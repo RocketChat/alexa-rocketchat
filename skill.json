@@ -1,0 +1,31 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "summary": "Sample Short Description - powered by Rocket.Chat",
+          "examplePhrases": [
+            "Alexa open rocket chat",
+            "Alexa tell rocket chat hello",
+            "Alexa ask rocket chat to say hello"
+          ],
+          "name": "Rocket Chat",
+          "description": "Sample Full Description - Innovating incredible new user experiences in the Alexa ecosystem - powered by Rocket.Chat"
+        }
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Sample Testing Instructions.",
+      "category": "COMMUNICATION",
+      "distributionCountries": []
+    },
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "sourceDir": "lambda/custom",
+          "uri": "rocket-chat"
+        }
+      }
+    },
+    "manifestVersion": "1.0"
+  }
+}
