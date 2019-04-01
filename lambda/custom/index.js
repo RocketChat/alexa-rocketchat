@@ -12,11 +12,17 @@ const authtoken0 = '';
 const userid0 = '';
 
 //REST API Endpoints
-const loginUrl = 'SERVER_URL/api/v1/login';
-const createchannelurl = 'SERVER_URL/api/v1/channels.create';
-const deletechannelurl = 'SERVER_URL/api/v1/channels.delete';
-const postmessageurl = 'SERVER_URL/api/v1/chat.postMessage';
-const channelmessageurl = 'SERVER_URL/api/v1/channels.messages?roomName=';
+const serverurl = process.env.SERVER_URL;
+
+
+const loginUrl = `${serverurl}/api/v1/login`;
+const createchannelurl = `${serverurl}/api/v1/channels.create`;
+const deletechannelurl = `${serverurl}/api/v1/channels.delete`;
+const postmessageurl = `${serverurl}/api/v1/chat.postMessage`;
+const channelmessageurl = `${serverurl}/api/v1/channels.messages?roomName=`;
+const channelinfourl = `${serverurl}/v1/channels.info?roomName=`;
+const userinfourl = `${serverurl}/api/v1/users.info?username=`;
+const makeleaderurl = `${serverurl}/api/v1/channels.addLeader`;
 
 //Axios Functions
 const login = async () => {
