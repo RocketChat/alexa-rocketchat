@@ -53,6 +53,10 @@ ASK CLI will create the skill and the lambda function for you. The Lambda functi
 	```bash
 	$ ask deploy
 	
+2. After Deploying goto lambda console and set Environment variables values.
+	
+	e.g: SERVER_URL https://your.servername.chat
+	
 	
 ### Testing
 
