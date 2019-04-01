@@ -111,6 +111,6 @@ We are facing some difficulties with the account linking process for Alexa and R
 
 * While for a successfull request Rocket.Chat API requires email,password,AUTH_TOKEN and UserID to return data.
 
-We are working constantly to solve this problem yet we would like if you can suggest some ideas regarding this topic and help us with the acoount linking process. One of the potential ideas are making a custom Auth0 API for carrying out this process. Feel free to join the discussion on [Rocket.Chat Alexa Discussion](https://open.rocket.chat/group/R7TSbpAS7eWb2NDFg)
+We are working constantly to solve this problem yet we would like if you can suggest some ideas regarding this topic and help us with the acoount linking process. One of the potential idea is making a custom Auth0 API for carrying out this process. Feel free to join the discussion on [Rocket.Chat Alexa Discussion](https://open.rocket.chat/group/R7TSbpAS7eWb2NDFg)
     
    
