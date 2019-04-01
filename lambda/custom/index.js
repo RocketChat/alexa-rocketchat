@@ -12,11 +12,11 @@ const authtoken0 = '';
 const userid0 = '';
 
 //REST API Endpoints
-const loginUrl = 'https://bots.rocket.chat/api/v1/login';
-const createchannelurl = 'https://bots.rocket.chat/api/v1/channels.create';
-const deletechannelurl = 'https://bots.rocket.chat/api/v1/channels.delete';
-const postmessageurl = 'https://bots.rocket.chat/api/v1/chat.postMessage';
-const channelmessageurl = 'https://bots.rocket.chat/api/v1/channels.messages?roomName=';
+const loginUrl = 'SERVER_URL/api/v1/login';
+const createchannelurl = 'SERVER_URL/api/v1/channels.create';
+const deletechannelurl = 'SERVER_URL/api/v1/channels.delete';
+const postmessageurl = 'SERVER_URL/api/v1/chat.postMessage';
+const channelmessageurl = 'SERVER_URL/api/v1/channels.messages?roomName=';
 
 //Axios Functions
 const login = async () => {
