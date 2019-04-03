@@ -1,0 +1,31 @@
+1) Create A New Channel
+
+Utterance: "Alexa, Create CHANNELNAME"
+
+2) Delete A Channel
+
+Utterance: "Alexa, Delete CHANNELNAME"
+
+3) Post A Message
+
+Utterance: "Alexa, Send MESSAGE to CHANNELNAME"
+
+4) Read Last Message On A Channel
+
+Utterance: "Alexa, Read CHANNELNAME last message"
+
+5) Add All User's On Server To A Channel
+
+Utterance: "Alexa, Add All To CHANNELNAME"
+
+6) Make A User Channel Moderator
+
+Utterance: "Alexa, Make USERNAME Moderator Of CHANNELNAME"
+
+7) Make A User Channel Owner
+
+Utterance: "Alexa, Make USERNAME Owner Of CHANNELNAME"
+
+8) Archive A Channel
+
+Utterance: "Alexa, Archive CHANNELNAME"
