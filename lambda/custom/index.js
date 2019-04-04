@@ -12,17 +12,21 @@ const authtoken0 = '';
 const userid0 = '';
 
 //REST API Endpoints
-const serverurl = process.env.SERVER_URL;
 
+const serverurl = process.env.SERVER_URL;
 
 const loginUrl = `${serverurl}/api/v1/login`;
 const createchannelurl = `${serverurl}/api/v1/channels.create`;
 const deletechannelurl = `${serverurl}/api/v1/channels.delete`;
 const postmessageurl = `${serverurl}/api/v1/chat.postMessage`;
 const channelmessageurl = `${serverurl}/api/v1/channels.messages?roomName=`;
-const channelinfourl = `${serverurl}/v1/channels.info?roomName=`;
+const channelinfourl = `${serverurl}/api/v1/channels.info?roomName=`;
 const userinfourl = `${serverurl}/api/v1/users.info?username=`;
-const makeleaderurl = `${serverurl}/api/v1/channels.addLeader`;
+const addallurl = `${serverurl}/api/v1/channels.addAll`;
+const makemoderatorurl = `${serverurl}/api/v1/channels.addModerator`;
+const addownerurl = `${serverurl}/api/v1/channels.addOwner`;
+const archivechannelurl = `${serverurl}/api/v1/channels.archive`;
+
 
 //Axios Functions
 const login = async () => {
@@ -104,6 +108,106 @@ const channelMessage = async (channelname0) => {
     return error;
   }
 };
+
+const getUserInfo = async (username0) => {
+  try {
+    const { data } = await axios({
+  method: 'get',
+  url: userinfourl+username0,
+  headers: headers
+});
+    return data;
+  } catch (error) {
+    console.error('cannot get channel message', error);
+    return error;
+  }
+};
+
+const getRoomInfo = async (channelname0) => {
+  try {
+    const { data } = await axios({
+  method: 'get',
+  url: channelinfourl+channelname0,
+  headers: headers
+});
+    return data;
+  } catch (error) {
+    console.error('cannot get channel message', error);
+    return error;
+  }
+};
+
+
+const addAll = async (roomid) => {
+  try {
+    const { data } = await axios({
+  method: 'post',
+  url: addallurl,
+  data: {
+    roomId : roomid
+  },
+  headers: headers
+});
+    return data;
+  } catch (error) {
+    console.error('cannot add all', error);
+    return error;
+  }
+};
+
+const makeModerator = async (userid,roomid) => {
+  try {
+    const { data } = await axios({
+  method: 'post',
+  url: makemoderatorurl,
+  data: {
+    userId : userid,
+    roomId : roomid
+  },
+  headers: headers
+});
+    return data;
+  } catch (error) {
+    console.error('cannot make moderator', error);
+    return error;
+  }
+};
+
+const addOwner = async (userid,roomid) => {
+  try {
+    const { data } = await axios({
+  method: 'post',
+  url: addownerurl,
+  data: {
+    userId : userid,
+    roomId : roomid
+  },
+  headers: headers
+});
+    return data;
+  } catch (error) {
+    console.error('cannot make owner', error);
+    return error;
+  }
+};
+
+const archiveChannel = async (roomid) => {
+  try {
+    const { data } = await axios({
+  method: 'post',
+  url: archivechannelurl,
+  data: {
+    roomId : roomid
+  },
+  headers: headers
+});
+    return data;
+  } catch (error) {
+    console.error('cannot archive channel', error);
+    return error;
+  }
+};
+
 
 
 //Alexa Intent Functions
@@ -230,6 +334,124 @@ const ChannelMessageHandler = {
   },
 };
 
+const AddAllHandler = {
+  canHandle(handlerInput) {
+     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'addalltochannel';
+  },
+  async handle(handlerInput) {
+    try {
+      
+      
+      var channelname0 = handlerInput.requestEnvelope.request.intent.slots.addallchannelname.value;
+      
+      const login0 = await login();
+      const channelinfodata = await getRoomInfo(channelname0);
+      const roomid = channelinfodata.channel._id;
+      const addalldata = await addAll(roomid);
+      
+      const speechText = ` ${addalldata.success} `;
+
+      return handlerInput.responseBuilder
+        .speak(speechText)
+        .withSimpleCard('Add All To Server', speechText)
+        .reprompt(speechText)
+        .getResponse();
+    } catch (error) {
+      console.error(error);
+    }
+  },
+};
+
+const MakeModeratorHandler = {
+  canHandle(handlerInput) {
+     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'makemoderator';
+  },
+  async handle(handlerInput) {
+    try {
+      
+      var username0 = handlerInput.requestEnvelope.request.intent.slots.moderatorusername.value;
+      var channelname0 = handlerInput.requestEnvelope.request.intent.slots.moderatorchannelname.value;
+      
+      const login0 = await login();
+      const userinfodata = await getUserInfo(username0);
+      const channelinfodata = await getRoomInfo(channelname0);
+      const userid = userinfodata.user._id;
+      const roomid = channelinfodata.channel._id;
+      const makemoderatordata = await makeModerator(userid,roomid);
+      
+      const speechText = ` ${makemoderatordata.success} `;
+
+      return handlerInput.responseBuilder
+        .speak(speechText)
+        .withSimpleCard('Make Moderator', speechText)
+        .reprompt(speechText)
+        .getResponse();
+    } catch (error) {
+      console.error(error);
+    }
+  },
+};
+
+const AddOwnerHandler = {
+  canHandle(handlerInput) {
+     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'addowner';
+  },
+  async handle(handlerInput) {
+    try {
+      
+      var username0 = handlerInput.requestEnvelope.request.intent.slots.ownerusername.value;
+      var channelname0 = handlerInput.requestEnvelope.request.intent.slots.ownerchannelname.value;
+      
+      const login0 = await login();
+      const userinfodata = await getUserInfo(username0);
+      const channelinfodata = await getRoomInfo(channelname0);
+      const userid = userinfodata.user._id;
+      const roomid = channelinfodata.channel._id;
+      const addownerdata = await addOwner(userid,roomid);
+      
+      const speechText = ` ${addownerdata.success} `;
+
+      return handlerInput.responseBuilder
+        .speak(speechText)
+        .withSimpleCard('Add Owner', speechText)
+        .reprompt(speechText)
+        .getResponse();
+    } catch (error) {
+      console.error(error);
+    }
+  },
+};
+
+const ArchiveChannelHandler = {
+  canHandle(handlerInput) {
+     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'archivechannel';
+  },
+  async handle(handlerInput) {
+    try {
+      
+      var channelname0 = handlerInput.requestEnvelope.request.intent.slots.archivechannelname.value;
+      
+      const login0 = await login();
+      const channelinfodata = await getRoomInfo(channelname0);
+      const roomid = channelinfodata.channel._id;
+      const archivechanneldata = await archiveChannel(roomid);
+      
+      const speechText = ` ${archivechanneldata.success} `;
+
+      return handlerInput.responseBuilder
+        .speak(speechText)
+        .withSimpleCard('Archive Channel', speechText)
+        .reprompt(speechText)
+        .getResponse();
+    } catch (error) {
+      console.error(error);
+    }
+  },
+};
 
 const HelpIntentHandler = {
   canHandle(handlerInput) {
@@ -297,6 +519,10 @@ exports.handler = skillBuilder
     DeleteChannelHandler,
     PostMessageHandler,
     ChannelMessageHandler,
+    AddAllHandler,
+    MakeModeratorHandler,
+    AddOwnerHandler,
+    ArchiveChannelHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler
