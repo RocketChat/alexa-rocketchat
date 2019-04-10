@@ -229,10 +229,10 @@ const LaunchRequestHandler = {
   },
 };
 
-const CreateChannelHandler = {
+const CreateChannelIntentHandler = {
   canHandle(handlerInput) {
      return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'createchannel';
+      && handlerInput.requestEnvelope.request.intent.name === 'CreateChannelIntent';
   },
   async handle(handlerInput) {
     try {
@@ -255,10 +255,10 @@ const CreateChannelHandler = {
   },
 };
 
-const DeleteChannelHandler = {
+const DeleteChannelIntentHandler = {
   canHandle(handlerInput) {
      return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'deletechannel';
+      && handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent';
   },
   async handle(handlerInput) {
     try {
@@ -281,10 +281,10 @@ const DeleteChannelHandler = {
   },
 };
 
-const PostMessageHandler = {
+const PostMessageIntentHandler = {
   canHandle(handlerInput) {
      return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'postmessage';
+      && handlerInput.requestEnvelope.request.intent.name === 'PostMessageIntent';
   },
   async handle(handlerInput) {
     try {
@@ -308,10 +308,10 @@ const PostMessageHandler = {
   },
 };
 
-const ChannelMessageHandler = {
+const ChannelMessageIntentHandler = {
   canHandle(handlerInput) {
      return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'channelmessage';
+      && handlerInput.requestEnvelope.request.intent.name === 'ChannelMessageIntent';
   },
   async handle(handlerInput) {
     try {
@@ -334,10 +334,10 @@ const ChannelMessageHandler = {
   },
 };
 
-const AddAllHandler = {
+const AddAllToChannelIntentHandler = {
   canHandle(handlerInput) {
      return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'addalltochannel';
+      && handlerInput.requestEnvelope.request.intent.name === 'AddAllToChannelIntent';
   },
   async handle(handlerInput) {
     try {
@@ -363,10 +363,10 @@ const AddAllHandler = {
   },
 };
 
-const MakeModeratorHandler = {
+const MakeModeratorIntentHandler = {
   canHandle(handlerInput) {
      return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'makemoderator';
+      && handlerInput.requestEnvelope.request.intent.name === 'MakeModeratorIntent';
   },
   async handle(handlerInput) {
     try {
@@ -394,10 +394,10 @@ const MakeModeratorHandler = {
   },
 };
 
-const AddOwnerHandler = {
+const AddOwnerIntentHandler = {
   canHandle(handlerInput) {
      return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'addowner';
+      && handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent';
   },
   async handle(handlerInput) {
     try {
@@ -425,10 +425,10 @@ const AddOwnerHandler = {
   },
 };
 
-const ArchiveChannelHandler = {
+const ArchiveChannelIntentHandler = {
   canHandle(handlerInput) {
      return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'archivechannel';
+      && handlerInput.requestEnvelope.request.intent.name === 'ArchiveChannelIntent';
   },
   async handle(handlerInput) {
     try {
@@ -459,12 +459,12 @@ const HelpIntentHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
   },
   handle(handlerInput) {
-    const speechText = 'Yet To Write Help Instructions';
+    const speechText = 'This is the Alexa Skill for rocket chat. Refer sample utterances file on GitHub.';
 
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
-      .withSimpleCard('Inspiration', speechText)
+      .withSimpleCard('Rocket Chat', speechText)
       .getResponse();
   },
 };
@@ -480,7 +480,7 @@ const CancelAndStopIntentHandler = {
 
     return handlerInput.responseBuilder
       .speak(speechText)
-      .withSimpleCard('Inspiration', speechText)
+      .withSimpleCard('Rocket Chat', speechText)
       .getResponse();
   },
 };
@@ -515,14 +515,14 @@ const skillBuilder = Alexa.SkillBuilders.custom();
 exports.handler = skillBuilder
   .addRequestHandlers(
     LaunchRequestHandler,
-    CreateChannelHandler,
-    DeleteChannelHandler,
-    PostMessageHandler,
-    ChannelMessageHandler,
-    AddAllHandler,
-    MakeModeratorHandler,
-    AddOwnerHandler,
-    ArchiveChannelHandler,
+    CreateChannelIntentHandler,
+    DeleteChannelIntentHandler,
+    PostMessageIntentHandler,
+    ChannelMessageIntentHandler,
+    AddAllToChannelIntentHandler,
+    MakeModeratorIntentHandler,
+    AddOwnerIntentHandler,
+    ArchiveChannelIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler
