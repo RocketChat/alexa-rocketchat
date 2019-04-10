@@ -6,10 +6,12 @@ const Alexa = require('ask-sdk-core');
 const axios = require('axios');
 
 //User Credentials
-const username0 = '';
-const password0 = '';
-const authtoken0 = '';
-const userid0 = '';
+//Use environment variables for now. Once Account Linking is fixed. We will use that instead.
+//Generate your AUTH_TOKEN and USER_ID here - https://yourservername.rocket.chat/account/tokens
+const username0 = process.env.USERNAME;
+const password0 = process.env.PASSWORD;
+const authtoken0 = process.env.AUTH_TOKEN;
+const userid0 = process.env.USER_ID;
 
 //REST API Endpoints
 
