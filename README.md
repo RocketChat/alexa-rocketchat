@@ -55,7 +55,13 @@ ASK CLI will create the skill and the lambda function for you. The Lambda functi
 	
 2. After Deploying goto lambda console and set Environment variables values.
 	
-	e.g: SERVER_URL https://your.servername.chat
+	e.g: SERVER_URL https://yourservername.rocket.chat
+		 USERNAME
+		 PASSWORD
+		 AUTH_TOKEN
+		 USER_ID
+	
+	You can generate your AUTH_TOKEN and USER_ID here - https://yourservername.rocket.chat/account/tokens
 	
 	
 ### Testing
@@ -103,7 +109,7 @@ ASK CLI will create the skill and the lambda function for you. The Lambda functi
 ## Intent Structure
 
 1. Keep sample utterance minimal.
-2. Make sure you have included the values that are required to send to the API  as slots in the sample utterance.
+2. Make sure you have included the values that are required to send to the API as slots in the sample utterance.
 3. Use only custom slots and include real examples from Rocket.chat for Natural language training.
 4. Include as many slot values as you can. More the merrier.
 
@@ -116,5 +122,3 @@ We are facing some difficulties with the account linking process for Alexa and R
 * While for a successfull request Rocket.Chat API requires email,password,AUTH_TOKEN and UserID to return data.
 
 We are working constantly to solve this problem yet we would like if you can suggest some ideas regarding this topic and help us with the account linking process. One of the potential idea is making a custom Auth0 API for carrying out this process. Feel free to join the discussion on [Rocket.Chat Alexa Discussion](https://open.rocket.chat/group/R7TSbpAS7eWb2NDFg)
-    
-   
