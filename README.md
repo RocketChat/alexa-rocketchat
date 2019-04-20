@@ -40,9 +40,7 @@ Innovating incredible new user experiences in the Alexa ecosystem - powered by R
 	```bash
 	$ cd lambda/custom
 	$ npm install
-
-4. Make Sure to fill out the User Credentials section with your own credentials in `/lambda/custom/index.js` before deployment.
-	
+	```
 	
 ### Deployment
 
@@ -52,17 +50,54 @@ ASK CLI will create the skill and the lambda function for you. The Lambda functi
 
 	```bash
 	$ ask deploy
+	```
 	
-2. After Deploying goto lambda console and set Environment variables values.
+2. After Deploying go to lambda console and set Environment variables values. 
 	
-	e.g: SERVER_URL https://yourservername.rocket.chat
-		 USERNAME
-		 PASSWORD
-		 AUTH_TOKEN
-		 USER_ID
+	e.g: 
+	1. **SERVER_URL**    https://yourservername.rocket.chat
+	2. **OAUTH_SERVICE_NAME**    (The name of the Custom OAuth you setup in next step)
 	
-	You can generate your AUTH_TOKEN and USER_ID here - https://yourservername.rocket.chat/account/tokens
-	
+### Configuring Account Linking
+
+1. Login to Alexa Developer Console, and go to Build section on top.
+
+2. Click on Account Linking on the bottom left.
+
+3. Toggle the *Do you allow users to create an account or link to an existing account with you?* button. Leave *Allow users to enable skill without account linking* as it is. Select auth code grant. 
+
+4. Now we need to fill up the *Authorization URI, Access Token URI, Client ID, Client Secret* which we will generate on our rocket chat server.
+
+5. **Note you need to be admin of the server to proceed with the further steps.**
+
+6. In a new tab go to your **Server -> Three Dot Menu -> Administration**.
+
+![Go to Server -> Administration](https://i.ibb.co/wgJnBxD/diagram1.jpg)
+
+7. Click on **OAuth Apps**.
+
+![Click on OAuth Apps](https://i.ibb.co/Wp2P42k/diagram2.jpg)
+
+8. Click on **New Application** on top right. Now we need to give it an *Application Name* and a *Redirect URI*. 
+ 
+9. For *Application Name* use **"alexa"**. This can be anything else as well. And for the *Redirect URI*, go back to Amazon Developer Console Account Linking page and at the bottom of the page you'll find some redirect URLs.
+Copy **https://pitangui.amazon.com/api/skill/link/YOURVENDORID** and paste it in the *Redirect URI* field. Click on save changes.
+
+10. You'll see it automatically generating *Client ID, Client Secret, Authorization URL, and Access Token URL*. Now copy these from the oauth app page and paste it in the *Client ID, Client Secret, Authorization URL, and Access Token URL* fields on the amazon developer console account linking page.
+
+11. Choose **"HTTP Basic"** for *Client Authentication Scheme* and leave *Scope*, *Domain List* and *Default Access Token Expiration Time* empty. Click on Save on top.
+
+12. We are done on setting our OAuth App which will give us the **access token** to use for logging in. But for that we need to also enable custom oauth login for our server which we will do in the next steps.
+
+13. Go to your **Server -> Three Dot Menu -> Administration**. Scroll down on your left and select **OAuth** and on top right click on **Add custom OAuth**.
+
+![Add custom OAuth](https://i.ibb.co/4jykrFx/diagram3.jpg)
+
+14. Give a unique name in lower case for the custom oauth. For example enter **"alexaskill"**. This name is important as we will be using this in the lambda environment variables for **OAUTH_SERVICE_NAME**. Click on Send.
+
+15. You will now be provided a few fields some of which will be prefilled. We only need to change a few. First change the *Enable* to **true**. In the *URL* enter **https://yourservername.rocket.chat** . Finally at the bottom switch *Merge users* to true. We don't need to make any other changes here.
+
+16. Click on **Save Changes** on top. WE ARE DONE! But don't forget to update the lambda environment variables with the service name you generated!
 	
 ### Testing
 
@@ -115,10 +150,5 @@ ASK CLI will create the skill and the lambda function for you. The Lambda functi
 
 ## A Little Help
 
-We are facing some difficulties with the account linking process for Alexa and Rocket.Chat and we would very much like for you to help us with that. So here's the problem:
-
-* Alexa only allows an OAuth 2.0 authorization support that means when a user access the skill Alexa only returns an OAuth Token to Rocket.Chat server.
-
-* While for a successfull request Rocket.Chat API requires email,password,AUTH_TOKEN and UserID to return data.
-
-We are working constantly to solve this problem yet we would like if you can suggest some ideas regarding this topic and help us with the account linking process. One of the potential idea is making a custom Auth0 API for carrying out this process. Feel free to join the discussion on [Rocket.Chat Alexa Discussion](https://open.rocket.chat/group/R7TSbpAS7eWb2NDFg)
+Keep an eye on our issues. We are just beginning and will surely appreciate all the help we can get. All ideas are welcome.
+Feel free to join the discussion on [Rocket.Chat Alexa Discussion](https://open.rocket.chat/group/R7TSbpAS7eWb2NDFg)
