@@ -1,21 +1,15 @@
 /* eslint-disable  func-names */
 /* eslint-disable  no-console */
 
-
 const Alexa = require('ask-sdk-core');
 const axios = require('axios');
 
-//User Credentials
-//Use environment variables for now. Once Account Linking is fixed. We will use that instead.
-//Generate your AUTH_TOKEN and USER_ID here - https://yourservername.rocket.chat/account/tokens
-const username0 = process.env.USERNAME;
-const password0 = process.env.PASSWORD;
-const authtoken0 = process.env.AUTH_TOKEN;
-const userid0 = process.env.USER_ID;
+//Server Credentials. Follow readme to set them up.
+const serverurl = process.env.SERVER_URL;
+const oauthServiceNname = process.env.OAUTH_SERVICE_NAME;
 
 //REST API Endpoints
 
-const serverurl = process.env.SERVER_URL;
 
 const loginUrl = `${serverurl}/api/v1/login`;
 const createchannelurl = `${serverurl}/api/v1/channels.create`;
@@ -31,93 +25,135 @@ const archivechannelurl = `${serverurl}/api/v1/channels.archive`;
 
 
 //Axios Functions
-const login = async () => {
-  try {
-    const { logindata } = await axios.post(loginUrl, {user: username0, password: password0});
-    return logindata;
-  } catch (loginerror) {
-    console.error('cannot fetch quotes', loginerror);
-  }
+
+const login = async (accessToken) => {
+  return await axios.post(loginUrl,
+    {
+      "serviceName": oauthServiceNname,
+      "accessToken": accessToken,
+      "expiresIn": 200
+    })
+    .then(res => res.data)
+    .then(res => {
+      console.log(res);
+      let headers = {
+        'X-Auth-Token': res.data.authToken,
+        'X-User-Id': res.data.userId
+      };
+      return headers;
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+const createChannel = async (channelName, headers) => {
+  return await axios.post(createchannelurl,
+    {
+      "name": channelName
+    },
+    { headers: headers })
+    .then(res => res.data)
+    .then(res => {
+      if(res.success == true){
+        return `I've created your channel ${channelName}`;
+      }
+      else{
+        return `Sorry, I couldn't create the channel ${channelName} right now`;
+      }
+    })
+    .catch(err => {
+      console.log(err.message);
+      if(err.response.data.errorType == `error-duplicate-channel-name`){
+        return `Sorry, the channel ${channelName} already exists. Please try again with different channel name.`;
+      }
+      else if(err.response.data.errorType == `error-invalid-room-name`){
+        return `Sorry, ${channelName} is not a valid channel name. Please try again with a single word name for the channel`;
+      }
+      else{
+        return `Sorry, I couldn't create the channel ${channelName} right now`;
+      }
+    });
 };
 
-var headers = {
-            'X-Auth-Token': authtoken0, 
-            'X-User-Id': userid0
-            };
-
-const createChannel = async (channelname0) => {
-  try {
-    const { data } = await axios({
-  method: 'post',
-  url: createchannelurl,
-  data: {
-    name : channelname0
-  },
-  headers: headers
-});
-    return data;
-  } catch (error) {
-    console.error('cannot create channel', error);
-    return error;
-  }
+const deleteChannel = async (channelName, headers) => {
+  return await axios.post(deletechannelurl,
+    {
+      "roomName": channelName
+    },
+    { headers: headers })
+    .then(res => res.data)
+    .then(res => {
+      if(res.success == true){
+        return `I've deleted the channel ${channelName}`;
+      }
+      else{
+        return `Sorry, I couldn't delete the channel ${channelName} right now`;
+      }
+    })
+    .catch(err => {
+      console.log(err.message);
+      if(err.response.data.errorType == `error-room-not-found`){
+        return `Sorry, the channel ${channelName} does not exist. Please try again with different channel name.`;
+      }
+      else{
+        return `Sorry, I couldn't delete the channel ${channelName} right now`;
+      }
+    });
 };
 
-const deleteChannel = async (channelname0) => {
-  try {
-    const { data } = await axios({
-  method: 'post',
-  url: deletechannelurl,
-  data: {
-    roomName : channelname0
-  },
-  headers: headers
-});
-    return data;
-  } catch (error) {
-    console.error('cannot delete channel', error);
-    return error;
-  }
+const postMessage = async (channelName, message, headers) => {
+  return await axios.post(postmessageurl,
+    {
+      "channel": `#${channelName}`,
+      "text": message
+    },
+    { headers: headers })
+    .then(res => res.data)
+    .then(res => {
+      if(res.success == true){
+        return `I've sent your message`;
+      }
+      else{
+        return `Sorry, I couldn't send your message right now`;
+      }
+    })
+    .catch(err => {
+      console.log(err.message);
+      return `Sorry, I couldn't send your message right now`;
+    });
 };
 
-const postMessage = async (channelname0,message) => {
-  try {
-    const { data } = await axios({
-  method: 'post',
-  url: postmessageurl,
-  data: {
-    channel : '#'+channelname0,
-    text: message
-  },
-  headers: headers
-});
-    return data;
-  } catch (error) {
-    console.error('cannot post message', error);
-    return error;
-  }
-};
-
-const channelMessage = async (channelname0) => {
-  try {
-    const { data } = await axios({
-  method: 'get',
-  url: channelmessageurl+channelname0,
-  headers: headers
-});
-    return data;
-  } catch (error) {
-    console.error('cannot get channel message', error);
-    return error;
-  }
+const channelLastMessage = async (channelName, headers) => {
+  return await axios.get(`${channelmessageurl}${channelName}`,
+    { headers: headers })
+    .then(res => res.data)
+    .then(res => {
+      if(res.success == true){
+        return `${res.messages[0].u.name} says, ${res.messages[0].msg}`;
+      }
+      else{
+        return `Sorry, I couldn't find the channel ${channelName} right now`;
+      }
+    })
+    .catch(err => {
+      console.log(err.message);
+      if(err.response.data.errorType == `error-room-not-found`){
+        return `Sorry, the channel ${channelName} does not exist. Please try again with different channel name.`;
+      }
+      else{
+        return `Sorry, I couldn't find the channel ${channelName} right now`;
+      }
+    });
 };
 
 const getUserInfo = async (username0) => {
   try {
     const { data } = await axios({
-  method: 'get',
-  url: userinfourl+username0,
-  headers: headers
-});
+      method: 'get',
+      url: userinfourl + username0,
+      headers: headers
+    });
     return data;
   } catch (error) {
     console.error('cannot get channel message', error);
@@ -128,10 +164,10 @@ const getUserInfo = async (username0) => {
 const getRoomInfo = async (channelname0) => {
   try {
     const { data } = await axios({
-  method: 'get',
-  url: channelinfourl+channelname0,
-  headers: headers
-});
+      method: 'get',
+      url: channelinfourl + channelname0,
+      headers: headers
+    });
     return data;
   } catch (error) {
     console.error('cannot get channel message', error);
@@ -143,13 +179,13 @@ const getRoomInfo = async (channelname0) => {
 const addAll = async (roomid) => {
   try {
     const { data } = await axios({
-  method: 'post',
-  url: addallurl,
-  data: {
-    roomId : roomid
-  },
-  headers: headers
-});
+      method: 'post',
+      url: addallurl,
+      data: {
+        roomId: roomid
+      },
+      headers: headers
+    });
     return data;
   } catch (error) {
     console.error('cannot add all', error);
@@ -157,17 +193,17 @@ const addAll = async (roomid) => {
   }
 };
 
-const makeModerator = async (userid,roomid) => {
+const makeModerator = async (userid, roomid) => {
   try {
     const { data } = await axios({
-  method: 'post',
-  url: makemoderatorurl,
-  data: {
-    userId : userid,
-    roomId : roomid
-  },
-  headers: headers
-});
+      method: 'post',
+      url: makemoderatorurl,
+      data: {
+        userId: userid,
+        roomId: roomid
+      },
+      headers: headers
+    });
     return data;
   } catch (error) {
     console.error('cannot make moderator', error);
@@ -175,17 +211,17 @@ const makeModerator = async (userid,roomid) => {
   }
 };
 
-const addOwner = async (userid,roomid) => {
+const addOwner = async (userid, roomid) => {
   try {
     const { data } = await axios({
-  method: 'post',
-  url: addownerurl,
-  data: {
-    userId : userid,
-    roomId : roomid
-  },
-  headers: headers
-});
+      method: 'post',
+      url: addownerurl,
+      data: {
+        userId: userid,
+        roomId: roomid
+      },
+      headers: headers
+    });
     return data;
   } catch (error) {
     console.error('cannot make owner', error);
@@ -196,13 +232,13 @@ const addOwner = async (userid,roomid) => {
 const archiveChannel = async (roomid) => {
   try {
     const { data } = await axios({
-  method: 'post',
-  url: archivechannelurl,
-  data: {
-    roomId : roomid
-  },
-  headers: headers
-});
+      method: 'post',
+      url: archivechannelurl,
+      data: {
+        roomId: roomid
+      },
+      headers: headers
+    });
     return data;
   } catch (error) {
     console.error('cannot archive channel', error);
@@ -219,32 +255,40 @@ const LaunchRequestHandler = {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   async handle(handlerInput) {
-    
-      const speechText = `Welcome To Rocket.Chat Alexa Skill. What Would you like to do today ?`;
+
+    if (handlerInput.requestEnvelope.context.System.user.accessToken === undefined) {
+
+      const speechText = `To start using this skill, please use the companion app to authenticate.`;
 
       return handlerInput.responseBuilder
         .speak(speechText)
-        .reprompt(speechText)
-        .withSimpleCard('Welcome To Rocket.Chat', speechText)
+        .withLinkAccountCard()
         .getResponse();
-    
+    }
+    const speechText = `Welcome To Rocket Chat Alexa Skill. What Would you like to do today ?`;
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .reprompt(speechText)
+      .withSimpleCard('Welcome To Rocket.Chat', speechText)
+      .getResponse();
+
   },
 };
 
 const CreateChannelIntentHandler = {
   canHandle(handlerInput) {
-     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'CreateChannelIntent';
   },
   async handle(handlerInput) {
     try {
-      
-      var channelname0 = handlerInput.requestEnvelope.request.intent.slots.channelname.value;
-      
-      const login0 = await login();
-      const rawdata = await createChannel(channelname0);
-      
-      const speechText = ` ${rawdata.success} `;
+      let accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
+
+      let channelName = handlerInput.requestEnvelope.request.intent.slots.channelname.value;
+
+      const headers = await login(accessToken);
+      const speechText = await createChannel(channelName, headers);
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -259,18 +303,17 @@ const CreateChannelIntentHandler = {
 
 const DeleteChannelIntentHandler = {
   canHandle(handlerInput) {
-     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent';
   },
   async handle(handlerInput) {
     try {
-      
-      var channelname0 = handlerInput.requestEnvelope.request.intent.slots.channeldelete.value;
-      
-      const login0 = await login();
-      const rawdata = await deleteChannel(channelname0);
-      
-      const speechText = ` ${rawdata.success} `;
+      let accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
+
+      let channelName = handlerInput.requestEnvelope.request.intent.slots.channeldelete.value;
+
+      const headers = await login(accessToken);
+      const speechText = await deleteChannel(channelName, headers);
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -285,19 +328,19 @@ const DeleteChannelIntentHandler = {
 
 const PostMessageIntentHandler = {
   canHandle(handlerInput) {
-     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'PostMessageIntent';
   },
   async handle(handlerInput) {
     try {
-      
-      var message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
-      var channelname0 = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
-      
-      const login0 = await login();
-      const rawdata = await postMessage(channelname0,message);
-      
-      const speechText = ` ${rawdata.success} `;
+      let accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
+
+      let message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
+      let channelName = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
+
+      const headers = await login(accessToken);
+      const speechText = await postMessage(channelName, message, headers);
+
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -310,20 +353,19 @@ const PostMessageIntentHandler = {
   },
 };
 
-const ChannelMessageIntentHandler = {
+const GetLastMessageFromChannelIntentHandler = {
   canHandle(handlerInput) {
-     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'ChannelMessageIntent';
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'GetLastMessageFromChannel';
   },
   async handle(handlerInput) {
     try {
-      
-      var channelname0 = handlerInput.requestEnvelope.request.intent.slots.getmessagechannelname.value;
-      
-      const login0 = await login();
-      const rawdata = await channelMessage(channelname0);
-      
-      const speechText = ` ${rawdata.messages[0].u.username} says ${rawdata.messages[0].msg} `;
+      let accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
+
+      let channelName = handlerInput.requestEnvelope.request.intent.slots.getmessagechannelname.value;
+
+      const headers = await login(accessToken);
+      const speechText = await channelLastMessage(channelName, headers);
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -338,20 +380,20 @@ const ChannelMessageIntentHandler = {
 
 const AddAllToChannelIntentHandler = {
   canHandle(handlerInput) {
-     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'AddAllToChannelIntent';
   },
   async handle(handlerInput) {
     try {
-      
-      
+
+
       var channelname0 = handlerInput.requestEnvelope.request.intent.slots.addallchannelname.value;
-      
+
       const login0 = await login();
       const channelinfodata = await getRoomInfo(channelname0);
       const roomid = channelinfodata.channel._id;
       const addalldata = await addAll(roomid);
-      
+
       const speechText = ` ${addalldata.success} `;
 
       return handlerInput.responseBuilder
@@ -367,22 +409,22 @@ const AddAllToChannelIntentHandler = {
 
 const MakeModeratorIntentHandler = {
   canHandle(handlerInput) {
-     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'MakeModeratorIntent';
   },
   async handle(handlerInput) {
     try {
-      
+
       var username0 = handlerInput.requestEnvelope.request.intent.slots.moderatorusername.value;
       var channelname0 = handlerInput.requestEnvelope.request.intent.slots.moderatorchannelname.value;
-      
+
       const login0 = await login();
       const userinfodata = await getUserInfo(username0);
       const channelinfodata = await getRoomInfo(channelname0);
       const userid = userinfodata.user._id;
       const roomid = channelinfodata.channel._id;
-      const makemoderatordata = await makeModerator(userid,roomid);
-      
+      const makemoderatordata = await makeModerator(userid, roomid);
+
       const speechText = ` ${makemoderatordata.success} `;
 
       return handlerInput.responseBuilder
@@ -398,22 +440,22 @@ const MakeModeratorIntentHandler = {
 
 const AddOwnerIntentHandler = {
   canHandle(handlerInput) {
-     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent';
   },
   async handle(handlerInput) {
     try {
-      
+
       var username0 = handlerInput.requestEnvelope.request.intent.slots.ownerusername.value;
       var channelname0 = handlerInput.requestEnvelope.request.intent.slots.ownerchannelname.value;
-      
+
       const login0 = await login();
       const userinfodata = await getUserInfo(username0);
       const channelinfodata = await getRoomInfo(channelname0);
       const userid = userinfodata.user._id;
       const roomid = channelinfodata.channel._id;
-      const addownerdata = await addOwner(userid,roomid);
-      
+      const addownerdata = await addOwner(userid, roomid);
+
       const speechText = ` ${addownerdata.success} `;
 
       return handlerInput.responseBuilder
@@ -429,19 +471,19 @@ const AddOwnerIntentHandler = {
 
 const ArchiveChannelIntentHandler = {
   canHandle(handlerInput) {
-     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'ArchiveChannelIntent';
   },
   async handle(handlerInput) {
     try {
-      
+
       var channelname0 = handlerInput.requestEnvelope.request.intent.slots.archivechannelname.value;
-      
+
       const login0 = await login();
       const channelinfodata = await getRoomInfo(channelname0);
       const roomid = channelinfodata.channel._id;
       const archivechanneldata = await archiveChannel(roomid);
-      
+
       const speechText = ` ${archivechanneldata.success} `;
 
       return handlerInput.responseBuilder
@@ -520,7 +562,7 @@ exports.handler = skillBuilder
     CreateChannelIntentHandler,
     DeleteChannelIntentHandler,
     PostMessageIntentHandler,
-    ChannelMessageIntentHandler,
+    GetLastMessageFromChannelIntentHandler,
     AddAllToChannelIntentHandler,
     MakeModeratorIntentHandler,
     AddOwnerIntentHandler,
