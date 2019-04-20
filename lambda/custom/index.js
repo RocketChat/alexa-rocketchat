@@ -33,7 +33,7 @@ const archivechannelurl = `${serverurl}/api/v1/channels.archive`;
 //Axios Functions
 const login = async () => {
   try {
-    const { logindata } = await axios.post(loginUrl, {name: username0, password: password0});
+    const { logindata } = await axios.post(loginUrl, {user: username0, password: password0});
     return logindata;
   } catch (loginerror) {
     console.error('cannot fetch quotes', loginerror);
