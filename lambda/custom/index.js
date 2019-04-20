@@ -47,44 +47,65 @@ const login = async (accessToken) => {
     });
 }
 
-const createChannel = async (channelname0) => {
-  try {
-    const { data } = await axios({
-      method: 'post',
-      url: createchannelurl,
-      data: {
-        name: channelname0
-      },
-      headers: headers
+const createChannel = async (channelName, headers) => {
+  return await axios.post(createchannelurl,
+    {
+      "name": channelName
+    },
+    { headers: headers })
+    .then(res => res.data)
+    .then(res => {
+      if(res.success == true){
+        return `I've created your channel ${channelName}`;
+      }
+      else{
+        return `Sorry, I couldn't create the channel ${channelName} right now`;
+      }
+    })
+    .catch(err => {
+      console.log(err.message);
+      if(err.response.data.errorType == `error-duplicate-channel-name`){
+        return `Sorry, the channel ${channelName} already exists. Please try again with different channel name.`;
+      }
+      else if(err.response.data.errorType == `error-invalid-room-name`){
+        return `Sorry, ${channelName} is not a valid channel name. Please try again with a single word name for the channel`;
+      }
+      else{
+        return `Sorry, I couldn't create the channel ${channelName} right now`;
+      }
     });
-    return data;
-  } catch (error) {
-    console.error('cannot create channel', error);
-    return error;
-  }
 };
 
-const deleteChannel = async (channelname0) => {
-  try {
-    const { data } = await axios({
-      method: 'post',
-      url: deletechannelurl,
-      data: {
-        roomName: channelname0
-      },
-      headers: headers
+const deleteChannel = async (channelName, headers) => {
+  return await axios.post(deletechannelurl,
+    {
+      "roomName": channelName
+    },
+    { headers: headers })
+    .then(res => res.data)
+    .then(res => {
+      if(res.success == true){
+        return `I've deleted the channel ${channelName}`;
+      }
+      else{
+        return `Sorry, I couldn't delete the channel ${channelName} right now`;
+      }
+    })
+    .catch(err => {
+      console.log(err.message);
+      if(err.response.data.errorType == `error-room-not-found`){
+        return `Sorry, the channel ${channelName} does not exist. Please try again with different channel name.`;
+      }
+      else{
+        return `Sorry, I couldn't delete the channel ${channelName} right now`;
+      }
     });
-    return data;
-  } catch (error) {
-    console.error('cannot delete channel', error);
-    return error;
-  }
 };
 
-const postMessage = async (channelname, message, headers) => {
+const postMessage = async (channelName, message, headers) => {
   return await axios.post(postmessageurl,
     {
-      "channel": `#${channelname}`,
+      "channel": `#${channelName}`,
       "text": message
     },
     { headers: headers })
@@ -94,16 +115,16 @@ const postMessage = async (channelname, message, headers) => {
         return `I've sent your message`;
       }
       else{
-        return `Sorry I couldn't send your message right now`;
+        return `Sorry, I couldn't send your message right now`;
       }
     })
     .catch(err => {
       console.log(err.message);
-      return `Sorry I couldn't send your message right now`;
+      return `Sorry, I couldn't send your message right now`;
     });
 };
 
-const channelMessage = async (channelname0) => {
+const channelMessage = async (channelName) => {
   try {
     const { data } = await axios({
       method: 'get',
@@ -253,13 +274,12 @@ const CreateChannelIntentHandler = {
   },
   async handle(handlerInput) {
     try {
+      let accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
 
-      var channelname0 = handlerInput.requestEnvelope.request.intent.slots.channelname.value;
+      let channelName = handlerInput.requestEnvelope.request.intent.slots.channelname.value;
 
-      const login0 = await login();
-      const rawdata = await createChannel(channelname0);
-
-      const speechText = ` ${rawdata.success} `;
+      const headers = await login(accessToken);
+      const speechText = await createChannel(channelName, headers);
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -279,13 +299,12 @@ const DeleteChannelIntentHandler = {
   },
   async handle(handlerInput) {
     try {
+      let accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
 
-      var channelname0 = handlerInput.requestEnvelope.request.intent.slots.channeldelete.value;
+      let channelName = handlerInput.requestEnvelope.request.intent.slots.channeldelete.value;
 
-      const login0 = await login();
-      const rawdata = await deleteChannel(channelname0);
-
-      const speechText = ` ${rawdata.success} `;
+      const headers = await login(accessToken);
+      const speechText = await deleteChannel(channelName, headers);
 
       return handlerInput.responseBuilder
         .speak(speechText)
