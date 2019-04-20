@@ -68,7 +68,7 @@
                     ]
                 },
                 {
-                    "name": "ChannelMessageIntent",
+                    "name": "GetLastMessageFromChannel",
                     "slots": [
                         {
                             "name": "getmessagechannelname",
@@ -76,6 +76,9 @@
                         }
                     ],
                     "samples": [
+                        "latest message from {getmessagechannelname}",
+                        "read last message from {getmessagechannelname}",
+                        "read latest message in {getmessagechannelname}",
                         "Read {getmessagechannelname} last message"
                     ]
                 },

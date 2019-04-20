@@ -124,18 +124,27 @@ const postMessage = async (channelName, message, headers) => {
     });
 };
 
-const channelMessage = async (channelName) => {
-  try {
-    const { data } = await axios({
-      method: 'get',
-      url: channelmessageurl + channelname0,
-      headers: headers
+const channelLastMessage = async (channelName, headers) => {
+  return await axios.get(`${channelmessageurl}${channelName}`,
+    { headers: headers })
+    .then(res => res.data)
+    .then(res => {
+      if(res.success == true){
+        return `${res.messages[0].u.name} says, ${res.messages[0].msg}`;
+      }
+      else{
+        return `Sorry, I couldn't find the channel ${channelName} right now`;
+      }
+    })
+    .catch(err => {
+      console.log(err.message);
+      if(err.response.data.errorType == `error-room-not-found`){
+        return `Sorry, the channel ${channelName} does not exist. Please try again with different channel name.`;
+      }
+      else{
+        return `Sorry, I couldn't find the channel ${channelName} right now`;
+      }
     });
-    return data;
-  } catch (error) {
-    console.error('cannot get channel message', error);
-    return error;
-  }
 };
 
 const getUserInfo = async (username0) => {
@@ -344,20 +353,19 @@ const PostMessageIntentHandler = {
   },
 };
 
-const ChannelMessageIntentHandler = {
+const GetLastMessageFromChannelIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'ChannelMessageIntent';
+      && handlerInput.requestEnvelope.request.intent.name === 'GetLastMessageFromChannel';
   },
   async handle(handlerInput) {
     try {
+      let accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
 
-      var channelname0 = handlerInput.requestEnvelope.request.intent.slots.getmessagechannelname.value;
+      let channelName = handlerInput.requestEnvelope.request.intent.slots.getmessagechannelname.value;
 
-      const login0 = await login();
-      const rawdata = await channelMessage(channelname0);
-
-      const speechText = ` ${rawdata.messages[0].u.username} says ${rawdata.messages[0].msg} `;
+      const headers = await login(accessToken);
+      const speechText = await channelLastMessage(channelName, headers);
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -554,7 +562,7 @@ exports.handler = skillBuilder
     CreateChannelIntentHandler,
     DeleteChannelIntentHandler,
     PostMessageIntentHandler,
-    ChannelMessageIntentHandler,
+    GetLastMessageFromChannelIntentHandler,
     AddAllToChannelIntentHandler,
     MakeModeratorIntentHandler,
     AddOwnerIntentHandler,
