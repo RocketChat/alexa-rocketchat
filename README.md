@@ -20,6 +20,7 @@ Innovating incredible new user experiences in the Alexa ecosystem - powered by R
 * Register for an [AWS Account](https://aws.amazon.com/)
 * Register for an [Amazon Developer Account](https://developer.amazon.com/)
 * Install and Setup [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html)
+* Rocket Chat Server updated to [Release 1.0.0-rc3](https://github.com/RocketChat/Rocket.Chat/releases/tag/1.0.0-rc.3) or later
 
 
 ### Installation
@@ -151,4 +152,4 @@ Copy **https://pitangui.amazon.com/api/skill/link/YOURVENDORID** and paste it in
 ## A Little Help
 
 Keep an eye on our issues. We are just beginning and will surely appreciate all the help we can get. All ideas are welcome.
-Feel free to join the discussion on [Rocket.Chat Alexa Discussion](https://open.rocket.chat/group/R7TSbpAS7eWb2NDFg)
+Feel free to join the discussion in our Alexa channel - [Rocket.Chat Alexa Channel](https://open.rocket.chat/channel/alexa)
