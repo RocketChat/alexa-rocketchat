@@ -21,7 +21,7 @@ Alexa, Add All To CHANNELNAME
 * Make A User Channel Moderator
 
 ```
-Alexa, Make USERNAME Owner Of CHANNELNAME
+Alexa, Make USERNAME Moderator Of CHANNELNAME
 ```
 
 * Make A User Channel Owner
