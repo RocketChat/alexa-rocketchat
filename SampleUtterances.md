@@ -1,4 +1,4 @@
-#Channel
+# Channel
 
 * Create A New Channel
 
@@ -36,7 +36,7 @@ Alexa, Make USERNAME Owner Of CHANNELNAME
 Alexa, Archive CHANNELNAME
 ```
 
-#Chat
+# Chat
 
 * Post A Message
 
@@ -51,6 +51,6 @@ Alexa, Read CHANNELNAME last message
 ```
 
 
-#IM
+# IM
 
-#User
+# User
