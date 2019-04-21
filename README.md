@@ -82,7 +82,7 @@ ASK CLI will create the skill and the lambda function for you. The Lambda functi
 8. Click on **New Application** on top right. Now we need to give it an *Application Name* and a *Redirect URI*. 
  
 9. For *Application Name* use **"alexa"**. This can be anything else as well. And for the *Redirect URI*, go back to Amazon Developer Console Account Linking page and at the bottom of the page you'll find some redirect URLs.
-Copy **https://pitangui.amazon.com/api/skill/link/YOURVENDORID** and paste it in the *Redirect URI* field. Click on save changes.
+Copy **https://pitangui.amazon.com/api/skill/link/YOURVENDORID** or **https://layla.amazon.com/api/skill/link/YOURVENDORID** and paste it in the *Redirect URI* field. Click on save changes.
 
 10. You'll see it automatically generating *Client ID, Client Secret, Authorization URL, and Access Token URL*. Now copy these from the oauth app page and paste it in the *Client ID, Client Secret, Authorization URL, and Access Token URL* fields on the amazon developer console account linking page.
 
@@ -94,11 +94,11 @@ Copy **https://pitangui.amazon.com/api/skill/link/YOURVENDORID** and paste it in
 
 ![Add custom OAuth](https://i.ibb.co/4jykrFx/diagram3.jpg)
 
-14. Give a unique name in lower case for the custom oauth. For example enter **"alexaskill"**. This name is important as we will be using this in the lambda environment variables for **OAUTH_SERVICE_NAME**. Click on Send.
+14. Give a unique name in lower case for the custom oauth. For example enter **"alexaskill"**.Click on Send. Set this name in the lambda environment variables for **OAUTH_SERVICE_NAME**. 
 
-15. You will now be provided a few fields some of which will be prefilled. We only need to change a few. First change the *Enable* to **true**. In the *URL* enter **https://yourservername.rocket.chat** . Finally at the bottom switch *Merge users* to true. We don't need to make any other changes here.
+15. You will now be provided a few fields some of which will be prefilled. We only need to change a few. First change the *Enable* to **true**. In the *URL* enter **https://yourservername.rocket.chat/api/v1** . Finally at the bottom switch *Merge users* to true. We don't need to make any other changes here.
 
-16. Click on **Save Changes** on top. WE ARE DONE! But don't forget to update the lambda environment variables with the service name you generated!
+16. Click on **Save Changes** on top. WE ARE DONE!
 	
 ### Testing
 
