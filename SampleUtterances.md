@@ -1,4 +1,4 @@
-#Channel
+# Channel
 
 * Create A New Channel
 
@@ -12,19 +12,19 @@ Alexa, Create CHANNELNAME
 Alexa, Delete CHANNELNAME
 ```
 
-* Add All User's On Server To A Channel
+* Add All Users On Server To A Channel
 
 ```
 Alexa, Add All To CHANNELNAME
 ```
 
-* Make A User Channel Moderator
+* Make An User Channel Moderator
 
 ```
 Alexa, Make USERNAME Moderator Of CHANNELNAME
 ```
 
-* Make A User Channel Owner
+* Make An User Channel Owner
 
 ```
 Alexa, Make USERNAME Owner Of CHANNELNAME
@@ -36,7 +36,7 @@ Alexa, Make USERNAME Owner Of CHANNELNAME
 Alexa, Archive CHANNELNAME
 ```
 
-#Chat
+# Chat
 
 * Post A Message
 
@@ -44,13 +44,12 @@ Alexa, Archive CHANNELNAME
 Alexa, Send MESSAGE to CHANNELNAME
 ```
 
-* Read Last Message On A Channel
+* Read Last Message From A Channel
 
 ```
 Alexa, Read CHANNELNAME last message
 ```
 
+# IM
 
-#IM
-
-#User
+# User
