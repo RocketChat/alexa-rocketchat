@@ -2,7 +2,7 @@
 /* eslint-disable  no-console */
 
 const Alexa = require('ask-sdk-core');
-const functionsAxios = require('./functionsAxios');
+const helperFunctions = require('./helperFunctions');
 
 
 //Alexa Intent Functions
@@ -44,8 +44,8 @@ const CreateChannelIntentHandler = {
 
       let channelName = handlerInput.requestEnvelope.request.intent.slots.channelname.value;
 
-      const headers = await functionsAxios.login(accessToken);
-      const speechText = await functionsAxios.createChannel(channelName, headers);
+      const headers = await helperFunctions.login(accessToken);
+      const speechText = await helperFunctions.createChannel(channelName, headers);
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -69,8 +69,8 @@ const DeleteChannelIntentHandler = {
 
       let channelName = handlerInput.requestEnvelope.request.intent.slots.channeldelete.value;
 
-      const headers = await functionsAxios.login(accessToken);
-      const speechText = await functionsAxios.deleteChannel(channelName, headers);
+      const headers = await helperFunctions.login(accessToken);
+      const speechText = await helperFunctions.deleteChannel(channelName, headers);
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -95,8 +95,8 @@ const PostMessageIntentHandler = {
       let message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
       let channelName = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
 
-      const headers = await functionsAxios.login(accessToken);
-      const speechText = await functionsAxios.postMessage(channelName, message, headers);
+      const headers = await helperFunctions.login(accessToken);
+      const speechText = await helperFunctions.postMessage(channelName, message, headers);
 
 
       return handlerInput.responseBuilder
@@ -121,8 +121,8 @@ const GetLastMessageFromChannelIntentHandler = {
 
       let channelName = handlerInput.requestEnvelope.request.intent.slots.getmessagechannelname.value;
 
-      const headers = await functionsAxios.login(accessToken);
-      const speechText = await functionsAxios.channelLastMessage(channelName, headers);
+      const headers = await helperFunctions.login(accessToken);
+      const speechText = await helperFunctions.channelLastMessage(channelName, headers);
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -146,9 +146,9 @@ const AddAllToChannelIntentHandler = {
       let accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
       var channelName = handlerInput.requestEnvelope.request.intent.slots.addallchannelname.value;
 
-      const headers = await functionsAxios.login(accessToken);
-      const roomid = await functionsAxios.getRoomId(channelName, headers);
-      const speechText = await functionsAxios.addAll(channelName,roomid, headers);
+      const headers = await helperFunctions.login(accessToken);
+      const roomid = await helperFunctions.getRoomId(channelName, headers);
+      const speechText = await helperFunctions.addAll(channelName,roomid, headers);
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -173,10 +173,10 @@ const MakeModeratorIntentHandler = {
       var channelName = handlerInput.requestEnvelope.request.intent.slots.moderatorchannelname.value;
       let accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
       
-      const headers = await functionsAxios.login(accessToken);
-      const userid = await functionsAxios.getUserId(userName, headers);
-      const roomid = await functionsAxios.getRoomId(channelName, headers);
-      const speechText = await functionsAxios.makeModerator(userName,channelName,userid, roomid, headers);
+      const headers = await helperFunctions.login(accessToken);
+      const userid = await helperFunctions.getUserId(userName, headers);
+      const roomid = await helperFunctions.getRoomId(channelName, headers);
+      const speechText = await helperFunctions.makeModerator(userName,channelName,userid, roomid, headers);
      
 
       return handlerInput.responseBuilder
@@ -202,10 +202,10 @@ const AddOwnerIntentHandler = {
       var channelName = handlerInput.requestEnvelope.request.intent.slots.ownerchannelname.value;
       let accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
 
-      const headers = await functionsAxios.login(accessToken);
-      const userid = await functionsAxios.getUserId(userName, headers);
-      const roomid = await functionsAxios.getRoomId(channelName, headers);
-      const speechText = await functionsAxios.addOwner(userName,channelName,userid, roomid, headers);
+      const headers = await helperFunctions.login(accessToken);
+      const userid = await helperFunctions.getUserId(userName, headers);
+      const roomid = await helperFunctions.getRoomId(channelName, headers);
+      const speechText = await helperFunctions.addOwner(userName,channelName,userid, roomid, headers);
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -229,9 +229,9 @@ const ArchiveChannelIntentHandler = {
       var channelName = handlerInput.requestEnvelope.request.intent.slots.archivechannelname.value;
       let accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
 
-      const headers = await functionsAxios.login(accessToken);
-      const roomid = await functionsAxios.getRoomId(channelName, headers);
-      const speechText = await functionsAxios.archiveChannel(channelName,roomid, headers);
+      const headers = await helperFunctions.login(accessToken);
+      const roomid = await helperFunctions.getRoomId(channelName, headers);
+      const speechText = await helperFunctions.archiveChannel(channelName,roomid, headers);
 
       return handlerInput.responseBuilder
         .speak(speechText)
