@@ -137,6 +137,19 @@
                     "samples": [
                         "archive {archivechannelname}"
                     ]
+                },
+                {
+                    "name": "ReadUnreadsIntent",
+                    "slots": [
+                        {
+                            "name": "readunreadschannel",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Any Unread Messages in {readunreadschannel}",
+                        "Read My Unread Messages From {readunreadschannel}"
+                    ]
                 }
             ],
             "types": [
