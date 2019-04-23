@@ -50,6 +50,12 @@ Alexa, Send MESSAGE to CHANNELNAME
 Alexa, Read CHANNELNAME last message
 ```
 
+* Read Unread Messages From A Channel
+
+```
+Alexa, Read My Unread Messages From CHANNELNAME
+```
+
 # IM
 
 # User

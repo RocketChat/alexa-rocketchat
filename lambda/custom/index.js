@@ -135,6 +135,31 @@ const GetLastMessageFromChannelIntentHandler = {
   },
 };
 
+const GetUnreadMessagesIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'ReadUnreadsIntent';
+  },
+  async handle(handlerInput) {
+    try {
+      let accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
+      let channelName = handlerInput.requestEnvelope.request.intent.slots.readunreadschannel.value;
+
+      const headers = await helperFunctions.login(accessToken);
+      const unreadCount = await helperFunctions.getUnreadCounter(channelName, headers);
+      const speechText = await helperFunctions.channelUnreadMessages(channelName, unreadCount, headers);
+
+      return handlerInput.responseBuilder
+        .speak(speechText)
+        .withSimpleCard('Channel Message', speechText)
+        .reprompt(speechText)
+        .getResponse();
+    } catch (error) {
+      console.error(error);
+    }
+  },
+};
+
 const AddAllToChannelIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -314,6 +339,7 @@ exports.handler = skillBuilder
     MakeModeratorIntentHandler,
     AddOwnerIntentHandler,
     ArchiveChannelIntentHandler,
+    GetUnreadMessagesIntentHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler
