@@ -162,7 +162,7 @@ const channelUnreadMessages = async (channelName,unreadCount, headers) => {
           var array = [];
           
           for (var i = 0; i <= unreadCount-1; i++) {
-                  array.push(`${res.messages[i].u.name} says, ${res.messages[i].msg} <break time="0.7s"/> `);
+                  array.push(`${res.messages[i].u.username} says, ${res.messages[i].msg} <break time="0.7s"/> `);
                 }
           
           var responseString = `You Have ${unreadCount} Unread Messages <break time="1s"/> ` + array.join(', ');
