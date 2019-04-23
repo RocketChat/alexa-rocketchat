@@ -136,28 +136,28 @@ const GetLastMessageFromChannelIntentHandler = {
 };
 
 const GetUnreadMessagesIntentHandler = {
-  canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'ReadUnreadsIntent';
-  },
-  async handle(handlerInput) {
-    try {
-      let accessToken = handlerInput.requestEnvelope.context.System.user.accessToken;
-      let channelName = handlerInput.requestEnvelope.request.intent.slots.readunreadschannel.value;
+	},
+	async handle(handlerInput) {
+		try {
+			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+			const channelName = handlerInput.requestEnvelope.request.intent.slots.readunreadschannel.value;
 
-      const headers = await helperFunctions.login(accessToken);
-      const unreadCount = await helperFunctions.getUnreadCounter(channelName, headers);
-      const speechText = await helperFunctions.channelUnreadMessages(channelName, unreadCount, headers);
+			const headers = await helperFunctions.login(accessToken);
+			const unreadCount = await helperFunctions.getUnreadCounter(channelName, headers);
+			const speechText = await helperFunctions.channelUnreadMessages(channelName, unreadCount, headers);
 
-      return handlerInput.responseBuilder
-        .speak(speechText)
-        .withSimpleCard('Channel Message', speechText)
-        .reprompt(speechText)
-        .getResponse();
-    } catch (error) {
-      console.error(error);
-    }
-  },
+			return handlerInput.responseBuilder
+				.speak(speechText)
+				.withSimpleCard('Channel Message', speechText)
+				.reprompt(speechText)
+				.getResponse();
+		} catch (error) {
+			console.error(error);
+		}
+	},
 };
 
 const AddAllToChannelIntentHandler = {
@@ -329,20 +329,20 @@ const ErrorHandler = {
 const skillBuilder = Alexa.SkillBuilders.custom();
 
 exports.handler = skillBuilder
-  .addRequestHandlers(
-    LaunchRequestHandler,
-    CreateChannelIntentHandler,
-    DeleteChannelIntentHandler,
-    PostMessageIntentHandler,
-    GetLastMessageFromChannelIntentHandler,
-    AddAllToChannelIntentHandler,
-    MakeModeratorIntentHandler,
-    AddOwnerIntentHandler,
-    ArchiveChannelIntentHandler,
-    GetUnreadMessagesIntentHandler,
-    HelpIntentHandler,
-    CancelAndStopIntentHandler,
-    SessionEndedRequestHandler
-  )
-  .addErrorHandlers(ErrorHandler)
-  .lambda();
+	.addRequestHandlers(
+		LaunchRequestHandler,
+		CreateChannelIntentHandler,
+		DeleteChannelIntentHandler,
+		PostMessageIntentHandler,
+		GetLastMessageFromChannelIntentHandler,
+		AddAllToChannelIntentHandler,
+		MakeModeratorIntentHandler,
+		AddOwnerIntentHandler,
+		ArchiveChannelIntentHandler,
+		GetUnreadMessagesIntentHandler,
+		HelpIntentHandler,
+		CancelAndStopIntentHandler,
+		SessionEndedRequestHandler
+	)
+	.addErrorHandlers(ErrorHandler)
+	.lambda();

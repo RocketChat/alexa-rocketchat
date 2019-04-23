@@ -114,71 +114,57 @@ const channelLastMessage = async (channelName, headers) => await axios.get(`${ a
 		}
 	});
 
-const getUnreadCounter = async (channelName, headers) => {
-  return await axios.get(`${apiEndpoints.counterurl}${channelName}`,
-    { headers: headers })
-    .then(res => res.data)
-    .then(res => {
-        return `${res.unreads}`;
-    })
-    .catch(err => {
-      console.log(err.message);
-    });
-};
+const getUnreadCounter = async (channelName, headers) => await axios.get(`${ apiEndpoints.counterurl }${ channelName }`,
+	{ headers })
+	.then((res) => res.data)
+	.then((res) => `${ res.unreads }`)
+	.catch((err) => {
+		console.log(err.message);
+	});
 
-const channelUnreadMessages = async (channelName,unreadCount, headers) => {
-  return await axios.get(`${apiEndpoints.channelmessageurl}${channelName}`,
-    { headers: headers })
-    .then(res => res.data)
-    .then(res => {
-      if(res.success == true){
-        
-        if(unreadCount == 0){
-        
-        return `You Don't Have Any Unread Messages`;
-          
-        }
-        
-        else{
-       
-          var array = [];
-          
-          for (var i = 0; i <= unreadCount-1; i++) {
-                  array.push(`${res.messages[i].u.username} says, ${res.messages[i].msg} <break time="0.7s"/> `);
-                }
-          
-          var responseString = `You Have ${unreadCount} Unread Messages <break time="1s"/> ` + array.join(', ');
-          
-          return responseString;
-          
-        }
-      }
-      else{
-        return `Sorry, I couldn't find the channel ${channelName} right now`;
-      }
-    })
-    .catch(err => {
-      console.log(err.message);
-      if(err.response.data.errorType == `error-room-not-found`){
-        return `Sorry, the channel ${channelName} does not exist. Please try again with different channel name.`;
-      }
-      else{
-        return `Sorry, I couldn't find the channel ${channelName} right now`;
-      }
-    });
-};
+const channelUnreadMessages = async (channelName, unreadCount, headers) => await axios.get(`${ apiEndpoints.channelmessageurl }${ channelName }`,
+	{ headers })
+	.then((res) => res.data)
+	.then((res) => {
+		if (res.success === true) {
 
-const getUserId = async (userName, headers) => {
-  return await axios.get(`${apiEndpoints.userinfourl}${userName}`,
-    { headers: headers })
-    .then(res => res.data)
-    .then(res => {
-        return `${res.user._id}`;
-    })
-    .catch(err => {
-      console.log(err.message);
-    });
-};
+			if (unreadCount === 0) {
+
+				return 'You Don\'t Have Any Unread Messages';
+
+			} else {
+
+				const array = [];
+
+				for (let i = 0; i <= unreadCount - 1; i++) {
+					array.push(`${ res.messages[i].u.username } says, ${ res.messages[i].msg } <break time="0.7s"/> `);
+				}
+
+				const responseString = `You Have ${ unreadCount } Unread Messages <break time="1s"/> ${ array.join(', ') }`;
+
+				return responseString;
+
+			}
+		} else {
+			return `Sorry, I couldn't find the channel ${ channelName } right now`;
+		}
+	})
+	.catch((err) => {
+		console.log(err.message);
+		if (err.response.data.errorType === 'error-room-not-found') {
+			return `Sorry, the channel ${ channelName } does not exist. Please try again with different channel name.`;
+		} else {
+			return `Sorry, I couldn't find the channel ${ channelName } right now`;
+		}
+	});
+
+const getUserId = async (userName, headers) => await axios.get(`${ apiEndpoints.userinfourl }${ userName }`,
+	{ headers })
+	.then((res) => res.data)
+	.then((res) => `${ res.user._id }`)
+	.catch((err) => {
+		console.log(err.message);
+	});
 
 const getRoomId = async (channelName, headers) => await axios.get(`${ apiEndpoints.channelinfourl }${ channelName }`,
 	{ headers })
