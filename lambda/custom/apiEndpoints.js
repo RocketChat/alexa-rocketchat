@@ -1,12 +1,11 @@
-
 const envVariables = require('./config');
 
-//Server URL Environment Variable
+// Server URL Environment Variable
 
-const serverurl = envVariables.serverurl;
+const { serverurl } = envVariables;
 
 
-//REST API Endpoints
+// REST API Endpoints
 
 module.exports = {
   loginUrl: `${serverurl}/api/v1/login`,
