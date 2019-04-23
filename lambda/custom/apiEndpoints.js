@@ -19,7 +19,8 @@ module.exports = {
   addallurl: `${serverurl}/api/v1/channels.addAll`,
   makemoderatorurl: `${serverurl}/api/v1/channels.addModerator`,
   addownerurl: `${serverurl}/api/v1/channels.addOwner`,
-  archivechannelurl: `${serverurl}/api/v1/channels.archive`
+  archivechannelurl: `${serverurl}/api/v1/channels.archive`,
+  counterurl: `${serverurl}/api/v1/channels.counters?roomName=`
   
 };
 
