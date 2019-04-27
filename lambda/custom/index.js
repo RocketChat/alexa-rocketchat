@@ -4,6 +4,9 @@
 const Alexa = require('ask-sdk-core');
 const helperFunctions = require('./helperFunctions');
 
+//Jargon for Localization
+const Jargon = require('@jargon/alexa-skill-sdk')
+const ri = Jargon.ri
 
 //Alexa Intent Functions
 
@@ -15,19 +18,19 @@ const LaunchRequestHandler = {
 
     if (handlerInput.requestEnvelope.context.System.user.accessToken === undefined) {
 
-      const speechText = `To start using this skill, please use the companion app to authenticate.`;
+      const speechText = ri('WELCOME.ERROR');
 
-      return handlerInput.responseBuilder
+      return handlerInput.jrb
         .speak(speechText)
         .withLinkAccountCard()
         .getResponse();
     }
-    const speechText = `Welcome To Rocket Chat Alexa Skill. What Would you like to do today ?`;
+    const speechText = ri('WELCOME.SUCCESS');
 
-    return handlerInput.responseBuilder
+    return handlerInput.jrb
       .speak(speechText)
       .reprompt(speechText)
-      .withSimpleCard('Welcome To Rocket.Chat', speechText)
+      .withSimpleCard(ri('WELCOME.CARD_TITLE'), speechText)
       .getResponse();
 
   },
@@ -47,10 +50,10 @@ const CreateChannelIntentHandler = {
       const headers = await helperFunctions.login(accessToken);
       const speechText = await helperFunctions.createChannel(channelName, headers);
 
-      return handlerInput.responseBuilder
+      return handlerInput.jrb
         .speak(speechText)
-        .withSimpleCard('Create A Channel', speechText)
         .reprompt(speechText)
+        .withSimpleCard(ri('CREATE_CHANNEL.CARD_TITLE'), speechText)
         .getResponse();
     } catch (error) {
       console.error(error);
@@ -72,10 +75,10 @@ const DeleteChannelIntentHandler = {
       const headers = await helperFunctions.login(accessToken);
       const speechText = await helperFunctions.deleteChannel(channelName, headers);
 
-      return handlerInput.responseBuilder
+      return handlerInput.jrb
         .speak(speechText)
-        .withSimpleCard('Delete A Channel', speechText)
         .reprompt(speechText)
+        .withSimpleCard('DELETE_CHANNEL.CARD_TITLE', speechText)
         .getResponse();
     } catch (error) {
       console.error(error);
@@ -99,10 +102,10 @@ const PostMessageIntentHandler = {
       const speechText = await helperFunctions.postMessage(channelName, message, headers);
 
 
-      return handlerInput.responseBuilder
+      return handlerInput.jrb
         .speak(speechText)
-        .withSimpleCard('Post A Message', speechText)
         .reprompt(speechText)
+        .withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
         .getResponse();
     } catch (error) {
       console.error(error);
@@ -124,10 +127,10 @@ const GetLastMessageFromChannelIntentHandler = {
       const headers = await helperFunctions.login(accessToken);
       const speechText = await helperFunctions.channelLastMessage(channelName, headers);
 
-      return handlerInput.responseBuilder
+      return handlerInput.jrb
         .speak(speechText)
-        .withSimpleCard('Channel Message', speechText)
         .reprompt(speechText)
+        .withSimpleCard(ri('GET_LAST_MESSAGE_FROM_CHANNEL.CARD_TITLE'), speechText)
         .getResponse();
     } catch (error) {
       console.error(error);
@@ -149,10 +152,10 @@ const GetUnreadMessagesIntentHandler = {
       const unreadCount = await helperFunctions.getUnreadCounter(channelName, headers);
       const speechText = await helperFunctions.channelUnreadMessages(channelName, unreadCount, headers);
 
-      return handlerInput.responseBuilder
+      return handlerInput.jrb
         .speak(speechText)
-        .withSimpleCard('Channel Message', speechText)
         .reprompt(speechText)
+        .withSimpleCard(ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.CARD_TITLE'), speechText)
         .getResponse();
     } catch (error) {
       console.error(error);
@@ -175,10 +178,10 @@ const AddAllToChannelIntentHandler = {
       const roomid = await helperFunctions.getRoomId(channelName, headers);
       const speechText = await helperFunctions.addAll(channelName,roomid, headers);
 
-      return handlerInput.responseBuilder
+      return handlerInput.jrb
         .speak(speechText)
-        .withSimpleCard('Add All To Server', speechText)
         .reprompt(speechText)
+        .withSimpleCard(ri('ADD_ALL_TO_CHANNEL.CARD_TITLE'), speechText)
         .getResponse();
     } catch (error) {
       console.error(error);
@@ -201,13 +204,13 @@ const MakeModeratorIntentHandler = {
       const headers = await helperFunctions.login(accessToken);
       const userid = await helperFunctions.getUserId(userName, headers);
       const roomid = await helperFunctions.getRoomId(channelName, headers);
-      const speechText = await helperFunctions.makeModerator(userName,channelName,userid, roomid, headers);
+      const speechText = await helperFunctions.makeModerator(userName, channelName, userid, roomid, headers);
      
 
-      return handlerInput.responseBuilder
+      return handlerInput.jrb
         .speak(speechText)
-        .withSimpleCard('Make Moderator', speechText)
         .reprompt(speechText)
+        .withSimpleCard(ri('MAKE_MODERATOR.CARD_TITLE'), speechText)
         .getResponse();
     } catch (error) {
       console.error(error);
@@ -232,10 +235,10 @@ const AddOwnerIntentHandler = {
       const roomid = await helperFunctions.getRoomId(channelName, headers);
       const speechText = await helperFunctions.addOwner(userName,channelName,userid, roomid, headers);
 
-      return handlerInput.responseBuilder
+      return handlerInput.jrb
         .speak(speechText)
-        .withSimpleCard('Add Owner', speechText)
         .reprompt(speechText)
+        .withSimpleCard(ri('ADD_OWNER.CARD_TITLE'), speechText)
         .getResponse();
     } catch (error) {
       console.error(error);
@@ -258,10 +261,10 @@ const ArchiveChannelIntentHandler = {
       const roomid = await helperFunctions.getRoomId(channelName, headers);
       const speechText = await helperFunctions.archiveChannel(channelName,roomid, headers);
 
-      return handlerInput.responseBuilder
+      return handlerInput.jrb
         .speak(speechText)
-        .withSimpleCard('Archive Channel', speechText)
         .reprompt(speechText)
+        .withSimpleCard(ri('ARCHIVE_CHANNEL.CARD_TITLE'), speechText)
         .getResponse();
     } catch (error) {
       console.error(error);
@@ -275,12 +278,12 @@ const HelpIntentHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
   },
   handle(handlerInput) {
-    const speechText = 'This is the Alexa Skill for rocket chat. Refer sample utterances file on GitHub.';
+    const speechText = ri('HELP.MESSAGE');
 
-    return handlerInput.responseBuilder
+    return handlerInput.jrb
       .speak(speechText)
       .reprompt(speechText)
-      .withSimpleCard('Rocket Chat', speechText)
+      .withSimpleCard(ri('HELP.CARD_TITLE'), speechText)
       .getResponse();
   },
 };
@@ -292,11 +295,11 @@ const CancelAndStopIntentHandler = {
         || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent');
   },
   handle(handlerInput) {
-    const speechText = 'Goodbye!';
+    const speechText = ri('GOODBYE.MESSAGE');
 
-    return handlerInput.responseBuilder
+    return handlerInput.jrb
       .speak(speechText)
-      .withSimpleCard('Rocket Chat', speechText)
+      .withSimpleCard(ri('GOODBYE.CARD_TITLE'), speechText)
       .getResponse();
   },
 };
@@ -318,15 +321,16 @@ const ErrorHandler = {
   },
   handle(handlerInput, error) {
     console.log(`Error handled: ${error.message}`);
+    const speechText = ri('ERROR');
 
-    return handlerInput.responseBuilder
-      .speak('Sorry, I can\'t understand the command. Please say again.')
-      .reprompt('Sorry, I can\'t understand the command. Please say again.')
+    return handlerInput.jrb
+      .speak(speechText)
+      .reprompt(speechText)
       .getResponse();
   },
 };
 
-const skillBuilder = Alexa.SkillBuilders.custom();
+const skillBuilder = new Jargon.JargonSkillBuilder().installOnto(Alexa.SkillBuilders.custom())
 
 exports.handler = skillBuilder
   .addRequestHandlers(
