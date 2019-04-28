@@ -78,7 +78,7 @@ const DeleteChannelIntentHandler = {
       return handlerInput.jrb
         .speak(speechText)
         .reprompt(speechText)
-        .withSimpleCard('DELETE_CHANNEL.CARD_TITLE', speechText)
+        .withSimpleCard(ri('DELETE_CHANNEL.CARD_TITLE'), speechText)
         .getResponse();
     } catch (error) {
       console.error(error);
