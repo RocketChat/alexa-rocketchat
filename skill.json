@@ -1,31 +1,41 @@
 {
-  "manifest": {
-    "publishingInformation": {
-      "locales": {
-        "en-US": {
-          "summary": "Alexa Skill For Rocket.Chat",
-          "examplePhrases": [
-            "Alexa, Open Rocketchat",
-            "Alexa, Begin Rocketchat",
-            "Alexa, Begin Rocketchat"
-          ],
-          "name": "Rocket.Chat",
-          "description": "Sample Full Description"
-        }
-      },
-      "isAvailableWorldwide": true,
-      "testingInstructions": "Sample Testing Instructions.",
-      "category": "COMMUNICATION",
-      "distributionCountries": []
-    },
-    "apis": {
-      "custom": {
-        "endpoint": {
-          "sourceDir": "lambda/custom",
-          "uri": "ask-custom-rocket-chat-default"
-        }
-      }
-    },
-    "manifestVersion": "1.0"
-  }
+    "manifest": {
+        "publishingInformation": {
+            "locales": {
+                "en-US": {
+                    "summary": "Alexa Skill For Rocket.Chat",
+                    "examplePhrases": [
+                        "Alexa, Open Rocketchat",
+                        "Alexa, Begin Rocketchat",
+                        "Alexa, Begin Rocketchat"
+                    ],
+                    "name": "Rocket.Chat",
+                    "description": "Sample Full Description"
+                },
+                "it-IT": {
+                    "summary": "Alexa Skill per Rocket.Chat",
+                    "examplePhrases": [
+                        "Alexa, Apri Rocketchat",
+                        "Alexa, Avvia Rocketchat",
+                        "Alexa, Lancia Rocketchat"
+                    ],
+                    "name": "Rocket.Chat",
+                    "description": "Esempio di descrizione completa."
+                }
+            },
+            "isAvailableWorldwide": true,
+            "testingInstructions": "Sample Testing Instructions.",
+            "category": "COMMUNICATION",
+            "distributionCountries": []
+        },
+        "apis": {
+            "custom": {
+                "endpoint": {
+                    "sourceDir": "lambda/custom",
+                    "uri": "ask-custom-rocket-chat-default"
+                }
+            }
+        },
+        "manifestVersion": "1.0"
+    }
 }

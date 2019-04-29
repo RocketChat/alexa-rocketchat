@@ -1,0 +1,75 @@
+{
+    "ERRORS": {
+        "v1": "Scusa, non ho potuto capire il comando. Per piacere, dillo ancora.",
+        "v2": "Scusa, non ho afferrato. Potresti ripeterlo?."
+    },
+    "HELP": {
+        "MESSAGE": "Questa è la Skill di Alexa per Rocket Chat. Riferisciti al file con le frasi di esempio su GitHub.",
+        "CARD_TITLE": "Rocket.Chat Aiuto"
+    },
+    "GOODBYE": {
+        "MESSAGE": "Grazie per aver usato Rocket Chat.",
+        "CARD_TITLE": "Arrivederci!"
+    },
+    "WELCOME": {
+        "SUCCESS": "Benvenuto nella Skill di Alexa per Rocket Chat. Cosa ti piacerebbe fare oggi?",
+        "CARD_TITLE": "Benvenuto In Rocket.Chat",
+        "ERROR": "Per iniziare ad usare questa skill, usa l'applicazione di Alexa per eseguire l'accesso."
+    },
+    "POST_MESSAGE": {
+        "SUCCESS": "Ho inviato il tuo messaggio.",
+        "CARD_TITLE": "Invia Un Messaggio",
+        "ERROR": "Scusa, non ho potuto inviare il tuo messaggio ora."
+    },
+    "CREATE_CHANNEL": {
+        "SUCCESS": "Ho creato il tuo canale {channelName}.",
+        "CARD_TITLE": "Crea Un Canale",
+        "ERROR": "Scusa, non ho potuto creare il canale {channelName} ora.",
+        "ERROR_DUPLICATE_NAME": "Scusa, il canale {channelName} esiste già. Riprova con un nome differente.",
+        "ERROR_INVALID_NAME": "Scusa, {channelName} non è un nome per il canale valido. Riprova con una nome contenente una sola parola."
+    },
+    "DELETE_CHANNEL": {
+        "SUCCESS": "Ho eliminato il canale {channelName}.",
+        "CARD_TITLE": "Elimina Un Canale",
+        "ERROR": "Scusa, non ho potuto eliminare il canale {channelName} ora.",
+        "ERROR_NOT_FOUND": "Scusa, il canale {channelName} non esiste. Riprova con un nome differente."
+    },
+    "GET_LAST_MESSAGE_FROM_CHANNEL": {
+        "SUCCESS": "{name} dice, {message}.",
+        "CARD_TITLE": "Ultimo Messaggio Del Canale",
+        "ERROR": "Scusa, non ho potuto trovare il canale {channelName} ora.",
+        "ERROR_NOT_FOUND": "Scusa, il canale {channelName} non esiste. Riprova con un nome differente."
+    },
+    "GET_UNREAD_MESSAGES_FROM_CHANNEL": {
+        "SUCCESS": "Hai {unreadCount, plural, =1 { un messaggio non letto. } other { # messaggi non letti. }} <break time='1s'/> ",
+        "MESSAGE": "{name} dice, {message}. <break time='0.7s'/> ",
+        "NO_MESSAGE": "Non hai nessun messaggio non letto.",
+        "CARD_TITLE": "Messaggi Del Canale Non Letti",
+        "ERROR": "Scusa, non ho potuto trovare il canale {channelName} ora.",
+        "ERROR_NOT_FOUND": "Scusa, il canale {channelName} non esiste. Riprova con un nome differente."
+    },
+    "MAKE_MODERATOR": {
+        "SUCCESS": "{userName} è ora moderatore di {channelName}.",
+        "CARD_TITLE": "Assegna Moderatore",
+        "ERROR": "Scusa, non ho potuto assegnare il moderatore ora.",
+        "ERROR_NOT_FOUND": "Scusa, non ho potuto assegnare il moderatore a {channelName} ora."
+    },
+    "ADD_ALL_TO_CHANNEL": {
+        "SUCCESS": "Ho aggiunto tutti a {channelName}.",
+        "CARD_TITLE": "Aggiungi Tutti A Un Canale",
+        "ERROR": "Scusa, non sono in grado di aggiungere tutti al canale ora.",
+        "ERROR_NOT_FOUND": "Scusa, non sono in grado di aggiungere tutti al canale {channelName} ora."
+    },
+    "ADD_OWNER": {
+        "SUCCESS": "{userName} è ora proprietario di {channelName}.",
+        "CARD_TITLE": "Aggiungi proprietario",
+        "ERROR": "Scusa, non ho potuto assegnare il proprietario al canale ora.",
+        "ERROR_NOT_FOUND": "Scusa, non ho potuto assegnare il proprietario al canale {channelName} ora."
+    },
+    "ARCHIVE_CHANNEL": {
+        "SUCCESS": "{channelName} è ora archiviato.",
+        "CARD_TITLE": "Archivia Canale",
+        "ERROR": "Scusa, non ho potuto archiviare il canale ora.",
+        "ERROR_NOT_FOUND": "Scusa, non ho potuto archiviare il canale {channelName} ora."
+    }
+}
