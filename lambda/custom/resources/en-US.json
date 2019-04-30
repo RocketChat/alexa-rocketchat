@@ -41,7 +41,7 @@
       "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
   },
   "GET_UNREAD_MESSAGES_FROM_CHANNEL": {
-    "MESSAGE": "You Have {unread} Unread Messages <break time='1s'/> {respString} <break time='0.7s'/> ",
+      "MESSAGE": "You Have {unread} Unread Messages <break time='1s'/> {respString} <break time='0.7s'/> ",
       "NO_MESSAGE": "You Don't Have Any Unread Messages.",
       "CARD_TITLE": "Channel Unread Messages",
       "ERROR": "Sorry, I couldn't find the channel {channelName} right now.",

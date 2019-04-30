@@ -170,6 +170,7 @@ const channelUnreadMessages = async (channelName, unreadCount, headers) => {
           var finalMsg = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.MESSAGE', { respString: responseString, unread:unreadCount });
 
           return finalMsg;
+          
 
         }
       }
