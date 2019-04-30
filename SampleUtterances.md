@@ -1,136 +1,156 @@
 # Channel
 
-* Create A New Channel
+* **Create A New Channel**
 
 
-**English**
+English
 
 ```
 Alexa, Create CHANNELNAME
 ```
 
-**Portuguese**
+Portuguese
 
 ```
 Alexa, Criar Quarto CHANNELNAME
 ```
 
-* Delete A Channel
 
 
-**English**
+* **Delete A Channel**
+
+
+English
 
 ```
 Alexa, Delete CHANNELNAME
 ```
 
-**Portuguese**
+Portuguese
 
 ```
 Alexa, Excluir Quarto CHANNELNAME
 ```
 
-* Add All Users On Server To A Channel
 
-**English**
+
+* **Add All Users On Server To A Channel**
+
+English
 
 ```
 Alexa, Add All To CHANNELNAME
 ```
 
-**Portuguese**
+Portuguese
 
 ```
 Alexa, Adicione Tudo Ao CHANNELNAME
 ```
 
 
-* Make An User Channel Moderator
 
-**English**
+
+* **Make An User Channel Moderator**
+
+English
 
 ```
 Alexa, Make USERNAME Moderator Of CHANNELNAME
 ```
 
-**Portuguese**
+Portuguese
 
 ```
 Alexa, Fazer USERNAME Moderador De CHANNELNAME
 ```
 
-* Make An User Channel Owner
 
-**English**
+
+* **Make An User Channel Owner**
+
+English
 
 ```
 Alexa, Make USERNAME Owner Of CHANNELNAME
 ```
 
-**Portuguese**
+Portuguese
 
 ```
 Alexa, Fazer USERNAME dono de CHANNELNAME
 ```
 
-* Archive A Channel
 
-**English**
+
+* **Archive A Channel**
+
+English
 
 ```
 Alexa, Archive CHANNELNAME
 ```
 
-**Portuguese**
+Portuguese
 
 ```
 Alexa, Arquivo CHANNELNAME
 ```
 
+
+
 # Chat
 
-* Post A Message
 
-**English**
+
+* **Post A Message**
+
+English
 
 ```
 Alexa, Send MESSAGE to CHANNELNAME
 ```
 
-**Portuguese**
+Portuguese
 
 ```
 Alexa, Mandar MESSAGE Para O CHANNELNAME
 ```
 
-* Read Last Message From A Channel
 
-**English**
+
+* **Read Last Message From A Channel**
+
+English
 
 ```
 Alexa, Read CHANNELNAME last message
 ```
 
-**Portuguese**
+Portuguese
 
 ```
 Alexa, Leia A última Mensagem Do CHANNELNAME
 ```
 
-* Read Unread Messages From A Channel
 
-**English**
+
+* **Read Unread Messages From A Channel**
+
+English
 
 ```
 Alexa, Read My Unread Messages From CHANNELNAME
 ```
 
-**Portuguese**
+Portuguese
 
 ```
 Alexa, Leia Minhas Mensagens Não Lidas De CHANNELNAME
 
 ```
+
+
 
 # IM
 
