@@ -1,9 +1,9 @@
-
 const axios = require('axios');
 const apiEndpoints = require('./apiEndpoints');
 const envVariables = require('./config');
 
-
+const Jargon = require('@jargon/alexa-skill-sdk')
+const ri = Jargon.ri
 
 //Server Credentials. Follow readme to set them up.
 const oauthServiceName = envVariables.oauthServiceName;
@@ -40,23 +40,23 @@ const createChannel = async (channelName, headers) => {
     { headers: headers })
     .then(res => res.data)
     .then(res => {
-      if(res.success == true){
-        return `I've created your channel ${channelName}`;
+      if (res.success == true) {
+        return ri('CREATE_CHANNEL.SUCCESS', { channelName: channelName });
       }
-      else{
-        return `Sorry, I couldn't create the channel ${channelName} right now`;
+      else {
+        return ri('CREATE_CHANNEL.ERROR', { channelName: channelName });
       }
     })
     .catch(err => {
       console.log(err.message);
-      if(err.response.data.errorType == `error-duplicate-channel-name`){
-        return `Sorry, the channel ${channelName} already exists. Please try again with different channel name.`;
+      if (err.response.data.errorType == `error-duplicate-channel-name`) {
+        return ri('CREATE_CHANNEL.ERROR_DUPLICATE_NAME', { channelName: channelName });
       }
-      else if(err.response.data.errorType == `error-invalid-room-name`){
-        return `Sorry, ${channelName} is not a valid channel name. Please try again with a single word name for the channel`;
+      else if (err.response.data.errorType == `error-invalid-room-name`) {
+        return ri('CREATE_CHANNEL.ERROR_INVALID_NAME', { channelName: channelName });
       }
-      else{
-        return `Sorry, I couldn't create the channel ${channelName} right now`;
+      else {
+        return ri('CREATE_CHANNEL.ERROR', { channelName: channelName });
       }
     });
 };
@@ -69,20 +69,20 @@ const deleteChannel = async (channelName, headers) => {
     { headers: headers })
     .then(res => res.data)
     .then(res => {
-      if(res.success == true){
-        return `I've deleted the channel ${channelName}`;
+      if (res.success == true) {
+        return ri('DELETE_CHANNEL.SUCCESS', { channelName: channelName });
       }
-      else{
-        return `Sorry, I couldn't delete the channel ${channelName} right now`;
+      else {
+        return ri('DELETE_CHANNEL.ERROR', { channelName: channelName });
       }
     })
     .catch(err => {
       console.log(err.message);
-      if(err.response.data.errorType == `error-room-not-found`){
-        return `Sorry, the channel ${channelName} does not exist. Please try again with different channel name.`;
+      if (err.response.data.errorType == `error-room-not-found`) {
+        return ri('DELETE_CHANNEL.ERROR_NOT_FOUND', { channelName: channelName });
       }
-      else{
-        return `Sorry, I couldn't delete the channel ${channelName} right now`;
+      else {
+        return ri('DELETE_CHANNEL.ERROR', { channelName: channelName });
       }
     });
 };
@@ -96,16 +96,16 @@ const postMessage = async (channelName, message, headers) => {
     { headers: headers })
     .then(res => res.data)
     .then(res => {
-      if(res.success == true){
-        return `I've sent your message`;
+      if (res.success == true) {
+        return ri('POST_MESSAGE.SUCCESS');
       }
-      else{
-        return `Sorry, I couldn't send your message right now`;
+      else {
+        return ri('POST_MESSAGE.ERROR');
       }
     })
     .catch(err => {
       console.log(err.message);
-      return `Sorry, I couldn't send your message right now`;
+      return ri('POST_MESSAGE.ERROR');
     });
 };
 
@@ -114,20 +114,20 @@ const channelLastMessage = async (channelName, headers) => {
     { headers: headers })
     .then(res => res.data)
     .then(res => {
-      if(res.success == true){
-        return `${res.messages[0].u.name} says, ${res.messages[0].msg}`;
+      if (res.success == true) {
+        return ri('GET_LAST_MESSAGE_FROM_CHANNEL.SUCCESS', { name: res.messages[0].u.name, message: res.messages[0].msg });
       }
-      else{
-        return `Sorry, I couldn't find the channel ${channelName} right now`;
+      else {
+        return ri('GET_LAST_MESSAGE_FROM_CHANNEL.ERROR', { channelName: channelName });
       }
     })
     .catch(err => {
       console.log(err.message);
-      if(err.response.data.errorType == `error-room-not-found`){
-        return `Sorry, the channel ${channelName} does not exist. Please try again with different channel name.`;
+      if (err.response.data.errorType == `error-room-not-found`) {
+        return ri('GET_LAST_MESSAGE_FROM_CHANNEL.ERROR_NOT_FOUND', { channelName: channelName });
       }
-      else{
-        return `Sorry, I couldn't find the channel ${channelName} right now`;
+      else {
+        return ri('GET_LAST_MESSAGE_FROM_CHANNEL.ERROR', { channelName: channelName });
       }
     });
 };
@@ -137,51 +137,51 @@ const getUnreadCounter = async (channelName, headers) => {
     { headers: headers })
     .then(res => res.data)
     .then(res => {
-        return `${res.unreads}`;
+      return `${res.unreads}`;
     })
     .catch(err => {
       console.log(err.message);
     });
 };
 
-const channelUnreadMessages = async (channelName,unreadCount, headers) => {
+const channelUnreadMessages = async (channelName, unreadCount, headers) => {
   return await axios.get(`${apiEndpoints.channelmessageurl}${channelName}`,
     { headers: headers })
     .then(res => res.data)
     .then(res => {
-      if(res.success == true){
-        
-        if(unreadCount == 0){
-        
-        return `You Don't Have Any Unread Messages`;
-          
+      if (res.success == true) {
+
+        if (unreadCount == 0) {
+
+          return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.NO_MESSAGE');
+
         }
-        
-        else{
-       
-          var array = [];
-          
-          for (var i = 0; i <= unreadCount-1; i++) {
-                  array.push(`${res.messages[i].u.username} says, ${res.messages[i].msg} <break time="0.7s"/> `);
-                }
-          
-          var responseString = `You Have ${unreadCount} Unread Messages <break time="1s"/> ` + array.join(', ');
-          
+
+        else {
+
+          var msgs = [];
+
+          for (var i = 0; i <= unreadCount - 1; i++) {
+            msgs.push(ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.MESSAGE', { name: res.messages[i].u.username, message: res.messages[i].msg }));
+          }
+
+          var responseString = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.SUCCESS', { unreadCount: unreadCount }) + msgs.join(', ');
+
           return responseString;
-          
+
         }
       }
-      else{
-        return `Sorry, I couldn't find the channel ${channelName} right now`;
+      else {
+        return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.ERROR', { channelName: channelName });
       }
     })
     .catch(err => {
       console.log(err.message);
-      if(err.response.data.errorType == `error-room-not-found`){
-        return `Sorry, the channel ${channelName} does not exist. Please try again with different channel name.`;
+      if (err.response.data.errorType == `error-room-not-found`) {
+        return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.ERROR_NOT_FOUND', { channelName: channelName });
       }
-      else{
-        return `Sorry, I couldn't find the channel ${channelName} right now`;
+      else {
+        return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.ERROR', { channelName: channelName });
       }
     });
 };
@@ -191,7 +191,7 @@ const getUserId = async (userName, headers) => {
     { headers: headers })
     .then(res => res.data)
     .then(res => {
-        return `${res.user._id}`;
+      return `${res.user._id}`;
     })
     .catch(err => {
       console.log(err.message);
@@ -203,14 +203,14 @@ const getRoomId = async (channelName, headers) => {
     { headers: headers })
     .then(res => res.data)
     .then(res => {
-        return `${res.channel._id}`;
+      return `${res.channel._id}`;
     })
     .catch(err => {
       console.log(err.message);
     });
 };
 
-const makeModerator = async (userName,channelName,userid, roomid, headers) => {
+const makeModerator = async (userName, channelName, userid, roomid, headers) => {
   return await axios.post(apiEndpoints.makemoderatorurl,
     {
       "userId": userid,
@@ -219,22 +219,20 @@ const makeModerator = async (userName,channelName,userid, roomid, headers) => {
     { headers: headers })
     .then(res => res.data)
     .then(res => {
-      if(res.success == true){
-        return `${userName} is now the moderator of ${channelName}`;
+      if (res.success == true) {
+        return ri('MAKE_MODERATOR.SUCCESS', { userName: userName, channelName: channelName });
       }
-      else{
-        return `Sorry, I couldn't assign a moderator to ${channelName} right now`;
+      else {
+        return ri('MAKE_MODERATOR.ERROR');
       }
     })
     .catch(err => {
       console.log(err.message);
-      
-      return `Sorry, I couldn't assign a moderator right now`;
-      
+      return ri('MAKE_MODERATOR.ERROR_NOT_FOUND', { channelName: channelName });
     });
 };
 
-const addAll = async (channelName,roomid, headers) => {
+const addAll = async (channelName, roomid, headers) => {
   return await axios.post(apiEndpoints.addallurl,
     {
       "roomId": roomid
@@ -242,21 +240,21 @@ const addAll = async (channelName,roomid, headers) => {
     { headers: headers })
     .then(res => res.data)
     .then(res => {
-      if(res.success == true){
-        return `Added All Users To ${channelName}`;
+      if (res.success == true) {
+        return ri('ADD_ALL_TO_CHANNEL.SUCCESS', { channelName: channelName });
       }
-      else{
-        return `Sorry, I am unable to add all users to ${channelName}`;
+      else {
+        return ri('ADD_ALL_TO_CHANNEL.ERROR');
       }
     })
     .catch(err => {
       console.log(err.message);
-        return `Sorry, I am unable to add all users to ${channelName}`;
+      return ri('ADD_ALL_TO_CHANNEL.ERROR_NOT_FOUND', { channelName: channelName });
     });
 };
 
 
-const addOwner = async (userName,channelName,userid, roomid, headers) => {
+const addOwner = async (userName, channelName, userid, roomid, headers) => {
   return await axios.post(apiEndpoints.addownerurl,
     {
       "userId": userid,
@@ -265,22 +263,21 @@ const addOwner = async (userName,channelName,userid, roomid, headers) => {
     { headers: headers })
     .then(res => res.data)
     .then(res => {
-      if(res.success == true){
-        return `${userName} is now the owner of ${channelName}`;
+      if (res.success == true) {
+        return ri('ADD_OWNER.SUCCESS', { userName: userName, channelName: channelName });
       }
-      else{
-        return `Sorry, I couldn't assign a owner to ${channelName} right now`;
+      else {
+        return ri('ADD_OWNER.ERROR');
       }
     })
     .catch(err => {
       console.log(err.message);
-      
-      return `Sorry, I couldn't assign a owner right now`;
-      
+      return ri('ADD_OWNER.ERROR_NOT_FOUND', { channelName: channelName });
+
     });
 };
 
-const archiveChannel = async (channelName,roomid, headers) => {
+const archiveChannel = async (channelName, roomid, headers) => {
   return await axios.post(apiEndpoints.archivechannelurl,
     {
       "roomId": roomid
@@ -288,18 +285,17 @@ const archiveChannel = async (channelName,roomid, headers) => {
     { headers: headers })
     .then(res => res.data)
     .then(res => {
-      if(res.success == true){
-        return `${channelName} is now Archived`;
+      if (res.success == true) {
+        return ri('ARCHIVE_CHANNEL.SUCCESS', { channelName: channelName });
       }
-      else{
-        return `Sorry, I couldn't archive ${channelName} right now`;
+      else {
+        return ri('ARCHIVE_CHANNEL.ERROR');
       }
     })
     .catch(err => {
       console.log(err.message);
-      
-      return `Sorry, I couldn't archive this channel right now`;
-      
+      return ri('ARCHIVE_CHANNEL.ERROR_NOT_FOUND', { channelName: channelName });
+
     });
 };
 
