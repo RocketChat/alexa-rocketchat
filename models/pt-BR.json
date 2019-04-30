@@ -1,74 +1,617 @@
 {
-    "ERRORS": {
-        "v1": "Desculpe, não consigo entender o comando. Por favor, repita.",
-        "v2": "Desculpe, eu não entendi. Você poderia dizer isso de novo?"
-    },
-    "HELP": {
-        "MESSAGE": "Este é o Alexa Skill para chat de foguetes. Consulte o arquivo de declarações de amostra no GitHub.",
-        "CARD_TITLE": "Rocket.Chat Ajuda"
-    },
-    "GOODBYE": {
-        "MESSAGE": "Obrigado por usar o Rocket Chat.",
-        "CARD_TITLE": "Adeus!"
-    },
-    "WELCOME": {
-        "SUCCESS": "Bem-vindo ao Rocket Chat Alexa Skill. O que você gostaria de fazer hoje?",
-        "CARD_TITLE": "Bem-vindo ao Rocket.Chat",
-        "ERROR": "Para começar a usar essa habilidade, use o aplicativo complementar para autenticar."
-    },
-    "POST_MESSAGE": {
-        "SUCCESS": "Eu enviei sua mensagem.",
-        "CARD_TITLE": "Publique uma mensagem",
-        "ERROR": "Desculpe, não consegui enviar sua mensagem agora."
-    },
-    "CREATE_CHANNEL": {
-        "SUCCESS": "Eu criei seu canal {channelName}.",
-        "CARD_TITLE": "Crie um canal",
-        "ERROR": "Desculpe, não consegui criar o canal {channelName} agora.",
-        "ERROR_DUPLICATE_NAME": "Desculpe, o canal {channelName} já existe. Por favor, tente novamente com o nome do canal diferente.",
-        "ERROR_INVALID_NAME": "Desculpe, {channelName} não é um nome de canal válido. Por favor, tente novamente com um único nome de palavra para o canal."
-    },
-    "DELETE_CHANNEL": {
-        "SUCCESS": "Eu deletei o canal {channelName}.",
-        "CARD_TITLE": "Excluir um canal",
-        "ERROR": "Desculpe, não foi possível excluir o canal {channelName} agora.",
-        "ERROR_NOT_FOUND": "Desculpe, o canal {channelName} não existe. Por favor, tente novamente com o nome do canal diferente."
-    },
-    "GET_LAST_MESSAGE_FROM_CHANNEL": {
-        "SUCCESS": "{name} diz {message}.",
-        "CARD_TITLE": "Última mensagem do canal",
-        "ERROR": "Desculpe, não encontrei o canal {channelName} agora.",
-        "ERROR_NOT_FOUND": "Desculpe, o canal {channelName} não existe. Por favor, tente novamente com o nome do canal diferente."
-    },
-    "GET_UNREAD_MESSAGES_FROM_CHANNEL": {
-        "MESSAGE": "Você tem {unread} mensagens não lidas <break time='1s'/> {respString} <break time='0.7s'/> ",
-        "NO_MESSAGE": "Você não tem nenhuma mensagem não lida.",
-        "CARD_TITLE": "Mensagens não lidas do canal",
-        "ERROR": "Desculpe, não encontrei o canal {channelName} agora.",
-        "ERROR_NOT_FOUND": "Desculpe, o canal {channelName} não existe. Por favor, tente novamente com o nome do canal diferente."
-    },
-    "MAKE_MODERATOR": {
-        "SUCCESS": "{userName} é agora o moderador de {channelName}.",
-        "CARD_TITLE": "Faça o moderador",
-        "ERROR": "Desculpe, não consegui atribuir um moderador agora.",
-        "ERROR_NOT_FOUND": "Não foi possível atribuir um moderador a {channelName} agora."
-    },
-    "ADD_ALL_TO_CHANNEL": {
-        "SUCCESS": "Adicionou todos os usuários a {channelName}.",
-        "CARD_TITLE": "Adicionar tudo ao canal",
-        "ERROR": "Desculpe, não é possível adicionar todos os usuários ao canal no momento.",
-        "ERROR_NOT_FOUND": "Desculpe, não é possível adicionar todos os usuários ao canal {channelName} agora."
-    },
-    "ADD_OWNER": {
-        "SUCCESS": "{userName} agora é o proprietário de {channelName}.",
-        "CARD_TITLE": "Adicionar proprietário",
-        "ERROR": "Desculpe, não consegui atribuir um proprietário ao canal agora.",
-        "ERROR_NOT_FOUND": "Desculpe, não consegui atribuir um proprietário ao canal {channelName} agora."
-    },
-    "ARCHIVE_CHANNEL": {
-        "SUCCESS": "{channelName} agora está arquivado.",
-        "CARD_TITLE": "Canal de arquivamento",
-        "ERROR": "Desculpe, não consegui arquivar este canal agora.",
-        "ERROR_NOT_FOUND": "Desculpe, não foi possível arquivar o canal {channelName} agora."
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "rocket chat",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "CreateChannelIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "criar quarto {channelname}"
+                    ]
+                },
+                {
+                    "name": "DeleteChannelIntent",
+                    "slots": [
+                        {
+                            "name": "channeldelete",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "excluir quarto {channeldelete}"
+                    ]
+                },
+                {
+                    "name": "PostMessageIntent",
+                    "slots": [
+                        {
+                            "name": "messagepost",
+                            "type": "message"
+                        },
+                        {
+                            "name": "messagechannel",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "mandar {messagepost} para o {messagechannel}"
+                    ]
+                },
+                {
+                    "name": "GetLastMessageFromChannel",
+                    "slots": [
+                        {
+                            "name": "getmessagechannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "leia a última mensagem do {getmessagechannelname}"
+                    ]
+                },
+                {
+                    "name": "AddAllToChannelIntent",
+                    "slots": [
+                        {
+                            "name": "addallchannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "adicione tudo ao {addallchannelname}"
+                    ]
+                },
+                {
+                    "name": "MakeModeratorIntent",
+                    "slots": [
+                        {
+                            "name": "moderatorusername",
+                            "type": "rocketchatusernames"
+                        },
+                        {
+                            "name": "moderatorchannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "fazer {moderatorusername} moderador de {moderatorchannelname}"
+                    ]
+                },
+                {
+                    "name": "AddOwnerIntent",
+                    "slots": [
+                        {
+                            "name": "ownerusername",
+                            "type": "rocketchatusernames"
+                        },
+                        {
+                            "name": "ownerchannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "fazer {ownerusername} dono de {ownerchannelname}"
+                    ]
+                },
+                {
+                    "name": "ArchiveChannelIntent",
+                    "slots": [
+                        {
+                            "name": "archivechannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "arquivo {archivechannelname}"
+                    ]
+                },
+                {
+                    "name": "ReadUnreadsIntent",
+                    "slots": [
+                        {
+                            "name": "readunreadschannel",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Leia minhas mensagens não lidas de {readunreadschannel}"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "message",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "este é um teste de alexa em língua portuguesa"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": " Está bem. por favor, apresente-se a esta comunidade de mais de 210 mentores e estudantes, caso esteja preparado."
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Bem vinda. Sinta-se à vontade para se apresentar a esta comunidade de"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": " Eu sou Ashish da Índia, procurando meus bacharelados em engenharia no Cluster Innovation Center, Universidade de Delhi. Estou interessado"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "desculpa"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Oi"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ola"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "quando você configura um dev dev com meteoro, você precisa de uma estação de trabalho com 8 GB de RAM antes de poder fazer uma compilação"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sim. que será o caminho mais rápido quando você se tornar expert em nodejs e npm, mais tarde em 2019,"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "bem-vindo, por favor, verifique as mensagens fixadas para mais informações. Sinta-se à vontade para se apresentar"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Compreendo"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "honestamente"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "realmente"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "você pensa"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "eu devo"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "identidade"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Obrigado equipe Repositório criado"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hmm"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "maybe i"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sure"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i wonder"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i suppose"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "really"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i am not"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i still"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i do"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "honestly"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i don't"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i mean"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "by the way"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i understand"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i'm not"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i don't know"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i'm"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "you guys"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "you say"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i know"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i said"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "you said"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "like you"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "i'm sorry"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "excuse me"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hey"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hello"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hi"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "welcome, please check the pinned messages for more info. Feel free to introduce yourself"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "yes. that will be the fastest way when you become nodejs and npm expert, later in 2019, there "
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "when you setup a dev env with meteor, you need a workstation with 8 GB of RAM before you can do a reasonable build"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ok. please introduce yourself to this community of 210+ mentors and students should you become ready. "
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Hey everyone! I am Kapil Gautam. I am from India. "
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Happy contributing 😌 . Click on top right corner (three dots) and go to Discussions to"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Welcome. Feel free to Introduce yourself to this community of "
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "I'm Ashish from India, pursuing my bachelors in engineering at Cluster Innovation Centre, University of Delhi. I'm interested in voice"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "channelnames",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "freinds"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "developers"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "this is not a channel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "randomwordshere"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "famisreal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "helloguys"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "123456"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "devcon"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "youtubechannel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "smoshchannel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channelisfun"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "randomchannel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "random"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "locomotion"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "mangojuice"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "testchannelalexa"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channel56"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channel23"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channel234"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channel1"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channel01"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channel123"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "botchannel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "newchannel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "test"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "testingalexa"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sandbox"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "gsoc2019"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "general"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "rocketchatusernames",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "mikael.mello"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "diego.dorgam"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "tim.kinnane"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "arthur.temporim"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sing.li"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "artificial.chat"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ashish.Jha"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "upendra.reddy"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "prajval.raval"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
     }
-  }
+}
