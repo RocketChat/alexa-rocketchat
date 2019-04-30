@@ -1,0 +1,74 @@
+{
+    "ERRORS": {
+        "v1": "Entschuldigung, ich kann den Befehl nicht verstehen. Bitte noch einmal sagen.",
+        "v2": "Entschuldigung, das habe ich nicht verstanden. Könnten Sie es noch einmal sagen?"
+    },
+    "HELP": {
+        "MESSAGE": "Dies ist der Alexa Skill für den Raketenchat. Siehe die Beispiel-Äußerungsdatei auf GitHub.",
+        "CARD_TITLE": "Rocket.Chat-Hilfe"
+    },
+    "GOODBYE": {
+        "MESSAGE": "Vielen Dank, dass Sie Rocket Chat verwenden.",
+        "CARD_TITLE": "Auf Wiedersehen!"
+    },
+    "WELCOME": {
+        "SUCCESS": "Willkommen bei Rocket Chat Alexa Skill. Was möchtest du heute machen?",
+        "CARD_TITLE": "Willkommen bei Rocket.Chat",
+        "ERROR": "Verwenden Sie zum Beginnen dieser Fertigkeit die Begleit-App zur Authentifizierung."
+    },
+    "POST_MESSAGE": {
+        "SUCCESS": "Ich habe deine Nachricht gesendet.",
+        "CARD_TITLE": "Sende eine Nachricht",
+        "ERROR": "Entschuldigung, ich konnte Ihre Nachricht jetzt nicht senden."
+    },
+    "CREATE_CHANNEL": {
+        "SUCCESS": "Ich habe Ihren Kanal {channelName} erstellt.",
+        "CARD_TITLE": "Einen Kanal erstellen",
+        "ERROR": "Der Kanal {channelName} konnte momentan nicht erstellt werden.",
+        "ERROR_DUPLICATE_NAME": "Entschuldigung, der Channel {channelName} existiert bereits. Bitte versuchen Sie es erneut mit einem anderen Kanalnamen.",
+        "ERROR_INVALID_NAME": "Entschuldigung, {channelName} ist kein gültiger Kanalname. Bitte versuchen Sie es erneut mit einem einzelnen Wortnamen für den Kanal."
+    },
+    "DELETE_CHANNEL": {
+        "SUCCESS": "Ich habe den Kanal {channelName} gelöscht.",
+        "CARD_TITLE": "Einen Kanal löschen",
+        "ERROR": "Leider konnte ich den Kanal {channelName} momentan nicht löschen.",
+        "ERROR_NOT_FOUND": "Der Kanal {channelName} ist leider nicht vorhanden. Bitte versuchen Sie es erneut mit einem anderen Kanalnamen."
+    },
+    "GET_LAST_MESSAGE_FROM_CHANNEL": {
+        "SUCCESS": "{name} sagt, {message}.",
+        "CARD_TITLE": "Kanal letzte Nachricht",
+        "ERROR": "Leider konnte ich den Kanal {channelName} momentan nicht finden.",
+        "ERROR_NOT_FOUND": "Der Kanal {channelName} ist leider nicht vorhanden. Bitte versuchen Sie es erneut mit einem anderen Kanalnamen."
+    },
+    "GET_UNREAD_MESSAGES_FROM_CHANNEL": {
+        "MESSAGE": "Sie haben {unread} ungelesene Nachrichten <break time='1s'/> {respString} <break time='0.7s'/> ",
+        "NO_MESSAGE": "Sie haben keine ungelesenen Nachrichten.",
+        "CARD_TITLE": "Kanal Ungelesene Nachrichten",
+        "ERROR": "Leider konnte ich den Kanal {channelName} momentan nicht finden.",
+        "ERROR_NOT_FOUND": "Der Kanal {channelName} ist leider nicht vorhanden. Bitte versuchen Sie es erneut mit einem anderen Kanalnamen."
+    },
+    "MAKE_MODERATOR": {
+        "SUCCESS": "{userName} ist jetzt der Moderator von {channelName}.",
+        "CARD_TITLE": "Moderator machen",
+        "ERROR": "Leider konnte ich momentan keinen Moderator zuweisen.",
+        "ERROR_NOT_FOUND": "Leider konnte ich {channelName} momentan keinen Moderator zuweisen."
+    },
+    "ADD_ALL_TO_CHANNEL": {
+        "SUCCESS": "Alle Benutzer zu {channelName} hinzugefügt.",
+        "CARD_TITLE": "Alle zu Kanal hinzufügen",
+        "ERROR": "Leider kann ich momentan nicht alle Nutzer zum Kanal hinzufügen.",
+        "ERROR_NOT_FOUND": "Leider kann ich momentan nicht alle Benutzer zu Channel {channelName} hinzufügen."
+    },
+    "ADD_OWNER": {
+        "SUCCESS": "{userName} ist jetzt der Besitzer von {channelName}.",
+        "CARD_TITLE": "Besitzer hinzufügen",
+        "ERROR": "Es tut mir leid, ich konnte dem Channel momentan keinen Besitzer zuordnen.",
+        "ERROR_NOT_FOUND": "Leider konnte ich Channel {channelName} momentan keinen Eigentümer zuordnen."
+    },
+    "ARCHIVE_CHANNEL": {
+        "SUCCESS": "{channelName} ist jetzt archiviert.",
+        "CARD_TITLE": "Archivkanal",
+        "ERROR": "Leider konnte ich diesen Kanal momentan nicht archivieren.",
+        "ERROR_NOT_FOUND": "Entschuldigung, ich konnte den Kanal {channelName} momentan nicht archivieren."
+    }
+  }
