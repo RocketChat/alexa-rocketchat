@@ -7,7 +7,29 @@
           "examplePhrases": [
             "Alexa, Open Rocketchat",
             "Alexa, Begin Rocketchat",
-            "Alexa, Begin Rocketchat"
+            "Alexa, Launch Rocketchat"
+          ],
+          "name": "Rocket.Chat",
+          "description": "Sample Full Description"
+        }
+      },
+      "en-IN": {
+          "summary": "Alexa Skill For Rocket.Chat",
+          "examplePhrases": [
+            "Alexa, Open Rocketchat",
+            "Alexa, Begin Rocketchat",
+            "Alexa, Launch Rocketchat"
+          ],
+          "name": "Rocket.Chat",
+          "description": "Sample Full Description"
+        }
+      },
+      "pt-BR": {
+          "summary": "Alexa Skill For Rocket.Chat",
+          "examplePhrases": [
+            "Alexa, Abrir Rocketchat",
+            "Alexa, Início Rocketchat",
+            "Alexa, Lançamento Rocketchat"
           ],
           "name": "Rocket.Chat",
           "description": "Sample Full Description"

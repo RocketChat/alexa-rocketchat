@@ -159,15 +159,18 @@ const channelUnreadMessages = async (channelName, unreadCount, headers) => {
 
         else {
 
-          var msgs = [];
+          var array = [];
+          
+          for (var i = 0; i <= unreadCount-1; i++) {
+                  array.push(`${res.messages[i].u.username} says, ${res.messages[i].msg} <break time="0.7s"/> `);
+                }
+          
+          var responseString = array.join(', ');
+          
+          var finalMsg = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.MESSAGE', { respString: responseString, unread:unreadCount });
 
-          for (var i = 0; i <= unreadCount - 1; i++) {
-            msgs.push(ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.MESSAGE', { name: res.messages[i].u.username, message: res.messages[i].msg }));
-          }
-
-          var responseString = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.SUCCESS', { unreadCount: unreadCount }) + msgs.join(', ');
-
-          return responseString;
+          return finalMsg;
+          
 
         }
       }
