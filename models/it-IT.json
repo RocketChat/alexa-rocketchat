@@ -154,22 +154,22 @@
                     "values": [
                         {
                             "name": {
-                                "value": "Thanks team Repository created"
+                                "value": "Grazie il team della repository creato"
                             }
                         },
                         {
                             "name": {
-                                "value": "i'd"
+                                "value": "mi piacerebbe"
                             }
                         },
                         {
                             "name": {
-                                "value": "i might"
+                                "value": "io potrei"
                             }
                         },
                         {
                             "name": {
-                                "value": "you think"
+                                "value": "tu pensi"
                             }
                         },
                         {
@@ -179,122 +179,117 @@
                         },
                         {
                             "name": {
-                                "value": "maybe i"
+                                "value": "forse io"
                             }
                         },
                         {
                             "name": {
-                                "value": "sure"
+                                "value": "certo"
                             }
                         },
                         {
                             "name": {
-                                "value": "i wonder"
+                                "value": "io mi chiedo"
                             }
                         },
                         {
                             "name": {
-                                "value": "i suppose"
+                                "value": "io credo"
                             }
                         },
                         {
                             "name": {
-                                "value": "really"
+                                "value": "veramente"
                             }
                         },
                         {
                             "name": {
-                                "value": "i am not"
+                                "value": "io non sono"
                             }
                         },
                         {
                             "name": {
-                                "value": "i still"
+                                "value": "io continuo"
                             }
                         },
                         {
                             "name": {
-                                "value": "i do"
+                                "value": "io faccio"
                             }
                         },
                         {
                             "name": {
-                                "value": "honestly"
+                                "value": "onestamente"
                             }
                         },
                         {
                             "name": {
-                                "value": "i don't"
+                                "value": "io non faccio"
                             }
                         },
                         {
                             "name": {
-                                "value": "i mean"
+                                "value": "io intendo"
                             }
                         },
                         {
                             "name": {
-                                "value": "by the way"
+                                "value": "a proposito"
                             }
                         },
                         {
                             "name": {
-                                "value": "i understand"
+                                "value": "io capisco"
                             }
                         },
                         {
                             "name": {
-                                "value": "i'm not"
+                                "value": "io non lo so"
                             }
                         },
                         {
                             "name": {
-                                "value": "i don't know"
+                                "value": "io sono"
                             }
                         },
                         {
                             "name": {
-                                "value": "i'm"
+                                "value": "voi ragazzi"
                             }
                         },
                         {
                             "name": {
-                                "value": "you guys"
+                                "value": "tu dici"
                             }
                         },
                         {
                             "name": {
-                                "value": "you say"
+                                "value": "io lo so"
                             }
                         },
                         {
                             "name": {
-                                "value": "i know"
+                                "value": "io dissi"
                             }
                         },
                         {
                             "name": {
-                                "value": "i said"
+                                "value": "tu dicesti"
                             }
                         },
                         {
                             "name": {
-                                "value": "you said"
+                                "value": "mi piaci"
                             }
                         },
                         {
                             "name": {
-                                "value": "like you"
+                                "value": "mi dispiace"
                             }
                         },
                         {
                             "name": {
-                                "value": "i'm sorry"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "excuse me"
+                                "value": "scusami"
                             }
                         },
                         {
@@ -304,52 +299,52 @@
                         },
                         {
                             "name": {
-                                "value": "hello"
+                                "value": "ciao"
                             }
                         },
                         {
                             "name": {
-                                "value": "hi"
+                                "value": "salve"
                             }
                         },
                         {
                             "name": {
-                                "value": "welcome, please check the pinned messages for more info. Feel free to introduce yourself"
+                                "value": "benvenuto, controlla il messaggio fissato per più informazioni. Sentiti libero di presentarti"
                             }
                         },
                         {
                             "name": {
-                                "value": "yes. that will be the fastest way when you become nodejs and npm expert, later in 2019, there "
+                                "value": "si. quella sarà la via più veloce quando diventerai un esperto di nodejs e npm, più tardi nel 2019, lì "
                             }
                         },
                         {
                             "name": {
-                                "value": "when you setup a dev env with meteor, you need a workstation with 8 GB of RAM before you can do a reasonable build"
+                                "value": "quando inizializzi un ambiente meteor, hai bisogno di un computer con 8 GB di RAM prima di fare una build ragionevole"
                             }
                         },
                         {
                             "name": {
-                                "value": "ok. please introduce yourself to this community of 210+ mentors and students should you become ready. "
+                                "value": "ok. introduci te stesso davanti a quasta community di 210+ mentori and studenti. "
                             }
                         },
                         {
                             "name": {
-                                "value": "Hey everyone! I am Kapil Gautam. I am from India. "
+                                "value": "Ciao a tutti! Io sono Gianluca Acerbis. Vengo dall'Italia. "
                             }
                         },
                         {
                             "name": {
-                                "value": "Happy contributing 😌 . Click on top right corner (three dots) and go to Discussions to"
+                                "value": "Felice contribuzione 😌 . Clicca sull'angolo in alto a destra (3 puntini) and vai a Discussioni"
                             }
                         },
                         {
                             "name": {
-                                "value": "Welcome. Feel free to Introduce yourself to this community of "
+                                "value": "Benvenuto. Sentiti libero di introdurre te stesso in questa community di "
                             }
                         },
                         {
                             "name": {
-                                "value": "I'm Ashish from India, pursuing my bachelors in engineering at Cluster Innovation Centre, University of Delhi. I'm interested in voice"
+                                "value": "Io sono Gianluca dall'Italia e studio informatica all'istituto tecnico di Brescia"
                             }
                         }
                     ]
@@ -550,6 +545,11 @@
                         {
                             "name": {
                                 "value": "prajval.raval"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "gianluca.acerbis"
                             }
                         }
                     ]
