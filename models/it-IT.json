@@ -143,8 +143,8 @@
                         }
                     ],
                     "samples": [
-                        "leggi i messaggi non letti da {readunreadschannel}",
-                        "leggi i messaggi non letti in {readunreadschannel}"
+                        "leggi i miei messaggi non letti da {readunreadschannel}",
+                        "leggi i miei messaggi non letti in {readunreadschannel}"
                     ]
                 }
             ],
