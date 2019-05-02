@@ -1,0 +1,422 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "rocket chat",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "CreateChannelIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "crear canal {channelname}"
+                    ]
+                },
+                {
+                    "name": "DeleteChannelIntent",
+                    "slots": [
+                        {
+                            "name": "channeldelete",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "eliminar canal {channeldelete}"
+                    ]
+                },
+                {
+                    "name": "PostMessageIntent",
+                    "slots": [
+                        {
+                            "name": "messagepost",
+                            "type": "message"
+                        },
+                        {
+                            "name": "messagechannel",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "enviar {messagepost} a {messagechannel}"
+                    ]
+                },
+                {
+                    "name": "GetLastMessageFromChannel",
+                    "slots": [
+                        {
+                            "name": "getmessagechannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "leer el último mensaje de {getmessagechannelname}"
+                    ]
+                },
+                {
+                    "name": "AddAllToChannelIntent",
+                    "slots": [
+                        {
+                            "name": "addallchannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "agregar todo a {addallchannelname}"
+                    ]
+                },
+                {
+                    "name": "MakeModeratorIntent",
+                    "slots": [
+                        {
+                            "name": "moderatorusername",
+                            "type": "rocketchatusernames"
+                        },
+                        {
+                            "name": "moderatorchannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "crea {moderatorusername} moderador de {moderatorchannelname}"
+                    ]
+                },
+                {
+                    "name": "AddOwnerIntent",
+                    "slots": [
+                        {
+                            "name": "ownerusername",
+                            "type": "rocketchatusernames"
+                        },
+                        {
+                            "name": "ownerchannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "crea {ownerusername} propietario de {ownerchannelname}"
+                    ]
+                },
+                {
+                    "name": "ArchiveChannelIntent",
+                    "slots": [
+                        {
+                            "name": "archivechannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "archivo {archivechannelname}"
+                    ]
+                },
+                {
+                    "name": "ReadUnreadsIntent",
+                    "slots": [
+                        {
+                            "name": "readunreadschannel",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Leer mis mensajes no leídos de {readunreadschannel}"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "message",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "enviar"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Encantada de conocerte"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Buenos días"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "gracias"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Hola"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gracias equipo Repositorio creado"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "bienvenido, por favor revise los mensajes fijados para más información. Siéntete libre de presentarte"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sí. esa será la forma más rápida cuando se convierta en un experto en nodejs y npm, más adelante en 2019, allí"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cuando configura un entorno de desarrollo con meteor, necesita una estación de trabajo con 8 GB de RAM antes de poder realizar una co"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "De acuerdo. preséntese a esta comunidad de más de 210 mentores y estudiantes en caso de que esté listo."
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "¡Hola a todos! Soy Kapil Gautam. Yo soy de India."
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Feliz contribuyendo. Haga clic en la esquina superior derecha (tres puntos) y vaya a Discusiones para"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Bienvenido. Siéntase libre de presentarse a esta comunidad de"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Soy Ashish, de India, cursando mi licenciatura en ingeniería en el Cluster Innovation Center de la Universidad de Delhi. Me interesa la voz"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "channelnames",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "freinds"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "developers"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "this is not a channel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "randomwordshere"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "famisreal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "helloguys"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "123456"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "devcon"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "youtubechannel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "smoshchannel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channelisfun"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "randomchannel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "random"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "locomotion"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "mangojuice"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "testchannelalexa"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channel56"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channel23"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channel234"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channel1"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channel01"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "channel123"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "botchannel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "newchannel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "test"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "testingalexa"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sandbox"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "gsoc2019"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "general"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "rocketchatusernames",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "mikael.mello"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "diego.dorgam"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "tim.kinnane"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "arthur.temporim"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sing.li"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "artificial.chat"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ashish.Jha"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "upendra.reddy"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "prajval.raval"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
