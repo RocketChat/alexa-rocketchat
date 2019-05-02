@@ -14,6 +14,24 @@ Italian
 Alexa, Crea CHANNELNAME
 ```
 
+French
+
+```
+Alexa, Créer Une Chambre CHANNELNAME
+```
+
+German
+
+```
+Alexa, Raum Erstellen CHANNELNAME
+```
+
+Spainish
+
+```
+Alexa, Crear Canal CHANNELNAME
+```
+
 Portuguese
 
 ```
@@ -32,6 +50,24 @@ Italian
 
 ```
 Alexa, Elimina CHANNELNAME
+```
+
+French
+
+```
+Alexa, Supprimer La Pièce CHANNELNAME
+```
+
+German
+
+```
+Alexa, Raum Löschen CHANNELNAME
+```
+
+Spainish
+
+```
+Alexa, Eliminar Canal CHANNELNAME
 ```
 
 Portuguese
@@ -54,6 +90,24 @@ Italian
 Alexa, Aggiungi Tutti A CHANNELNAME
 ```
 
+French
+
+```
+Alexa, Tout Ajouter à CHANNELNAME
+```
+
+German
+
+```
+Alexa, Alles Zu CHANNELNAME hinzufügen
+```
+
+Spainish
+
+```
+Alexa, Agregar Todo A CHANNELNAME
+```
+
 Portuguese
 
 ```
@@ -72,6 +126,24 @@ Italian
 
 ```
 Alexa, Fai USERNAME Moderatore Di CHANNELNAME
+```
+
+French
+
+```
+Alexa, Make USERNAME Modérateur De CHANNELNAME
+```
+
+German
+
+```
+Alexa, Mach USERNAME Moderator Von CHANNELNAME
+```
+
+Spainish
+
+```
+Alexa, Crea USERNAME Moderador De CHANNELNAME
 ```
 
 Portuguese
@@ -94,6 +166,24 @@ Italian
 Alexa, Fai USERNAME Proprietario Di CHANNELNAME
 ```
 
+French
+
+```
+Alexa, Make USERNAME Propriétaire De CHANNELNAME
+```
+
+German
+
+```
+Alexa, Mach USERNAME Besitzer Von CHANNELNAME
+```
+
+Spainish
+
+```
+Alexa, Crea USERNAME Propietario De CHANNELNAME
+```
+
 Portuguese
 
 ```
@@ -112,6 +202,24 @@ Italian
 
 ```
 Alexa, Archivia CHANNELNAME
+```
+
+French
+
+```
+Alexa, Archive CHANNELNAME
+```
+
+German
+
+```
+Alexa, Archiv CHANNELNAME
+```
+
+Spainish
+
+```
+Alexa, Archivo CHANNELNAME
 ```
 
 Portuguese
@@ -136,6 +244,24 @@ Italian
 Alexa, Invia USERNAME In CHANNELNAME
 ```
 
+French
+
+```
+Alexa, Envoyer MESSAGE à CHANNELNAME
+```
+
+German
+
+```
+Alexa, MESSAGE An CHANNELNAME Senden
+```
+
+Spainish
+
+```
+Alexa, Enviar MESSAGE a CHANNELNAME
+```
+
 Portuguese
 
 ```
@@ -154,6 +280,25 @@ Italian
 
 ```
 Alexa, Leggi l'Ultimo Messaggio In CHANNELNAME
+```
+
+
+French
+
+```
+Alexa, Lire Le Dernier Message De CHANNELNAME
+```
+
+German
+
+```
+Alexa, Letzte Nachricht Von CHANNELNAME Lesen
+```
+
+Spainish
+
+```
+Alexa, Leer El último Mensaje De CHANNELNAME
 ```
 
 Portuguese
@@ -182,6 +327,25 @@ Portuguese
 Alexa, Leia Minhas Mensagens Não Lidas De CHANNELNAME
 
 ```
+
+French
+
+```
+Alexa, Lire Mes Messages Non Lus De CHANNELNAME
+```
+
+German
+
+```
+Alexa, Lesen Sie Meine Ungelesenen Nachrichten Von CHANNELNAME
+```
+
+Spainish
+
+```
+Alexa, Leer Mis Mensajes No Leídos De CHANNELNAME
+```
+
 
 # IM
 

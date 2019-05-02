@@ -1,0 +1,74 @@
+{
+    "ERRORS": {
+        "v1": "Désolé, je ne comprends pas la commande. Répétez s'il vous pait.",
+        "v2": "Désolé, je n'ai pas compris ça. Pourriez-vous le répéter?"
+    },
+    "HELP": {
+        "MESSAGE": "C'est la compétence Alexa pour parler à la fusée. Référez-vous à l'exemple de fichier d'énoncés sur GitHub.",
+        "CARD_TITLE": "Aide Rocket.Chat"
+    },
+    "GOODBYE": {
+        "MESSAGE": "Merci d'utiliser Rocket Chat.",
+        "CARD_TITLE": "Au revoir!"
+    },
+    "WELCOME": {
+        "SUCCESS": "Bienvenue sur Rocket Chat Alexa Skill. Que voudrais tu faire aujourd'hui?",
+        "CARD_TITLE": "Bienvenue sur Rocket.Chat",
+        "ERROR": "Pour commencer à utiliser cette compétence, veuillez utiliser l'application associée pour vous authentifier."
+    },
+    "POST_MESSAGE": {
+        "SUCCESS": "J'ai envoyé votre message.",
+        "CARD_TITLE": "Envoyer un message",
+        "ERROR": "Désolé, je n'ai pas pu envoyer votre message maintenant."
+    },
+    "CREATE_CHANNEL": {
+        "SUCCESS": "J'ai créé votre chaîne {channelName}.",
+        "CARD_TITLE": "Créer une chaîne",
+        "ERROR": "Désolé, je n'ai pas pu créer le canal {channelName} pour le moment.",
+        "ERROR_DUPLICATE_NAME": "Désolé, le canal {channelName} existe déjà. Veuillez réessayer avec un nom de chaîne différent.",
+        "ERROR_INVALID_NAME": "Désolé, {channelName} n'est pas un nom de chaîne valide. Veuillez réessayer avec un seul mot pour la chaîne."
+    },
+    "DELETE_CHANNEL": {
+        "SUCCESS": "J'ai supprimé le canal {channelName}.",
+        "CARD_TITLE": "Supprimer une chaîne",
+        "ERROR": "Désolé, je n'ai pas pu supprimer le canal {channelName} pour le moment.",
+        "ERROR_NOT_FOUND": "Désolé, le canal {channelName} n'existe pas. Veuillez réessayer avec un nom de chaîne différent."
+    },
+    "GET_LAST_MESSAGE_FROM_CHANNEL": {
+        "SUCCESS": "{name} dit, {message}.",
+        "CARD_TITLE": "Dernier message de la chaîne",
+        "ERROR": "Désolé, je n'ai pas trouvé le canal {channelName} pour le moment.",
+        "ERROR_NOT_FOUND": "Désolé, le canal {channelName} n'existe pas. Veuillez réessayer avec un nom de chaîne différent."
+    },
+    "GET_UNREAD_MESSAGES_FROM_CHANNEL": {
+        "MESSAGE": "Vous avez {unread} Messages non lus <break time = '1s' /> {respString} <break time = '0.7s' />",
+        "NO_MESSAGE": "Vous n'avez pas de messages non lus.",
+        "CARD_TITLE": "Messages non lus de la chaîne",
+        "ERROR": "Désolé, je n'ai pas trouvé le canal {channelName} pour le moment.",
+        "ERROR_NOT_FOUND": "Désolé, le canal {channelName} n'existe pas. Veuillez réessayer avec un nom de chaîne différent."
+    },
+    "MAKE_MODERATOR": {
+        "SUCCESS": "{userName} est maintenant le modérateur de {channelName}.",
+        "CARD_TITLE": "Faire modérateur",
+        "ERROR": "Désolé, je n'ai pas pu assigner de modérateur pour le moment.",
+        "ERROR_NOT_FOUND": "Désolé, je ne pouvais pas affecter de modérateur à {channelName} pour le moment."
+    },
+    "ADD_ALL_TO_CHANNEL": {
+        "SUCCESS": "Ajouté tous les utilisateurs à {channelName}.",
+        "CARD_TITLE": "Ajouter tout au canal",
+        "ERROR": "Désolé, je ne peux pas ajouter tous les utilisateurs à la chaîne pour le moment.",
+        "ERROR_NOT_FOUND": "Désolé, je ne peux pas ajouter tous les utilisateurs à la chaîne {channelName} pour le moment."
+    },
+    "ADD_OWNER": {
+        "SUCCESS": "{userName} est maintenant le propriétaire de {channelName}.",
+        "CARD_TITLE": "Ajouter un propriétaire",
+        "ERROR": "Désolé, je n'ai pas pu affecter un propriétaire à la chaîne pour le moment.",
+        "ERROR_NOT_FOUND": "Désolé, je n'ai pas pu affecter un propriétaire à la chaîne {channelName} pour le moment."
+    },
+    "ARCHIVE_CHANNEL": {
+        "SUCCESS": "{channelName} est maintenant archivé.",
+        "CARD_TITLE": "Archive Channel",
+        "ERROR": "Désolé, je n'ai pas pu archiver cette chaîne pour le moment.",
+        "ERROR_NOT_FOUND": "Désolé, je ne pouvais pas archiver le canal {channelName} pour le moment."
+    }
+  }
