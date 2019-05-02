@@ -116,7 +116,7 @@ const PostMessageIntentHandler = {
 const GetLastMessageFromChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'GetLastMessageFromChannel';
+      && handlerInput.requestEnvelope.request.intent.name === 'GetLastMessageFromChannelIntent';
 	},
 	async handle(handlerInput) {
 		try {

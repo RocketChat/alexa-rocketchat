@@ -64,7 +64,7 @@
                     ]
                 },
                 {
-                    "name": "GetLastMessageFromChannel",
+                    "name": "GetLastMessageFromChannelIntent",
                     "slots": [
                         {
                             "name": "getmessagechannelname",
