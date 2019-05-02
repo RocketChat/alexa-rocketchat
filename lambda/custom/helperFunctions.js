@@ -120,7 +120,7 @@ const channelLastMessage = async (channelName, headers) =>
 		.then((res) => {
 			if (res.success === true) {
 				return ri('GET_LAST_MESSAGE_FROM_CHANNEL.SUCCESS', {
-					name: res.messages[0].u.name,
+					name: res.messages[0].u.username,
 					message: res.messages[0].msg,
 				});
 			} else {

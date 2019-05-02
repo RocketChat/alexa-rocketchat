@@ -321,7 +321,7 @@ const ErrorHandler = {
 	},
 	handle(handlerInput, error) {
 		console.log(`Error handled: ${ error.message }`);
-		const speechText = ri('ERROR');
+		const speechText = ri('ERRORS');
 
 		return handlerInput.jrb
 			.speak(speechText)
