@@ -1,7 +1,6 @@
 # Channel
 
-* **Create A New Channel**
-
+-   **Create A New Channel**
 
 English
 
@@ -9,10 +8,10 @@ English
 Alexa, Create CHANNELNAME
 ```
 
-Portuguese
+Italian
 
 ```
-Alexa, Criar Quarto CHANNELNAME
+Alexa, Crea CHANNELNAME
 ```
 
 French
@@ -33,10 +32,13 @@ Spainish
 Alexa, Crear Canal CHANNELNAME
 ```
 
+Portuguese
 
+```
+Alexa, Criar Quarto CHANNELNAME
+```
 
-* **Delete A Channel**
-
+-   **Delete A Channel**
 
 English
 
@@ -44,10 +46,10 @@ English
 Alexa, Delete CHANNELNAME
 ```
 
-Portuguese
+Italian
 
 ```
-Alexa, Excluir Quarto CHANNELNAME
+Alexa, Elimina CHANNELNAME
 ```
 
 French
@@ -68,9 +70,13 @@ Spainish
 Alexa, Eliminar Canal CHANNELNAME
 ```
 
+Portuguese
 
+```
+Alexa, Excluir Quarto CHANNELNAME
+```
 
-* **Add All Users On Server To A Channel**
+-   **Add All Users On Server To A Channel**
 
 English
 
@@ -78,10 +84,10 @@ English
 Alexa, Add All To CHANNELNAME
 ```
 
-Portuguese
+Italian
 
 ```
-Alexa, Adicione Tudo Ao CHANNELNAME
+Alexa, Aggiungi Tutti A CHANNELNAME
 ```
 
 French
@@ -102,10 +108,13 @@ Spainish
 Alexa, Agregar Todo A CHANNELNAME
 ```
 
+Portuguese
 
+```
+Alexa, Adicione Tudo Ao CHANNELNAME
+```
 
-
-* **Make An User Channel Moderator**
+-   **Make An User Channel Moderator**
 
 English
 
@@ -113,10 +122,10 @@ English
 Alexa, Make USERNAME Moderator Of CHANNELNAME
 ```
 
-Portuguese
+Italian
 
 ```
-Alexa, Fazer USERNAME Moderador De CHANNELNAME
+Alexa, Fai USERNAME Moderatore Di CHANNELNAME
 ```
 
 French
@@ -137,9 +146,13 @@ Spainish
 Alexa, Crea USERNAME Moderador De CHANNELNAME
 ```
 
+Portuguese
 
+```
+Alexa, Fazer USERNAME Moderador De CHANNELNAME
+```
 
-* **Make An User Channel Owner**
+-   **Make An User Channel Owner**
 
 English
 
@@ -147,10 +160,10 @@ English
 Alexa, Make USERNAME Owner Of CHANNELNAME
 ```
 
-Portuguese
+Italian
 
 ```
-Alexa, Fazer USERNAME dono de CHANNELNAME
+Alexa, Fai USERNAME Proprietario Di CHANNELNAME
 ```
 
 French
@@ -171,9 +184,13 @@ Spainish
 Alexa, Crea USERNAME Propietario De CHANNELNAME
 ```
 
+Portuguese
 
+```
+Alexa, Fazer USERNAME dono de CHANNELNAME
+```
 
-* **Archive A Channel**
+-   **Archive A Channel**
 
 English
 
@@ -181,10 +198,10 @@ English
 Alexa, Archive CHANNELNAME
 ```
 
-Portuguese
+Italian
 
 ```
-Alexa, Arquivo CHANNELNAME
+Alexa, Archivia CHANNELNAME
 ```
 
 French
@@ -205,13 +222,15 @@ Spainish
 Alexa, Archivo CHANNELNAME
 ```
 
+Portuguese
 
+```
+Alexa, Arquivo CHANNELNAME
+```
 
 # Chat
 
-
-
-* **Post A Message**
+-   **Post A Message**
 
 English
 
@@ -219,10 +238,10 @@ English
 Alexa, Send MESSAGE to CHANNELNAME
 ```
 
-Portuguese
+Italian
 
 ```
-Alexa, Mandar MESSAGE Para O CHANNELNAME
+Alexa, Invia USERNAME In CHANNELNAME
 ```
 
 French
@@ -243,9 +262,13 @@ Spainish
 Alexa, Enviar MESSAGE a CHANNELNAME
 ```
 
+Portuguese
 
+```
+Alexa, Mandar MESSAGE Para O CHANNELNAME
+```
 
-* **Read Last Message From A Channel**
+-   **Read Last Message From A Channel**
 
 English
 
@@ -253,11 +276,12 @@ English
 Alexa, Read CHANNELNAME last message
 ```
 
-Portuguese
+Italian
 
 ```
-Alexa, Leia A última Mensagem Do CHANNELNAME
+Alexa, Leggi l'Ultimo Messaggio In CHANNELNAME
 ```
+
 
 French
 
@@ -277,14 +301,24 @@ Spainish
 Alexa, Leer El último Mensaje De CHANNELNAME
 ```
 
+Portuguese
 
+```
+Alexa, Leia A última Mensagem Do CHANNELNAME
+```
 
-* **Read Unread Messages From A Channel**
+-   **Read Unread Messages From A Channel**
 
 English
 
 ```
 Alexa, Read My Unread Messages From CHANNELNAME
+```
+
+Italian
+
+```
+Alexa, Leggi I Miei Messaggi Non Letti Da CHANNELNAME
 ```
 
 Portuguese
@@ -311,7 +345,6 @@ Spainish
 ```
 Alexa, Leer Mis Mensajes No Leídos De CHANNELNAME
 ```
-
 
 
 # IM

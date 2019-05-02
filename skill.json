@@ -1,8 +1,38 @@
 {
-  "manifest": {
-    "publishingInformation": {
-      "locales": {
-        "en-US": {
+    "manifest": {
+        "publishingInformation": {
+            "locales": {
+                "en-US": {
+                    "summary": "Alexa Skill For Rocket.Chat",
+                    "examplePhrases": [
+                        "Alexa, Open Rocketchat",
+                        "Alexa, Begin Rocketchat",
+                        "Alexa, Launch Rocketchat"
+                    ],
+                    "name": "Rocket.Chat",
+                    "description": "Sample Full Description"
+                },
+                "it-IT": {
+                    "summary": "Alexa Skill per Rocket.Chat",
+                    "examplePhrases": [
+                        "Alexa, Apri Rocketchat",
+                        "Alexa, Avvia Rocketchat",
+                        "Alexa, Lancia Rocketchat"
+                    ],
+                    "name": "Rocket.Chat",
+                    "description": "Esempio di descrizione completa."
+                },
+                "en-IN": {
+                    "summary": "Alexa Skill For Rocket.Chat",
+                    "examplePhrases": [
+                        "Alexa, Open Rocketchat",
+                        "Alexa, Begin Rocketchat",
+                        "Alexa, Launch Rocketchat"
+                    ],
+                    "name": "Rocket.Chat",
+                    "description": "Sample Full Description"
+                },
+                "en-CA": {
           "summary": "Alexa Skill For Rocket.Chat",
           "examplePhrases": [
             "Alexa, Open Rocketchat",
@@ -12,7 +42,7 @@
           "name": "Rocket.Chat",
           "description": "Sample Full Description"
         },
-      "en-IN": {
+                "en-AU": {
           "summary": "Alexa Skill For Rocket.Chat",
           "examplePhrases": [
             "Alexa, Open Rocketchat",
@@ -22,7 +52,7 @@
           "name": "Rocket.Chat",
           "description": "Sample Full Description"
         },
-        "en-CA": {
+                "en-UK": {
           "summary": "Alexa Skill For Rocket.Chat",
           "examplePhrases": [
             "Alexa, Open Rocketchat",
@@ -32,27 +62,7 @@
           "name": "Rocket.Chat",
           "description": "Sample Full Description"
         },
-        "en-AU": {
-          "summary": "Alexa Skill For Rocket.Chat",
-          "examplePhrases": [
-            "Alexa, Open Rocketchat",
-            "Alexa, Begin Rocketchat",
-            "Alexa, Launch Rocketchat"
-          ],
-          "name": "Rocket.Chat",
-          "description": "Sample Full Description"
-        },
-        "en-UK": {
-          "summary": "Alexa Skill For Rocket.Chat",
-          "examplePhrases": [
-            "Alexa, Open Rocketchat",
-            "Alexa, Begin Rocketchat",
-            "Alexa, Launch Rocketchat"
-          ],
-          "name": "Rocket.Chat",
-          "description": "Sample Full Description"
-        },
-        "fr-CA": {
+                "fr-CA": {
           "summary": "Alexa Skill For Rocket.Chat",
           "examplePhrases": [
             "Alexa, Open Rocketchat",
@@ -62,7 +72,7 @@
           "name": "Rocket.Chat",
           "description": "Description complète de l'échantillon"
         },
-        "fr-FR": {
+                "fr-FR": {
           "summary": "Alexa Skill For Rocket.Chat",
           "examplePhrases": [
             "Alexa, Ouvrir Rocketchat",
@@ -72,7 +82,7 @@
           "name": "Rocket.Chat",
           "description": "Description complète de l'échantillon"
         },
-        "de-DE": {
+                "de-DE": {
           "summary": "Alexa Skill For Rocket.Chat",
           "examplePhrases": [
             "Alexa, Offen Rocketchat",
@@ -82,7 +92,7 @@
           "name": "Rocket.Chat",
           "description": "Probe Vollständige Beschreibung"
         },
-        "es-ES": {
+                "es-ES": {
           "summary": "Alexa Skill For Rocket.Chat",
           "examplePhrases": [
             "Alexa, Abierto Rocketchat",
@@ -92,7 +102,7 @@
           "name": "Rocket.Chat",
           "description": "Muestra Descripción Completa"
         },
-        "es-MX": {
+                "es-MX": {
           "summary": "Alexa Skill For Rocket.Chat",
           "examplePhrases": [
             "Alexa, Abierto Rocketchat",
@@ -102,7 +112,7 @@
           "name": "Rocket.Chat",
           "description": "Muestra Descripción Completa"
         },
-        "es-US": {
+                "es-US": {
           "summary": "Alexa Skill For Rocket.Chat",
           "examplePhrases": [
             "Alexa, Abierto Rocketchat",
@@ -112,29 +122,30 @@
           "name": "Rocket.Chat",
           "description": "Muestra Descripción Completa"
         },
-        "pt-BR": {
-          "summary": "Alexa Skill For Rocket.Chat",
-          "examplePhrases": [
-            "Alexa, Abrir Rocketchat",
-            "Alexa, Início Rocketchat",
-            "Alexa, Lançamento Rocketchat"
-          ],
-          "name": "Rocket.Chat",
-          "description": "Sample Full Description"
+                "pt-BR": {
+                    "summary": "Alexa Skill For Rocket.Chat",
+                    "examplePhrases": [
+                        "Alexa, Abrir Rocketchat",
+                        "Alexa, Início Rocketchat",
+                        "Alexa, Lançamento Rocketchat"
+                    ],
+                    "name": "Rocket.Chat",
+                    "description": "Sample Full Description"
+                }
+            }
         },
-      "isAvailableWorldwide": true,
-      "testingInstructions": "Sample Testing Instructions.",
-      "category": "COMMUNICATION",
-      "distributionCountries": []
+        "isAvailableWorldwide": true,
+        "testingInstructions": "Sample Testing Instructions.",
+        "category": "COMMUNICATION",
+        "distributionCountries": []
     },
     "apis": {
-      "custom": {
-        "endpoint": {
-          "sourceDir": "lambda/custom",
-          "uri": "ask-custom-rocket-chat-default"
+        "custom": {
+            "endpoint": {
+                "sourceDir": "lambda/custom",
+                "uri": "ask-custom-rocket-chat-default"
+            }
         }
-      }
     },
     "manifestVersion": "1.0"
-  }
 }
