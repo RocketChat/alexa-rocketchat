@@ -47,7 +47,7 @@ Innovating incredible new user experiences in the Alexa ecosystem - powered by R
 
 ASK CLI will create the skill and the lambda function for you. The Lambda function will be created in ```us-east-1 (Northern Virginia)``` by default.
 
-1. Deploy the skill and the lambda function in one step by running the following command:
+1. Make sure you are at your `alexa-rocketchat` top level project directory, then deploy the skill and the lambda function in one step by running the following command:
 
 	```bash
 	$ ask deploy
