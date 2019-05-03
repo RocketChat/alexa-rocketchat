@@ -102,9 +102,11 @@ Copy **https://pitangui.amazon.com/api/skill/link/YOURVENDORID** or **https://la
 	
 ### Testing
 
-1. To test, you need to login to Alexa Developer Console, and enable the "Test" switch on your skill from the "Test" Tab.
+1. Before testing, you must make sure that Account Linking has completed.   Go to alexa.amazon.com or your alexa app and click **account linking** to complete the link.
 
-2. Once the "Test" switch is enabled, your skill can be tested in the Alexa skill simulator or on devices associated with the developer account as well. Speak to Alexa from any enabled device, from your browser at [echosim.io](https://echosim.io/welcome), or through your Amazon Mobile App and say :
+2. To test, you need to login to Alexa Developer Console, and enable the "Test" switch on your skill from the "Test" Tab.
+
+3. Once the "Test" switch is enabled, your skill can be tested in the Alexa skill simulator or on devices associated with the developer account as well. Speak to Alexa from any enabled device, from your browser at [echosim.io](https://echosim.io/welcome), or through your Amazon Mobile App and say :
 
 	```text
 	Alexa, start rocket chat
