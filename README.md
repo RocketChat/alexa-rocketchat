@@ -96,9 +96,11 @@ Copy **https://pitangui.amazon.com/api/skill/link/YOURVENDORID** or **https://la
 
 14. Give a unique name in lower case for the custom oauth. For example enter **"alexaskill"**.Click on Send. Set this name in the lambda environment variables for **OAUTH_SERVICE_NAME**. 
 
-15. You will now be provided a few fields some of which will be prefilled. We only need to change a few. First change the *Enable* to **true**. In the *URL* enter **https://yourservername.rocket.chat/api/v1** . Finally at the bottom switch *Merge users* to true. We don't need to make any other changes here.
+15. You will now be provided a few fields some of which will be prefilled. We only need to change a few. First change the *Enable* to **true**. In the *URL* enter **https://yourservername.rocket.chat/api/v1**. 
 
-16. Click on **Save Changes** on top. WE ARE DONE!
+16. Finally at the bottom switch *Merge users* to true. We don't need to make any other changes here.
+
+17. Click on **Save Changes** on top. WE ARE DONE!
 	
 ### Testing
 
