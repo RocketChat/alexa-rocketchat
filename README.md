@@ -61,7 +61,7 @@ ASK CLI will create the skill and the lambda function for you. The Lambda functi
 	
 ### Configuring Account Linking
 
-1. Login to Alexa Developer Console, and go to Build section on top.
+1. Login to Alexa Developer Console, click on the Rocket.Chat skill on the list, and go to Build section on top.
 
 2. Click on Account Linking on the bottom left.
 
