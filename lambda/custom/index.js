@@ -116,7 +116,7 @@ const PostMessageIntentHandler = {
 const GetLastMessageFromChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'GetLastMessageFromChannel';
+      && handlerInput.requestEnvelope.request.intent.name === 'GetLastMessageFromChannelIntent';
 	},
 	async handle(handlerInput) {
 		try {
@@ -321,7 +321,7 @@ const ErrorHandler = {
 	},
 	handle(handlerInput, error) {
 		console.log(`Error handled: ${ error.message }`);
-		const speechText = ri('ERROR');
+		const speechText = ri('ERRORS');
 
 		return handlerInput.jrb
 			.speak(speechText)
