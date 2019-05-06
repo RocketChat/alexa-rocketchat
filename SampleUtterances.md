@@ -35,7 +35,7 @@ Alexa, Crear Canal CHANNELNAME
 Portuguese
 
 ```
-Alexa, Criar Quarto CHANNELNAME
+Alexa, Criar Canal CHANNELNAME
 ```
 
 -   **Delete A Channel**
@@ -73,7 +73,7 @@ Alexa, Eliminar Canal CHANNELNAME
 Portuguese
 
 ```
-Alexa, Excluir Quarto CHANNELNAME
+Alexa, Apagar Canal CHANNELNAME
 ```
 
 -   **Add All Users On Server To A Channel**
@@ -111,7 +111,7 @@ Alexa, Agregar Todo A CHANNELNAME
 Portuguese
 
 ```
-Alexa, Adicione Tudo Ao CHANNELNAME
+Alexa, Adicionar Todos Ao CHANNELNAME
 ```
 
 -   **Make An User Channel Moderator**
@@ -225,7 +225,7 @@ Alexa, Archivo CHANNELNAME
 Portuguese
 
 ```
-Alexa, Arquivo CHANNELNAME
+Alexa, Arquivar CHANNELNAME
 ```
 
 # Chat
