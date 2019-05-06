@@ -3,7 +3,7 @@
 </p>
 
 <h3 align="center">
-  Innovating Incredible New User Experiences In The Alexa ecosystem
+  Innovating Incredible New User Experiences In The Alexa Ecosystem
 </h3>
 
 ---
