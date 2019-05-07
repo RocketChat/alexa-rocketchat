@@ -1,5 +1,12 @@
-# alexa-rocketchat
-Innovating incredible new user experiences in the Alexa ecosystem - powered by Rocket.Chat
+<p align="center">
+  <img  src="https://user-images.githubusercontent.com/41849970/57236777-691ae200-7043-11e9-8d8e-67e05e60a8e4.png">
+</p>
+
+<h3 align="center">
+  Innovating Incredible New User Experiences In The Alexa Ecosystem
+</h3>
+
+---
 
 # Let's Get Started
 
