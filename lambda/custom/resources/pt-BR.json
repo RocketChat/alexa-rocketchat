@@ -18,7 +18,7 @@
     },
     "POST_MESSAGE": {
         "SUCCESS": "Eu enviei sua mensagem.",
-        "CARD_TITLE": "Publique uma mensagem",
+        "CARD_TITLE": "Envie uma mensagem",
         "ERROR": "Desculpe, não consegui enviar sua mensagem agora."
     },
     "CREATE_CHANNEL": {
@@ -49,13 +49,13 @@
     },
     "MAKE_MODERATOR": {
         "SUCCESS": "{userName} é agora o moderador de {channelName}.",
-        "CARD_TITLE": "Faça o moderador",
+        "CARD_TITLE": "Torne moderador",
         "ERROR": "Desculpe, não consegui atribuir um moderador agora.",
         "ERROR_NOT_FOUND": "Não foi possível atribuir um moderador a {channelName} agora."
     },
     "ADD_ALL_TO_CHANNEL": {
         "SUCCESS": "Adicionou todos os usuários a {channelName}.",
-        "CARD_TITLE": "Adicionar tudo ao canal",
+        "CARD_TITLE": "Adicionar todos ao canal",
         "ERROR": "Desculpe, não é possível adicionar todos os usuários ao canal no momento.",
         "ERROR_NOT_FOUND": "Desculpe, não é possível adicionar todos os usuários ao canal {channelName} agora."
     },
@@ -67,7 +67,7 @@
     },
     "ARCHIVE_CHANNEL": {
         "SUCCESS": "{channelName} agora está arquivado.",
-        "CARD_TITLE": "Canal de arquivamento",
+        "CARD_TITLE": "Arquivar canal",
         "ERROR": "Desculpe, não consegui arquivar este canal agora.",
         "ERROR_NOT_FOUND": "Desculpe, não foi possível arquivar o canal {channelName} agora."
     }
