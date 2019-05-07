@@ -236,6 +236,7 @@ English
 
 ```
 Alexa, Send MESSAGE to CHANNELNAME
+Alexa, Send MESSAGE emoji EMOJI to CHANNELNAME
 ```
 
 Italian
