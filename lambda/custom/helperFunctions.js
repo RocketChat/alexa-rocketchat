@@ -151,6 +151,7 @@ const getUnreadCounter = async (channelName, headers) =>
 			console.log(err.message);
 		});
 
+//PLEASE DO NOT REFACTOR CHANNELUNREADMESSAGES FUNCTION
 const channelUnreadMessages = async (channelName, unreadCount, headers) =>
 	await axios
 		.get(`${ apiEndpoints.channelmessageurl }${ channelName }`, { headers })
@@ -163,20 +164,14 @@ const channelUnreadMessages = async (channelName, unreadCount, headers) =>
 					const msgs = [];
 
 					for (let i = 0; i <= unreadCount - 1; i++) {
-						msgs.push(
-							ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.MESSAGE', {
-								name: res.messages[i].u.username,
-								message: res.messages[i].msg,
-							})
-						);
+						msgs.push(`${res.messages[i].u.username} says, ${res.messages[i].msg} <break time="0.7s"/> `);
 					}
 
-					const responseString =
-						ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.SUCCESS', {
-							unreadCount,
-						}) + msgs.join(', ');
+					var responseString = msgs.join(', ');
+					
+					var finalMsg = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.MESSAGE', { respString: responseString, unread:unreadCount });
 
-					return responseString;
+					return finalMsg;
 				}
 			} else {
 				return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.ERROR', {
