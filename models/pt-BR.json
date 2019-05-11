@@ -28,7 +28,7 @@
                         }
                     ],
                     "samples": [
-                        "criar quarto {channelname}"
+                        "criar canal {channelname}"
                     ]
                 },
                 {
@@ -40,7 +40,7 @@
                         }
                     ],
                     "samples": [
-                        "excluir quarto {channeldelete}"
+                        "Apagar Canal {channeldelete}"
                     ]
                 },
                 {
@@ -80,7 +80,7 @@
                         }
                     ],
                     "samples": [
-                        "adicione tudo ao {addallchannelname}"
+                        "Adicionar Todos Ao {addallchannelname}"
                     ]
                 },
                 {
@@ -124,7 +124,7 @@
                         }
                     ],
                     "samples": [
-                        "arquivo {archivechannelname}"
+                        "Arquivar {archivechannelname}"
                     ]
                 },
                 {

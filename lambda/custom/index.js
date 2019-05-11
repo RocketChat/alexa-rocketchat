@@ -97,6 +97,33 @@ const PostMessageIntentHandler = {
 
 			let message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
 			const channelName = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
+
+			const headers = await helperFunctions.login(accessToken);
+			const speechText = await helperFunctions.postMessage(channelName, message, headers);
+
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
+				.getResponse();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+const PostEmojiMessageIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'PostEmojiMessageIntent';
+	},
+	async handle(handlerInput) {
+		try {
+			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+
+			let message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
+			const channelName = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
 			const emoji = helperFunctions.getSlotID(handlerInput.requestEnvelope.request.intent.slots.emoji)
 			const emojiTwo = helperFunctions.getSlotID(handlerInput.requestEnvelope.request.intent.slots.emojiTwo)
 			const emojiThree = helperFunctions.getSlotID(handlerInput.requestEnvelope.request.intent.slots.emojiThree)
@@ -351,6 +378,7 @@ exports.handler = skillBuilder
 		CreateChannelIntentHandler,
 		DeleteChannelIntentHandler,
 		PostMessageIntentHandler,
+		PostEmojiMessageIntentHandler,
 		GetLastMessageFromChannelIntentHandler,
 		AddAllToChannelIntentHandler,
 		MakeModeratorIntentHandler,
