@@ -138,6 +138,26 @@
                     "samples": [
                         "Leia minhas mensagens não lidas de {readunreadschannel}"
                     ]
+                },
+                {
+                    "name": "PostEmojiMessageIntent",
+                    "slots": [
+                        {
+                            "name": "messagepost",
+                            "type": "message"
+                        },
+                        {
+                            "name": "emoji",
+                            "type": "emoji"
+                        },
+                        {
+                            "name": "messagechannel",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "enviar {messagepost} emoji {emoji} para {messagechannel}"
+                    ]
                 }
             ],
             "types": [
@@ -607,6 +627,561 @@
                         {
                             "name": {
                                 "value": "prajval.raval"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "emoji",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "clipboard scroll gift"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "id cupid memo"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cool cyclone x"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "bell top rewind"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "canada aruba clock230"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "madagascar israel finland"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "zimbabwe es samoa"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "monaco senegal vanuatu"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "curacao guernsey jersey"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "mega algeria comoros"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hash abc soon"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "heartpulse vs recycle"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "postbox books heartpulse"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "synagogue stopwatch smoking"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "art train2 volcano"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sandwich beer skateboard"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ox leaves lemon"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "guardswoman santa luggage"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "grimacing sleepy muscle"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "duck eye zzz"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "spoon sandwich ocean dog2"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "watch foggy station trophy"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "shower barber flashlight"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "underage libra lock date"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "diamonds speaker nine cinema"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "nation bhutan croatia cyprus"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "india uk brazil flag"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "building payment weather rainbow"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "animal mexican betting nature"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "click technology disk oldschool"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "happy photo sky rainbow"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "transportation car bart race"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "award first instrument movie"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "clean human rain snow"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hobby fighting human man"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sports ball winter summer"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dog cat fish monkey"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "king queen crown royal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "drink wine animal money"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "italian noodle"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "summer  breakfast"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "nature tropical"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cyclone rock"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "animal fish"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "swim fish"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dinosaur"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dinosaur extinct"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cricket game"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "slow animal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hoot bird"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "monkey animal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "oink ocean"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "croak toad"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "animal cat"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dog woof"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "animal nature"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "eyesight dork"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "business legal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "fashion shopping"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "royal crown"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "royal queen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "royal king"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "blond girl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "man woman"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "woman man"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dracula witch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "festival happy"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "evil man"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "british male"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "spy uk"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "fingers palm"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "direction rude"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "kick stomp"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "fingers shake"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "face eyeroll"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "frustrated"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "eyeroll"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "indifferent"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "meh"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hellokitty"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hug"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "face"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "money"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "tongue"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "wealthy"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "happiness"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "flipped"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "wink"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "smile"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "partying"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "rofl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "joy"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "grinning"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "grimacing"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "success"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "fist"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hash"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "phone"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "fire"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "on"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "is"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "house"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "kiss"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cute"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "heart"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "car"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dog"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cat"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sad"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "happy"
                             }
                         }
                     ]
