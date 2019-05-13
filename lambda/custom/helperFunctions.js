@@ -5,6 +5,9 @@ const envVariables = require('./config');
 const Jargon = require('@jargon/alexa-skill-sdk');
 const { ri } = Jargon;
 
+const removeWhitespace = require('remove-whitespace'); 
+const emojiTranslate = require('moji-translate');
+
 // Server Credentials. Follow readme to set them up.
 const { oauthServiceName } = envVariables;
 
@@ -300,18 +303,20 @@ const archiveChannel = async (channelName, roomid, headers) =>
 			return ri('ARCHIVE_CHANNEL.ERROR_NOT_FOUND', { channelName });
 		});
 
-function getSlotID(slot) {
-	if (slot.value == undefined) {
-		return undefined;
-	}
-	let value = slot.value;
-	let resolution = (slot.resolutions && slot.resolutions.resolutionsPerAuthority && slot.resolutions.resolutionsPerAuthority.length > 0) ? slot.resolutions.resolutionsPerAuthority[0] : null;
-	if (resolution && resolution.status.code == 'ER_SUCCESS_MATCH') {
-		let resolutionValue = resolution.values[0].value;
-		value = resolutionValue.id != null ? resolutionValue.id : resolutionValue.name;
-	}
-	return value;
+function replaceWhitespacesFunc(str){
+	return removeWhitespace(str);
 }
+
+function replaceWhitespacesDots(str){
+	return str.replace(/\s/ig, '.');
+}
+
+function emojiTranslateFunc(str){
+	onlyEmoji = true;
+	return emojiTranslate.translate(str, onlyEmoji);
+}
+
+
 
 // Module Export of Functions
 
@@ -328,4 +333,6 @@ module.exports.addOwner = addOwner;
 module.exports.archiveChannel = archiveChannel;
 module.exports.getUnreadCounter = getUnreadCounter;
 module.exports.channelUnreadMessages = channelUnreadMessages;
-module.exports.getSlotID = getSlotID;
+module.exports.replaceWhitespacesFunc = replaceWhitespacesFunc;
+module.exports.replaceWhitespacesDots = replaceWhitespacesDots;
+module.exports.emojiTranslateFunc = emojiTranslateFunc;

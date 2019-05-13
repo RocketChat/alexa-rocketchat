@@ -45,7 +45,8 @@ const CreateChannelIntentHandler = {
 		try {
 			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
 
-			const channelName = handlerInput.requestEnvelope.request.intent.slots.channelname.value;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.channelname.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.createChannel(channelName, headers);
@@ -70,7 +71,8 @@ const DeleteChannelIntentHandler = {
 		try {
 			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
 
-			const channelName = handlerInput.requestEnvelope.request.intent.slots.channeldelete.value;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.channeldelete.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.deleteChannel(channelName, headers);
@@ -96,7 +98,8 @@ const PostMessageIntentHandler = {
 			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
 
 			let message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
-			const channelName = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.postMessage(channelName, message, headers);
@@ -122,25 +125,15 @@ const PostEmojiMessageIntentHandler = {
 		try {
 			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
 
-			let message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
-			const channelName = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
-			const emoji = helperFunctions.getSlotID(handlerInput.requestEnvelope.request.intent.slots.emoji)
-			const emojiTwo = helperFunctions.getSlotID(handlerInput.requestEnvelope.request.intent.slots.emojiTwo)
-			const emojiThree = helperFunctions.getSlotID(handlerInput.requestEnvelope.request.intent.slots.emojiThree)
-
-			if(emoji){
-				message += ` ${emoji}`;
-			}
-			if(emojiTwo){
-				message += ` ${emojiTwo}`;
-			}
-			if(emojiThree){
-				message += ` ${emojiThree}`;
-			}
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
+			 const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+			const emojiData = handlerInput.requestEnvelope.request.intent.slots.emoji.value;
+			const emoji = helperFunctions.emojiTranslateFunc(emojiData);
+			const messageData = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
+			 const message = messageData + emoji;
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.postMessage(channelName, message, headers);
-
 
 			return handlerInput.jrb
 				.speak(speechText)
@@ -162,7 +155,8 @@ const GetLastMessageFromChannelIntentHandler = {
 		try {
 			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
 
-			const channelName = handlerInput.requestEnvelope.request.intent.slots.getmessagechannelname.value;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.getmessagechannelname.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.channelLastMessage(channelName, headers);
@@ -186,7 +180,8 @@ const GetUnreadMessagesIntentHandler = {
 	async handle(handlerInput) {
 		try {
 			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
-			const channelName = handlerInput.requestEnvelope.request.intent.slots.readunreadschannel.value;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.readunreadschannel.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
 			const headers = await helperFunctions.login(accessToken);
 			const unreadCount = await helperFunctions.getUnreadCounter(channelName, headers);
@@ -212,7 +207,8 @@ const AddAllToChannelIntentHandler = {
 		try {
 
 			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
-			const channelName = handlerInput.requestEnvelope.request.intent.slots.addallchannelname.value;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.addallchannelname.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.getRoomId(channelName, headers);
@@ -237,10 +233,12 @@ const MakeModeratorIntentHandler = {
 	async handle(handlerInput) {
 		try {
 
-			const userName = handlerInput.requestEnvelope.request.intent.slots.moderatorusername.value;
-			const channelName = handlerInput.requestEnvelope.request.intent.slots.moderatorchannelname.value;
+			const userNameData = handlerInput.requestEnvelope.request.intent.slots.moderatorusername.value;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.moderatorchannelname.value;
+			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+			
 			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
-
 			const headers = await helperFunctions.login(accessToken);
 			const userid = await helperFunctions.getUserId(userName, headers);
 			const roomid = await helperFunctions.getRoomId(channelName, headers);
@@ -266,14 +264,16 @@ const AddOwnerIntentHandler = {
 	async handle(handlerInput) {
 		try {
 
-			const userName = handlerInput.requestEnvelope.request.intent.slots.ownerusername.value;
-			const channelName = handlerInput.requestEnvelope.request.intent.slots.ownerchannelname.value;
-			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
-
-			const headers = await helperFunctions.login(accessToken);
-			const userid = await helperFunctions.getUserId(userName, headers);
-			const roomid = await helperFunctions.getRoomId(channelName, headers);
-			const speechText = await helperFunctions.addOwner(userName, channelName, userid, roomid, headers);
+			const userNameData = handlerInput.requestEnvelope.request.intent.slots.ownerusername.value;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.ownerchannelname.value;
+			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+			
+			 const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+			 const headers = await helperFunctions.login(accessToken);
+			 const userid = await helperFunctions.getUserId(userName, headers);
+			 const roomid = await helperFunctions.getRoomId(channelName, headers);
+			 const speechText = await helperFunctions.addOwner(userName, channelName, userid, roomid, headers);
 
 			return handlerInput.jrb
 				.speak(speechText)
@@ -294,9 +294,10 @@ const ArchiveChannelIntentHandler = {
 	async handle(handlerInput) {
 		try {
 
-			const channelName = handlerInput.requestEnvelope.request.intent.slots.archivechannelname.value;
-			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.archivechannelname.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
+			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.getRoomId(channelName, headers);
 			const speechText = await helperFunctions.archiveChannel(channelName, roomid, headers);
