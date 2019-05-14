@@ -267,6 +267,7 @@ Portuguese
 
 ```
 Alexa, Mandar MESSAGE Para O CHANNELNAME
+Alexa, Enviar MESSAGE Emoji EMOJINAME Para CHANNELNAME
 ```
 
 -   **Read Last Message From A Channel**
