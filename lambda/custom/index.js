@@ -3,10 +3,21 @@
 
 const Alexa = require('ask-sdk-core');
 const helperFunctions = require('./helperFunctions');
+const main = require('./main.json');
 
 // Jargon for Localization
 const Jargon = require('@jargon/alexa-skill-sdk');
-const { ri } = Jargon;
+const {
+	ri
+} = Jargon;
+
+//APL Compaitability Checker Function
+
+function supportsAPL(handlerInput) {
+	const supportedInterfaces = handlerInput.requestEnvelope.context.System.device.supportedInterfaces;
+	const aplInterface = supportedInterfaces['Alexa.Presentation.APL'];
+	return aplInterface != null && aplInterface != undefined;
+  }
 
 // Alexa Intent Functions
 
@@ -38,12 +49,14 @@ const LaunchRequestHandler = {
 
 const CreateChannelIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'CreateChannelIntent';
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'CreateChannelIntent';
 	},
 	async handle(handlerInput) {
 		try {
-			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
 
 			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.channelname.value;
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
@@ -64,12 +77,14 @@ const CreateChannelIntentHandler = {
 
 const DeleteChannelIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent';
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent';
 	},
 	async handle(handlerInput) {
 		try {
-			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
 
 			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.channeldelete.value;
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
@@ -90,12 +105,14 @@ const DeleteChannelIntentHandler = {
 
 const PostMessageIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'PostMessageIntent';
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'PostMessageIntent';
 	},
 	async handle(handlerInput) {
 		try {
-			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
 
 			let message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
 			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
@@ -118,19 +135,21 @@ const PostMessageIntentHandler = {
 
 const PostEmojiMessageIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'PostEmojiMessageIntent';
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'PostEmojiMessageIntent';
 	},
 	async handle(handlerInput) {
 		try {
-			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
 
 			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
-			 const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 			const emojiData = handlerInput.requestEnvelope.request.intent.slots.emoji.value;
 			const emoji = helperFunctions.emojiTranslateFunc(emojiData);
 			const messageData = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
-			 const message = messageData + emoji;
+			const message = messageData + emoji;
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.postMessage(channelName, message, headers);
@@ -148,24 +167,80 @@ const PostEmojiMessageIntentHandler = {
 
 const GetLastMessageFromChannelIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'GetLastMessageFromChannelIntent';
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'GetLastMessageFromChannelIntent';
 	},
 	async handle(handlerInput) {
 		try {
-			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
 
 			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.getmessagechannelname.value;
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
 			const headers = await helperFunctions.login(accessToken);
+			const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
+			const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
 			const speechText = await helperFunctions.channelLastMessage(channelName, headers);
+
+
+		if(supportsAPL(handlerInput)){
 
 			return handlerInput.jrb
 				.speak(speechText)
 				.reprompt(speechText)
-				.withSimpleCard(ri('GET_LAST_MESSAGE_FROM_CHANNEL.CARD_TITLE'), speechText)
+				.addDirective({
+					type: 'Alexa.Presentation.APL.RenderDocument',
+					version: '1.0',
+					document: main,
+					datasources:
+
+					{
+
+						"bodyTemplate6Data": {
+							"type": "object",
+							"objectId": "bt6Sample",
+							"backgroundImage": {
+								"sources": [{
+
+										"url": download,
+										"size": "small",
+
+									},
+									{
+										"url": download,
+										"size": "large",
+
+									}
+								]
+							},
+							"textContent": {
+								"primaryText": {
+									"type": "PlainText",
+									"text": "This Is An Image Message"
+								}
+							},
+							"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png",
+							"hintText": "SAMPLE REDIRECTION URL TEST"
+						}
+
+
+					}
+
+
+				})
 				.getResponse();
+
+			}
+
+			else{
+				return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.getResponse();
+			}
+
 		} catch (error) {
 			console.error(error);
 		}
@@ -174,12 +249,14 @@ const GetLastMessageFromChannelIntentHandler = {
 
 const GetUnreadMessagesIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'ReadUnreadsIntent';
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'ReadUnreadsIntent';
 	},
 	async handle(handlerInput) {
 		try {
-			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
 			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.readunreadschannel.value;
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
@@ -200,13 +277,15 @@ const GetUnreadMessagesIntentHandler = {
 
 const AddAllToChannelIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'AddAllToChannelIntent';
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'AddAllToChannelIntent';
 	},
 	async handle(handlerInput) {
 		try {
 
-			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
 			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.addallchannelname.value;
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
@@ -227,8 +306,8 @@ const AddAllToChannelIntentHandler = {
 
 const MakeModeratorIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'MakeModeratorIntent';
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'MakeModeratorIntent';
 	},
 	async handle(handlerInput) {
 		try {
@@ -237,8 +316,10 @@ const MakeModeratorIntentHandler = {
 			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.moderatorchannelname.value;
 			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
-			
-			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
 			const headers = await helperFunctions.login(accessToken);
 			const userid = await helperFunctions.getUserId(userName, headers);
 			const roomid = await helperFunctions.getRoomId(channelName, headers);
@@ -258,8 +339,8 @@ const MakeModeratorIntentHandler = {
 
 const AddOwnerIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent';
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent';
 	},
 	async handle(handlerInput) {
 		try {
@@ -268,12 +349,14 @@ const AddOwnerIntentHandler = {
 			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.ownerchannelname.value;
 			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
-			
-			 const { accessToken } = handlerInput.requestEnvelope.context.System.user;
-			 const headers = await helperFunctions.login(accessToken);
-			 const userid = await helperFunctions.getUserId(userName, headers);
-			 const roomid = await helperFunctions.getRoomId(channelName, headers);
-			 const speechText = await helperFunctions.addOwner(userName, channelName, userid, roomid, headers);
+
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+			const headers = await helperFunctions.login(accessToken);
+			const userid = await helperFunctions.getUserId(userName, headers);
+			const roomid = await helperFunctions.getRoomId(channelName, headers);
+			const speechText = await helperFunctions.addOwner(userName, channelName, userid, roomid, headers);
 
 			return handlerInput.jrb
 				.speak(speechText)
@@ -288,8 +371,8 @@ const AddOwnerIntentHandler = {
 
 const ArchiveChannelIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'ArchiveChannelIntent';
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'ArchiveChannelIntent';
 	},
 	async handle(handlerInput) {
 		try {
@@ -297,7 +380,9 @@ const ArchiveChannelIntentHandler = {
 			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.archivechannelname.value;
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
-			const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.getRoomId(channelName, headers);
 			const speechText = await helperFunctions.archiveChannel(channelName, roomid, headers);
@@ -315,8 +400,8 @@ const ArchiveChannelIntentHandler = {
 
 const HelpIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
 	},
 	handle(handlerInput) {
 		const speechText = ri('HELP.MESSAGE');
@@ -331,9 +416,9 @@ const HelpIntentHandler = {
 
 const CancelAndStopIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && (handlerInput.requestEnvelope.request.intent.name === 'AMAZON.CancelIntent'
-        || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent');
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			(handlerInput.requestEnvelope.request.intent.name === 'AMAZON.CancelIntent' ||
+				handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent');
 	},
 	handle(handlerInput) {
 		const speechText = ri('GOODBYE.MESSAGE');
