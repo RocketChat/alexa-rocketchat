@@ -238,6 +238,7 @@ const GetLastMessageFromChannelIntentHandler = {
 				return handlerInput.jrb
 				.speak(speechText)
 				.reprompt(speechText)
+				.withSimpleCard(ri('GET_LAST_MESSAGE_FROM_CHANNEL.CARD_TITLE'), speechText)
 				.getResponse();
 			}
 
