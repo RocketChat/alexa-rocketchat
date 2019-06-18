@@ -20,4 +20,5 @@ module.exports = {
 	addownerurl: `${ serverurl }/api/v1/channels.addOwner`,
 	archivechannelurl: `${ serverurl }/api/v1/channels.archive`,
 	counterurl: `${ serverurl }/api/v1/channels.counters?roomName=`,
+	markasreadurl: `${ serverurl }/api/v1/subscriptions.read`,
 };

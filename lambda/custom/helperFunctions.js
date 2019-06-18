@@ -147,7 +147,8 @@ const channelLastMessage = async (channelName, headers) =>
 			return ri('GET_LAST_MESSAGE_FROM_CHANNEL.SUCCESS', {
 				name: res.messages[0].u.username,
 				message: res.messages[0].msg,
-			});
+			}
+		)
 		} else {
 			return ri('GET_LAST_MESSAGE_FROM_CHANNEL.ERROR', {
 				channelName,
@@ -165,6 +166,20 @@ const channelLastMessage = async (channelName, headers) =>
 				channelName,
 			});
 		}
+	});
+
+const readMessages = async (roomid,headers) =>
+	await axios
+	.post(apiEndpoints.markasreadurl, {
+		rid: roomid,
+	}, {
+		headers
+	})
+	.then((res) => {
+		console.log(res.data);
+	})
+	.catch((err) => {
+		console.log(err.message);
 	});
 
 const getLastMessageFileURL = async (channelName, headers) =>
@@ -410,3 +425,4 @@ module.exports.channelUnreadMessages = channelUnreadMessages;
 module.exports.replaceWhitespacesFunc = replaceWhitespacesFunc;
 module.exports.replaceWhitespacesDots = replaceWhitespacesDots;
 module.exports.emojiTranslateFunc = emojiTranslateFunc;
+module.exports.readMessages = readMessages;
