@@ -37,6 +37,67 @@ const login = async (accessToken) =>
 		console.log(err);
 	});
 
+const getUserName = async (headers) =>
+	await axios
+		.get(`${ apiEndpoints.meUrl }`, { headers })
+		.then((res) => res.data)
+		.then((res) => `${ res.username }`)
+		.catch((err) => {
+			console.log(err.message);
+		});
+
+		
+const createPersonalAccessToken = async (headers) =>
+	await axios
+		.post(
+			apiEndpoints.generatetokenurl,
+			{
+				tokenName: "alexaRocketChatNotifications",
+			},
+			{ headers }
+		)
+		.then((res) => res.data)
+		.then((res) => {
+			if (res.success === true) {
+				return res.token;
+			} else {
+				console.log(res);
+				return "";
+			}
+		})
+		.catch(async (err) => {
+			console.log(err.message);
+			if (
+				err.response.data.errorType === 'error-token-already-exists'
+			){
+				return await removePersonalAccessToken(headers);
+			}
+			return "";
+		});
+
+const removePersonalAccessToken = async (headers) =>
+	await axios
+		.post(
+			apiEndpoints.removetokenurl,
+			{
+				tokenName: "alexaRocketChatNotifications",
+			},
+			{ headers }
+		)
+		.then((res) => res.data)
+		.then(async (res) => {
+			if (res.success === true) {
+				return await createPersonalAccessToken(headers)
+			} else {
+				console.log(res);
+				return "";
+			}
+		})
+		.catch((err) => {
+			console.log(err.message);
+			return "";
+		});
+	
 const createChannel = async (channelName, headers) =>
 	await axios
 	.post(
@@ -388,11 +449,21 @@ function emojiTranslateFunc(str) {
 	return emojiTranslate.translate(str, onlyEmoji);
 }
 
+function slotValue(slot){
+	let value = slot.value;
+	let resolution = (slot.resolutions && slot.resolutions.resolutionsPerAuthority && slot.resolutions.resolutionsPerAuthority.length > 0) ? slot.resolutions.resolutionsPerAuthority[0] : null;
+	if(resolution && resolution.status.code == 'ER_SUCCESS_MATCH'){
+		let resolutionValue = resolution.values[0].value;
+		value = resolutionValue.name;
+	}
+	return value;
+}
 
 
 // Module Export of Functions
 
 module.exports.login = login;
+module.exports.createPersonalAccessToken = createPersonalAccessToken;
 module.exports.createChannel = createChannel;
 module.exports.deleteChannel = deleteChannel;
 module.exports.postMessage = postMessage;
@@ -400,6 +471,7 @@ module.exports.channelLastMessage = channelLastMessage;
 module.exports.getLastMessageFileURL = getLastMessageFileURL;
 module.exports.getLastMessageFileDowloadURL = getLastMessageFileDowloadURL;
 module.exports.getUserId = getUserId;
+module.exports.getUserName = getUserName;
 module.exports.getRoomId = getRoomId;
 module.exports.makeModerator = makeModerator;
 module.exports.addAll = addAll;
@@ -410,3 +482,4 @@ module.exports.channelUnreadMessages = channelUnreadMessages;
 module.exports.replaceWhitespacesFunc = replaceWhitespacesFunc;
 module.exports.replaceWhitespacesDots = replaceWhitespacesDots;
 module.exports.emojiTranslateFunc = emojiTranslateFunc;
+module.exports.slotValue = slotValue;

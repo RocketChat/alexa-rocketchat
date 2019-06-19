@@ -146,6 +146,33 @@
                 }
             }
         },
-        "manifestVersion": "1.0"
+        "manifestVersion": "1.0",
+        "permissions": [
+            {
+                "name": "alexa::devices:all:notifications:write"
+            }
+        ],
+        "events": {
+            "publications": [
+                {
+                    "eventName": "AMAZON.MessageAlert.Activated"
+                }
+            ],
+            "endpoint": {
+                "uri": "your-arn-here"
+            },
+            "subscriptions": [
+                {
+                    "eventName": "SKILL_PROACTIVE_SUBSCRIPTION_CHANGED"
+                }
+            ],
+            "regions": {
+                "NA": {
+                    "endpoint": {
+                        "uri": "your-arn-here"
+                    }
+                }
+            }
+        }
     }
 }

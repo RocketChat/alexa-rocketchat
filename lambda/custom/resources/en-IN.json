@@ -13,8 +13,18 @@
     },
     "WELCOME": {
         "SUCCESS": "Welcome To Rocket Chat Alexa Skill. What Would you like to do today?",
+        "SUCCESS_RETURN_USER": "Welcome back! What Would you like to do today?",
         "CARD_TITLE": "Welcome To Rocket.Chat",
         "ERROR": "To start using this skill, please use the companion app to authenticate."
+    },
+    "NOTIFICATION_SETTINGS": {
+        "SUCCESS_USERMENTIONS": "I have updated your settings. You will now receive notifications for user mentions only.",
+        "SUCCESS_UNREADS": "I have updated your settings. You will now receive notifications for unread messages only.",
+        "CARD_TITLE": "Change Notification Settings",
+        "ERROR": "To start receiving notifications from this skill, please use the companion app to give the permission.",
+        "ERROR_TURNED_OFF": "You have turned off the notification settings for this skill. To start receiving notifications again, please use the companion app to give the permission.",
+        "ERROR_ALREADY_USERMENTIONS": "Your notification settings are already set to user mentions.",
+        "ERROR_ALREADY_UNREADS": "Your notification settings are already set to unread messages."
     },
     "POST_MESSAGE": {
         "SUCCESS": "I've sent your message.",
@@ -41,7 +51,7 @@
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
     },
     "GET_UNREAD_MESSAGES_FROM_CHANNEL": {
-      "MESSAGE": "You Have {unread} Unread Messages <break time='1s'/> {respString} <break time='0.7s'/> ",
+        "MESSAGE": "You Have {unread} Unread Messages <break time='1s'/> {respString} <break time='0.7s'/> ",
         "NO_MESSAGE": "You Don't Have Any Unread Messages.",
         "CARD_TITLE": "Channel Unread Messages",
         "ERROR": "Sorry, I couldn't find the channel {channelName} right now.",
