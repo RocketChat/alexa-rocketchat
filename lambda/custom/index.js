@@ -301,6 +301,13 @@ const GetLastMessageFromChannelIntentHandler = {
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
 			const headers = await helperFunctions.login(accessToken);
+
+			//FOR IMPLEMENTING READ
+			/*
+			const roomid = await helperFunctions.getRoomId(channelName, headers);
+			helperFunctions.readMessages(roomid, headers);
+			*/
+
 			const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
 			const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
 			const speechText = await helperFunctions.channelLastMessage(channelName, headers);

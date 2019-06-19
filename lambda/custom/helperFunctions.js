@@ -228,6 +228,20 @@ const channelLastMessage = async (channelName, headers) =>
 		}
 	});
 
+const readMessages = async (roomid,headers) =>
+	await axios
+	.post(apiEndpoints.markasreadurl, {
+		rid: roomid,
+	}, {
+		headers
+	})
+	.then((res) => {
+		console.log(res.data);
+	})
+	.catch((err) => {
+		console.log(err.message);
+	});
+
 const getLastMessageFileURL = async (channelName, headers) =>
 	await axios
 	.get(`${ apiEndpoints.channelmessageurl }${ channelName }`, {
@@ -482,4 +496,5 @@ module.exports.channelUnreadMessages = channelUnreadMessages;
 module.exports.replaceWhitespacesFunc = replaceWhitespacesFunc;
 module.exports.replaceWhitespacesDots = replaceWhitespacesDots;
 module.exports.emojiTranslateFunc = emojiTranslateFunc;
+module.exports.readMessages = readMessages; 
 module.exports.slotValue = slotValue;
