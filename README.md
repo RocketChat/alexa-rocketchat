@@ -66,6 +66,9 @@ ASK CLI will create the skill and the lambda function for you. The Lambda functi
 	e.g: 
 	1. **SERVER_URL**    https://yourservername.rocket.chat
 	2. **OAUTH_SERVICE_NAME**    (The name of the Custom OAuth you setup in next step)
+	3. **DDB_NAME**    (The name of the Dynamo DB table being used by your skill)
+
+3. Then go to the IAM console and add policies to access DynamoDB and Cloudwatch to the role for this lambda function.
 	
 ### Configuring Account Linking
 
@@ -109,6 +112,21 @@ Copy **https://pitangui.amazon.com/api/skill/link/YOURVENDORID** or **https://la
 16. Finally at the bottom switch *Merge users* to true. We don't need to make any other changes here.
 
 17. Click on **Save Changes** on top. WE ARE DONE!
+
+### Configuring Notifications
+
+1. Open ```./skill.json``` file and add the ARN of your AWS Lambda function. 
+
+2. Deploy the changes.
+
+		```bash
+		$ ask deploy
+		```
+3. Go to your Alexa App and enable notifications for this skill. New users of the skill will be the shown the permissions settings while enabling the skill itself.
+
+4. Setup a notifications microservice following the instructions in [Rocket Chat Alexa Skill Notifications](https://github.com/RocketChat/alexa-rocketchat-notification)
+
+5. Also it will be worth checking out this video to get insights [Alexa Notifications with Proactive Events - Dabble Lab #125](https://www.youtube.com/watch?v=oMcHTMZDTVQ)
 	
 ### Testing
 

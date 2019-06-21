@@ -170,6 +170,36 @@
                     "samples": [
                         "send {messagepost} emoji {emoji}  to {messagechannel}"
                     ]
+                },
+                {
+                    "name": "ChangeNotificationSettingsIntent",
+                    "slots": [
+                        {
+                            "name": "notificationsFor",
+                            "type": "notificationType",
+                            "samples": [
+                                "{notificationsFor} only",
+                                "change settings to {notificationsFor}",
+                                "only {notificationsFor}",
+                                "{notificationsFor}",
+                                "change notifications settings to {notificationsFor}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "change settings",
+                        "change notifications settings",
+                        "change notifications",
+                        "send me notifications for {notificationsFor}",
+                        "only send me notifications for {notificationsFor}",
+                        "change notifications settings to {notificationsFor}",
+                        "set notifications settings to {notificationsFor}",
+                        "change settings to {notificationsFor}",
+                        "change settings to {notificationsFor} only",
+                        "change notifications to {notificationsFor}",
+                        "change notifications to {notificationsFor} only",
+                        "set notifications to {notificationsFor}"
+                    ]
                 }
             ],
             "types": [
@@ -1392,8 +1422,81 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "notificationType",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "unreads",
+                                "synonyms": [
+                                    "unread",
+                                    "unread messages",
+                                    "messages"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "userMentions",
+                                "synonyms": [
+                                    "my mention",
+                                    "mentions",
+                                    "user mentions"
+                                ]
+                            }
+                        }
+                    ]
                 }
             ]
-        }
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "ChangeNotificationSettingsIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "notificationsFor",
+                            "type": "notificationType",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.16090782249.1452903943384"
+                            },
+                            "validations": [
+                                {
+                                    "type": "hasEntityResolutionMatch",
+                                    "prompt": "Slot.Validation.16090782249.1452903943384.1352879012452"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.16090782249.1452903943384",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Would you like to receive notifications for unread messages, or for user mentions only?"
+                    }
+                ]
+            },
+            {
+                "id": "Slot.Validation.16090782249.1452903943384.1352879012452",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You can either choose notifications for unread messages, or for user mentions. Which one do you want?"
+                    }
+                ]
+            }
+        ]
     }
 }

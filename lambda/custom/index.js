@@ -1,15 +1,21 @@
 /* eslint-disable  func-names */
 /* eslint-disable  no-console */
 
-const Alexa = require('ask-sdk-core');
+const Alexa = require('ask-sdk');
 const helperFunctions = require('./helperFunctions');
 const main = require('./main.json');
+const envVariables = require('./config');
 
 // Jargon for Localization
 const Jargon = require('@jargon/alexa-skill-sdk');
 const {
 	ri
 } = Jargon;
+
+//Permissions for Notifications
+const PERMISSIONS = {
+	NOTIFICATION_PERMISSION: 'alexa::devices:all:notifications:write'
+};
 
 //APL Compaitability Checker Function
 
@@ -21,11 +27,40 @@ function supportsAPL(handlerInput) {
 
 // Alexa Intent Functions
 
+const ProactiveEventHandler = {
+	canHandle(handlerInput) {
+		console.log(handlerInput);
+		return handlerInput.requestEnvelope.request.type === 'AlexaSkillEvent.ProactiveSubscriptionChanged'
+	},
+	async handle(handlerInput) {
+		const attributesManager = handlerInput.attributesManager;
+		const attributes = await attributesManager.getPersistentAttributes() || {};
+
+		if (handlerInput.requestEnvelope.request.hasOwnProperty("body")) {
+			if (attributes.hasOwnProperty("optForNotifications")) {
+				attributes.optForNotifications = !attributes.optForNotifications;
+			}
+			else {
+				attributes.optForNotifications = true;
+			}
+		}
+		else {
+			attributes.optForNotifications = false;
+		}
+
+		handlerInput.attributesManager.setPersistentAttributes(attributes);
+		await handlerInput.attributesManager.savePersistentAttributes();
+	},
+}
+
+
 const LaunchRequestHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
 	},
 	async handle(handlerInput) {
+		const attributesManager = handlerInput.attributesManager;
+		const attributes = await attributesManager.getPersistentAttributes() || {};
 
 		if (handlerInput.requestEnvelope.context.System.user.accessToken === undefined) {
 
@@ -36,7 +71,34 @@ const LaunchRequestHandler = {
 				.withLinkAccountCard()
 				.getResponse();
 		}
-		const speechText = ri('WELCOME.SUCCESS');
+
+		let speechText = '';
+
+		if (attributes.hasOwnProperty("userId")) {
+			speechText = ri('WELCOME.SUCCESS_RETURN_USER');
+		} else {
+			attributes.userId = handlerInput.requestEnvelope.context.System.user.userId;
+			speechText = ri('WELCOME.SUCCESS');
+		}
+
+		if (attributes.hasOwnProperty("optForNotifications") && !attributes.hasOwnProperty("personalAccessToken")) {
+			if (attributes.optForNotifications == true) {
+				const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+				const headers = await helperFunctions.login(accessToken);
+				const dataResponse = await helperFunctions.createPersonalAccessToken(headers);
+				if (dataResponse.length != 0) {
+					attributes.profileId = headers["X-User-Id"];
+					attributes.personalAccessToken = dataResponse;
+					attributes.notificationsSettings = "userMentions";
+					attributes.apiRegion = "userMentions";
+					attributes.userName = await helperFunctions.getUserName(headers);
+				}
+			}
+		}
+
+
+		handlerInput.attributesManager.setPersistentAttributes(attributes);
+		await handlerInput.attributesManager.savePersistentAttributes();
 
 		return handlerInput.jrb
 			.speak(speechText)
@@ -44,6 +106,65 @@ const LaunchRequestHandler = {
 			.withSimpleCard(ri('WELCOME.CARD_TITLE'), speechText)
 			.getResponse();
 
+	},
+};
+
+const ChangeNotificationSettingsIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+			&& handlerInput.requestEnvelope.request.intent.name === 'ChangeNotificationSettingsIntent';
+	},
+	async handle(handlerInput) {
+		const attributesManager = handlerInput.attributesManager;
+		const attributes = await attributesManager.getPersistentAttributes() || {};
+
+		const notificationsFor = helperFunctions.slotValue(handlerInput.requestEnvelope.request.intent.slots.notificationsFor);
+		let speechText = '';
+
+		if (attributes.hasOwnProperty("optForNotifications") && attributes.hasOwnProperty("notificationsSettings")) {
+			if (attributes.optForNotifications == true) {
+				if (attributes.notificationsSettings == notificationsFor) {
+					if (notificationsFor === "userMentions") {
+						speechText = ri('NOTIFICATION_SETTINGS.ERROR_ALREADY_USERMENTIONS');
+					}
+					else {
+						speechText = ri('NOTIFICATION_SETTINGS.ERROR_ALREADY_UNREADS');
+					}
+				}
+				else {
+					attributes.notificationsSettings = notificationsFor;
+					if (notificationsFor === "userMentions") {
+						speechText = ri('NOTIFICATION_SETTINGS.SUCCESS_USERMENTIONS');
+					}
+					else {
+						speechText = ri('NOTIFICATION_SETTINGS.SUCCESS_UNREADS');
+					}
+					handlerInput.attributesManager.setPersistentAttributes(attributes);
+					await handlerInput.attributesManager.savePersistentAttributes();
+				}
+			}
+			else {
+				speechText = ri('NOTIFICATION_SETTINGS.ERROR_TURNED_OFF');
+				return handlerInput.jrb
+					.speak(speechText)
+					.reprompt(speechText)
+					.withAskForPermissionsConsentCard([PERMISSIONS.NOTIFICATION_PERMISSION])
+					.getResponse();
+			}
+		}
+		else {
+			speechText = ri('NOTIFICATION_SETTINGS.ERROR');
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withAskForPermissionsConsentCard([PERMISSIONS.NOTIFICATION_PERMISSION])
+				.getResponse();
+		}
+		return handlerInput.jrb
+			.speak(speechText)
+			.reprompt(speechText)
+			.withSimpleCard(ri('NOTIFICATION_SETTINGS.CARD_TITLE'), speechText)
+			.getResponse();
 	},
 };
 
@@ -180,6 +301,13 @@ const GetLastMessageFromChannelIntentHandler = {
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
 			const headers = await helperFunctions.login(accessToken);
+
+			//FOR IMPLEMENTING READ
+			/*
+			const roomid = await helperFunctions.getRoomId(channelName, headers);
+			helperFunctions.readMessages(roomid, headers);
+			*/
+
 			const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
 			const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
 			const speechText = await helperFunctions.channelLastMessage(channelName, headers);
@@ -457,11 +585,13 @@ const ErrorHandler = {
 	},
 };
 
-const skillBuilder = new Jargon.JargonSkillBuilder().installOnto(Alexa.SkillBuilders.custom());
+const skillBuilder = new Jargon.JargonSkillBuilder().installOnto(Alexa.SkillBuilders.standard());
 
 exports.handler = skillBuilder
 	.addRequestHandlers(
+		ProactiveEventHandler,
 		LaunchRequestHandler,
+		ChangeNotificationSettingsIntentHandler,
 		CreateChannelIntentHandler,
 		DeleteChannelIntentHandler,
 		PostMessageIntentHandler,
@@ -477,4 +607,6 @@ exports.handler = skillBuilder
 		SessionEndedRequestHandler
 	)
 	.addErrorHandlers(ErrorHandler)
+	.withTableName(envVariables.dynamoDBTableName)
+	.withAutoCreateTable(true)
 	.lambda();

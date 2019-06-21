@@ -348,6 +348,13 @@ Spainish
 Alexa, Leer Mis Mensajes No Leídos De CHANNELNAME
 ```
 
+-   **Change Notification Settings**
+
+English
+
+```
+Alexa, Change my notification settings
+```
 
 # IM
 

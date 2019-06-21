@@ -9,6 +9,7 @@ const { serverurl } = envVariables;
 
 module.exports = {
 	loginUrl: `${ serverurl }/api/v1/login`,
+	meUrl: `${ serverurl }/api/v1/me`,
 	createchannelurl: `${ serverurl }/api/v1/channels.create`,
 	deletechannelurl: `${ serverurl }/api/v1/channels.delete`,
 	postmessageurl: `${ serverurl }/api/v1/chat.postMessage`,
@@ -20,4 +21,7 @@ module.exports = {
 	addownerurl: `${ serverurl }/api/v1/channels.addOwner`,
 	archivechannelurl: `${ serverurl }/api/v1/channels.archive`,
 	counterurl: `${ serverurl }/api/v1/channels.counters?roomName=`,
+	markasreadurl: `${ serverurl }/api/v1/subscriptions.read`,
+	generatetokenurl: `${ serverurl }/api/v1/users.generatePersonalAccessToken`,
+	removetokenurl: `${ serverurl }/api/v1/users.removePersonalAccessToken`,
 };
