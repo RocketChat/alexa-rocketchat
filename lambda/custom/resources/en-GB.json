@@ -26,13 +26,24 @@
         "ERROR_ALREADY_USERMENTIONS": "Your notification settings are already set to user mentions.",
         "ERROR_ALREADY_UNREADS": "Your notification settings are already set to unread messages."
     },
+    "WELCOME_ANONYMOUS_USER": {
+        "SUCCESS": "Welcome To Rocket Chat Alexa Skill. You are currently logged in as anonymous user. Say 'Read my flash briefings' to read your flash briefings."
+    },
+    "FLASH_BRIEFING": {
+        "SUCCESS": "{message}",
+        "CARD_TITLE": "Flash Briefing",
+        "ERROR": "Sorry, This Server Does Not Have 'Anonymous Read' Enabled.",
+        "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
+    },
     "POST_MESSAGE": {
         "SUCCESS": "I've sent your message.",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Post A Message",
         "ERROR": "Sorry, I couldn't send your message right now."
     },
     "CREATE_CHANNEL": {
         "SUCCESS": "I've created your channel {channelName}.",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Create A Channel",
         "ERROR": "Sorry, I couldn't create the channel {channelName} right now.",
         "ERROR_DUPLICATE_NAME": "Sorry, the channel {channelName} already exists. Please try again with different channel name.",
@@ -40,6 +51,7 @@
     },
     "DELETE_CHANNEL": {
         "SUCCESS": "I've deleted the channel {channelName}.",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Delete A Channel",
         "ERROR": "Sorry, I couldn't delete the channel {channelName} right now.",
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
@@ -47,11 +59,13 @@
     "GET_LAST_MESSAGE_FROM_CHANNEL": {
         "SUCCESS": "{name} says, {message}.",
         "CARD_TITLE": "Channel Last Message",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "ERROR": "Sorry, I couldn't find the channel {channelName} right now.",
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
     },
     "GET_UNREAD_MESSAGES_FROM_CHANNEL": {
         "MESSAGE": "You Have {unread} Unread Messages <break time='1s'/> {respString} <break time='0.7s'/> ",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "NO_MESSAGE": "You Don't Have Any Unread Messages.",
         "CARD_TITLE": "Channel Unread Messages",
         "ERROR": "Sorry, I couldn't find the channel {channelName} right now.",
@@ -59,24 +73,28 @@
     },
     "MAKE_MODERATOR": {
         "SUCCESS": "{userName} is now the moderator of {channelName}.",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Make Moderator",
         "ERROR": "Sorry, I couldn't assign a moderator right now.",
         "ERROR_NOT_FOUND": "Sorry, I couldn't assign a moderator to {channelName} right now."
     },
     "ADD_ALL_TO_CHANNEL": {
         "SUCCESS": "Added All Users To {channelName}.",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Add All To Channel",
         "ERROR": "Sorry, I am unable to add all users to the channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I am unable to add all users to channel {channelName} right now."
     },
     "ADD_OWNER": {
         "SUCCESS": "{userName} is now the owner of {channelName}.",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Add Owner",
         "ERROR": "Sorry, I couldn't assign a owner to the channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I couldn't assign a owner to channel {channelName} right now."
     },
     "ARCHIVE_CHANNEL": {
         "SUCCESS": "{channelName} is now archived.",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Archive Channel",
         "ERROR": "Sorry, I couldn't archive this channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
