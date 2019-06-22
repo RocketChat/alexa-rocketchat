@@ -200,6 +200,165 @@
                         "change notifications to {notificationsFor} only",
                         "set notifications to {notificationsFor}"
                     ]
+                },
+                {
+                    "name": "FlashBriefingIntent",
+                    "slots": [],
+                    "samples": [
+                        "Read My Flash Briefings"
+                    ]
+                },
+                {
+                    "name": "CreateGroupIntent",
+                    "slots": [
+                        {
+                            "name": "groupname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Create Private Channel {groupname}"
+                    ]
+                },
+                {
+                    "name": "DeleteGroupIntent",
+                    "slots": [
+                        {
+                            "name": "deletegroupname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Delete Private Channel {deletegroupname}"
+                    ]
+                },
+                {
+                    "name": "MakeGroupModeratorIntent",
+                    "slots": [
+                        {
+                            "name": "groupmoderatorusername",
+                            "type": "rocketchatusernames"
+                        },
+                        {
+                            "name": "groupmoderatorchannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Make {groupmoderatorusername} Moderator Of Private Channel {groupmoderatorchannelname}"
+                    ]
+                },
+                {
+                    "name": "MakeGroupOwnerIntent",
+                    "slots": [
+                        {
+                            "name": "groupownerusername",
+                            "type": "rocketchatusernames"
+                        },
+                        {
+                            "name": "groupownerchannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Make {groupownerusername} Owner Of Private Channel {groupownerchannelname}"
+                    ]
+                },
+                {
+                    "name": "PostGroupMessageIntent",
+                    "slots": [
+                        {
+                            "name": "groupmessage",
+                            "type": "message"
+                        },
+                        {
+                            "name": "groupmessagechannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Send {groupmessage} To Private Channel {groupmessagechannelname}"
+                    ]
+                },
+                {
+                    "name": "GroupLastMessageIntent",
+                    "slots": [
+                        {
+                            "name": "grouplastmessagechannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Read Last Message From Private Channel {grouplastmessagechannelname}"
+                    ]
+                },
+                {
+                    "name": "ReadGroupUnreadsIntent",
+                    "slots": [
+                        {
+                            "name": "groupunreadschannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Read Unread Messages From Private Channel {groupunreadschannelname}"
+                    ]
+                },
+                {
+                    "name": "PostGroupEmojiMessageIntent",
+                    "slots": [
+                        {
+                            "name": "groupemojimessage",
+                            "type": "message"
+                        },
+                        {
+                            "name": "groupmessageemojiname",
+                            "type": "emoji"
+                        },
+                        {
+                            "name": "groupmessageemojichannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Send {groupemojimessage} emoji {groupmessageemojiname} to Private Channel {groupmessageemojichannelname}"
+                    ]
+                },
+                {
+                    "name": "PostDirectMessageIntent",
+                    "slots": [
+                        {
+                            "name": "directmessage",
+                            "type": "message"
+                        },
+                        {
+                            "name": "directmessageusername",
+                            "type": "rocketchatusernames"
+                        }
+                    ],
+                    "samples": [
+                        "direct message {directmessage} recipient {directmessageusername}"
+                    ]
+                },
+                {
+                    "name": "PostEmojiDirectMessageIntent",
+                    "slots": [
+                        {
+                            "name": "directmessage",
+                            "type": "message"
+                        },
+                        {
+                            "name": "directmessageemojiname",
+                            "type": "emoji"
+                        },
+                        {
+                            "name": "directmessageusername",
+                            "type": "rocketchatusernames"
+                        }
+                    ],
+                    "samples": [
+                        "direct message {directmessage} emoji {directmessageemojiname} recipient {directmessageusername}"
+                    ]
                 }
             ],
             "types": [
