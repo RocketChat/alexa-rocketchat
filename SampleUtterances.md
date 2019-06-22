@@ -228,6 +228,63 @@ Portuguese
 Alexa, Arquivar CHANNELNAME
 ```
 
+-   **Create A New Group**
+
+English
+
+```
+Alexa, Create Private Channel CHANNELNAME
+```
+
+Portuguese
+
+```
+Alexa, Criar Canal Privado CHANNELNAME
+```
+
+-   **Delete A Group**
+
+English
+
+```
+Alexa, Delete Private Channel CHANNELNAME
+```
+
+Portuguese
+
+```
+Alexa, Excluir Canal Privado CHANNELNAME
+```
+
+-   **Make An User Group Moderator**
+
+English
+
+```
+Alexa, Make USERNAME Moderator Of Private Channel CHANNELNAME
+```
+
+Portuguese
+
+```
+Alexa, Tornar O USERNAME Moderador Do Canal Privado CHANNELNAME
+```
+
+-   **Make An User Group Owner**
+
+English
+
+```
+Alexa, Make USERNAME Owner Of Private Channel CHANNELNAME
+```
+
+Portuguese
+
+```
+Alexa, Tornar O USERNAME Proprietário Do Canal Privado CHANNELNAME
+```
+
+
 # Chat
 
 -   **Post A Message**
@@ -347,6 +404,63 @@ Spainish
 ```
 Alexa, Leer Mis Mensajes No Leídos De CHANNELNAME
 ```
+-   **Post Message In A Private Channel**
+
+English
+
+```
+Alexa,Send MESSAGE To Private Channel CHANNELNAME
+```
+
+Portuguese
+
+```
+Alexa,Enviar MESSAGE Para O Canal Privado CHANNELNAME
+```
+-   **Post Emoji Message In A Private Channel**
+
+English
+
+```
+Alexa,Send MESSAGE Emoji EMOJINAME to Private Channel CHANNELNAME
+```
+
+Portuguese
+
+```
+Alexa,Enviar MESSAGE Emoji EMOJINAME Para O Canal Privado CHANNELNAME
+```
+
+-   **Read Last Message From A Private Channel**
+
+English
+
+```
+Alexa,Read Last Message From Private Channel CHANNELNAME
+```
+
+Portuguese
+
+```
+Alexa,Leia A Última Mensagem Do Canal Privado CHANNELNAME
+```
+
+-   **Read Unread Messages From A Private Channel**
+
+English
+
+```
+Alexa,Read Unread Messages From Private Channel CHANNELNAME
+```
+
+Portuguese
+
+```
+Alexa,Leia Minhas Mensagens Não Lidas De Canal Privado CHANNELNAME
+```
+
+
+***
 
 -   **Change Notification Settings**
 
@@ -358,4 +472,64 @@ Alexa, Change my notification settings
 
 # IM
 
+-   **Send DM To An User**
+
+English
+
+```
+Alexa, Direct Message MESSAGE Recipient USERNAME
+```
+
+Portuguese
+
+```
+Alexa, Mensagem Direta MESSAGE Destinatário USERNAME
+```
+
+-   **Send DM With Emoji To An User**
+
+English
+
+```
+Alexa, Direct Message MESSAGE Emoji EMOJINAME Recipient USERNAME
+```
+
+Portuguese
+
+```
+Alexa, Mensagem Direta MESSAGE Emoji EMOJINAME Destinatário USERNAME
+```
+
+***
+
 # User
+
+-   **Help Intent**
+
+English
+
+```
+Alexa, Help
+```
+
+Portuguese
+
+```
+Alexa, Socorro
+```
+
+-   **Stop Intent**
+
+English
+
+```
+Alexa, Stop
+```
+
+Portuguese
+
+```
+Alexa, Pare
+```
+
+***

@@ -140,7 +140,6 @@ Copy **https://pitangui.amazon.com/api/skill/link/YOURVENDORID** or **https://la
 	Alexa, start rocket chat
 	```
 	
-	
 ## Customization
 
 1. ```./skill.json```

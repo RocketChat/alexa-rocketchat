@@ -158,6 +158,158 @@
                     "samples": [
                         "enviar {messagepost} emoji {emoji} para {messagechannel}"
                     ]
+                },
+                {
+                    "name": "CreateGroupIntent",
+                    "slots": [
+                        {
+                            "name": "groupname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Criar Canal Privado {groupname}"
+                    ]
+                },
+                {
+                    "name": "DeleteGroupIntent",
+                    "slots": [
+                        {
+                            "name": "deletegroupname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Excluir Canal Privado {deletegroupname}"
+                    ]
+                },
+                {
+                    "name": "MakeGroupModeratorIntent",
+                    "slots": [
+                        {
+                            "name": "groupmoderatorusername",
+                            "type": "rocketchatusernames"
+                        },
+                        {
+                            "name": "groupmoderatorchannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Tornar O {groupmoderatorusername} Moderador Do Canal Privado {groupmoderatorchannelname}"
+                    ]
+                },
+                {
+                    "name": "MakeGroupOwnerIntent",
+                    "slots": [
+                        {
+                            "name": "groupownerusername",
+                            "type": "rocketchatusernames"
+                        },
+                        {
+                            "name": "groupownerchannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Tornar O {groupownerusername} Proprietário Do Canal Privado {groupownerchannelname}"
+                    ]
+                },
+                {
+                    "name": "PostGroupMessageIntent",
+                    "slots": [
+                        {
+                            "name": "groupmessage",
+                            "type": "message"
+                        },
+                        {
+                            "name": "groupmessagechannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Enviar {groupmessage} Para O Canal Privado {groupmessagechannelname}"
+                    ]
+                },
+                {
+                    "name": "PostGroupEmojiMessageIntent",
+                    "slots": [
+                        {
+                            "name": "groupemojimessage",
+                            "type": "message"
+                        },
+                        {
+                            "name": "groupmessageemojiname",
+                            "type": "emoji"
+                        },
+                        {
+                            "name": "groupmessageemojichannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Enviar {groupemojimessage} Emoji {groupmessageemojiname} Para O Canal Privado {groupmessageemojichannelname}"
+                    ]
+                },
+                {
+                    "name": "GroupLastMessageIntent",
+                    "slots": [
+                        {
+                            "name": "grouplastmessagechannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Leia A Última Mensagem Do Canal Privado {grouplastmessagechannelname}"
+                    ]
+                },
+                {
+                    "name": "ReadGroupUnreadsIntent",
+                    "slots": [
+                        {
+                            "name": "groupunreadschannelname",
+                            "type": "channelnames"
+                        }
+                    ],
+                    "samples": [
+                        "Leia Minhas Mensagens Não Lidas De Canal Privado {groupunreadschannelname}"
+                    ]
+                },
+                {
+                    "name": "PostDirectMessageIntent",
+                    "slots": [
+                        {
+                            "name": "directmessage",
+                            "type": "message"
+                        },
+                        {
+                            "name": "directmessageusername",
+                            "type": "rocketchatusernames"
+                        }
+                    ],
+                    "samples": [
+                        "mensagem direta {directmessage} destinatário {directmessageusername}"
+                    ]
+                },
+                {
+                    "name": "PostEmojiDirectMessageIntent",
+                    "slots": [
+                        {
+                            "name": "directmessage",
+                            "type": "message"
+                        },
+                        {
+                            "name": "directmessageemojiname",
+                            "type": "emoji"
+                        },
+                        {
+                            "name": "directmessageusername",
+                            "type": "rocketchatusernames"
+                        }
+                    ],
+                    "samples": [
+                        "mensagem direta {directmessage} emoji {directmessageemojiname} destinatário {directmessageusername}"
+                    ]
                 }
             ],
             "types": [

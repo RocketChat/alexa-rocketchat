@@ -23,7 +23,7 @@ function supportsAPL(handlerInput) {
 	const supportedInterfaces = handlerInput.requestEnvelope.context.System.device.supportedInterfaces;
 	const aplInterface = supportedInterfaces['Alexa.Presentation.APL'];
 	return aplInterface != null && aplInterface != undefined;
-  }
+}
 
 // Alexa Intent Functions
 
@@ -39,12 +39,10 @@ const ProactiveEventHandler = {
 		if (handlerInput.requestEnvelope.request.hasOwnProperty("body")) {
 			if (attributes.hasOwnProperty("optForNotifications")) {
 				attributes.optForNotifications = !attributes.optForNotifications;
-			}
-			else {
+			} else {
 				attributes.optForNotifications = true;
 			}
-		}
-		else {
+		} else {
 			attributes.optForNotifications = false;
 		}
 
@@ -68,7 +66,7 @@ const LaunchRequestHandler = {
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.withLinkAccountCard()
+				.reprompt(speechText)
 				.getResponse();
 		}
 
@@ -83,7 +81,9 @@ const LaunchRequestHandler = {
 
 		if (attributes.hasOwnProperty("optForNotifications") && !attributes.hasOwnProperty("personalAccessToken")) {
 			if (attributes.optForNotifications == true) {
-				const { accessToken } = handlerInput.requestEnvelope.context.System.user;
+				const {
+					accessToken
+				} = handlerInput.requestEnvelope.context.System.user;
 				const headers = await helperFunctions.login(accessToken);
 				const dataResponse = await helperFunctions.createPersonalAccessToken(headers);
 				if (dataResponse.length != 0) {
@@ -111,8 +111,8 @@ const LaunchRequestHandler = {
 
 const ChangeNotificationSettingsIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-			&& handlerInput.requestEnvelope.request.intent.name === 'ChangeNotificationSettingsIntent';
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'ChangeNotificationSettingsIntent';
 	},
 	async handle(handlerInput) {
 		const attributesManager = handlerInput.attributesManager;
@@ -126,24 +126,20 @@ const ChangeNotificationSettingsIntentHandler = {
 				if (attributes.notificationsSettings == notificationsFor) {
 					if (notificationsFor === "userMentions") {
 						speechText = ri('NOTIFICATION_SETTINGS.ERROR_ALREADY_USERMENTIONS');
-					}
-					else {
+					} else {
 						speechText = ri('NOTIFICATION_SETTINGS.ERROR_ALREADY_UNREADS');
 					}
-				}
-				else {
+				} else {
 					attributes.notificationsSettings = notificationsFor;
 					if (notificationsFor === "userMentions") {
 						speechText = ri('NOTIFICATION_SETTINGS.SUCCESS_USERMENTIONS');
-					}
-					else {
+					} else {
 						speechText = ri('NOTIFICATION_SETTINGS.SUCCESS_UNREADS');
 					}
 					handlerInput.attributesManager.setPersistentAttributes(attributes);
 					await handlerInput.attributesManager.savePersistentAttributes();
 				}
-			}
-			else {
+			} else {
 				speechText = ri('NOTIFICATION_SETTINGS.ERROR_TURNED_OFF');
 				return handlerInput.jrb
 					.speak(speechText)
@@ -151,8 +147,7 @@ const ChangeNotificationSettingsIntentHandler = {
 					.withAskForPermissionsConsentCard([PERMISSIONS.NOTIFICATION_PERMISSION])
 					.getResponse();
 			}
-		}
-		else {
+		} else {
 			speechText = ri('NOTIFICATION_SETTINGS.ERROR');
 			return handlerInput.jrb
 				.speak(speechText)
@@ -313,61 +308,59 @@ const GetLastMessageFromChannelIntentHandler = {
 			const speechText = await helperFunctions.channelLastMessage(channelName, headers);
 
 
-		if(supportsAPL(handlerInput)){
+			if (supportsAPL(handlerInput)) {
 
-			return handlerInput.jrb
-				.speak(speechText)
-				.reprompt(speechText)
-				.addDirective({
-					type: 'Alexa.Presentation.APL.RenderDocument',
-					version: '1.0',
-					document: main,
-					datasources:
+				return handlerInput.jrb
+					.speak(speechText)
+					.reprompt(speechText)
+					.addDirective({
+						type: 'Alexa.Presentation.APL.RenderDocument',
+						version: '1.0',
+						document: main,
+						datasources:
 
-					{
+						{
 
-						"bodyTemplate6Data": {
-							"type": "object",
-							"objectId": "bt6Sample",
-							"backgroundImage": {
-								"sources": [{
+							"bodyTemplate6Data": {
+								"type": "object",
+								"objectId": "bt6Sample",
+								"backgroundImage": {
+									"sources": [{
 
-										"url": download,
-										"size": "small",
+											"url": download,
+											"size": "small",
 
-									},
-									{
-										"url": download,
-										"size": "large",
+										},
+										{
+											"url": download,
+											"size": "large",
 
+										}
+									]
+								},
+								"textContent": {
+									"primaryText": {
+										"type": "PlainText",
+										"text": "This Is An Image Message"
 									}
-								]
-							},
-							"textContent": {
-								"primaryText": {
-									"type": "PlainText",
-									"text": "This Is An Image Message"
-								}
-							},
-							"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png",
-							"hintText": "SAMPLE REDIRECTION URL TEST"
+								},
+								"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png",
+								"hintText": "SAMPLE REDIRECTION URL TEST"
+							}
+
+
 						}
 
 
-					}
+					})
+					.getResponse();
 
-
-				})
-				.getResponse();
-
-			}
-
-			else{
+			} else {
 				return handlerInput.jrb
-				.speak(speechText)
-				.reprompt(speechText)
-				.withSimpleCard(ri('GET_LAST_MESSAGE_FROM_CHANNEL.CARD_TITLE'), speechText)
-				.getResponse();
+					.speak(speechText)
+					.reprompt(speechText)
+					.withSimpleCard(ri('GET_LAST_MESSAGE_FROM_CHANNEL.CARD_TITLE'), speechText)
+					.getResponse();
 			}
 
 		} catch (error) {
@@ -527,6 +520,317 @@ const ArchiveChannelIntentHandler = {
 	},
 };
 
+const CreateGrouplIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'CreateGroupIntent';
+	},
+	async handle(handlerInput) {
+		try {
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.groupname.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+
+			const headers = await helperFunctions.login(accessToken);
+			const speechText = await helperFunctions.createGroup(channelName, headers);
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withSimpleCard(ri('CREATE_CHANNEL.CARD_TITLE'), speechText)
+				.getResponse();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+const DeleteGroupIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'DeleteGroupIntent';
+	},
+	async handle(handlerInput) {
+		try {
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.deletegroupname.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+
+			const headers = await helperFunctions.login(accessToken);
+			const speechText = await helperFunctions.deleteGroup(channelName, headers);
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withSimpleCard(ri('DELETE_CHANNEL.CARD_TITLE'), speechText)
+				.getResponse();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+const MakeGroupModeratorIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'MakeGroupModeratorIntent';
+	},
+	async handle(handlerInput) {
+		try {
+
+			const userNameData = handlerInput.requestEnvelope.request.intent.slots.groupmoderatorusername.value;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.groupmoderatorchannelname.value;
+			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+			const headers = await helperFunctions.login(accessToken);
+			const userid = await helperFunctions.getUserId(userName, headers);
+			const roomid = await helperFunctions.getGroupId(channelName, headers);
+			const speechText = await helperFunctions.addGroupModerator(userName, channelName, userid, roomid, headers);
+
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withSimpleCard(ri('MAKE_MODERATOR.CARD_TITLE'), speechText)
+				.getResponse();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+const MakeGroupOwnerIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'MakeGroupOwnerIntent';
+	},
+	async handle(handlerInput) {
+		try {
+
+			const userNameData = handlerInput.requestEnvelope.request.intent.slots.groupownerusername.value;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.groupownerchannelname.value;
+			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+			const headers = await helperFunctions.login(accessToken);
+			const userid = await helperFunctions.getUserId(userName, headers);
+			const roomid = await helperFunctions.getGroupId(channelName, headers);
+			const speechText = await helperFunctions.addGroupOwner(userName, channelName, userid, roomid, headers);
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withSimpleCard(ri('ADD_OWNER.CARD_TITLE'), speechText)
+				.getResponse();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+const PostGroupMessageIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'PostGroupMessageIntent';
+	},
+	async handle(handlerInput) {
+		try {
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+
+			let message = handlerInput.requestEnvelope.request.intent.slots.groupmessage.value;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.groupmessagechannelname.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+
+			const headers = await helperFunctions.login(accessToken);
+			const roomid = await helperFunctions.getGroupId(channelName, headers);
+			const speechText = await helperFunctions.postGroupMessage(roomid, message, headers);
+
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
+				.getResponse();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+const PostGroupEmojiMessageIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'PostGroupEmojiMessageIntent';
+	},
+	async handle(handlerInput) {
+		try {
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+
+			const messageData = handlerInput.requestEnvelope.request.intent.slots.groupemojimessage.value;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.groupmessageemojichannelname.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+			const emojiData = handlerInput.requestEnvelope.request.intent.slots.groupmessageemojiname.value;
+			const emoji = helperFunctions.emojiTranslateFunc(emojiData);
+			const message = messageData + emoji;
+
+			const headers = await helperFunctions.login(accessToken);
+			const roomid = await helperFunctions.getGroupId(channelName, headers);
+			const speechText = await helperFunctions.postGroupMessage(roomid, message, headers);
+
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
+				.getResponse();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+const GroupLastMessageIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'GroupLastMessageIntent';
+	},
+	async handle(handlerInput) {
+		try {
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.grouplastmessagechannelname.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+
+			const headers = await helperFunctions.login(accessToken);
+			const roomid = await helperFunctions.getGroupId(channelName, headers);
+			const speechText = await helperFunctions.groupLastMessage(channelName, roomid, headers);
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withSimpleCard(ri('GET_LAST_MESSAGE_FROM_CHANNEL.CARD_TITLE'), speechText)
+				.getResponse();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+const GetGroupUnreadMessagesIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'ReadGroupUnreadsIntent';
+	},
+	async handle(handlerInput) {
+		try {
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.groupunreadschannelname.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+
+			const headers = await helperFunctions.login(accessToken);
+			const roomid = await helperFunctions.getGroupId(channelName, headers);
+			const unreadCount = await helperFunctions.getGroupUnreadCounter(roomid, headers);
+			const speechText = await helperFunctions.groupUnreadMessages(channelName, roomid, unreadCount, headers);
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withSimpleCard(ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.CARD_TITLE'), speechText)
+				.getResponse();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+const PostDirectMessageIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'PostDirectMessageIntent';
+	},
+	async handle(handlerInput) {
+		try {
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+
+			let message = handlerInput.requestEnvelope.request.intent.slots.directmessage.value;
+			const userNameData = handlerInput.requestEnvelope.request.intent.slots.directmessageusername.value;
+			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
+
+			const headers = await helperFunctions.login(accessToken);
+			const roomid = await helperFunctions.createDMSession(userName, headers);
+			const speechText = await helperFunctions.postDirectMessage(message, roomid, headers);
+
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
+				.getResponse();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+const PostEmojiDirectMessageIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'PostEmojiDirectMessageIntent';
+	},
+	async handle(handlerInput) {
+		try {
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+
+			const messageData = handlerInput.requestEnvelope.request.intent.slots.directmessage.value;
+			const userNameData = handlerInput.requestEnvelope.request.intent.slots.directmessageusername.value;
+			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
+			const emojiData = handlerInput.requestEnvelope.request.intent.slots.directmessageemojiname.value;
+			const emoji = helperFunctions.emojiTranslateFunc(emojiData);
+			const message = messageData + emoji;
+
+			const headers = await helperFunctions.login(accessToken);
+			const roomid = await helperFunctions.createDMSession(userName, headers);
+			const speechText = await helperFunctions.postDirectMessage(message, roomid, headers);
+
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
+				.getResponse();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+
+
 const HelpIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -602,6 +906,16 @@ exports.handler = skillBuilder
 		AddOwnerIntentHandler,
 		ArchiveChannelIntentHandler,
 		GetUnreadMessagesIntentHandler,
+		CreateGrouplIntentHandler,
+		DeleteGroupIntentHandler,
+		MakeGroupModeratorIntentHandler,
+		MakeGroupOwnerIntentHandler,
+		PostGroupMessageIntentHandler,
+		PostGroupEmojiMessageIntentHandler,
+		GroupLastMessageIntentHandler,
+		GetGroupUnreadMessagesIntentHandler,
+		PostDirectMessageIntentHandler,
+		PostEmojiDirectMessageIntentHandler,
 		HelpIntentHandler,
 		CancelAndStopIntentHandler,
 		SessionEndedRequestHandler
