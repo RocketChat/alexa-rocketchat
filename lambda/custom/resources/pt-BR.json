@@ -16,15 +16,6 @@
         "CARD_TITLE": "Bem-vindo ao Rocket.Chat",
         "ERROR": "Para começar a usar essa habilidade, use o aplicativo complementar para autenticar."
     },
-    "WELCOME_ANONYMOUS_USER": {
-        "SUCCESS": "Bem-vindo ao Rocket Chat Alexa Skill. Você está logado como usuário anônimo. Diga 'Leia meus briefings de flash' para ler seus briefings de flash."
-    },
-    "FLASH_BRIEFING": {
-        "SUCCESS": "{message}",
-        "CARD_TITLE": "Flash Briefing",
-        "ERROR": "Desculpe, este servidor não possui 'Anonymous Read' habilitado.",
-        "ERROR_NOT_FOUND": "Desculpe, o canal {channelName} não existe. Por favor, tente novamente com o nome do canal diferente."
-    },
     "POST_MESSAGE": {
         "SUCCESS": "Eu enviei sua mensagem.",
         "AUTH_ERROR": "Desculpe, mas você está desconectado, use o aplicativo complementar para autenticar",
