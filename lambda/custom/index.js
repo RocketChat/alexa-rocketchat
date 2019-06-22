@@ -62,7 +62,7 @@ const LaunchRequestHandler = {
 
 		if (handlerInput.requestEnvelope.context.System.user.accessToken === undefined) {
 
-			const speechText = ri('WELCOME_ANONYMOUS_USER.SUCCESS');
+			const speechText = ri('WELCOME.ERROR');
 
 			return handlerInput.jrb
 				.speak(speechText)
@@ -520,25 +520,6 @@ const ArchiveChannelIntentHandler = {
 	},
 };
 
-const flashBreifingIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'FlashBriefingIntent';
-	},
-	async handle(handlerInput) {
-
-		var channelName = "general";
-
-		const speechText = await helperFunctions.flashBriefingMessage(channelName);
-
-		return handlerInput.jrb
-			.speak(speechText)
-			.withSimpleCard(ri('FLASH_BRIEFING.CARD_TITLE'), speechText)
-			.getResponse();
-
-	},
-};
-
 const CreateGrouplIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -925,7 +906,6 @@ exports.handler = skillBuilder
 		AddOwnerIntentHandler,
 		ArchiveChannelIntentHandler,
 		GetUnreadMessagesIntentHandler,
-		flashBreifingIntentHandler,
 		CreateGrouplIntentHandler,
 		DeleteGroupIntentHandler,
 		MakeGroupModeratorIntentHandler,
