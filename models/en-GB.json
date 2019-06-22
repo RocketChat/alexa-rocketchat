@@ -202,13 +202,6 @@
                     ]
                 },
                 {
-                    "name": "FlashBriefingIntent",
-                    "slots": [],
-                    "samples": [
-                        "Read My Flash Briefings"
-                    ]
-                },
-                {
                     "name": "CreateGroupIntent",
                     "slots": [
                         {
