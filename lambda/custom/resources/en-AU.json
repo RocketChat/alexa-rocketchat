@@ -26,15 +26,6 @@
         "ERROR_ALREADY_USERMENTIONS": "Your notification settings are already set to user mentions.",
         "ERROR_ALREADY_UNREADS": "Your notification settings are already set to unread messages."
     },
-    "WELCOME_ANONYMOUS_USER": {
-        "SUCCESS": "Welcome To Rocket Chat Alexa Skill. You are currently logged in as anonymous user. Say 'Read my flash briefings' to read your flash briefings."
-    },
-    "FLASH_BRIEFING": {
-        "SUCCESS": "{message}",
-        "CARD_TITLE": "Flash Briefing",
-        "ERROR": "Sorry, This Server Does Not Have 'Anonymous Read' Enabled.",
-        "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
-    },
     "POST_MESSAGE": {
         "SUCCESS": "I've sent your message.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
