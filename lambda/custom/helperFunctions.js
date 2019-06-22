@@ -503,32 +503,6 @@ function slotValue(slot) {
 	return value;
 }
 
-const flashBriefingMessage = async (channelName) =>
-	await axios
-	.get(`${ apiEndpoints.anonymousReadUrl }${ channelName }`)
-	.then((res) => res.data)
-	.then((res) => {
-		if (res.success === true) {
-			return ri('FLASH_BRIEFING.SUCCESS', {
-				message: res.messages[0].msg,
-			});
-		} else {
-			return ri('FLASH_BRIEFING.ERROR');
-		}
-	})
-	.catch((err) => {
-		console.log(err.message);
-		if (err.response.data.errorType === 'error-room-not-found') {
-			return ri('FLASH_BRIEFING.ERROR_NOT_FOUND', {
-				channelName
-			});
-		} else {
-			return ri('FLASH_BRIEFING.ERROR', {
-				channelName
-			});
-		}
-	});
-
 const createGroup = async (channelName, headers) =>
 	await axios
 	.post(
@@ -859,7 +833,6 @@ module.exports.replaceWhitespacesDots = replaceWhitespacesDots;
 module.exports.emojiTranslateFunc = emojiTranslateFunc;
 module.exports.readMessages = readMessages;
 module.exports.slotValue = slotValue;
-module.exports.flashBriefingMessage = flashBriefingMessage;
 module.exports.createGroup = createGroup;
 module.exports.deleteGroup = deleteGroup;
 module.exports.getGroupId = getGroupId;
