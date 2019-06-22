@@ -139,6 +139,20 @@ Copy **https://pitangui.amazon.com/api/skill/link/YOURVENDORID** or **https://la
 	```text
 	Alexa, start rocket chat
 	```
+
+### Setting Up Flash Briefing (Optional)
+
+Flash briefing helps admin to setup a way that new users can interact with his Google Action anonymously. Admin can provide short messages to this anonymous user by simply setting up a channel as his flash briefing channel. Default channel is **General**. To setup flash briefing follow below mentioned steps:
+
+1.  Go to **Administration** -> **Accounts** -> **Allow Anonymous Read** and set it to **True**
+
+2.  In **Functions** folder, open **index.js** file and search for **flashBreifingIntentHandler**.
+
+3. Change **channelName** value with the channel name you want to setup for flash briefing and save it.
+
+4.  Deploy the code to Lambda Function.
+
+5. Go To **Alexa Developer Console** -> **Account Linking** -> **Allow users to enable skill without account linking** and enable it. 
 	
 	
 ## Customization
