@@ -30,7 +30,8 @@
         "SUCCESS": "I've sent your message.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Post A Message",
-        "ERROR": "Sorry, I couldn't send your message right now."
+        "ERROR": "Sorry, I couldn't send your message right now.",
+        "DENIED": "Okay, let's try again."
     },
     "CREATE_CHANNEL": {
         "SUCCESS": "I've created your channel {channelName}.",
@@ -38,7 +39,8 @@
         "CARD_TITLE": "Create A Channel",
         "ERROR": "Sorry, I couldn't create the channel {channelName} right now.",
         "ERROR_DUPLICATE_NAME": "Sorry, the channel {channelName} already exists. Please try again with different channel name.",
-        "ERROR_INVALID_NAME": "Sorry, {channelName} is not a valid channel name. Please try again with a single word name for the channel."
+        "ERROR_INVALID_NAME": "Sorry, {channelName} is not a valid channel name. Please try again with a single word name for the channel.",
+        "DENIED": "Okay, let's try again."
     },
     "DELETE_CHANNEL": {
         "SUCCESS": "I've deleted the channel {channelName}.",

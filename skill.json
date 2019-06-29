@@ -143,7 +143,12 @@
                 "endpoint": {
                     "sourceDir": "lambda/custom",
                     "uri": "ask-custom-rocket-chat-default"
-                }
+                },
+                "interfaces": [
+                  {
+                    "type": "ALEXA_PRESENTATION_APL"
+                  }
+                ]
             }
         },
         "manifestVersion": "1.0",
