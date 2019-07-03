@@ -28,10 +28,18 @@
                     "slots": [
                         {
                             "name": "channelname",
-                            "type": "channelnames"
+                            "type": "channelnames",
+                            "samples": [
+                                "create room {channelname}",
+                                "create channel {channelname}",
+                                "{channelname}",
+                                "Create {channelname}"
+                            ]
                         }
                     ],
                     "samples": [
+                        "create room",
+                        "create channel",
                         "create room {channelname}",
                         "create channel {channelname}",
                         "Create {channelname}"
@@ -56,14 +64,25 @@
                     "slots": [
                         {
                             "name": "messagepost",
-                            "type": "message"
+                            "type": "message",
+                            "samples": [
+                                "{messagepost}"
+                            ]
                         },
                         {
                             "name": "messagechannel",
-                            "type": "channelnames"
+                            "type": "channelnames",
+                            "samples": [
+                                "to {messagechannel}",
+                                "{messagechannel}"
+                            ]
                         }
                     ],
                     "samples": [
+                        "send message {messagepost}",
+                        "send {messagepost}",
+                        "send message to channel",
+                        "send message",
                         "send {messagepost} to {messagechannel}"
                     ]
                 },
@@ -1626,6 +1645,53 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "name": "PostMessageIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.71995924876"
+                    },
+                    "slots": [
+                        {
+                            "name": "messagepost",
+                            "type": "message",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.71995924876.1362380319022"
+                            }
+                        },
+                        {
+                            "name": "messagechannel",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.71995924876.363295980075"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "CreateChannelIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.608055791868"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.608055791868.1274697542871"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1646,6 +1712,51 @@
                     {
                         "type": "PlainText",
                         "value": "You can either choose notifications for unread messages, or for user mentions. Which one do you want?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.71995924876.1362380319022",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What message would you like to send?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.71995924876",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to send, {messagepost} , to channel {messagechannel} . Is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.71995924876.363295980075",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel would you like to send the message to?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.608055791868.1274697542871",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What is the name of the channel you want to create?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.608055791868",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to create channel {channelname} . Is that correct?"
                     }
                 ]
             }

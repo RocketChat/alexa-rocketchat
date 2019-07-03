@@ -29,7 +29,6 @@ function supportsAPL(handlerInput) {
 
 const ProactiveEventHandler = {
 	canHandle(handlerInput) {
-		console.log(handlerInput);
 		return handlerInput.requestEnvelope.request.type === 'AlexaSkillEvent.ProactiveSubscriptionChanged'
 	},
 	async handle(handlerInput) {
@@ -163,10 +162,67 @@ const ChangeNotificationSettingsIntentHandler = {
 	},
 };
 
+const StartedCreateChannelIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+      handlerInput.requestEnvelope.request.intent.name === 'CreateChannelIntent' &&
+      handlerInput.requestEnvelope.request.dialogState === 'STARTED';
+  },
+  handle(handlerInput) {
+    const currentIntent = handlerInput.requestEnvelope.request.intent;
+    return handlerInput.responseBuilder
+      .addDelegateDirective(currentIntent)
+      .getResponse();
+  },
+};
+
+const InProgressCreateChannelIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+      handlerInput.requestEnvelope.request.intent.name === 'CreateChannelIntent' &&
+      handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+	  handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
+  },
+  handle(handlerInput) {
+    const currentIntent = handlerInput.requestEnvelope.request.intent;
+    return handlerInput.responseBuilder
+      .addDelegateDirective(currentIntent)
+      .getResponse();
+  },
+};
+
+const DeniedCreateChannelIntentHandler = {
+	canHandle(handlerInput) {
+	  return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+		handlerInput.requestEnvelope.request.intent.name === 'CreateChannelIntent' &&
+		handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+		handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
+	},
+	handle(handlerInput) {
+		let speechText = ri('CREATE_CHANNEL.DENIED');
+
+		return handlerInput.jrb
+		  .speak(speechText)
+		  .addDelegateDirective({
+			name: 'CreateChannelIntent',
+			confirmationStatus: 'NONE',
+			slots: {
+				"channelname": {
+					"name": "channelname",
+					"confirmationStatus": "NONE"
+				}
+			}
+		  })
+		  .getResponse();
+	},
+};
+  
 const CreateChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'CreateChannelIntent';
+			handlerInput.requestEnvelope.request.intent.name === 'CreateChannelIntent'
+			&& handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
+			&& handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
 	async handle(handlerInput) {
 		try {
@@ -219,10 +275,71 @@ const DeleteChannelIntentHandler = {
 	},
 };
 
+const StartedPostMessageIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+      handlerInput.requestEnvelope.request.intent.name === 'PostMessageIntent' &&
+      handlerInput.requestEnvelope.request.dialogState === 'STARTED';
+  },
+  handle(handlerInput) {
+    const currentIntent = handlerInput.requestEnvelope.request.intent;
+    return handlerInput.responseBuilder
+      .addDelegateDirective(currentIntent)
+      .getResponse();
+  },
+};
+
+const InProgressPostMessageIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+      handlerInput.requestEnvelope.request.intent.name === 'PostMessageIntent' &&
+      handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+	  handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
+  },
+  handle(handlerInput) {
+    const currentIntent = handlerInput.requestEnvelope.request.intent;
+    return handlerInput.responseBuilder
+      .addDelegateDirective(currentIntent)
+      .getResponse();
+  },
+};
+
+const DeniedPostMessageIntentHandler = {
+	canHandle(handlerInput) {
+	  return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+		handlerInput.requestEnvelope.request.intent.name === 'PostMessageIntent' &&
+		handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+		handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
+	},
+	handle(handlerInput) {
+		let speechText = ri('POST_MESSAGE.DENIED');
+
+		return handlerInput.jrb
+		  .speak(speechText)
+		  .addDelegateDirective({
+			name: 'PostMessageIntent',
+			confirmationStatus: 'NONE',
+			slots: {
+				"messagechannel": {
+					"name": "messagechannel",
+					"confirmationStatus": "NONE"
+				},
+				"messagepost": {
+					"name": "messagepost",
+					"confirmationStatus": "NONE"
+				}
+			}
+		  })
+		  .getResponse();
+	},
+};
+  
 const PostMessageIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'PostMessageIntent';
+			handlerInput.requestEnvelope.request.intent.name === 'PostMessageIntent'
+			&& handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
+			&& handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
 	async handle(handlerInput) {
 		try {
@@ -896,8 +1013,14 @@ exports.handler = skillBuilder
 		ProactiveEventHandler,
 		LaunchRequestHandler,
 		ChangeNotificationSettingsIntentHandler,
+		StartedCreateChannelIntentHandler,
+		InProgressCreateChannelIntentHandler,
+		DeniedCreateChannelIntentHandler,
 		CreateChannelIntentHandler,
 		DeleteChannelIntentHandler,
+		StartedPostMessageIntentHandler,
+		InProgressPostMessageIntentHandler,
+		DeniedPostMessageIntentHandler,
 		PostMessageIntentHandler,
 		PostEmojiMessageIntentHandler,
 		GetLastMessageFromChannelIntentHandler,
