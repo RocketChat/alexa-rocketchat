@@ -5,6 +5,7 @@ const Alexa = require('ask-sdk');
 const helperFunctions = require('./helperFunctions');
 const main = require('./main.json');
 const envVariables = require('./config');
+const layouts = require('./APL/layouts');
 
 // Jargon for Localization
 const Jargon = require('@jargon/alexa-skill-sdk');
@@ -63,10 +64,63 @@ const LaunchRequestHandler = {
 
 			const speechText = ri('WELCOME.ERROR');
 
-			return handlerInput.jrb
+			if (supportsAPL(handlerInput)) {
+
+				return handlerInput.jrb
 				.speak(speechText)
 				.reprompt(speechText)
+				.addDirective({
+					type: 'Alexa.Presentation.APL.RenderDocument',
+					version: '1.0',
+					document: layouts.authorisationErrorLayout,
+					datasources: {
+						"AuthorisationErrorPageData": {
+							"type": "object",
+							"objectId": "rcAuthorisation",
+							"backgroundImage": {
+								"contentDescription": null,
+								"smallSourceUrl": null,
+								"largeSourceUrl": null,
+								"sources": [
+									{
+										"url": "https://user-images.githubusercontent.com/41849970/60644955-126c3180-9e55-11e9-9147-7820655f3c0b.png",
+										"size": "small",
+										"widthPixels": 0,
+										"heightPixels": 0
+									},
+									{
+										"url": "https://user-images.githubusercontent.com/41849970/60644955-126c3180-9e55-11e9-9147-7820655f3c0b.png",
+										"size": "large",
+										"widthPixels": 0,
+										"heightPixels": 0
+									}
+								]
+							},
+							"textContent": {
+								"primaryText": {
+									"type": "PlainText",
+									"text": "AUTHORISED PERSONNEL ONLY"
+								},
+								"secondaryText": {
+									"type": "PlainText",
+									"text": "To start using this skill, please use the companion app to authenticate."
+								}
+							},
+							"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
+						}
+					}
+				})
 				.getResponse();
+
+			} else {
+
+				return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withSimpleCard(ri('WELCOME.ERROR'), speechText)
+				.getResponse();
+
+			}
 		}
 
 		let speechText = '';
@@ -99,11 +153,60 @@ const LaunchRequestHandler = {
 		handlerInput.attributesManager.setPersistentAttributes(attributes);
 		await handlerInput.attributesManager.savePersistentAttributes();
 
-		return handlerInput.jrb
+		if (supportsAPL(handlerInput)) {
+
+			return handlerInput.jrb
+			.speak(speechText)
+			.reprompt(speechText)
+			.addDirective({
+				type: 'Alexa.Presentation.APL.RenderDocument',
+				version: '1.0',
+				document: layouts.homePageLayout,
+				datasources: {
+					"RCHomePageData": {
+						"type": "object",
+						"objectId": "rcHomePage",
+						"backgroundImage": {
+							"contentDescription": null,
+							"smallSourceUrl": null,
+							"largeSourceUrl": null,
+							"sources": [
+								{
+									"url": "https://user-images.githubusercontent.com/41849970/60642860-e057d100-9e4e-11e9-8ef3-69a8ebe44703.png",
+									"size": "small",
+									"widthPixels": 0,
+									"heightPixels": 0
+								},
+								{
+									"url": "https://user-images.githubusercontent.com/41849970/60642860-e057d100-9e4e-11e9-8ef3-69a8ebe44703.png",
+									"size": "large",
+									"widthPixels": 0,
+									"heightPixels": 0
+								}
+							]
+						},
+						"textContent": {
+							"primaryText": {
+								"type": "PlainText",
+								"text": "Welcome to Rocket.Chat"
+							}
+						},
+						"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png",
+						"hintText": "Try, \"Alexa, send a message\""
+					}
+				}
+			})
+			.getResponse();
+
+		} else {
+
+			return handlerInput.jrb
 			.speak(speechText)
 			.reprompt(speechText)
 			.withSimpleCard(ri('WELCOME.CARD_TITLE'), speechText)
 			.getResponse();
+
+		}
 
 	},
 };
@@ -236,11 +339,70 @@ const CreateChannelIntentHandler = {
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.createChannel(channelName, headers);
 
-			return handlerInput.jrb
+			if (supportsAPL(handlerInput)) {
+
+				return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.addDirective({
+					type: 'Alexa.Presentation.APL.RenderDocument',
+					version: '1.0',
+					document: layouts.createChannelLayout,
+					datasources: {
+
+						"CreateChannelPageData": {
+							"type": "object",
+							"objectId": "rcCreateChannel",
+							"backgroundImage": {
+								"contentDescription": null,
+								"smallSourceUrl": null,
+								"largeSourceUrl": null,
+								"sources": [
+									{
+										"url": "https://user-images.githubusercontent.com/41849970/60651516-fcb23880-9e63-11e9-8efb-1e590a41489e.png",
+										"size": "small",
+										"widthPixels": 0,
+										"heightPixels": 0
+									},
+									{
+										"url": "https://user-images.githubusercontent.com/41849970/60651516-fcb23880-9e63-11e9-8efb-1e590a41489e.png",
+										"size": "large",
+										"widthPixels": 0,
+										"heightPixels": 0
+									}
+								]
+							},
+							"textContent": {
+								"placeholder": {
+									"type": "PlainText",
+									"text": "Channel"
+								},
+								"channelname": {
+									"type": "PlainText",
+									"text": `#${speechText.params.channelName}`
+								},
+								"successful": {
+									"type": "PlainText",
+									"text": "created successfully."
+								}
+							},
+							"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
+						}
+
+					}
+				})
+				.getResponse();
+
+			} else {
+
+				return handlerInput.jrb
 				.speak(speechText)
 				.reprompt(speechText)
 				.withSimpleCard(ri('CREATE_CHANNEL.CARD_TITLE'), speechText)
 				.getResponse();
+
+			}
+
 		} catch (error) {
 			console.error(error);
 		}
@@ -355,11 +517,66 @@ const PostMessageIntentHandler = {
 			const speechText = await helperFunctions.postMessage(channelName, message, headers);
 
 
-			return handlerInput.jrb
+			if (supportsAPL(handlerInput)) {
+
+				return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.addDirective({
+					type: 'Alexa.Presentation.APL.RenderDocument',
+					version: '1.0',
+					document: layouts.postMessageLayout,
+					datasources: {
+
+						"PostMessageData": {
+							"type": "object",
+							"objectId": "rcPostMessage",
+							"backgroundImage": {
+								"contentDescription": null,
+								"smallSourceUrl": null,
+								"largeSourceUrl": null,
+								"sources": [
+									{
+										"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
+										"size": "small",
+										"widthPixels": 0,
+										"heightPixels": 0
+									},
+									{
+										"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
+										"size": "large",
+										"widthPixels": 0,
+										"heightPixels": 0
+									}
+								]
+							},
+							"textContent": {
+								"channelname": {
+									"type": "PlainText",
+									"text": `#${channelName}`
+								},
+								"message": {
+									"type": "PlainText",
+									"text": message
+								}
+							},
+							"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
+						}
+
+					}
+				})
+				.getResponse();
+
+			} else {
+
+				return handlerInput.jrb
 				.speak(speechText)
 				.reprompt(speechText)
 				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
 				.getResponse();
+
+			}
+
 		} catch (error) {
 			console.error(error);
 		}
