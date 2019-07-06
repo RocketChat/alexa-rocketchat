@@ -172,13 +172,13 @@ const LaunchRequestHandler = {
 							"largeSourceUrl": null,
 							"sources": [
 								{
-									"url": "https://user-images.githubusercontent.com/41849970/60642860-e057d100-9e4e-11e9-8ef3-69a8ebe44703.png",
+									"url": "https://user-images.githubusercontent.com/41849970/60758741-64b97800-a038-11e9-9798-45b3b8a89b31.png",
 									"size": "small",
 									"widthPixels": 0,
 									"heightPixels": 0
 								},
 								{
-									"url": "https://user-images.githubusercontent.com/41849970/60642860-e057d100-9e4e-11e9-8ef3-69a8ebe44703.png",
+									"url": "https://user-images.githubusercontent.com/41849970/60758741-64b97800-a038-11e9-9798-45b3b8a89b31.png",
 									"size": "large",
 									"widthPixels": 0,
 									"heightPixels": 0
