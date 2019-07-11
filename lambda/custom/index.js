@@ -420,10 +420,67 @@ const CreateChannelIntentHandler = {
 	},
 };
 
+const StartedDeleteChannelIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+      handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
+      handlerInput.requestEnvelope.request.dialogState === 'STARTED';
+  },
+  handle(handlerInput) {
+    const currentIntent = handlerInput.requestEnvelope.request.intent;
+    return handlerInput.responseBuilder
+      .addDelegateDirective(currentIntent)
+      .getResponse();
+  },
+};
+
+const InProgressDeleteChannelIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+      handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
+      handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+	  handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
+  },
+  handle(handlerInput) {
+    const currentIntent = handlerInput.requestEnvelope.request.intent;
+    return handlerInput.responseBuilder
+      .addDelegateDirective(currentIntent)
+      .getResponse();
+  },
+};
+
+const DeniedDeleteChannelIntentHandler = {
+	canHandle(handlerInput) {
+	  return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+		handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
+		handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+		handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
+	},
+	handle(handlerInput) {
+		let speechText = ri('DELETE_CHANNEL.DENIED');
+
+		return handlerInput.jrb
+		  .speak(speechText)
+		  .addDelegateDirective({
+			name: 'DeleteChannelIntent',
+			confirmationStatus: 'NONE',
+			slots: {
+				"channeldelete": {
+					"name": "channeldelete",
+					"confirmationStatus": "NONE"
+				}
+			}
+		  })
+		  .getResponse();
+	},
+};
+
 const DeleteChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent';
+			handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent'
+			&& handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
+			&& handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
 	async handle(handlerInput) {
 		try {
@@ -1254,6 +1311,9 @@ exports.handler = skillBuilder
 		InProgressCreateChannelIntentHandler,
 		DeniedCreateChannelIntentHandler,
 		CreateChannelIntentHandler,
+		StartedDeleteChannelIntentHandler,
+		InProgressDeleteChannelIntentHandler,
+		DeniedDeleteChannelIntentHandler,
 		DeleteChannelIntentHandler,
 		StartedPostMessageIntentHandler,
 		InProgressPostMessageIntentHandler,

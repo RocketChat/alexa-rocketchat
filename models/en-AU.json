@@ -50,10 +50,18 @@
                     "slots": [
                         {
                             "name": "channeldelete",
-                            "type": "channelnames"
+                            "type": "channelnames",
+                            "samples": [
+                                "delete {channeldelete}",
+                                "{channeldelete}",
+                                "delete channel {channeldelete}",
+                                "delete room {channeldelete}"
+                            ]
                         }
                     ],
                     "samples": [
+                        "delete room",
+                        "delete channel",
                         "delete room {channeldelete}",
                         "delete channel {channeldelete}",
                         "delete {channeldelete}"
@@ -1692,6 +1700,24 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "DeleteChannelIntent",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.1279935591703"
+                    },
+                    "slots": [
+                        {
+                            "name": "channeldelete",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1279935591703.1198344949986"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1757,6 +1783,24 @@
                     {
                         "type": "PlainText",
                         "value": "You want to create channel {channelname} . Is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.1279935591703",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to delete channel {channeldelete} . Is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1279935591703.1198344949986",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to delete?"
                     }
                 ]
             }
