@@ -553,10 +553,10 @@ function getStaticAndDynamicSlotValuesFromSlot(slot) {
 	}
 	
 	if(result.hasOwnProperty('dynamic') && result.dynamic.statusCode === 'ER_SUCCESS_MATCH'){
-		return result.dynamic.resolvedValues[0];
+		return result.dynamic.resolvedValues[0].value.name;
 	}
-	else if(result.hasOwnProperty('static') && result.dynamic.statusCode === 'ER_SUCCESS_MATCH'){
-		return result.static.resolvedValues[0];
+	else if(result.hasOwnProperty('static') && result.static.statusCode === 'ER_SUCCESS_MATCH'){
+		return result.static.resolvedValues[0].value.name;
 	}
 	else{
 		return result.value;
