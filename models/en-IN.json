@@ -99,10 +99,21 @@
                     "slots": [
                         {
                             "name": "getmessagechannelname",
-                            "type": "channelnames"
+                            "type": "channelnames",
+                            "samples": [
+                                "latest message from {getmessagechannelname}",
+                                "read latest message in {getmessagechannelname}",
+                                "read last message from {getmessagechannelname}",
+                                "from {getmessagechannelname}",
+                                "{getmessagechannelname}"
+                            ]
                         }
                     ],
                     "samples": [
+                        "what is the latest message",
+                        "what is the latest message in {getmessagechannelname}",
+                        "read latest message",
+                        "read last message",
                         "latest message from {getmessagechannelname}",
                         "read last message from {getmessagechannelname}",
                         "read latest message in {getmessagechannelname}",
@@ -1718,6 +1729,23 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "GetLastMessageFromChannelIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "getmessagechannelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.449336420378.1492444758346"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1801,6 +1829,15 @@
                     {
                         "type": "PlainText",
                         "value": "Which channel do you want to delete?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.449336420378.1492444758346",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel's last message do you want to hear?"
                     }
                 ]
             }
