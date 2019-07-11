@@ -197,6 +197,16 @@ const LaunchRequestHandler = {
 					}
 				}
 			})
+			.addDirective({
+				type: 'Dialog.UpdateDynamicEntities',
+				updateBehavior: 'REPLACE',
+				types: [
+				  {
+					name: 'channelnames',
+					values: await helperFunctions.channelList(headers)
+				  }
+				]
+			})
 			.getResponse();
 
 		} else {
