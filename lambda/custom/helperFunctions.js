@@ -224,7 +224,24 @@ const postMessage = async (channelName, message, headers) =>
 		}
 	});
 
-const channelLastMessage = async (channelName, headers) =>
+const getLastMessageType = async (channelName, headers) =>
+	await axios
+	.get(`${ apiEndpoints.channelmessageurl }${ channelName }`, {
+		headers
+	})
+	.then((res) => res.data)
+	.then((res) => {
+		if(!res.messages[0].file){
+			return 'textmessage'
+		} else {
+			return res.messages[0].file.type
+		}
+	})
+	.catch((err) => {
+		console.log(err.message);
+	});
+
+	const channelLastMessage = async (channelName, headers) =>
 	await axios
 	.get(`${ apiEndpoints.channelmessageurl }${ channelName }`, {
 		headers
@@ -257,6 +274,7 @@ const channelLastMessage = async (channelName, headers) =>
 		}
 	});
 
+
 const readMessages = async (roomid, headers) =>
 	await axios
 	.post(apiEndpoints.markasreadurl, {
@@ -270,6 +288,7 @@ const readMessages = async (roomid, headers) =>
 	.catch((err) => {
 		console.log(err.message);
 	});
+
 
 const getLastMessageFileURL = async (channelName, headers) =>
 	await axios
@@ -906,3 +925,4 @@ module.exports.getGroupUnreadCounter = getGroupUnreadCounter;
 module.exports.groupUnreadMessages = groupUnreadMessages;
 module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
+module.exports.getLastMessageType = getLastMessageType;
