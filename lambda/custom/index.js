@@ -3,7 +3,6 @@
 
 const Alexa = require('ask-sdk');
 const helperFunctions = require('./helperFunctions');
-const main = require('./main.json');
 const envVariables = require('./config');
 const layouts = require('./APL/layouts');
 
