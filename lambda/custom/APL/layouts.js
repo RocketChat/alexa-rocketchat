@@ -3368,6 +3368,8 @@ module.exports = {
                                 {
                                     "type": "Text",
                                     "paddingLeft": "@marginLeft",
+                                    "height": "70vh",
+                                    "fontSize": "26",
                                     "paddingTop": "50",
                                     "paddingRight": "@marginRight",
                                     "textAlign": "center",
