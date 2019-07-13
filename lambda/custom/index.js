@@ -122,6 +122,11 @@ const LaunchRequestHandler = {
 
 			}
 		}
+		
+		const {
+			accessToken
+		} = handlerInput.requestEnvelope.context.System.user;
+		const headers = await helperFunctions.login(accessToken);
 
 		let speechText = '';
 
@@ -134,10 +139,6 @@ const LaunchRequestHandler = {
 
 		if (attributes.hasOwnProperty("optForNotifications") && !attributes.hasOwnProperty("personalAccessToken")) {
 			if (attributes.optForNotifications == true) {
-				const {
-					accessToken
-				} = handlerInput.requestEnvelope.context.System.user;
-				const headers = await helperFunctions.login(accessToken);
 				const dataResponse = await helperFunctions.createPersonalAccessToken(headers);
 				if (dataResponse.length != 0) {
 					attributes.profileId = headers["X-User-Id"];
@@ -196,6 +197,16 @@ const LaunchRequestHandler = {
 					}
 				}
 			})
+			.addDirective({
+				type: 'Dialog.UpdateDynamicEntities',
+				updateBehavior: 'REPLACE',
+				types: [
+				  {
+					name: 'channelnames',
+					values: await helperFunctions.channelList(headers)
+				  }
+				]
+			})
 			.getResponse();
 
 		} else {
@@ -204,6 +215,16 @@ const LaunchRequestHandler = {
 			.speak(speechText)
 			.reprompt(speechText)
 			.withSimpleCard(ri('WELCOME.CARD_TITLE'), speechText)
+			.addDirective({
+				type: 'Dialog.UpdateDynamicEntities',
+				updateBehavior: 'REPLACE',
+				types: [
+				  {
+					name: 'channelnames',
+					values: await helperFunctions.channelList(headers)
+				  }
+				]
+			})
 			.getResponse();
 
 		}
@@ -409,10 +430,67 @@ const CreateChannelIntentHandler = {
 	},
 };
 
+const StartedDeleteChannelIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+      handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
+      handlerInput.requestEnvelope.request.dialogState === 'STARTED';
+  },
+  handle(handlerInput) {
+    const currentIntent = handlerInput.requestEnvelope.request.intent;
+    return handlerInput.responseBuilder
+      .addDelegateDirective(currentIntent)
+      .getResponse();
+  },
+};
+
+const InProgressDeleteChannelIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+      handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
+      handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+	  handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
+  },
+  handle(handlerInput) {
+    const currentIntent = handlerInput.requestEnvelope.request.intent;
+    return handlerInput.responseBuilder
+      .addDelegateDirective(currentIntent)
+      .getResponse();
+  },
+};
+
+const DeniedDeleteChannelIntentHandler = {
+	canHandle(handlerInput) {
+	  return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+		handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
+		handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+		handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
+	},
+	handle(handlerInput) {
+		let speechText = ri('DELETE_CHANNEL.DENIED');
+
+		return handlerInput.jrb
+		  .speak(speechText)
+		  .addDelegateDirective({
+			name: 'DeleteChannelIntent',
+			confirmationStatus: 'NONE',
+			slots: {
+				"channeldelete": {
+					"name": "channeldelete",
+					"confirmationStatus": "NONE"
+				}
+			}
+		  })
+		  .getResponse();
+	},
+};
+
 const DeleteChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent';
+			handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent'
+			&& handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
+			&& handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
 	async handle(handlerInput) {
 		try {
@@ -510,7 +588,7 @@ const PostMessageIntentHandler = {
 			} = handlerInput.requestEnvelope.context.System.user;
 
 			let message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
+			const channelNameData = helperFunctions.getStaticAndDynamicSlotValuesFromSlot(handlerInput.requestEnvelope.request.intent.slots.messagechannel);
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
 			const headers = await helperFunctions.login(accessToken);
@@ -1193,6 +1271,10 @@ const CancelAndStopIntentHandler = {
 		return handlerInput.jrb
 			.speak(speechText)
 			.withSimpleCard(ri('GOODBYE.CARD_TITLE'), speechText)
+			.addDirective({
+				type: 'Dialog.UpdateDynamicEntities',
+				updateBehavior: 'CLEAR'
+			})
 			.getResponse();
 	},
 };
@@ -1204,7 +1286,12 @@ const SessionEndedRequestHandler = {
 	handle(handlerInput) {
 		console.log(`Session ended with reason: ${ handlerInput.requestEnvelope.request.reason }`);
 
-		return handlerInput.responseBuilder.getResponse();
+		return handlerInput.responseBuilder
+			.addDirective({
+				type: 'Dialog.UpdateDynamicEntities',
+				updateBehavior: 'CLEAR'
+			})
+			.getResponse();
 	},
 };
 
@@ -1234,6 +1321,9 @@ exports.handler = skillBuilder
 		InProgressCreateChannelIntentHandler,
 		DeniedCreateChannelIntentHandler,
 		CreateChannelIntentHandler,
+		StartedDeleteChannelIntentHandler,
+		InProgressDeleteChannelIntentHandler,
+		DeniedDeleteChannelIntentHandler,
 		DeleteChannelIntentHandler,
 		StartedPostMessageIntentHandler,
 		InProgressPostMessageIntentHandler,

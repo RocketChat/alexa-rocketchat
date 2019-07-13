@@ -100,6 +100,23 @@ const removePersonalAccessToken = async (headers) =>
 		return "";
 	});
 
+const channelList = async (headers) =>
+	await axios
+	.get(`${ apiEndpoints.channellisturl }?fields={ "name": 1 }&sort={"_updatedAt":-1}&count=100`, {
+		headers
+	})
+	.then((res) => res.data)
+	.then(res => {
+		return res.channels.map(i => ({
+			"name": {
+				"value": i.name
+			}
+		}));
+	})
+	.catch((err) => {
+		console.log(err.message);
+	});
+
 const createChannel = async (channelName, headers) =>
 	await axios
 	.post(
@@ -503,6 +520,49 @@ function slotValue(slot) {
 	return value;
 }
 
+function getStaticAndDynamicSlotValuesFromSlot(slot) {
+    
+    const result = {
+        name: slot.name,
+        value: slot.value
+    };
+    
+    if (((slot.resolutions || {}).resolutionsPerAuthority || [])[0] || {}) {
+        slot.resolutions.resolutionsPerAuthority.forEach((authority) => {
+            const slotValue = {
+                authority: authority.authority,
+                statusCode: authority.status.code,
+                synonym: slot.value || undefined,
+                resolvedValues: slot.value
+            };
+            if (authority.values && authority.values.length > 0) {
+                slotValue.resolvedValues = [];
+                
+                authority.values.forEach((value) => {
+                    slotValue.resolvedValues.push(value);
+                });
+                
+            }
+            
+            if (authority.authority.includes('amzn1.er-authority.echo-sdk.dynamic')) {
+                result.dynamic = slotValue;
+            } else {
+                result.static = slotValue;
+            }
+        });
+	}
+	
+	if(result.hasOwnProperty('dynamic') && result.dynamic.statusCode === 'ER_SUCCESS_MATCH'){
+		return result.dynamic.resolvedValues[0].value.name;
+	}
+	else if(result.hasOwnProperty('static') && result.static.statusCode === 'ER_SUCCESS_MATCH'){
+		return result.static.resolvedValues[0].value.name;
+	}
+	else{
+		return result.value;
+	}
+};
+
 const createGroup = async (channelName, headers) =>
 	await axios
 	.post(
@@ -813,6 +873,7 @@ const postDirectMessage = async (message, roomid, headers) =>
 
 module.exports.login = login;
 module.exports.createPersonalAccessToken = createPersonalAccessToken;
+module.exports.channelList = channelList;
 module.exports.createChannel = createChannel;
 module.exports.deleteChannel = deleteChannel;
 module.exports.postMessage = postMessage;
@@ -833,6 +894,7 @@ module.exports.replaceWhitespacesDots = replaceWhitespacesDots;
 module.exports.emojiTranslateFunc = emojiTranslateFunc;
 module.exports.readMessages = readMessages;
 module.exports.slotValue = slotValue;
+module.exports.getStaticAndDynamicSlotValuesFromSlot = getStaticAndDynamicSlotValuesFromSlot;
 module.exports.createGroup = createGroup;
 module.exports.deleteGroup = deleteGroup;
 module.exports.getGroupId = getGroupId;

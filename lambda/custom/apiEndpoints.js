@@ -10,6 +10,7 @@ const { serverurl } = envVariables;
 module.exports = {
 	loginUrl: `${ serverurl }/api/v1/login`,
 	meUrl: `${ serverurl }/api/v1/me`,
+	channellisturl: `${ serverurl }/api/v1/channels.list.joined`,
 	createchannelurl: `${ serverurl }/api/v1/channels.create`,
 	deletechannelurl: `${ serverurl }/api/v1/channels.delete`,
 	postmessageurl: `${ serverurl }/api/v1/chat.postMessage`,

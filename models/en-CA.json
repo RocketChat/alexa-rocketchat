@@ -50,10 +50,18 @@
                     "slots": [
                         {
                             "name": "channeldelete",
-                            "type": "channelnames"
+                            "type": "channelnames",
+                            "samples": [
+                                "delete {channeldelete}",
+                                "{channeldelete}",
+                                "delete channel {channeldelete}",
+                                "delete room {channeldelete}"
+                            ]
                         }
                     ],
                     "samples": [
+                        "delete room",
+                        "delete channel",
                         "delete room {channeldelete}",
                         "delete channel {channeldelete}",
                         "delete {channeldelete}"
@@ -91,10 +99,21 @@
                     "slots": [
                         {
                             "name": "getmessagechannelname",
-                            "type": "channelnames"
+                            "type": "channelnames",
+                            "samples": [
+                                "latest message from {getmessagechannelname}",
+                                "read latest message in {getmessagechannelname}",
+                                "read last message from {getmessagechannelname}",
+                                "from {getmessagechannelname}",
+                                "{getmessagechannelname}"
+                            ]
                         }
                     ],
                     "samples": [
+                        "what is the latest message",
+                        "what is the latest message in {getmessagechannelname}",
+                        "read latest message",
+                        "read last message",
                         "latest message from {getmessagechannelname}",
                         "read last message from {getmessagechannelname}",
                         "read latest message in {getmessagechannelname}",
@@ -1692,6 +1711,41 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "DeleteChannelIntent",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.1279935591703"
+                    },
+                    "slots": [
+                        {
+                            "name": "channeldelete",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1279935591703.1198344949986"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "GetLastMessageFromChannelIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "getmessagechannelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.449336420378.1492444758346"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1757,6 +1811,33 @@
                     {
                         "type": "PlainText",
                         "value": "You want to create channel {channelname} . Is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.1279935591703",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to delete channel {channeldelete} . Is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1279935591703.1198344949986",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to delete?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.449336420378.1492444758346",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel's last message do you want to hear?"
                     }
                 ]
             }
