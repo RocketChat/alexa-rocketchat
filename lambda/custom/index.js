@@ -3,7 +3,6 @@
 
 const Alexa = require('ask-sdk');
 const helperFunctions = require('./helperFunctions');
-const main = require('./main.json');
 const envVariables = require('./config');
 const layouts = require('./APL/layouts');
 
@@ -504,11 +503,70 @@ const DeleteChannelIntentHandler = {
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.deleteChannel(channelName, headers);
 
-			return handlerInput.jrb
+			if (supportsAPL(handlerInput)) {
+
+				return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.addDirective({
+					type: 'Alexa.Presentation.APL.RenderDocument',
+					version: '1.0',
+					document: layouts.deleteChannelLayout,
+					datasources: {
+
+						"DeleteChannelPageData": {
+							"type": "object",
+							"objectId": "rcDeleteChannel",
+							"backgroundImage": {
+								"contentDescription": null,
+								"smallSourceUrl": null,
+								"largeSourceUrl": null,
+								"sources": [
+									{
+										"url": "https://user-images.githubusercontent.com/41849970/60651516-fcb23880-9e63-11e9-8efb-1e590a41489e.png",
+										"size": "small",
+										"widthPixels": 0,
+										"heightPixels": 0
+									},
+									{
+										"url": "https://user-images.githubusercontent.com/41849970/60651516-fcb23880-9e63-11e9-8efb-1e590a41489e.png",
+										"size": "large",
+										"widthPixels": 0,
+										"heightPixels": 0
+									}
+								]
+							},
+							"textContent": {
+								"placeholder": {
+									"type": "PlainText",
+									"text": "Channel"
+								},
+								"channelname": {
+									"type": "PlainText",
+									"text": `#${speechText.params.channelName}`
+								},
+								"successful": {
+									"type": "PlainText",
+									"text": "deleted successfully."
+								}
+							},
+							"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
+						}
+
+					}
+				})
+				.getResponse();
+
+			} else {
+
+				return handlerInput.jrb
 				.speak(speechText)
 				.reprompt(speechText)
 				.withSimpleCard(ri('DELETE_CHANNEL.CARD_TITLE'), speechText)
 				.getResponse();
+
+			}
+
 		} catch (error) {
 			console.error(error);
 		}
@@ -706,21 +764,15 @@ const GetLastMessageFromChannelIntentHandler = {
 
 			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.getmessagechannelname.value;
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
-
 			const headers = await helperFunctions.login(accessToken);
 
-			//FOR IMPLEMENTING READ
-			/*
-			const roomid = await helperFunctions.getRoomId(channelName, headers);
-			helperFunctions.readMessages(roomid, headers);
-			*/
+			const messageType = await helperFunctions.getLastMessageType(channelName, headers);
+			
+		if (supportsAPL(handlerInput)) {
 
-			const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
-			const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
-			const speechText = await helperFunctions.channelLastMessage(channelName, headers);
-
-
-			if (supportsAPL(handlerInput)) {
+			if(messageType === 'textmessage'){
+				
+				const speechText = await helperFunctions.channelLastMessage(channelName, headers);
 
 				return handlerInput.jrb
 					.speak(speechText)
@@ -728,52 +780,222 @@ const GetLastMessageFromChannelIntentHandler = {
 					.addDirective({
 						type: 'Alexa.Presentation.APL.RenderDocument',
 						version: '1.0',
-						document: main,
-						datasources:
+						document: layouts.lastMessageLayout,
+						datasources: { 
 
-						{
+							"lastMessageData": {
+									"type": "object",
+									"objectId": "rcPostMessage",
+									"backgroundImage": {
+										"contentDescription": null,
+										"smallSourceUrl": null,
+										"largeSourceUrl": null,
+										"sources": [
+											{
+												"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
+												"size": "small",
+												"widthPixels": 0,
+												"heightPixels": 0
+											},
+											{
+												"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
+												"size": "large",
+												"widthPixels": 0,
+												"heightPixels": 0
+											}
+										]
+									},
+									"textContent": {
+										"username": {
+											"type": "PlainText",
+											"text": speechText.params.name
+										},
+										"message": {
+											"type": "PlainText",
+											"text": speechText.params.message
+										}
+									},
+									"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
+								}
+						}
+					})
+					.getResponse();
 
-							"bodyTemplate6Data": {
+			} else if(messageType.includes("image")) {
+
+				const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
+				const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
+				const messageData = await helperFunctions.channelLastMessage(channelName, headers);
+				const speechText = `${messageData.params.name} sent you an image message.`;
+
+
+				return handlerInput.responseBuilder
+					.speak(speechText)
+					.reprompt(speechText)
+					.addDirective({
+						type: 'Alexa.Presentation.APL.RenderDocument',
+						version: '1.0',
+						document: layouts.lastMessageImageLayout,
+						datasources: {
+							
+							"lastMessageData": {
 								"type": "object",
-								"objectId": "bt6Sample",
+								"objectId": "rcLastImageMessage",
 								"backgroundImage": {
-									"sources": [{
-
-											"url": download,
+									"sources": [
+										{
+											"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
 											"size": "small",
-
+											"widthPixels": 0,
+											"heightPixels": 0
 										},
 										{
-											"url": download,
+											"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
 											"size": "large",
+											"widthPixels": 0,
+											"heightPixels": 0
+										}
+									]
+								},
+								"messageContent": {
+									"image": {
+										"url": download
+									},
+									"username": {
+										"type": "PlainText",
+										"text": messageData.params.name
+									}
+								},
+								"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
+							}
+						}
+					})
+					.getResponse();
+			
+			} else if(messageType.includes("video")) {
 
+				const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
+				const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
+				const speechText = await helperFunctions.channelLastMessage(channelName, headers);
+
+
+				return handlerInput.jrb
+					.speak(speechText)
+					.reprompt(speechText)
+					.addDirective({
+						type: 'Alexa.Presentation.APL.RenderDocument',
+						version: '1.0',
+						document: layouts.lastMessageVideoLayout,
+						datasources: {
+							
+							"lastMessageData": {
+								"type": "object",
+								"objectId": "rcLastVideoMessage",
+								"backgroundImage": {
+									"sources": [
+										{
+											"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
+											"size": "small",
+											"widthPixels": 0,
+											"heightPixels": 0
+										},
+										{
+											"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
+											"size": "large",
+											"widthPixels": 0,
+											"heightPixels": 0
+										}
+									]
+								},
+								"messageContent": {
+									"video": {
+										"url": download
+									},
+									"username": {
+										"type": "PlainText",
+										"text": speechText.params.name
+									}
+								},
+								"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
+							}
+						}
+					})
+					.getResponse();
+			
+			} else {
+
+				const speechText = 'Sorry. This message contains file types, which cannot be accessed on this device.';
+
+				return handlerInput.responseBuilder
+					.speak(speechText)
+					.reprompt(speechText)
+					.addDirective({
+						type: 'Alexa.Presentation.APL.RenderDocument',
+						version: '1.0',
+						document: layouts.lastMessageNotSupported,
+						datasources: {
+							
+							"LastMessageNotSupportedData": {
+								"type": "object",
+								"objectId": "rcnotsupported",
+								"backgroundImage": {
+									"sources": [
+										{
+											"url": "https://user-images.githubusercontent.com/41849970/60644955-126c3180-9e55-11e9-9147-7820655f3c0b.png",
+											"size": "small",
+											"widthPixels": 0,
+											"heightPixels": 0
+										},
+										{
+											"url": "https://user-images.githubusercontent.com/41849970/60644955-126c3180-9e55-11e9-9147-7820655f3c0b.png",
+											"size": "large",
+											"widthPixels": 0,
+											"heightPixels": 0
 										}
 									]
 								},
 								"textContent": {
 									"primaryText": {
 										"type": "PlainText",
-										"text": "This Is An Image Message"
+										"text": "It’s a trap!"
+									},
+									"secondaryText": {
+										"type": "PlainText",
+										"text": "Message contains file types which cannot be accessed on this device."
 									}
 								},
-								"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png",
-								"hintText": "SAMPLE REDIRECTION URL TEST"
+								"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
 							}
-
-
 						}
-
-
 					})
 					.getResponse();
+			}
 
-			} else {
+		} else {
+
+			if(messageType === 'textmessage'){
+
+				const speechText = await helperFunctions.channelLastMessage(channelName, headers);
+
 				return handlerInput.jrb
 					.speak(speechText)
 					.reprompt(speechText)
 					.withSimpleCard(ri('GET_LAST_MESSAGE_FROM_CHANNEL.CARD_TITLE'), speechText)
 					.getResponse();
+
+			} else {
+
+				const speechText = 'Sorry. This message contains file types, which cannot be accessed on this device.';
+
+				return handlerInput.responseBuilder
+					.speak(speechText)
+					.reprompt(speechText)
+					.withSimpleCard('Its a Trap!', speechText)
+					.getResponse();
+
 			}
+
+		}
 
 		} catch (error) {
 			console.error(error);
