@@ -28,6 +28,9 @@
     },
     "POST_MESSAGE": {
         "SUCCESS": "I've sent your message.",
+        "ASK_MORE": "Would you like to add more?",
+        "CONFIRM_MORE": "Okay, go on.",
+        "CONFIRM_MORE_REPROMPT": "Please continue your message.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Post A Message",
         "ERROR": "Sorry, I couldn't send your message right now.",
@@ -93,4 +96,4 @@
         "ERROR": "Sorry, I couldn't archive this channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
     }
-  }
+}
