@@ -87,11 +87,43 @@
                         }
                     ],
                     "samples": [
+                        "post message to {messagechannel}",
+                        "post message",
                         "send message {messagepost}",
                         "send {messagepost}",
                         "send message to channel",
                         "send message",
                         "send {messagepost} to {messagechannel}"
+                    ]
+                },
+                {
+                    "name": "PostLongMessageIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "{channelname}",
+                                "to {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "longmessage",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{longmessage}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "post long message to {channelname}",
+                        "send long message to {channelname}",
+                        "dictate a message to {channelname}",
+                        "send a long message to {channelname}",
+                        "post long message",
+                        "send long message",
+                        "dictate a message",
+                        "send a long message"
                     ]
                 },
                 {
@@ -390,6 +422,14 @@
                     "samples": [
                         "direct message {directmessage} emoji {directmessageemojiname} recipient {directmessageusername}"
                     ]
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
                 }
             ],
             "types": [
@@ -1746,6 +1786,32 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "PostLongMessageIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.622819296016.658394028103"
+                            }
+                        },
+                        {
+                            "name": "longmessage",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.622819296016.128404170246"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1838,6 +1904,33 @@
                     {
                         "type": "PlainText",
                         "value": "Which channel's last message do you want to hear?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.622819296016.658394028103",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel would you like to send the message to?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.622819296016.128404170246",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Okay, what message you would like to send?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.637951215764.1130527358321",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Alright, go on"
                     }
                 ]
             }

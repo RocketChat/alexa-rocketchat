@@ -719,6 +719,200 @@ const PostMessageIntentHandler = {
 	},
 };
 
+
+const StartedPostLongMessageIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+      handlerInput.requestEnvelope.request.intent.name === 'PostLongMessageIntent' &&
+      handlerInput.requestEnvelope.request.dialogState === 'STARTED';
+  },
+  handle(handlerInput) {
+	const currentIntent = handlerInput.requestEnvelope.request.intent;
+    return handlerInput.responseBuilder
+      .addDelegateDirective(currentIntent)
+      .getResponse();
+  },
+};
+
+const InProgressPostLongMessageIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+      handlerInput.requestEnvelope.request.intent.name === 'PostLongMessageIntent' &&
+      handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS';
+  },
+  handle(handlerInput) {
+    const currentIntent = handlerInput.requestEnvelope.request.intent;
+    return handlerInput.responseBuilder
+      .addDelegateDirective(currentIntent)
+      .getResponse();
+  },
+};
+
+const PostLongMessageIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'PostLongMessageIntent'
+			&& handlerInput.requestEnvelope.request.dialogState === 'COMPLETED';
+	},
+	async handle(handlerInput) {
+		const attributesManager = handlerInput.attributesManager;
+		const sessionAttributes = attributesManager.getSessionAttributes() || {};
+
+		try {
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+
+			let message = handlerInput.requestEnvelope.request.intent.slots.longmessage.value;
+			if(sessionAttributes.hasOwnProperty('message')){
+				sessionAttributes.message += `, ${message}`;
+			}
+			else{
+				sessionAttributes.message = message;
+			}
+
+			if(!sessionAttributes.hasOwnProperty('channelName')){
+				const channelNameData = helperFunctions.getStaticAndDynamicSlotValuesFromSlot(handlerInput.requestEnvelope.request.intent.slots.channelname);
+				const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+				sessionAttributes.channelName = channelName;
+			}
+
+			return handlerInput.jrb
+				.speak(ri('POST_MESSAGE.ASK_MORE'))
+				.reprompt(ri('POST_MESSAGE.ASK_MORE'))
+				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), ri('POST_MESSAGE.ASK_MORE'))
+				.getResponse();
+
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+
+const YesIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'AMAZON.YesIntent';
+	},
+	handle(handlerInput) {
+		
+		const attributesManager = handlerInput.attributesManager;
+		const sessionAttributes = attributesManager.getSessionAttributes() || {};
+
+		return handlerInput.jrb
+		  .speak(ri('POST_MESSAGE.CONFIRM_MORE'))
+		  .reprompt(ri('POST_MESSAGE.CONFIRM_MORE_REPROMPT'))
+		  .addElicitSlotDirective("longmessage", {
+			name: 'PostLongMessageIntent',
+			confirmationStatus: 'NONE',
+			slots: {
+				"channelname": {
+					"name": "channelname",
+					"value": sessionAttributes.channelName,
+					"confirmationStatus": "NONE"
+				},
+				"longmessage": {
+					"name": "longmessage",
+					"confirmationStatus": "NONE"
+				}
+			}
+		  })
+		  .getResponse();
+	},
+};
+
+
+const NoIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'AMAZON.NoIntent';
+	},
+	async handle(handlerInput) {
+
+		try {
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+
+
+			const attributesManager = handlerInput.attributesManager;
+			const sessionAttributes = attributesManager.getSessionAttributes() || {};
+
+			let channelName = sessionAttributes.channelName;
+			let message = sessionAttributes.message;
+
+			delete sessionAttributes.channelName;
+			delete sessionAttributes.message;
+
+			const headers = await helperFunctions.login(accessToken);
+			const speechText = await helperFunctions.postMessage(channelName, message, headers);
+
+
+			if (supportsAPL(handlerInput)) {
+
+				return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.addDirective({
+					type: 'Alexa.Presentation.APL.RenderDocument',
+					version: '1.0',
+					document: layouts.postMessageLayout,
+					datasources: {
+
+						"PostMessageData": {
+							"type": "object",
+							"objectId": "rcPostMessage",
+							"backgroundImage": {
+								"contentDescription": null,
+								"smallSourceUrl": null,
+								"largeSourceUrl": null,
+								"sources": [
+									{
+										"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
+										"size": "small",
+										"widthPixels": 0,
+										"heightPixels": 0
+									},
+									{
+										"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
+										"size": "large",
+										"widthPixels": 0,
+										"heightPixels": 0
+									}
+								]
+							},
+							"textContent": {
+								"channelname": {
+									"type": "PlainText",
+									"text": `#${channelName}`
+								},
+								"message": {
+									"type": "PlainText",
+									"text": message
+								}
+							},
+							"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
+						}
+
+					}
+				})
+				.getResponse();
+
+			} else {
+				return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
+				.getResponse();
+			}
+
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
 const PostEmojiMessageIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -1463,8 +1657,6 @@ const PostEmojiDirectMessageIntentHandler = {
 	},
 };
 
-
-
 const HelpIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -1551,6 +1743,11 @@ exports.handler = skillBuilder
 		InProgressPostMessageIntentHandler,
 		DeniedPostMessageIntentHandler,
 		PostMessageIntentHandler,
+		StartedPostLongMessageIntentHandler,
+		InProgressPostLongMessageIntentHandler,
+		YesIntentHandler,
+		NoIntentHandler,
+		PostLongMessageIntentHandler,
 		PostEmojiMessageIntentHandler,
 		GetLastMessageFromChannelIntentHandler,
 		AddAllToChannelIntentHandler,
