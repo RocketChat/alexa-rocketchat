@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "chat rocket",
+            "invocationName": "rocket chat",
             "intents": [
                 {
                     "name": "AMAZON.FallbackIntent",
