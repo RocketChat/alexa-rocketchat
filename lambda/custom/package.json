@@ -15,6 +15,7 @@
     "ask-sdk-core": "^2.0.0",
     "ask-sdk-model": "^1.0.0",
     "axios": "^0.18.0",
+    "circular-json": "^0.5.9",
     "moji-translate": "1.0.8",
     "remove-whitespace": "1.1.0"
   },

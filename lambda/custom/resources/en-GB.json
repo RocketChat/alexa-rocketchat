@@ -4,7 +4,7 @@
         "v2": "Sorry, I didn't get that. Could you say it again?."
     },
     "HELP": {
-        "MESSAGE": "This is the Alexa Skill for rocket chat. Refer sample utterances file on GitHub.",
+        "MESSAGE": "This is the Alexa Skill for rocket chat. What would you like to do?",
         "CARD_TITLE": "Rocket.Chat Help"
     },
     "GOODBYE": {
@@ -95,5 +95,7 @@
         "CARD_TITLE": "Archive Channel",
         "ERROR": "Sorry, I couldn't archive this channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
-    }
+    },
+    "AUDIO_NO_SUPPORT": "Sorry, this skill doesn't support that feature.",
+    "GENERIC_REPROMPT": "Anything else I can help you with?"
 }

@@ -147,6 +147,12 @@
                 "interfaces": [
                   {
                     "type": "ALEXA_PRESENTATION_APL"
+                  },
+                  {
+                    "type": "AUDIO_PLAYER"
+                  },
+                  {
+                    "type": "RENDER_TEMPLATE"
                   }
                 ]
             }
