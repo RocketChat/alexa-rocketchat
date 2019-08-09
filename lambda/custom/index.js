@@ -2,6 +2,7 @@
 /* eslint-disable  no-console */
 
 const Alexa = require('ask-sdk');
+const JSON = require('circular-json');
 const helperFunctions = require('./helperFunctions');
 const envVariables = require('./config');
 const layouts = require('./APL/layouts');
@@ -23,6 +24,16 @@ function supportsAPL(handlerInput) {
 	const supportedInterfaces = handlerInput.requestEnvelope.context.System.device.supportedInterfaces;
 	const aplInterface = supportedInterfaces['Alexa.Presentation.APL'];
 	return aplInterface != null && aplInterface != undefined;
+}
+
+function supportsDisplay(handlerInput) {
+	const hasDisplay =
+	  handlerInput.requestEnvelope.context &&
+	  handlerInput.requestEnvelope.context.System &&
+	  handlerInput.requestEnvelope.context.System.device &&
+	  handlerInput.requestEnvelope.context.System.device.supportedInterfaces &&
+	  handlerInput.requestEnvelope.context.System.device.supportedInterfaces.Display;
+	return hasDisplay;
 }
 
 // Alexa Intent Functions
@@ -116,7 +127,7 @@ const LaunchRequestHandler = {
 				return handlerInput.jrb
 				.speak(speechText)
 				.reprompt(speechText)
-				.withSimpleCard(ri('WELCOME.ERROR'), speechText)
+				.withSimpleCard(ri('WELCOME.CARD_TITLE'), speechText)
 				.getResponse();
 
 			}
@@ -242,6 +253,7 @@ const ChangeNotificationSettingsIntentHandler = {
 
 		const notificationsFor = helperFunctions.slotValue(handlerInput.requestEnvelope.request.intent.slots.notificationsFor);
 		let speechText = '';
+		let repromptText = ri('GENERIC_REPROMPT');
 
 		if (attributes.hasOwnProperty("optForNotifications") && attributes.hasOwnProperty("notificationsSettings")) {
 			if (attributes.optForNotifications == true) {
@@ -265,7 +277,6 @@ const ChangeNotificationSettingsIntentHandler = {
 				speechText = ri('NOTIFICATION_SETTINGS.ERROR_TURNED_OFF');
 				return handlerInput.jrb
 					.speak(speechText)
-					.reprompt(speechText)
 					.withAskForPermissionsConsentCard([PERMISSIONS.NOTIFICATION_PERMISSION])
 					.getResponse();
 			}
@@ -273,13 +284,13 @@ const ChangeNotificationSettingsIntentHandler = {
 			speechText = ri('NOTIFICATION_SETTINGS.ERROR');
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
 				.withAskForPermissionsConsentCard([PERMISSIONS.NOTIFICATION_PERMISSION])
 				.getResponse();
 		}
 		return handlerInput.jrb
 			.speak(speechText)
-			.reprompt(speechText)
+			.speak(repromptText)
+			.reprompt(repromptText)
 			.withSimpleCard(ri('NOTIFICATION_SETTINGS.CARD_TITLE'), speechText)
 			.getResponse();
 	},
@@ -358,12 +369,14 @@ const CreateChannelIntentHandler = {
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.createChannel(channelName, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 			if (supportsAPL(handlerInput)) {
 
 				return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.addDirective({
 					type: 'Alexa.Presentation.APL.RenderDocument',
 					version: '1.0',
@@ -417,7 +430,8 @@ const CreateChannelIntentHandler = {
 
 				return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('CREATE_CHANNEL.CARD_TITLE'), speechText)
 				.getResponse();
 
@@ -502,12 +516,14 @@ const DeleteChannelIntentHandler = {
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.deleteChannel(channelName, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 			if (supportsAPL(handlerInput)) {
 
 				return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.addDirective({
 					type: 'Alexa.Presentation.APL.RenderDocument',
 					version: '1.0',
@@ -561,7 +577,8 @@ const DeleteChannelIntentHandler = {
 
 				return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('DELETE_CHANNEL.CARD_TITLE'), speechText)
 				.getResponse();
 
@@ -651,13 +668,15 @@ const PostMessageIntentHandler = {
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.postMessage(channelName, message, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 
 			if (supportsAPL(handlerInput)) {
 
 				return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.addDirective({
 					type: 'Alexa.Presentation.APL.RenderDocument',
 					version: '1.0',
@@ -707,7 +726,8 @@ const PostMessageIntentHandler = {
 
 				return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
 				.getResponse();
 
@@ -847,13 +867,15 @@ const NoIntentHandler = {
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.postMessage(channelName, message, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 
 			if (supportsAPL(handlerInput)) {
 
 				return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.addDirective({
 					type: 'Alexa.Presentation.APL.RenderDocument',
 					version: '1.0',
@@ -902,7 +924,8 @@ const NoIntentHandler = {
 			} else {
 				return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
 				.getResponse();
 			}
@@ -933,10 +956,12 @@ const PostEmojiMessageIntentHandler = {
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.postMessage(channelName, message, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -961,29 +986,137 @@ const GetLastMessageFromChannelIntentHandler = {
 			const headers = await helperFunctions.login(accessToken);
 
 			const messageType = await helperFunctions.getLastMessageType(channelName, headers);
-			
-		if (supportsAPL(handlerInput)) {
 
-			if(messageType === 'textmessage'){
+			if(messageType.includes("audio")){
+
+				const attributesManager = handlerInput.attributesManager;
+				const attributes = await attributesManager.getPersistentAttributes() || {};
 				
+				const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
+				const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
 				const speechText = await helperFunctions.channelLastMessage(channelName, headers);
+				
+				const playBehavior = 'REPLACE_ALL';
+				const token = fileurl.split('/').slice(-2)[0];
+				const offsetInMilliseconds = 0;
 
-				return handlerInput.jrb
-					.speak(speechText)
-					.reprompt(speechText)
-					.addDirective({
-						type: 'Alexa.Presentation.APL.RenderDocument',
-						version: '1.0',
-						document: layouts.lastMessageLayout,
-						datasources: { 
+				attributes.inPlaybackSession = true;
+				attributes.playBackURL = download;
+				await handlerInput.attributesManager.savePersistentAttributes();
 
-							"lastMessageData": {
+				if (supportsDisplay(handlerInput)) {
+
+					const metadata = {
+						"title": "Rocket.Chat",
+						"subtitle": "You have received an audio message!",
+						"art": {
+						"sources": [
+							{
+							"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png"
+							}
+						]
+						},
+						"backgroundImage": {
+						"sources": [
+							{
+							"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png"
+							}
+						]
+						}
+					}
+
+					return handlerInput.jrb
+						.speak(speechText)
+						.addAudioPlayerPlayDirective(playBehavior, download, token, offsetInMilliseconds, null, metadata)
+						.getResponse();
+
+				} else {
+
+					return handlerInput.jrb
+						.speak(speechText)
+						.addAudioPlayerPlayDirective(playBehavior, download, token, offsetInMilliseconds, null, null)
+						.getResponse();
+				}
+			}
+				
+			if (supportsAPL(handlerInput)) {
+
+				if(messageType === 'textmessage'){
+					
+					const speechText = await helperFunctions.channelLastMessage(channelName, headers);
+					let repromptText = ri('GENERIC_REPROMPT');
+
+					return handlerInput.jrb
+						.speak(speechText)
+						.speak(repromptText)
+						.reprompt(repromptText)
+						.addDirective({
+							type: 'Alexa.Presentation.APL.RenderDocument',
+							version: '1.0',
+							document: layouts.lastMessageLayout,
+							datasources: { 
+
+								"lastMessageData": {
+										"type": "object",
+										"objectId": "rcPostMessage",
+										"backgroundImage": {
+											"contentDescription": null,
+											"smallSourceUrl": null,
+											"largeSourceUrl": null,
+											"sources": [
+												{
+													"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
+													"size": "small",
+													"widthPixels": 0,
+													"heightPixels": 0
+												},
+												{
+													"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
+													"size": "large",
+													"widthPixels": 0,
+													"heightPixels": 0
+												}
+											]
+										},
+										"textContent": {
+											"username": {
+												"type": "PlainText",
+												"text": speechText.params.name
+											},
+											"message": {
+												"type": "PlainText",
+												"text": speechText.params.message
+											}
+										},
+										"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
+									}
+							}
+						})
+						.getResponse();
+
+				} else if(messageType.includes("image")) {
+
+					const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
+					const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
+					const messageData = await helperFunctions.channelLastMessage(channelName, headers);
+					const speechText = `${messageData.params.name} sent you an image message.`;
+					let repromptText = ri('GENERIC_REPROMPT');
+
+
+					return handlerInput.responseBuilder
+						.speak(speechText)
+						.speak(repromptText)
+						.reprompt(repromptText)
+						.addDirective({
+							type: 'Alexa.Presentation.APL.RenderDocument',
+							version: '1.0',
+							document: layouts.lastMessageImageLayout,
+							datasources: {
+								
+								"lastMessageData": {
 									"type": "object",
-									"objectId": "rcPostMessage",
+									"objectId": "rcLastImageMessage",
 									"backgroundImage": {
-										"contentDescription": null,
-										"smallSourceUrl": null,
-										"largeSourceUrl": null,
 										"sources": [
 											{
 												"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
@@ -999,197 +1132,153 @@ const GetLastMessageFromChannelIntentHandler = {
 											}
 										]
 									},
-									"textContent": {
+									"messageContent": {
+										"image": {
+											"url": download
+										},
 										"username": {
 											"type": "PlainText",
-											"text": speechText.params.name
-										},
-										"message": {
-											"type": "PlainText",
-											"text": speechText.params.message
+											"text": messageData.params.name
 										}
 									},
 									"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
 								}
-						}
-					})
-					.getResponse();
-
-			} else if(messageType.includes("image")) {
-
-				const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
-				const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
-				const messageData = await helperFunctions.channelLastMessage(channelName, headers);
-				const speechText = `${messageData.params.name} sent you an image message.`;
-
-
-				return handlerInput.responseBuilder
-					.speak(speechText)
-					.reprompt(speechText)
-					.addDirective({
-						type: 'Alexa.Presentation.APL.RenderDocument',
-						version: '1.0',
-						document: layouts.lastMessageImageLayout,
-						datasources: {
-							
-							"lastMessageData": {
-								"type": "object",
-								"objectId": "rcLastImageMessage",
-								"backgroundImage": {
-									"sources": [
-										{
-											"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
-											"size": "small",
-											"widthPixels": 0,
-											"heightPixels": 0
-										},
-										{
-											"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
-											"size": "large",
-											"widthPixels": 0,
-											"heightPixels": 0
-										}
-									]
-								},
-								"messageContent": {
-									"image": {
-										"url": download
-									},
-									"username": {
-										"type": "PlainText",
-										"text": messageData.params.name
-									}
-								},
-								"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
 							}
-						}
-					})
-					.getResponse();
-			
-			} else if(messageType.includes("video")) {
+						})
+						.getResponse();
+				
+				} else if(messageType.includes("video")) {
 
-				const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
-				const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
-				const speechText = await helperFunctions.channelLastMessage(channelName, headers);
+					const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
+					const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
+					const speechText = await helperFunctions.channelLastMessage(channelName, headers);
+					let repromptText = ri('GENERIC_REPROMPT');
 
 
-				return handlerInput.jrb
-					.speak(speechText)
-					.reprompt(speechText)
-					.addDirective({
-						type: 'Alexa.Presentation.APL.RenderDocument',
-						version: '1.0',
-						document: layouts.lastMessageVideoLayout,
-						datasources: {
-							
-							"lastMessageData": {
-								"type": "object",
-								"objectId": "rcLastVideoMessage",
-								"backgroundImage": {
-									"sources": [
-										{
-											"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
-											"size": "small",
-											"widthPixels": 0,
-											"heightPixels": 0
-										},
-										{
-											"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
-											"size": "large",
-											"widthPixels": 0,
-											"heightPixels": 0
-										}
-									]
-								},
-								"messageContent": {
-									"video": {
-										"url": download
+					return handlerInput.jrb
+						.speak(speechText)
+						.speak(repromptText)
+						.reprompt(repromptText)
+						.addDirective({
+							type: 'Alexa.Presentation.APL.RenderDocument',
+							version: '1.0',
+							document: layouts.lastMessageVideoLayout,
+							datasources: {
+								
+								"lastMessageData": {
+									"type": "object",
+									"objectId": "rcLastVideoMessage",
+									"backgroundImage": {
+										"sources": [
+											{
+												"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
+												"size": "small",
+												"widthPixels": 0,
+												"heightPixels": 0
+											},
+											{
+												"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
+												"size": "large",
+												"widthPixels": 0,
+												"heightPixels": 0
+											}
+										]
 									},
-									"username": {
-										"type": "PlainText",
-										"text": speechText.params.name
-									}
-								},
-								"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
-							}
-						}
-					})
-					.getResponse();
-			
-			} else {
-
-				const speechText = 'Sorry. This message contains file types, which cannot be accessed on this device.';
-
-				return handlerInput.responseBuilder
-					.speak(speechText)
-					.reprompt(speechText)
-					.addDirective({
-						type: 'Alexa.Presentation.APL.RenderDocument',
-						version: '1.0',
-						document: layouts.lastMessageNotSupported,
-						datasources: {
-							
-							"LastMessageNotSupportedData": {
-								"type": "object",
-								"objectId": "rcnotsupported",
-								"backgroundImage": {
-									"sources": [
-										{
-											"url": "https://user-images.githubusercontent.com/41849970/60644955-126c3180-9e55-11e9-9147-7820655f3c0b.png",
-											"size": "small",
-											"widthPixels": 0,
-											"heightPixels": 0
+									"messageContent": {
+										"video": {
+											"url": download
 										},
-										{
-											"url": "https://user-images.githubusercontent.com/41849970/60644955-126c3180-9e55-11e9-9147-7820655f3c0b.png",
-											"size": "large",
-											"widthPixels": 0,
-											"heightPixels": 0
+										"username": {
+											"type": "PlainText",
+											"text": speechText.params.name
 										}
-									]
-								},
-								"textContent": {
-									"primaryText": {
-										"type": "PlainText",
-										"text": "It’s a trap!"
 									},
-									"secondaryText": {
-										"type": "PlainText",
-										"text": "Message contains file types which cannot be accessed on this device."
-									}
-								},
-								"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
+									"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
+								}
 							}
-						}
-					})
-					.getResponse();
-			}
+						})
+						.getResponse();
+				
+				} else {
 
-		} else {
+					const speechText = 'Sorry. This message contains file types, which cannot be accessed on this device.';
+					let repromptText = ri('GENERIC_REPROMPT');
 
-			if(messageType === 'textmessage'){
-
-				const speechText = await helperFunctions.channelLastMessage(channelName, headers);
-
-				return handlerInput.jrb
-					.speak(speechText)
-					.reprompt(speechText)
-					.withSimpleCard(ri('GET_LAST_MESSAGE_FROM_CHANNEL.CARD_TITLE'), speechText)
-					.getResponse();
+					return handlerInput.responseBuilder
+						.speak(speechText)
+						.speak(repromptText)
+						.reprompt(repromptText)
+						.addDirective({
+							type: 'Alexa.Presentation.APL.RenderDocument',
+							version: '1.0',
+							document: layouts.lastMessageNotSupported,
+							datasources: {
+								
+								"LastMessageNotSupportedData": {
+									"type": "object",
+									"objectId": "rcnotsupported",
+									"backgroundImage": {
+										"sources": [
+											{
+												"url": "https://user-images.githubusercontent.com/41849970/60644955-126c3180-9e55-11e9-9147-7820655f3c0b.png",
+												"size": "small",
+												"widthPixels": 0,
+												"heightPixels": 0
+											},
+											{
+												"url": "https://user-images.githubusercontent.com/41849970/60644955-126c3180-9e55-11e9-9147-7820655f3c0b.png",
+												"size": "large",
+												"widthPixels": 0,
+												"heightPixels": 0
+											}
+										]
+									},
+									"textContent": {
+										"primaryText": {
+											"type": "PlainText",
+											"text": "It’s a trap!"
+										},
+										"secondaryText": {
+											"type": "PlainText",
+											"text": "Message contains file types which cannot be accessed on this device."
+										}
+									},
+									"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
+								}
+							}
+						})
+						.getResponse();
+				}
 
 			} else {
 
-				const speechText = 'Sorry. This message contains file types, which cannot be accessed on this device.';
+				if(messageType === 'textmessage'){
 
-				return handlerInput.responseBuilder
-					.speak(speechText)
-					.reprompt(speechText)
-					.withSimpleCard('Its a Trap!', speechText)
-					.getResponse();
+					const speechText = await helperFunctions.channelLastMessage(channelName, headers);
+					let repromptText = ri('GENERIC_REPROMPT');
+
+					return handlerInput.jrb
+						.speak(speechText)
+						.speak(repromptText)
+						.reprompt(repromptText)
+						.withSimpleCard(ri('GET_LAST_MESSAGE_FROM_CHANNEL.CARD_TITLE'), speechText)
+						.getResponse();
+
+				} else {
+
+					const speechText = 'Sorry. This message contains file types, which cannot be accessed on this device.';
+					let repromptText = ri('GENERIC_REPROMPT');
+
+					return handlerInput.responseBuilder
+						.speak(speechText)
+						.speak(repromptText)
+						.reprompt(repromptText)
+						.withSimpleCard('Its a Trap!', speechText)
+						.getResponse();
+
+				}
 
 			}
-
-		}
 
 		} catch (error) {
 			console.error(error);
@@ -1213,10 +1302,12 @@ const GetUnreadMessagesIntentHandler = {
 			const headers = await helperFunctions.login(accessToken);
 			const unreadCount = await helperFunctions.getUnreadCounter(channelName, headers);
 			const speechText = await helperFunctions.channelUnreadMessages(channelName, unreadCount, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1242,10 +1333,12 @@ const AddAllToChannelIntentHandler = {
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.getRoomId(channelName, headers);
 			const speechText = await helperFunctions.addAll(channelName, roomid, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('ADD_ALL_TO_CHANNEL.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1274,11 +1367,13 @@ const MakeModeratorIntentHandler = {
 			const userid = await helperFunctions.getUserId(userName, headers);
 			const roomid = await helperFunctions.getRoomId(channelName, headers);
 			const speechText = await helperFunctions.makeModerator(userName, channelName, userid, roomid, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('MAKE_MODERATOR.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1307,10 +1402,12 @@ const AddOwnerIntentHandler = {
 			const userid = await helperFunctions.getUserId(userName, headers);
 			const roomid = await helperFunctions.getRoomId(channelName, headers);
 			const speechText = await helperFunctions.addOwner(userName, channelName, userid, roomid, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('ADD_OWNER.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1336,10 +1433,12 @@ const ArchiveChannelIntentHandler = {
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.getRoomId(channelName, headers);
 			const speechText = await helperFunctions.archiveChannel(channelName, roomid, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('ARCHIVE_CHANNEL.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1364,10 +1463,12 @@ const CreateGrouplIntentHandler = {
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.createGroup(channelName, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('CREATE_CHANNEL.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1392,10 +1493,12 @@ const DeleteGroupIntentHandler = {
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.deleteGroup(channelName, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('DELETE_CHANNEL.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1424,11 +1527,13 @@ const MakeGroupModeratorIntentHandler = {
 			const userid = await helperFunctions.getUserId(userName, headers);
 			const roomid = await helperFunctions.getGroupId(channelName, headers);
 			const speechText = await helperFunctions.addGroupModerator(userName, channelName, userid, roomid, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('MAKE_MODERATOR.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1457,10 +1562,13 @@ const MakeGroupOwnerIntentHandler = {
 			const userid = await helperFunctions.getUserId(userName, headers);
 			const roomid = await helperFunctions.getGroupId(channelName, headers);
 			const speechText = await helperFunctions.addGroupOwner(userName, channelName, userid, roomid, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
+
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('ADD_OWNER.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1487,11 +1595,13 @@ const PostGroupMessageIntentHandler = {
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.getGroupId(channelName, headers);
 			const speechText = await helperFunctions.postGroupMessage(roomid, message, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1521,11 +1631,13 @@ const PostGroupEmojiMessageIntentHandler = {
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.getGroupId(channelName, headers);
 			const speechText = await helperFunctions.postGroupMessage(roomid, message, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1551,10 +1663,13 @@ const GroupLastMessageIntentHandler = {
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.getGroupId(channelName, headers);
 			const speechText = await helperFunctions.groupLastMessage(channelName, roomid, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
+
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('GET_LAST_MESSAGE_FROM_CHANNEL.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1580,10 +1695,13 @@ const GetGroupUnreadMessagesIntentHandler = {
 			const roomid = await helperFunctions.getGroupId(channelName, headers);
 			const unreadCount = await helperFunctions.getGroupUnreadCounter(roomid, headers);
 			const speechText = await helperFunctions.groupUnreadMessages(channelName, roomid, unreadCount, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
+
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1610,11 +1728,13 @@ const PostDirectMessageIntentHandler = {
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.createDMSession(userName, headers);
 			const speechText = await helperFunctions.postDirectMessage(message, roomid, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1644,11 +1764,13 @@ const PostEmojiDirectMessageIntentHandler = {
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.createDMSession(userName, headers);
 			const speechText = await helperFunctions.postDirectMessage(message, roomid, headers);
+			let repromptText = ri('GENERIC_REPROMPT');
 
 
 			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
@@ -1675,9 +1797,15 @@ const HelpIntentHandler = {
 
 const CancelAndStopIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+		const attributesManager = handlerInput.attributesManager;
+		const attributes = await attributesManager.getPersistentAttributes() || {};
+	
+		if(!attributes.hasOwnProperty('inPlaybackSession') || attributes.inPlaybackSession == false){
+			return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
 			(handlerInput.requestEnvelope.request.intent.name === 'AMAZON.CancelIntent' ||
-				handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent');
+				handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent' ||
+					handlerInput.requestEnvelope.request.intent.name === 'AMAZON.PauseIntent');
+		}
 	},
 	handle(handlerInput) {
 		const speechText = ri('GOODBYE.MESSAGE');
@@ -1690,6 +1818,161 @@ const CancelAndStopIntentHandler = {
 				updateBehavior: 'CLEAR'
 			})
 			.getResponse();
+	},
+};
+
+const StartPlaybackHandler = {
+	async canHandle(handlerInput) {
+		
+	  const attributesManager = handlerInput.attributesManager;
+	  const attributes = await attributesManager.getPersistentAttributes() || {};
+
+	  if(attributes.hasOwnProperty('inPlaybackSession') && attributes.inPlaybackSession == true){
+		const request = handlerInput.requestEnvelope.request;
+		if (request.type === 'PlaybackController.PlayCommandIssued') {
+		  return true;
+		}
+		if (request.type === 'IntentRequest') {
+		  return request.intent.name === 'AMAZON.ResumeIntent';
+		}
+	  }
+	  return false;
+
+	},
+	handle(handlerInput) {
+
+		const attributesManager = handlerInput.attributesManager;
+		const attributes = await attributesManager.getPersistentAttributes() || {};
+		
+		const playBehavior = 'REPLACE_ALL';
+		const token = fileurl.split('/').slice(-2)[0];
+		const offsetInMilliseconds = 0;
+
+		if (supportsDisplay(handlerInput)) {
+
+			const metadata = {
+				"title": "Rocket.Chat",
+				"subtitle": "You have received an audio message!",
+				"art": {
+				"sources": [
+					{
+					"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png"
+					}
+				]
+				},
+				"backgroundImage": {
+				"sources": [
+					{
+					"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png"
+					}
+				]
+				}
+			}
+
+			return handlerInput.jrb
+				.speak("You have received an audio message!")
+				.addAudioPlayerPlayDirective(playBehavior, attributes.playBackURL, token, offsetInMilliseconds, null, metadata)
+				.getResponse();
+
+		} else {
+
+			return handlerInput.jrb
+				.speak("You have received an audio message!")
+				.addAudioPlayerPlayDirective(playBehavior, attributes.playBackURL, token, offsetInMilliseconds, null, null)
+				.getResponse();
+		}
+	},
+};
+
+const AudioControlPlaybackHandler = {
+	async canHandle(handlerInput) {
+	  const request = handlerInput.requestEnvelope.request;
+  
+	  return request.type === 'PlaybackController.NextCommandIssued' || request.type === 'PlaybackController.PreviousCommandIssued' ||
+		  (request.type === 'IntentRequest' && (request.intent.name === 'AMAZON.NextIntent' || request.intent.name === 'AMAZON.PreviousIntent' || request.intent.name === 'AMAZON.LoopOnIntent' || request.intent.name === 'AMAZON.LoopOffIntent' || request.intent.name === 'AMAZON.ShuffleOnIntent' || request.intent.name === 'AMAZON.ShuffleOffIntent' || request.intent.name === 'AMAZON.StartOverIntent' || request.intent.name === 'AMAZON.ResumeIntent'));
+	},
+	handle(handlerInput) {
+		const speechText = ri('AUDIO_NO_SUPPORT');
+		return handlerInput.jrb
+			.speak(speechText)
+			.getResponse();
+	},
+};
+
+const PausePlaybackHandler = {
+	async canHandle(handlerInput) {
+	  const attributesManager = handlerInput.attributesManager;
+	  const attributes = await attributesManager.getPersistentAttributes() || {};
+  
+	  if(attributes.hasOwnProperty('inPlaybackSession') && attributes.inPlaybackSession == true){
+		const request = handlerInput.requestEnvelope.request;
+  
+		return request.type === 'IntentRequest' &&
+		  (request.intent.name === 'AMAZON.StopIntent' ||
+			request.intent.name === 'AMAZON.CancelIntent' ||
+			request.intent.name === 'AMAZON.PauseIntent');
+	  }
+	  return false;
+	},
+	handle(handlerInput) {
+		
+		const attributesManager = handlerInput.attributesManager;
+		const attributes = await attributesManager.getPersistentAttributes() || {};
+		
+		delete attributes.inPlaybackSession;
+		delete attributes.playBackURL;
+		await handlerInput.attributesManager.savePersistentAttributes();
+
+		const speechText = ri('GOODBYE.MESSAGE');
+
+		return handlerInput.jrb
+			.speak(speechText)
+			.withSimpleCard(ri('GOODBYE.CARD_TITLE'), speechText)
+			.addDirective({
+				type: 'Dialog.UpdateDynamicEntities',
+				updateBehavior: 'CLEAR'
+			})
+			.addAudioPlayerStopDirective()
+			.getResponse();
+	},
+};
+
+const AudioPlayerEventHandler = {
+	canHandle(handlerInput) {
+	  return handlerInput.requestEnvelope.request.type.startsWith('AudioPlayer.');
+	},
+	async handle(handlerInput) {
+		
+	  const attributesManager = handlerInput.attributesManager;
+	  const attributes = await attributesManager.getPersistentAttributes() || {};
+	  attributes.inPlaybackSession = true;
+		
+	  const audioPlayerEventName = requestEnvelope.request.type.split('.')[1];
+  
+	  switch (audioPlayerEventName) {
+		case 'PlaybackStarted':
+		  attributes.inPlaybackSession = true;
+		  break;
+		case 'PlaybackFinished':
+		  attributes.inPlaybackSession = false;
+		  break;
+		case 'PlaybackStopped':
+		  attributes.inPlaybackSession = true;
+		  break;
+		case 'PlaybackNearlyFinished':
+		  attributes.inPlaybackSession = true;
+		  break;
+		case 'PlaybackFailed':
+		  attributes.inPlaybackSession = false;
+		  console.log('Playback Failed : %j', handlerInput.requestEnvelope.request.error);
+		  return;
+		default:
+		  throw new Error('Should never reach here!');
+	  }
+	  
+	  await handlerInput.attributesManager.savePersistentAttributes();
+  
+	  return handlerInput.responseBuilder.getResponse();
 	},
 };
 
@@ -1724,7 +2007,19 @@ const ErrorHandler = {
 	},
 };
 
-const skillBuilder = new Jargon.JargonSkillBuilder().installOnto(Alexa.SkillBuilders.standard());
+const RequestLog = {
+  process(handlerInput) {
+    console.log(`REQUEST ENVELOPE = ${JSON.stringify(handlerInput.requestEnvelope)}`);
+  },
+};
+
+const ResponseLog = {
+  process(handlerInput) {
+    console.log(`RESPONSE BUILDER = ${JSON.stringify(handlerInput)}`);
+  },
+};
+
+const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
 exports.handler = skillBuilder
 	.addRequestHandlers(
@@ -1767,9 +2062,15 @@ exports.handler = skillBuilder
 		PostEmojiDirectMessageIntentHandler,
 		HelpIntentHandler,
 		CancelAndStopIntentHandler,
-		SessionEndedRequestHandler
+		SessionEndedRequestHandler,
+		StartPlaybackHandler,
+		PausePlaybackHandler,
+		AudioControlPlaybackHandler,
+		AudioPlayerEventHandler
 	)
 	.addErrorHandlers(ErrorHandler)
+	.addRequestInterceptors(RequestLog)
+	.addResponseInterceptors(ResponseLog)
 	.withTableName(envVariables.dynamoDBTableName)
 	.withAutoCreateTable(true)
 	.lambda();
