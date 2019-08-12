@@ -1796,7 +1796,7 @@ const HelpIntentHandler = {
 };
 
 const CancelAndStopIntentHandler = {
-	canHandle(handlerInput) {
+	async canHandle(handlerInput) {
 		const attributesManager = handlerInput.attributesManager;
 		const attributes = await attributesManager.getPersistentAttributes() || {};
 	
@@ -1839,7 +1839,7 @@ const StartPlaybackHandler = {
 	  return false;
 
 	},
-	handle(handlerInput) {
+	async handle(handlerInput) {
 
 		const attributesManager = handlerInput.attributesManager;
 		const attributes = await attributesManager.getPersistentAttributes() || {};
@@ -1914,7 +1914,7 @@ const PausePlaybackHandler = {
 	  }
 	  return false;
 	},
-	handle(handlerInput) {
+	async handle(handlerInput) {
 		
 		const attributesManager = handlerInput.attributesManager;
 		const attributes = await attributesManager.getPersistentAttributes() || {};
