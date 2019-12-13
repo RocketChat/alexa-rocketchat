@@ -511,6 +511,11 @@ English
 ```
 Alexa, Help
 ```
+French
+
+```
+Alexa, Aidez-moi
+```
 
 Portuguese
 
@@ -525,6 +530,12 @@ English
 ```
 Alexa, Stop
 ```
+French
+
+```
+Alexa, Arrêtez
+```
+
 
 Portuguese
 
