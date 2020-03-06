@@ -1796,9 +1796,9 @@ const HelpIntentHandler = {
 };
 
 const CancelAndStopIntentHandler = {
-	canHandle(handlerInput) {
+	async canHandle(handlerInput) {
 		const attributesManager = handlerInput.attributesManager;
-		const attributes = attributesManager.getPersistentAttributes() || {};
+		const attributes = await attributesManager.getPersistentAttributes() || {};
 	
 		if(!attributes.hasOwnProperty('inPlaybackSession') || attributes.inPlaybackSession == false){
 			return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -1839,10 +1839,10 @@ const StartPlaybackHandler = {
 	  return false;
 
 	},
-	handle(handlerInput) {
+	async handle(handlerInput) {
 
 		const attributesManager = handlerInput.attributesManager;
-		const attributes = attributesManager.getPersistentAttributes() || {};
+		const attributes = await attributesManager.getPersistentAttributes() || {};
 		
 		const playBehavior = 'REPLACE_ALL';
 		const token = fileurl.split('/').slice(-2)[0];
@@ -1914,10 +1914,10 @@ const PausePlaybackHandler = {
 	  }
 	  return false;
 	},
-	handle(handlerInput) {
+	async handle(handlerInput) {
 		
 		const attributesManager = handlerInput.attributesManager;
-		const attributes = attributesManager.getPersistentAttributes() || {};
+		const attributes = await attributesManager.getPersistentAttributes() || {};
 		
 		delete attributes.inPlaybackSession;
 		delete attributes.playBackURL;
