@@ -733,33 +733,6 @@ const addGroupOwner = async (userName, channelName, userid, roomid, headers) =>
 		}
 	});
 
-const postGroupMessage = async (roomid, message, headers) =>
-	await axios
-	.post(
-		apiEndpoints.postmessageurl, {
-			roomId: roomid,
-			text: message,
-		}, {
-			headers
-		}
-	)
-	.then((res) => res.data)
-	.then((res) => {
-		if (res.success === true) {
-			return ri('POST_MESSAGE.SUCCESS');
-		} else {
-			return ri('POST_MESSAGE.ERROR');
-		}
-	})
-	.catch((err) => {
-		console.log(err.message);
-		if (err.response.status === 401) {
-			return ri('POST_MESSAGE.AUTH_ERROR');
-		} else {
-			return ri('POST_MESSAGE.ERROR');
-		}
-	});
-
 const groupLastMessage = async (channelName, roomid, headers) =>
 	await axios
 	.get(`${ apiEndpoints.groupmessageurl }${ roomid }`, {
@@ -864,30 +837,6 @@ const createDMSession = async (userName, headers) =>
 		console.log(err.message);
 	});
 
-const postDirectMessage = async (message, roomid, headers) =>
-	await axios
-	.post(
-		apiEndpoints.postmessageurl, {
-			roomId: roomid,
-			text: message,
-		}, {
-			headers
-		}
-	)
-	.then((res) => res.data)
-	.then((res) => {
-		if (res.success === true) {
-			return ri('POST_MESSAGE.SUCCESS');
-		} else {
-			return ri('POST_MESSAGE.ERROR');
-		}
-	})
-	.catch((err) => {
-		console.log(err.message);
-		return ri('POST_MESSAGE.ERROR');
-	});
-
-
 // Module Export of Functions
 
 module.exports.login = login;
@@ -919,10 +868,8 @@ module.exports.deleteGroup = deleteGroup;
 module.exports.getGroupId = getGroupId;
 module.exports.addGroupModerator = addGroupModerator;
 module.exports.addGroupOwner = addGroupOwner;
-module.exports.postGroupMessage = postGroupMessage;
 module.exports.groupLastMessage = groupLastMessage;
 module.exports.getGroupUnreadCounter = getGroupUnreadCounter;
 module.exports.groupUnreadMessages = groupUnreadMessages;
 module.exports.createDMSession = createDMSession;
-module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;

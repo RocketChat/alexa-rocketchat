@@ -1607,7 +1607,7 @@ const PostGroupMessageIntentHandler = {
 
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.getGroupId(channelName, headers);
-			const speechText = await helperFunctions.postGroupMessage(roomid, message, headers);
+			const speechText = await helperFunctions.postMessage(roomid, message, headers);
 			let repromptText = ri('GENERIC_REPROMPT');
 
 
@@ -1643,7 +1643,7 @@ const PostGroupEmojiMessageIntentHandler = {
 
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.getGroupId(channelName, headers);
-			const speechText = await helperFunctions.postGroupMessage(roomid, message, headers);
+			const speechText = await helperFunctions.postMessage(roomid, message, headers);
 			let repromptText = ri('GENERIC_REPROMPT');
 
 
@@ -1740,7 +1740,7 @@ const PostDirectMessageIntentHandler = {
 
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.createDMSession(userName, headers);
-			const speechText = await helperFunctions.postDirectMessage(message, roomid, headers);
+			const speechText = await helperFunctions.postMessage(roomid, message, headers);
 			let repromptText = ri('GENERIC_REPROMPT');
 
 
@@ -1776,7 +1776,7 @@ const PostEmojiDirectMessageIntentHandler = {
 
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.createDMSession(userName, headers);
-			const speechText = await helperFunctions.postDirectMessage(message, roomid, headers);
+			const speechText = await helperFunctions.postMessage(roomid, message, headers);
 			let repromptText = ri('GENERIC_REPROMPT');
 
 
