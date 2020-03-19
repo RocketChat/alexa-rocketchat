@@ -197,11 +197,11 @@ const deleteChannel = async (channelName, headers) =>
 		}
 	});
 
-const postMessage = async (channelName, message, headers) =>
+const postMessage = async (roomid, message, headers) =>
 	await axios
 	.post(
 		apiEndpoints.postmessageurl, {
-			channel: `#${ channelName }`,
+			roomId: roomid,
 			text: message,
 		}, {
 			headers

@@ -667,7 +667,13 @@ const PostMessageIntentHandler = {
 			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 
 			const headers = await helperFunctions.login(accessToken);
-			const speechText = await helperFunctions.postMessage(channelName, message, headers);
+
+			let roomid = await helperFunctions.getGroupId(channelName, headers);
+			if(!roomid){
+				roomid = await helperFunctions.getRoomId(channelName, headers);
+			}
+
+			const speechText = await helperFunctions.postMessage(roomid, message, headers);
 			let repromptText = ri('GENERIC_REPROMPT');
 
 
@@ -866,7 +872,8 @@ const NoIntentHandler = {
 			delete sessionAttributes.message;
 
 			const headers = await helperFunctions.login(accessToken);
-			const speechText = await helperFunctions.postMessage(channelName, message, headers);
+			let roomid = await helperFunctions.getRoomId(channelName, headers);
+			const speechText = await helperFunctions.postMessage(roomid, message, headers);
 			let repromptText = ri('GENERIC_REPROMPT');
 
 
@@ -955,7 +962,13 @@ const PostEmojiMessageIntentHandler = {
 			const message = messageData + emoji;
 
 			const headers = await helperFunctions.login(accessToken);
-			const speechText = await helperFunctions.postMessage(channelName, message, headers);
+
+			let roomid = await helperFunctions.getGroupId(channelName, headers);
+			if(!roomid){
+				roomid = await helperFunctions.getRoomId(channelName, headers);
+			}
+
+			const speechText = await helperFunctions.postMessage(roomid, message, headers);
 			let repromptText = ri('GENERIC_REPROMPT');
 
 			return handlerInput.jrb
