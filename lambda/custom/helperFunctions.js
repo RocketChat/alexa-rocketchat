@@ -525,7 +525,7 @@ function replaceWhitespacesDots(str) {
 }
 
 function emojiTranslateFunc(str) {
-	onlyEmoji = true;
+	const onlyEmoji = true;
 	return emojiTranslate.translate(str, onlyEmoji);
 }
 
