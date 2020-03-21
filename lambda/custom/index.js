@@ -1723,9 +1723,9 @@ const PostDirectMessageIntentHandler = {
 
 			let message = handlerInput.requestEnvelope.request.intent.slots.directmessage.value;
 			const userNameData = handlerInput.requestEnvelope.request.intent.slots.directmessageusername.value;
-			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
 
 			const headers = await helperFunctions.login(accessToken);
+			const userName = await helperFunctions.resolveUsername(userNameData, headers)
 			const roomid = await helperFunctions.createDMSession(userName, headers);
 			const speechText = await helperFunctions.postDirectMessage(message, roomid, headers);
 			let repromptText = ri('GENERIC_REPROMPT');
@@ -1756,12 +1756,13 @@ const PostEmojiDirectMessageIntentHandler = {
 
 			const messageData = handlerInput.requestEnvelope.request.intent.slots.directmessage.value;
 			const userNameData = handlerInput.requestEnvelope.request.intent.slots.directmessageusername.value;
-			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
+			
 			const emojiData = handlerInput.requestEnvelope.request.intent.slots.directmessageemojiname.value;
 			const emoji = helperFunctions.emojiTranslateFunc(emojiData);
 			const message = messageData + emoji;
 
 			const headers = await helperFunctions.login(accessToken);
+			const userName = await helperFunctions.resolveUsername(userNameData, headers)
 			const roomid = await helperFunctions.createDMSession(userName, headers);
 			const speechText = await helperFunctions.postDirectMessage(message, roomid, headers);
 			let repromptText = ri('GENERIC_REPROMPT');

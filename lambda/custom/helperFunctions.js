@@ -9,6 +9,7 @@ const {
 
 const removeWhitespace = require('remove-whitespace');
 const emojiTranslate = require('moji-translate');
+const stringSimilar = require('string-similarity')
 
 // Server Credentials. Follow readme to set them up.
 const {
@@ -529,6 +530,19 @@ function emojiTranslateFunc(str) {
 	return emojiTranslate.translate(str, onlyEmoji);
 }
 
+const resolveUsername = async (userNameData, headers) =>
+	await axios
+	.get(apiEndpoints.userslisturl, {
+		headers
+	})
+	.then((res) => res.data.users)
+    .then((res) => {
+        const usernames = res.map(data => data.username);
+		username = stringSimilar.findBestMatch(userNameData, usernames).bestMatch
+		if(username.rating >= 0.3) return username.target
+		return userNameData
+    })
+
 function slotValue(slot) {
 	let value = slot.value;
 	let resolution = (slot.resolutions && slot.resolutions.resolutionsPerAuthority && slot.resolutions.resolutionsPerAuthority.length > 0) ? slot.resolutions.resolutionsPerAuthority[0] : null;
@@ -926,3 +940,4 @@ module.exports.groupUnreadMessages = groupUnreadMessages;
 module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
+module.exports.resolveUsername = resolveUsername;
