@@ -249,10 +249,20 @@ const getLastMessageType = async (channelName, headers) =>
 	.then((res) => res.data)
 	.then((res) => {
 		if (res.success === true) {
-			return ri('GET_LAST_MESSAGE_FROM_CHANNEL.SUCCESS', {
-				name: res.messages[0].u.username,
-				message: res.messages[0].msg,
-			});
+			for (let i = 0; i <= res.messages.length; i++) {
+				if(res.messages[i] && !res.messages[i].hasOwnProperty('t')){
+					return ri('GET_LAST_MESSAGE_FROM_CHANNEL.SUCCESS', {
+						name: res.messages[i].u.username,
+						message: res.messages[i].msg,
+					});
+				}
+				else if(res.messages[i].t == "room_changed_announcement"){
+					return ri('GET_LAST_MESSAGE_FROM_CHANNEL.SUCCESS', {
+						name: res.messages[i].u.username,
+						message: res.messages[i].msg,
+					});
+				}
+			}
 		} else {
 			return ri('GET_LAST_MESSAGE_FROM_CHANNEL.ERROR', {
 				channelName,
@@ -337,14 +347,20 @@ const channelUnreadMessages = async (channelName, unreadCount, headers) =>
 				const msgs = [];
 
 				for (let i = 0; i <= unreadCount - 1; i++) {
-					msgs.push(`${res.messages[i].u.username} says, ${res.messages[i].msg} <break time="0.7s"/> `);
+					if(res.messages[i] && !res.messages[i].hasOwnProperty('t')){
+						msgs.push(`${res.messages[i].u.username} says, ${res.messages[i].msg} <break time="0.7s"/> `);
+					} 
+					else if(res.messages[i].t == "room_changed_announcement"){
+						msgs.push(`${res.messages[i].u.username} announced, ${res.messages[i].msg} <break time="0.7s"/> `)
+					}
 				}
 
 				var responseString = msgs.join(', ');
+				var trueUnreadCount = msgs.length;
 
 				var finalMsg = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.MESSAGE', {
 					respString: responseString,
-					unread: unreadCount
+					unread: trueUnreadCount
 				});
 
 				return finalMsg;
