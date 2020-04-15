@@ -888,6 +888,45 @@ const postDirectMessage = async (message, roomid, headers) =>
 	});
 
 
+const getChannelUnreadMentions = async (channelName, headers) => 
+	await axios
+	.get(
+		`${apiEndpoints.counterurl}${channelName}`, {
+			headers
+		}
+	)
+	.then((res) => res.data)
+	.then((res) => {
+		if (res.success == true) {
+			mentionsCount = res.userMentions
+			if(mentionsCount == 0) return ri('GET_UNREAD_MENTIONS_FROM_CHANNEL.NO_MENTIONS', {
+				channelName
+			})
+			return ri('GET_UNREAD_MENTIONS_FROM_CHANNEL.MESSAGE', {
+				channelName,
+				mentionsCount
+			})
+		} else {
+			return ri('GET_UNREAD_MENTIONS_FROM_CHANNEL.ERROR', {
+				channelName
+			})
+		}
+	})
+	.catch((err) => {
+		console.log(err.message)
+		if(err.response.data.errorType == "error-room-not-found"){
+			return ri('GET_UNREAD_MENTIONS_FROM_CHANNEL.ERROR_NOT_FOUND', {
+				channelName
+			})
+		} else if (err.response.status === 401) {
+			return ri('GET_UNREAD_MENTIONS_FROM_CHANNEL.AUTH_ERROR')
+		} else {
+			return ri('GET_UNREAD_MENTIONS_FROM_CHANNEL.ERROR', {
+				channelName
+			})
+		}
+	})
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -926,3 +965,4 @@ module.exports.groupUnreadMessages = groupUnreadMessages;
 module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
+module.exports.getChannelUnreadMentions = getChannelUnreadMentions
