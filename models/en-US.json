@@ -478,6 +478,27 @@
                 {
                     "name": "AMAZON.ScrollUpIntent",
                     "samples": []
+                },
+                {
+                    "name": "GetUnreadMentionsIntent",
+                    "slots": [
+                      {
+                        "name": "channel",
+                        "type": "AMAZON.SearchQuery",
+                        "samples": [
+                          "from channel {channel}",
+                          "{channel}",
+                          "from {channel}"
+                        ]
+                      }
+                    ],
+                    "samples": [
+                      "any unread mentions",
+                      "get unread mentions",
+                      "any unread mentions from {channel}",
+                      "get unread mentions from channel {channel}",
+                      "Get unread mentions from {channel}"
+                    ]
                 }
             ],
             "types": [
@@ -1860,6 +1881,23 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "GetUnreadMentionsIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                      {
+                        "name": "channel",
+                        "type": "AMAZON.SearchQuery",
+                        "elicitationRequired": true,
+                        "confirmationRequired": false,
+                        "prompts": {
+                          "elicitation": "Elicit.Slot.689035774081.211875746935"
+                        }
+                      }
+                    ],
+                    "delegationStrategy": "SKILL_RESPONSE"
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1980,6 +2018,15 @@
                         "type": "PlainText",
                         "value": "Alright, go on"
                     }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.689035774081.211875746935",
+                "variations": [
+                  {
+                    "type": "PlainText",
+                    "value": "Which channel do you want the unread mentions form?"
+                  }
                 ]
             }
         ]

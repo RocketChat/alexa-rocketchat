@@ -97,7 +97,7 @@
         "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
     },
     "GET_UNREAD_MENTIONS_FROM_CHANNEL": {
-        "MESSAGE": "You Have {mentionsCount} Unread Mentions in channel {channelName}",
+        "MESSAGE": "You Have {mentionsCount} Unread Mentions in channel {channelName}.",
         "AUTH_ERROR": "Sorry you are currently signed out, please use the companion app to authenticate.",
         "NO_MENTIONS": "You Don't Have Any Mentions in channel {channelName}.",
         "ERROR": "Sorry, I couldn't find the channel {channelName} right now.",

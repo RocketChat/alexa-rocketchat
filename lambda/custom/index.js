@@ -296,6 +296,95 @@ const ChangeNotificationSettingsIntentHandler = {
 	},
 };
 
+const StartedGetUnreadMentionsIntentHandler = {
+	canHandle(handlerInput) {
+	  return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+		handlerInput.requestEnvelope.request.intent.name === 'GetUnreadMentionsIntent' &&
+		handlerInput.requestEnvelope.request.dialogState === 'STARTED';
+	},
+	handle(handlerInput) {
+	  const currentIntent = handlerInput.requestEnvelope.request.intent;
+	  return handlerInput.responseBuilder
+		.addDelegateDirective(currentIntent)
+		.getResponse();
+	},
+  };
+  
+  const InProgressGetUnreadMentionsIntentHandler = {
+	canHandle(handlerInput) {
+	  return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+		handlerInput.requestEnvelope.request.intent.name === 'GetUnreadMentionsIntent' &&
+		handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+		handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
+	},
+	handle(handlerInput) {
+	  const currentIntent = handlerInput.requestEnvelope.request.intent;
+	  return handlerInput.responseBuilder
+		.addDelegateDirective(currentIntent)
+		.getResponse();
+	},
+  };
+  
+  const DeniedGetUnreadMentionsIntentHandler = {
+	  canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+		  handlerInput.requestEnvelope.request.intent.name === 'GetUnreadMentionsIntent' &&
+		  handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+		  handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
+	  },
+	  handle(handlerInput) {
+		  let speechText = ri('GET_UNREAD_MENTIONS_FROM_CHANNEL.DENIED');
+  
+		  return handlerInput.jrb
+			.speak(speechText)
+			.addDelegateDirective({
+			  name: 'GetUnreadMentionsIntent',
+			  confirmationStatus: 'NONE',
+			  slots: {
+				  "channel": {
+					  "name": "channel",
+					  "confirmationStatus": "NONE"
+				  }
+			  }
+			})
+			.getResponse();
+	  },
+  };
+	
+  const GetUnreadMentionsIntentHandler = {
+	  canHandle(handlerInput) {
+		  return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			  handlerInput.requestEnvelope.request.intent.name === 'GetUnreadMentionsIntent'
+			  && handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
+			  && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'NONE';
+	  },
+	  async handle(handlerInput) {
+		  try {
+			  const {
+				  accessToken
+			  } = handlerInput.requestEnvelope.context.System.user;
+  
+			  const channelNameData = handlerInput.requestEnvelope.request.intent.slots.channel.value;
+			  const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+  
+			  const headers = await helperFunctions.login(accessToken);
+			  const speechText = await helperFunctions.getChannelUnreadMentions(channelName, headers);
+			  let repromptText = ri('GENERIC_REPROMPT');
+
+  
+				  return handlerInput.jrb
+				  .speak(speechText)
+				  .speak(repromptText)
+				  .reprompt(repromptText)
+				  .getResponse();
+  
+  
+		  } catch (error) {
+			  console.error(error);
+		  }
+	  },
+  };
+
 const StartedCreateChannelIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -2026,6 +2115,10 @@ exports.handler = skillBuilder
 		ProactiveEventHandler,
 		LaunchRequestHandler,
 		ChangeNotificationSettingsIntentHandler,
+		StartedGetUnreadMentionsIntentHandler,
+		InProgressGetUnreadMentionsIntentHandler,
+		DeniedGetUnreadMentionsIntentHandler,
+		GetUnreadMentionsIntentHandler,
 		StartedCreateChannelIntentHandler,
 		InProgressCreateChannelIntentHandler,
 		DeniedCreateChannelIntentHandler,
