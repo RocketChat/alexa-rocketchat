@@ -404,6 +404,14 @@ Spainish
 ```
 Alexa, Leer Mis Mensajes No Leídos De CHANNELNAME
 ```
+-   **Read Unread Mentions From A Channel**
+
+English
+
+```
+Alexa, Read unread mentions from CHANNELNAME
+```
+
 -   **Post Message In A Private Channel**
 
 English

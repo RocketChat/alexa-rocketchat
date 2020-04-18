@@ -887,6 +887,52 @@ const postDirectMessage = async (message, roomid, headers) =>
 		return ri('POST_MESSAGE.ERROR');
 	});
 
+const readUnreadMentions = async (roomId, headers) => {
+	try{
+		let response = await axios.get(`${apiEndpoints.channelcountersurl}?roomId=${roomId}`, {
+			headers
+		}).then((res) => res.data)
+
+		let userMentions
+
+		if(response.success == true){
+			userMentions = response.userMentions
+		}else{
+			return ri('READ_UNREAD_MENTIONS_FROM_CHANNEL.ERROR')
+		}
+
+		if (userMentions == 0) return ri('READ_UNREAD_MENTIONS_FROM_CHANNEL.NO_MENTIONS')
+
+		response = await axios.get(`${apiEndpoints.getmentionedmessagesurl}?roomId=${roomId}&count=${userMentions}`, {
+			headers
+		}).then((res) => res.data)
+
+		if(response.success == true){
+			let finalMessage = ""
+
+			response.messages.forEach(message => {
+				finalMessage += `${message.u.username} says, ${message.msg} <break time="0.7s"/>`
+			});
+
+			return ri('READ_UNREAD_MENTIONS_FROM_CHANNEL.MESSAGE', {
+				finalMessage, userMentions
+			})
+		}else{
+			return ri('READ_UNREAD_MENTIONS_FROM_CHANNEL.ERROR')
+		}
+
+	}catch(err){
+		console.log(err.message)
+		if(err.response.data.errorType == "error-room-not-found"){
+			return ri('READ_UNREAD_MENTIONS_FROM_CHANNEL.ERROR_NOT_FOUND')
+		} else if (err.response.status === 401) {
+			return ri('READ_UNREAD_MENTIONS_FROM_CHANNEL.AUTH_ERROR')
+		} else {
+			return ri('READ_UNREAD_MENTIONS_FROM_CHANNEL.ERROR')
+		}
+	}
+}
+
 
 // Module Export of Functions
 
@@ -926,3 +972,4 @@ module.exports.groupUnreadMessages = groupUnreadMessages;
 module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
+module.exports.readUnreadMentions = readUnreadMentions;
