@@ -478,6 +478,27 @@
                 {
                     "name": "AMAZON.ScrollUpIntent",
                     "samples": []
+                },
+                {
+                    "name": "AcknowledgeUnreadMentionsIntent",
+                    "slots": [
+                      {
+                        "name": "channel",
+                        "type": "AMAZON.SearchQuery",
+                        "samples": [
+                          "to channel {channel}",
+                          "to {channel}",
+                          "{channel}"
+                        ]
+                      }
+                    ],
+                    "samples": [
+                      "react to mentions in channel {channel}",
+                      "react to mentions in {channel}",
+                      "react to unread mentions",
+                      "react to mentions",
+                      "acknowledge mentions"
+                    ]
                 }
             ],
             "types": [
@@ -1860,6 +1881,25 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "AcknowledgeUnreadMentionsIntent",
+                    "confirmationRequired": true,
+                    "prompts": {
+                      "confirmation": "Confirm.Intent.693640581309"
+                    },
+                    "slots": [
+                      {
+                        "name": "channel",
+                        "type": "AMAZON.SearchQuery",
+                        "elicitationRequired": true,
+                        "confirmationRequired": false,
+                        "prompts": {
+                          "elicitation": "Elicit.Slot.693640581309.791820660757"
+                        }
+                      }
+                    ],
+                    "delegationStrategy": "SKILL_RESPONSE"
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1980,6 +2020,24 @@
                         "type": "PlainText",
                         "value": "Alright, go on"
                     }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.693640581309.791820660757",
+                "variations": [
+                  {
+                    "type": "PlainText",
+                    "value": "Which channel mentions would you like to react to?"
+                  }
+                ]
+              },
+              {
+                "id": "Confirm.Intent.693640581309",
+                "variations": [
+                  {
+                    "type": "PlainText",
+                    "value": "You want to react to mentions in {channel} , is that correct?"
+                  }
                 ]
             }
         ]

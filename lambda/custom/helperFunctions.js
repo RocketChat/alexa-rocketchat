@@ -887,6 +887,54 @@ const postDirectMessage = async (message, roomid, headers) =>
 		return ri('POST_MESSAGE.ERROR');
 	});
 
+const acknowledgeUnreadMentions = async (roomId, headers) => {
+	try{
+		let response = await axios.get(`${apiEndpoints.channelcountersurl}?roomId=${roomId}`, {
+			headers
+		}).then((res) => res.data)
+
+		let userMentions
+
+		if(response.success == true){
+			userMentions = response.userMentions
+		}else{
+			return ri('ACKNOWLEDGE_UNREAD_MENTIONS_CHANNEL.ERROR')
+		}
+
+		if (userMentions == 0) return ri('ACKNOWLEDGE_UNREAD_MENTIONS_CHANNEL.NO_MENTIONS')
+
+		response = await axios.get(`${apiEndpoints.getmentionedmessagesurl}?roomId=${roomId}&count=${userMentions}`, {
+			headers
+		}).then((res) => res.data)
+
+		if(response.success == true){
+			for (let index = 0; index < response.messages.length; index++ ){
+				let res = await axios.post(apiEndpoints.reacttomessageurl, {
+					messageId: response.messages[index]._id,
+					emoji: 'thumbsup',
+					shouldReact: true
+				}, {
+					headers
+				}).then((res) => res.data)
+				if(!res.success) return ri('ACKNOWLEDGE_UNREAD_MENTIONS_CHANNEL.ERROR')
+			}
+			return ri('ACKNOWLEDGE_UNREAD_MENTIONS_CHANNEL.SUCCESS')
+		}else{
+			return ri('ACKNOWLEDGE_UNREAD_MENTIONS_CHANNEL.ERROR')
+		}
+
+	}catch(err){
+		console.log(err.message)
+		if(err.response.data.errorType == "error-room-not-found"){
+			return ri('ACKNOWLEDGE_UNREAD_MENTIONS_CHANNEL.ERROR_NOT_FOUND')
+		} else if (err.response.status === 401) {
+			return ri('ACKNOWLEDGE_UNREAD_MENTIONS_CHANNEL.AUTH_ERROR')
+		} else {
+			return ri('ACKNOWLEDGE_UNREAD_MENTIONS_CHANNEL.ERROR')
+		}
+	}
+}
+
 
 // Module Export of Functions
 
@@ -926,3 +974,4 @@ module.exports.groupUnreadMessages = groupUnreadMessages;
 module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
+module.exports.acknowledgeUnreadMentions = acknowledgeUnreadMentions;
