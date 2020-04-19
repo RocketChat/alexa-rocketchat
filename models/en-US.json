@@ -478,6 +478,15 @@
                 {
                     "name": "AMAZON.ScrollUpIntent",
                     "samples": []
+                },
+                {
+                    "name": "GetAllUnreadMentionsIntent",
+                    "slots": [],
+                    "samples": [
+                      "all mentions",
+                      "all unread mentions",
+                      "get all unread mentions"
+                    ]
                 }
             ],
             "types": [

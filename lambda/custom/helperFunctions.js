@@ -887,6 +887,35 @@ const postDirectMessage = async (message, roomid, headers) =>
 		return ri('POST_MESSAGE.ERROR');
 	});
 
+const getAllUnreadMentions = async (headers) => {
+	try{
+		let response = await axios.get(apiEndpoints.channellisturl, {
+			headers
+		}).then((res) => res.data)
+		let finalMessage = ""
+		for (let i = 0; i < response.channels.length; i++){
+			channelName = response.channels[i].name
+			counters = await axios.get(`${apiEndpoints.counterurl}${channelName}`, {
+				headers
+			}).then((res) => res.data)
+				
+			if(counters.userMentions == 0) continue
+			
+			finalMessage += `${counters.userMentions} mentions in ${channelName}, `
+		}
+		if (finalMessage == "") return ri('GET_ALL_UNREAD_MENTIONS.NO_MENTIONS')
+		return ri('GET_ALL_UNREAD_MENTIONS.MESSAGE', {finalMessage})
+	}catch(err) {
+		console.log(err.message)
+		if (err.response.status === 401) {
+			return ri('GET_UNREAD_MENTIONS_FROM_CHANNEL.AUTH_ERROR')
+		} else {
+			return ri('GET_ALL_UNREAD_MENTIONS.ERROR')
+		}
+	}
+}
+
+	
 
 // Module Export of Functions
 
@@ -926,3 +955,4 @@ module.exports.groupUnreadMessages = groupUnreadMessages;
 module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
+module.exports.getAllUnreadMentions = getAllUnreadMentions;

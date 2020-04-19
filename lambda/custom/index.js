@@ -1477,6 +1477,33 @@ const CreateGrouplIntentHandler = {
 	},
 };
 
+const GetAllUnreadMentionsIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'GetAllUnreadMentionsIntent';
+	},
+	async handle(handlerInput) {
+		try {
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+
+			const headers = await helperFunctions.login(accessToken);
+			const speechText = await helperFunctions.getAllUnreadMentions(headers);
+			let repromptText = ri('GENERIC_REPROMPT');
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+
 const DeleteGroupIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -2051,6 +2078,7 @@ exports.handler = skillBuilder
 		ArchiveChannelIntentHandler,
 		GetUnreadMessagesIntentHandler,
 		CreateGrouplIntentHandler,
+		GetAllUnreadMentionsIntentHandler,
 		DeleteGroupIntentHandler,
 		MakeGroupModeratorIntentHandler,
 		MakeGroupOwnerIntentHandler,
