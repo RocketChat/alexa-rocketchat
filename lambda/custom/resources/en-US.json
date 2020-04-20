@@ -96,6 +96,14 @@
         "ERROR": "Sorry, I couldn't archive this channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
     },
+    "GET_PINNED_MESSAGES_FROM_CHANNEL":{
+        "MESSAGE": "The pinned messages are <break time='1s'/> {responseString} <break time='0.7s'/> ",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate.",
+        "NO_MESSAGES": "There are not pinned messages in this channel.",
+        "ERROR": "Sorry, I couldn't perform this request.",
+        "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different name.",
+        "DENIED": "Okay, let's try again."
+    },
     "AUDIO_NO_SUPPORT": "Sorry, this skill doesn't support that feature.",
     "GENERIC_REPROMPT": "Anything else I can help you with?"
 }

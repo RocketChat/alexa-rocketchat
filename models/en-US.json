@@ -478,6 +478,25 @@
                 {
                     "name": "AMAZON.ScrollUpIntent",
                     "samples": []
+                },
+                {
+                    "name": "GetPinnedMessagesIntent",
+                    "slots": [
+                      {
+                        "name": "channel",
+                        "type": "AMAZON.SearchQuery",
+                        "samples": [
+                          "from channel {channel}",
+                          "from {channel}",
+                          "{channel}"
+                        ]
+                      }
+                    ],
+                    "samples": [
+                      "read pinned messages from {channel}",
+                      "read pinned messages from channel",
+                      "get pinned messages from channel"
+                    ]
                 }
             ],
             "types": [
@@ -1860,6 +1879,23 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "GetPinnedMessagesIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                      {
+                        "name": "channel",
+                        "type": "AMAZON.SearchQuery",
+                        "elicitationRequired": true,
+                        "confirmationRequired": false,
+                        "prompts": {
+                          "elicitation": "Elicit.Slot.415900836515.282295610304"
+                        }
+                      }
+                    ],
+                    "delegationStrategy": "SKILL_RESPONSE"
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1980,6 +2016,15 @@
                         "type": "PlainText",
                         "value": "Alright, go on"
                     }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.415900836515.282295610304",
+                "variations": [
+                  {
+                    "type": "PlainText",
+                    "value": "Which channel would like to read the pinned messages from?"
+                  }
                 ]
             }
         ]

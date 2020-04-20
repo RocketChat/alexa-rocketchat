@@ -2019,6 +2019,96 @@ const ResponseLog = {
   },
 };
 
+const StartedGetPinnedMessagesIntentHandler = {
+canHandle(handlerInput) {
+	return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+	handlerInput.requestEnvelope.request.intent.name === 'GetPinnedMessagesIntent' &&
+	handlerInput.requestEnvelope.request.dialogState === 'STARTED';
+},
+handle(handlerInput) {
+	const currentIntent = handlerInput.requestEnvelope.request.intent;
+	return handlerInput.responseBuilder
+	.addDelegateDirective(currentIntent)
+	.getResponse();
+},
+};
+
+const InProgressGetPinnedMessagesIntentHandler = {
+canHandle(handlerInput) {
+	return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+	handlerInput.requestEnvelope.request.intent.name === 'GetPinnedMessagesIntent' &&
+	handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+	handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
+},
+handle(handlerInput) {
+	const currentIntent = handlerInput.requestEnvelope.request.intent;
+	return handlerInput.responseBuilder
+	.addDelegateDirective(currentIntent)
+	.getResponse();
+},
+};
+
+const DeniedGetPinnedMessagesIntentHandler = {
+	canHandle(handlerInput) {
+	return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+		handlerInput.requestEnvelope.request.intent.name === 'GetPinnedMessagesIntent' &&
+		handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+		handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
+	},
+	handle(handlerInput) {
+		let speechText = ri('GET_PINNED_MESSAGES_FROM_CHANNEL.DENIED');
+
+		return handlerInput.jrb
+		.speak(speechText)
+		.addDelegateDirective({
+			name: 'GetPinnedMessagesIntent',
+			confirmationStatus: 'NONE',
+			slots: {
+				"channel": {
+					"name": "channel",
+					"confirmationStatus": "NONE"
+				}
+			}
+		})
+		.getResponse();
+	},
+};
+
+const GetPinnedMessagesIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'GetPinnedMessagesIntent'
+			&& handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
+			&& handlerInput.requestEnvelope.request.intent.confirmationStatus === 'NONE';
+	},
+	async handle(handlerInput) {
+		try {
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.channel.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+
+			const headers = await helperFunctions.login(accessToken);
+			const roomid = await helperFunctions.getRoomId(channelName, headers);
+			const speechText = await helperFunctions.getPinnedMessages(headers, roomid, channelName)
+			let repromptText = ri('GENERIC_REPROMPT');
+
+
+				return handlerInput.jrb
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse();
+
+
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
 exports.handler = skillBuilder
@@ -2066,7 +2156,11 @@ exports.handler = skillBuilder
 		StartPlaybackHandler,
 		PausePlaybackHandler,
 		AudioControlPlaybackHandler,
-		AudioPlayerEventHandler
+		AudioPlayerEventHandler,
+		StartedGetPinnedMessagesIntentHandler,
+		InProgressGetPinnedMessagesIntentHandler,
+		DeniedGetPinnedMessagesIntentHandler,
+		GetPinnedMessagesIntentHandler
 	)
 	.addErrorHandlers(ErrorHandler)
 	.addRequestInterceptors(RequestLog)

@@ -431,6 +431,14 @@ Portuguese
 Alexa,Enviar MESSAGE Emoji EMOJINAME Para O Canal Privado CHANNELNAME
 ```
 
+-   **Read Pinned Messages From a Channel**
+
+English
+
+```
+Alexa, Read Pinned Messages From CHANNELNAME
+```
+
 -   **Read Last Message From A Private Channel**
 
 English

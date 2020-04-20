@@ -888,6 +888,49 @@ const postDirectMessage = async (message, roomid, headers) =>
 	});
 
 
+const getPinnedMessages = async (headers, roomId, channelName) => {
+	try{
+		let response = await axios.get(`${apiEndpoints.pinnedmessagesurl}${roomId}`, {
+			headers
+		}).then((res) => res.data)
+
+		if(response.success == true){
+
+			if(response.count == 0) return ri('GET_PINNED_MESSAGES_FROM_CHANNEL.NO_MESSAGES')
+
+			let msgs = [];
+
+			for (let i = 0; i < response.count ; i++) {
+				msgs.push(`${response.messages[i].u.username} says, ${response.messages[i].msg} <break time="0.7s"/> `);
+			}
+
+			let responseString = msgs.join('  ');
+
+			let finalMsg = ri('GET_PINNED_MESSAGES_FROM_CHANNEL.MESSAGE', {
+				responseString
+			});
+
+			return finalMsg; 
+		}else{
+			return ri('GET_PINNED_MESSAGES_FROM_CHANNEL.ERROR')
+		}
+
+
+	}catch(err) {
+		console.log(err.message)
+		if(err.response.data.errorType == "error-room-not-found"){
+			return ri('GET_PINNED_MESSAGES_FROM_CHANNEL.ERROR_NOT_FOUND', {
+				channelName
+			})
+		} else if (err.response.status === 401) {
+			return ri('GET_PINNED_MESSAGES_FROM_CHANNEL.AUTH_ERROR')
+		} else {
+			return ri('GET_PINNED_MESSAGES_FROM_CHANNEL.ERROR')
+		}
+	}
+}
+
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -926,3 +969,4 @@ module.exports.groupUnreadMessages = groupUnreadMessages;
 module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
+module.exports.getPinnedMessages = getPinnedMessages;
