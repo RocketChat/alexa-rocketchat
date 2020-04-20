@@ -804,33 +804,33 @@ const getGroupUnreadCounter = async (roomid, headers) =>
 		console.log(err.message);
 	});
 
-const groupUnreadMessages = async (channelName, roomid, unreadCount, headers) =>
-	await axios
-	.get(`${ apiEndpoints.groupmessageurl }${ roomid }`, {
+const groupUnreadMessages = async (channelName, roomid, unreadCount, headers) => {
+
+	if(unreadCount == 0) return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.NO_MESSAGE');
+
+	return await axios
+	.get(`${ apiEndpoints.groupmessageurl }${ roomid }&count=${unreadCount}`, {
 		headers
 	})
 	.then((res) => res.data)
 	.then((res) => {
 		if (res.success === true) {
 
-			if (unreadCount == 0) {
-				return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.NO_MESSAGE');
-			} else {
-				const msgs = [];
+			const msgs = [];
 
-				for (let i = 0; i <= unreadCount - 1; i++) {
-					msgs.push(`${res.messages[i].u.username} says, ${res.messages[i].msg} <break time="0.7s"/> `);
-				}
-
-				var responseString = msgs.join('  ');
-
-				var finalMsg = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.MESSAGE', {
-					respString: responseString,
-					unread: unreadCount
-				});
-
-				return finalMsg;
+			for (let i = 0; i <= unreadCount - 1; i++) {
+				msgs.push(`${res.messages[i].u.username} says, ${res.messages[i].msg} <break time="0.7s"/> `);
 			}
+
+			var responseString = msgs.join('  ');
+
+			var finalMsg = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.MESSAGE', {
+				respString: responseString,
+				unread: unreadCount
+			});
+
+			return finalMsg;
+			
 		} else {
 			return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.ERROR');
 		}
@@ -848,6 +848,7 @@ const groupUnreadMessages = async (channelName, roomid, unreadCount, headers) =>
 			return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.ERROR');
 		}
 	});
+}
 
 const createDMSession = async (userName, headers) =>
 	await axios
