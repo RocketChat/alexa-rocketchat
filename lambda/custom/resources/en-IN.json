@@ -96,6 +96,14 @@
         "ERROR": "Sorry, I couldn't archive this channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
     },
+    "LEAVE_CHANNEL": {
+        "SUCCESS": "You have left channel {channelName}.",
+        "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate.",
+        "ERROR": "Sorry, I could not perform this request.",
+        "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name.",
+        "ERROR_LAST_OWNER": "You are the last owner, please set a new owner before leaving.",
+        "DENIED": "Okay, let's try again."
+    },
     "AUDIO_NO_SUPPORT": "Sorry, this skill doesn't support that feature.",
     "GENERIC_REPROMPT": "Anything else I can help you with?"
 }

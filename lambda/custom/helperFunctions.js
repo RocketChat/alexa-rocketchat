@@ -887,6 +887,29 @@ const postDirectMessage = async (message, roomid, headers) =>
 		return ri('POST_MESSAGE.ERROR');
 	});
 
+const leaveChannel = async (headers, roomId, channelName) => {
+	try{
+		let response = await axios.post( apiEndpoints.leavechannelurl , {
+			roomId
+		}, { headers }).then((res) => res.data)
+
+		if(response.success == true) return ri('LEAVE_CHANNEL.SUCCESS', { channelName })
+
+		return ri('LEAVE_CHANNEL.ERROR')
+
+	}catch(err){
+		console.log(err.message)
+        if(err.response.data.errorType == "error-you-are-last-owner"){
+            return ri('LEAVE_CHANNEL.ERROR_LAST_OWNER')
+        }else if(err.response.data.errorType == "error-room-not-found"){
+			return ri('LEAVE_CHANNEL.ERROR_NOT_FOUND', { channelName })
+		} else if (err.response.status === 401) {
+			return ri('LEAVE_CHANNEL.AUTH_ERROR')
+		} else {
+			return ri('LEAVE_CHANNEL.ERROR')
+		}
+	}
+}
 
 // Module Export of Functions
 
@@ -926,3 +949,4 @@ module.exports.groupUnreadMessages = groupUnreadMessages;
 module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
+module.exports.leaveChannel = leaveChannel;

@@ -35,4 +35,5 @@ module.exports = {
 	groupmessageurl: `${ serverurl }/api/v1/groups.messages?roomId=`,
 	groupcounterurl: `${ serverurl }/api/v1/groups.counters?roomId=`,
 	createimurl: `${ serverurl }/api/v1/im.create`,
+	leavechannelurl: `${ serverurl }/api/v1/channels.leave`
 };

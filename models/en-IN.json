@@ -478,6 +478,23 @@
                 {
                     "name": "AMAZON.ScrollUpIntent",
                     "samples": []
+                },
+                {
+                    "name": "LeaveChannelIntent",
+                    "slots": [
+                      {
+                        "name": "channel",
+                        "type": "AMAZON.SearchQuery",
+                        "samples": [
+                          "channel {channel}",
+                          "{channel}"
+                        ]
+                      }
+                    ],
+                    "samples": [
+                      "leave channel {channel}",
+                      "leave channel "
+                    ]
                 }
             ],
             "types": [
@@ -1860,6 +1877,25 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "LeaveChannelIntent",
+                    "confirmationRequired": true,
+                    "prompts": {
+                      "confirmation": "Confirm.Intent.1433722128924"
+                    },
+                    "slots": [
+                      {
+                        "name": "channel",
+                        "type": "AMAZON.SearchQuery",
+                        "elicitationRequired": true,
+                        "confirmationRequired": false,
+                        "prompts": {
+                          "elicitation": "Elicit.Slot.1433722128924.486334729755"
+                        }
+                      }
+                    ],
+                    "delegationStrategy": "SKILL_RESPONSE"
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1980,6 +2016,24 @@
                         "type": "PlainText",
                         "value": "Alright, go on"
                     }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.1433722128924",
+                "variations": [
+                  {
+                    "type": "PlainText",
+                    "value": "You want to leave channel {channel} , is that correct?"
+                  }
+                ]
+              },
+              {
+                "id": "Elicit.Slot.1433722128924.486334729755",
+                "variations": [
+                  {
+                    "type": "PlainText",
+                    "value": "Which channel do you want to leave?"
+                  }
                 ]
             }
         ]

@@ -2019,6 +2019,98 @@ const ResponseLog = {
   },
 };
 
+
+const StartedLeaveChannelIntentHandler = {
+	canHandle(handlerInput) {
+	  	return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'LeaveChannelIntent' &&
+			handlerInput.requestEnvelope.request.dialogState === 'STARTED';
+	},
+	handle(handlerInput) {
+	  const currentIntent = handlerInput.requestEnvelope.request.intent;
+	  return handlerInput.responseBuilder
+		.addDelegateDirective(currentIntent)
+		.getResponse();
+	},
+};
+  
+const InProgressLeaveChannelIntentHandler = {
+	canHandle(handlerInput) {
+	  	return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'LeaveChannelIntent' &&
+			handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+			handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
+	},
+	handle(handlerInput) {
+	  const currentIntent = handlerInput.requestEnvelope.request.intent;
+	  return handlerInput.responseBuilder
+		.addDelegateDirective(currentIntent)
+		.getResponse();
+	},
+};
+  
+const DeniedLeaveChannelIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'LeaveChannelIntent' &&
+			handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+			handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
+	},
+	  handle(handlerInput) {
+		  let speechText = ri('LEAVE_CHANNEL.DENIED');
+  
+		  return handlerInput.jrb
+			.speak(speechText)
+			.addDelegateDirective({
+			  name: 'LeaveChannelIntent',
+			  confirmationStatus: 'NONE',
+			  slots: {
+				  "channel": {
+					  "name": "channel",
+					  "confirmationStatus": "NONE"
+				  }
+			  }
+			})
+			.getResponse();
+	  },
+  };
+	
+const LeaveChannelIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'LeaveChannelIntent'
+			&& handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
+			&& handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
+	},
+	async handle(handlerInput) {
+		try {
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+
+			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.channel.value;
+			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+
+			const headers = await helperFunctions.login(accessToken);
+			const roomid = await helperFunctions.getRoomId(channelName, headers);
+			const speechText = await helperFunctions.leaveChannel(headers, roomid, channelName);
+			let repromptText = ri('GENERIC_REPROMPT');
+
+
+			return handlerInput.jrb
+			.speak(speechText)
+			.speak(repromptText)
+			.reprompt(repromptText)
+			.getResponse();
+
+
+		} catch (error) {
+			console.error(error);
+		}
+	},
+};
+
+
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
 exports.handler = skillBuilder
@@ -2066,7 +2158,11 @@ exports.handler = skillBuilder
 		StartPlaybackHandler,
 		PausePlaybackHandler,
 		AudioControlPlaybackHandler,
-		AudioPlayerEventHandler
+		AudioPlayerEventHandler,
+		StartedLeaveChannelIntentHandler,
+		InProgressLeaveChannelIntentHandler,
+		DeniedLeaveChannelIntentHandler,
+		LeaveChannelIntentHandler,
 	)
 	.addErrorHandlers(ErrorHandler)
 	.addRequestInterceptors(RequestLog)
