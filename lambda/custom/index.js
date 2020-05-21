@@ -623,17 +623,15 @@ const InProgressPostMessageIntentHandler = {
 		let channels = sessionAttributes.similarChannels.trim().split(' ')
 
 		if(Number(updatedSlots.choice.value) == 0 || Number(updatedSlots.choice.value) > channels.length) {
-			const speechText = `Please select a choice between one and ${channels.length}`
-			// const speechText = ri('POST_MESSAGE.ASK_CHOICE', {choice_limit: channels.length})
+			const speechText = ri('POST_MESSAGE.ASK_CHOICE', {choice_limit: channels.length, channels_list: channels.join(', ')})
 			const slotName = 'choice'
-			return handlerInput.responseBuilder
+			return handlerInput.jrb
                 .speak(speechText)
-                .reprompt()
+                .reprompt(speechText)
 				.addElicitSlotDirective(slotName)
                 .getResponse()
 		}
 
-		console.log(channels)
 		updatedSlots.messagechannel.value = channels[Number(updatedSlots.choice.value)-1] 
 		return handlerInput.responseBuilder
 			.addDelegateDirective(currentIntent)
@@ -651,28 +649,29 @@ const InProgressPostMessageIntentHandler = {
 		let channels = await helperFunctions.resolveChannelname(updatedSlots.messagechannel.value, headers);
 
 		if (channels.length == 0){
-			speechText = `There is no channel named ${updatedSlots.messagechannel.value}. Anything else I can help you with?`
-			// let speechText = ri('POST_MESSAGE.NO_CHANNEL')
-			return handlerInput.responseBuilder
+			let speechText = ri('POST_MESSAGE.NO_CHANNEL', {channel_name: updatedSlots.messagechannel.value})
+			let repromptText = ri('GENERIC_REPROMPT');
+			return handlerInput.jrb
 				.speak(speechText)
-				.reprompt()
+				.speak(repromptText)
+				.reprompt(repromptText)
 				.getResponse()
 		}else if(channels.length == 1){
 			updatedSlots.messagechannel.value = channels[0].name
 		}else{
 			sessionAttributes.similarChannels = ""
-			speechText = "There are multiple channels with similar name. Please tell the serial number of desired channel. "
 			for (let i = 0; i < channels.length; i++){
-				speechText += channels[i].name + ", "
 				sessionAttributes.similarChannels += channels[i].name + " "
 			}
-			// speechText = ri('POST_MESSAGE.SIMILAR_CHANNELS', {channel_names: speechText})
+
+			let channel_names = sessionAttributes.similarChannels.split(' ').join(', ')
+			let speechText = ri('POST_MESSAGE.SIMILAR_CHANNELS', {channel_names})
 			const slotName = 'choice'
             
             
-            return handlerInput.responseBuilder
+            return handlerInput.jrb
                 .speak(speechText)
-                .reprompt()
+                .reprompt(speechText)
 				.addElicitSlotDirective(slotName)
                 .getResponse()
 		}
@@ -693,28 +692,35 @@ const DeniedPostMessageIntentHandler = {
 	},
 	handle(handlerInput) {
 		let speechText = ri('POST_MESSAGE.DENIED');
+		let repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
-		  .speak(speechText)
-		  .addDelegateDirective({
-			name: 'PostMessageIntent',
-			confirmationStatus: 'NONE',
-			slots: {
-				"messagechannel": {
-					"name": "messagechannel",
-					"confirmationStatus": "NONE"
-				},
-				"messagepost": {
-					"name": "messagepost",
-					"confirmationStatus": "NONE"
-				},
-				"choice": {
-					"name": "choice",
-					"confirmationStatus": "NONE"
-				}
-			}
-		  })
-		  .getResponse();
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse()
+
+		// return handlerInput.jrb
+		//   .speak(speechText)
+		//   .addDelegateDirective({
+		// 	name: 'PostMessageIntent',
+		// 	confirmationStatus: 'NONE',
+		// 	slots: {
+		// 		"messagechannel": {
+		// 			"name": "messagechannel",
+		// 			"confirmationStatus": "NONE"
+		// 		},
+		// 		"messagepost": {
+		// 			"name": "messagepost",
+		// 			"confirmationStatus": "NONE"
+		// 		},
+		// 		"choice": {
+		// 			"name": "choice",
+		// 			"confirmationStatus": "NONE"
+		// 		}
+		// 	}
+		//   })
+		//   .getResponse();
 	},
 };
   
@@ -1792,75 +1798,77 @@ const StartedPostDirectMessageIntentHandler = {
 		.addDelegateDirective(currentIntent)
 		.getResponse();
 	},
-  };
+};
   
-  const InProgressPostDirectMessageIntentHandler = {
+const InProgressPostDirectMessageIntentHandler = {
 	canHandle(handlerInput) {
-	  return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-		handlerInput.requestEnvelope.request.intent.name === 'PostDirectMessageIntent' &&
-		handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
-		handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
+	    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'PostDirectMessageIntent' &&
+			handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+			handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
 	},
 	async handle(handlerInput) {
-	  const currentIntent = handlerInput.requestEnvelope.request.intent;
-	  let updatedSlots = currentIntent.slots
+		const currentIntent = handlerInput.requestEnvelope.request.intent;
+		let updatedSlots = currentIntent.slots
+	
+		const attributesManager = handlerInput.attributesManager;
+		const sessionAttributes = attributesManager.getSessionAttributes() || {};
   
-	  const attributesManager = handlerInput.attributesManager;
-	  const sessionAttributes = attributesManager.getSessionAttributes() || {};
-  
-	  if(updatedSlots.choice && updatedSlots.choice.value){
+	  	if(updatedSlots.choice && updatedSlots.choice.value){
 
-		  let directs = sessionAttributes.similarDirects.trim().split(' ')
+			let directs = sessionAttributes.similarDirects.trim().split(' ')
+	
+			if(Number(updatedSlots.choice.value) == 0 || Number(updatedSlots.choice.value) > directs.length) {
+				let similar_directs = directs.join(', ')
+				const speechText = ri('POST_MESSAGE.ASK_CHOICE', {choice_limit: directs.length, channels_list: similar_directs})
+				const slotName = 'choice'
+				return handlerInput.jrb
+					.speak(speechText)
+					.reprompt(speechText)
+					.addElicitSlotDirective(slotName)
+					.getResponse()
+			}
   
-		  if(Number(updatedSlots.choice.value) == 0 || Number(updatedSlots.choice.value) > directs.length) {
-			  const speechText = `Please select a choice between one and ${directs.length}`
-			  const slotName = 'choice'
-			  return handlerInput.responseBuilder
-				  .speak(speechText)
-				  .reprompt()
-				  .addElicitSlotDirective(slotName)
-				  .getResponse()
-		  }
-  
-		  console.log(directs)
-		  updatedSlots.directmessageusername.value = channels[Number(updatedSlots.choice.value)-1] 
-		  return handlerInput.responseBuilder
-			  .addDelegateDirective(currentIntent)
-			  .getResponse()
-	  }
+			updatedSlots.directmessageusername.value = directs[Number(updatedSlots.choice.value)-1] 
+			return handlerInput.responseBuilder
+				.addDelegateDirective(currentIntent)
+				.getResponse()
+		}
     
-	  if(updatedSlots.directmessageusername.value){
-		  const {
-			  accessToken
-		  } = handlerInput.requestEnvelope.context.System.user;
-  
-		  const headers = await helperFunctions.login(accessToken);
-  
-		  let channels = await helperFunctions.resolveUsername(updatedSlots.directmessageusername.value, headers);
-  
-		  if (channels.length == 0){
-			  speechText = `There's no one named ${updatedSlots.directmessageusername.value}. Anything else that I can help you with?`
-			  return handlerInput.responseBuilder
-				  .speak(speechText)
-				  .reprompt()
-				  .getResponse()
-		  }else if(channels.length == 1){
-			  updatedSlots.directmessageusername.value = channels[0].name
-		  }else{
-			  sessionAttributes.similarChannels = ""
-			  speechText = "There are multiple users with similar username. Please tell the serial number of desired channel. "
-			  for (let i = 0; i < channels.length; i++){
-				  speechText += channels[i].name + ", "
-				  sessionAttributes.similarChannels += channels[i].name + " "
-			  }
-			  const slotName = 'choice'
-			  
-			  
-			  return handlerInput.responseBuilder
-				  .speak(speechText)
-				  .reprompt()
-				  .addElicitSlotDirective(slotName)
-				  .getResponse()
+	  	if(updatedSlots.directmessageusername.value){
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+	
+			const headers = await helperFunctions.login(accessToken);
+	
+			let channels = await helperFunctions.resolveUsername(updatedSlots.directmessageusername.value, headers);
+	
+			if (channels.length == 0){
+				const speechText = ri('POST_MESSAGE.NO_USER', {username: updatedSlots.directmessageusername.value})
+				let repromptText = ri('GENERIC_REPROMPT');
+				return handlerInput.jrb
+					.speak(speechText)
+					.speak(repromptText)
+					.reprompt(repromptText)
+					.getResponse()
+			}else if(channels.length == 1){
+				updatedSlots.directmessageusername.value = channels[0].name
+			}else{
+				sessionAttributes.similarDirects = ""
+				for (let i = 0; i < channels.length; i++){
+					sessionAttributes.similarDirects += channels[i].name + " "
+				}
+				const slotName = 'choice'
+				let similar_directs = sessionAttributes.similarDirects.split(' ').join(', ')
+				
+				let speechText = ri('POST_MESSAGE.SIMILAR_USERS', {usernames: similar_directs})
+				
+				return handlerInput.jrb
+					.speak(speechText)
+					.reprompt(speechText)
+					.addElicitSlotDirective(slotName)
+					.getResponse()
 		  }
 	  }
   
@@ -1868,50 +1876,57 @@ const StartedPostDirectMessageIntentHandler = {
 		.addDelegateDirective(currentIntent)
 		.getResponse();
 	},
-  };
+};
   
-  const DeniedPostDirectMessageIntentHandler = {
-	  canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-		  handlerInput.requestEnvelope.request.intent.name === 'PostDirectMessageIntent' &&
-		  handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
-		  handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
-	  },
-	  handle(handlerInput) {
-		  let speechText = ri('POST_MESSAGE.DENIED');
-  
-		  return handlerInput.jrb
-			.speak(speechText)
-			.addDelegateDirective({
-			  name: 'PostDirectMessageIntent',
-			  confirmationStatus: 'NONE',
-			  slots: {
-				  "directmessageusername": {
-					  "name": "directmessageusername",
-					  "confirmationStatus": "NONE"
-				  },
-				  "directmessage": {
-					  "name": "directmessage",
-					  "confirmationStatus": "NONE"
-				  },
-				  "choice": {
-					  "name": "choice",
-					  "confirmationStatus": "NONE"
-				  }
-			  }
-			})
-			.getResponse();
-	  },
-  };
+const DeniedPostDirectMessageIntentHandler = {
+	canHandle(handlerInput) {
+	return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+		handlerInput.requestEnvelope.request.intent.name === 'PostDirectMessageIntent' &&
+		handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+		handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
+	},
+	handle(handlerInput) {
+		let speechText = ri('POST_MESSAGE.DENIED');
+		let repromptText = ri('GENERIC_REPROMPT');
+
+		return handlerInput.jrb
+		.speak(speechText)
+		.speak(repromptText)
+		.reprompt(repromptText)
+		.getResponse()
+
+	//   return handlerInput.jrb
+	// 	.speak(speechText)
+	// 	.addDelegateDirective({
+	// 	  name: 'PostDirectMessageIntent',
+	// 	  confirmationStatus: 'NONE',
+	// 	  slots: {
+	// 		  "directmessageusername": {
+	// 			  "name": "directmessageusername",
+	// 			  "confirmationStatus": "NONE"
+	// 		  },
+	// 		  "directmessage": {
+	// 			  "name": "directmessage",
+	// 			  "confirmationStatus": "NONE"
+	// 		  },
+	// 		  "choice": {
+	// 			  "name": "choice",
+	// 			  "confirmationStatus": "NONE"
+	// 		  }
+	// 	  }
+	// 	})
+	// 	.getResponse();
+	},
+};
 	
-  const PostDirectMessageIntentHandler = {
-	  canHandle(handlerInput) {
-		  return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			  handlerInput.requestEnvelope.request.intent.name === 'PostDirectMessageIntent'
-			  && handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
-			  && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
-	  },
-	  async handle(handlerInput) {
+const PostDirectMessageIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'PostDirectMessageIntent'
+			&& handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
+			&& handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
+	},
+	async handle(handlerInput) {
 		try {
 			const {
 				accessToken
@@ -1937,8 +1952,8 @@ const StartedPostDirectMessageIntentHandler = {
 		} catch (error) {
 			console.error(error);
 		}
-	  },
-  };
+	},
+};
 
 const PostEmojiDirectMessageIntentHandler = {
 	canHandle(handlerInput) {
@@ -2179,6 +2194,7 @@ const SessionEndedRequestHandler = {
 	},
 	handle(handlerInput) {
 		console.log(`Session ended with reason: ${ handlerInput.requestEnvelope.request.reason }`);
+		helperFunctions.customLog({session_ended_reason: handlerInput.requestEnvelope.request.reason})
 
 		return handlerInput.responseBuilder
 			.addDirective({
@@ -2195,6 +2211,7 @@ const ErrorHandler = {
 	},
 	handle(handlerInput, error) {
 		console.log(`Error handled: ${ error.message }`);
+		helperFunctions.customLog({errorMessage: error.message})
 		const speechText = ri('ERRORS');
 
 		return handlerInput.jrb
@@ -2206,13 +2223,15 @@ const ErrorHandler = {
 
 const RequestLog = {
   process(handlerInput) {
-    console.log(`REQUEST ENVELOPE = ${JSON.stringify(handlerInput.requestEnvelope)}`);
+	console.log(`REQUEST ENVELOPE = ${JSON.stringify(handlerInput.requestEnvelope)}`);
+	helperFunctions.customLog(handlerInput.requestEnvelope)
   },
 };
 
 const ResponseLog = {
   process(handlerInput) {
-    console.log(`RESPONSE BUILDER = ${JSON.stringify(handlerInput)}`);
+	console.log(`RESPONSE BUILDER = ${JSON.stringify(handlerInput)}`);
+	helperFunctions.customLog(handlerInput.requestEnvelope)
   },
 };
 

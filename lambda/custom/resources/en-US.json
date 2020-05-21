@@ -29,15 +29,17 @@
     "POST_MESSAGE": {
         "SUCCESS": "I've sent your message.",
         "ASK_MORE": "Would you like to add more?",
-        "ASK_CHOICE": "Please select between one and {choice_limit}.",
-        "NO_CHANNEL": "There are no channels named . ",
-        "SIMILAR_CHANNELS": "There are multiple channels with similar name, Please tell the serial number of desired channel. {channel_names}.",
+        "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
+        "NO_CHANNEL": "There is no channel named {channel_name}.",
+        "NO_USER": "There's no one named {username}.",
+        "SIMILAR_CHANNELS": "There are multiple channels with similar name. Please tell the serial number of desired channel. {channel_names}.",
+        "SIMILAR_USERS": "There are multiple users with similar username. Please tell the serial number of desired user. {usernames}.",
         "CONFIRM_MORE": "Okay, go on.",
         "CONFIRM_MORE_REPROMPT": "Please continue your message.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Post A Message",
         "ERROR": "Sorry, I couldn't send your message right now.",
-        "DENIED": "Okay, let's try again."
+        "DENIED": "Okay, I won't send the message."
     },
     "CREATE_CHANNEL": {
         "SUCCESS": "I've created your channel {channelName}.",
