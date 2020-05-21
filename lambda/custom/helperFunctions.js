@@ -1,6 +1,7 @@
 const axios = require('axios');
 const apiEndpoints = require('./apiEndpoints');
 const envVariables = require('./config');
+const stringSimilar = require('string-similarity')
 
 const Jargon = require('@jargon/alexa-skill-sdk');
 const {
@@ -887,6 +888,35 @@ const postDirectMessage = async (message, roomid, headers) =>
 		return ri('POST_MESSAGE.ERROR');
 	});
 
+const resolveChannelname = async (channelName, headers) => {
+	try {
+		let publicChannelsResponse = await axios.get(apiEndpoints.channellisturl, {
+			headers
+		}).then((res) => res.data)
+
+		let privateChannelsResponse = await axios.get(apiEndpoints.grouplisturl, {
+			headers
+		}).then((res) => res.data)
+
+		let channels = publicChannelsResponse.channels.map(channel => {
+			return {name: channel.name,
+			id: channel._id,
+			type: channel.t}})
+
+		channels = channels.concat(privateChannelsResponse.groups.map(channel => {
+			return {
+				name: channel.name,
+				id: channel._id,
+				type: channel.t
+			}
+		}))
+
+		let similarChannels = channels.filter((channel) => stringSimilar.compareTwoStrings(channelName, channel.name) > 0.3 )    
+		return similarChannels
+	}catch (err) {
+		console.log(err)
+	}
+}
 
 // Module Export of Functions
 
@@ -926,3 +956,4 @@ module.exports.groupUnreadMessages = groupUnreadMessages;
 module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
+module.exports.resolveChannelname = resolveChannelname;

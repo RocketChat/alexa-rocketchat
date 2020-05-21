@@ -611,8 +611,74 @@ const InProgressPostMessageIntentHandler = {
       handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
 	  handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
   },
-  handle(handlerInput) {
-    const currentIntent = handlerInput.requestEnvelope.request.intent;
+  async handle(handlerInput) {
+	const currentIntent = handlerInput.requestEnvelope.request.intent;
+	let updatedSlots = currentIntent.slots
+
+	const attributesManager = handlerInput.attributesManager;
+	const sessionAttributes = attributesManager.getSessionAttributes() || {};
+
+	if(updatedSlots.choice && updatedSlots.choice.value){
+
+		let channels = sessionAttributes.similarChannels.trim().split(' ')
+
+		if(Number(updatedSlots.choice.value) == 0 || Number(updatedSlots.choice.value) > channels.length) {
+			const speechText = `Please select a choice between one and ${channels.length}`
+			// const speechText = ri('POST_MESSAGE.ASK_CHOICE', {choice_limit: channels.length})
+			const slotName = 'choice'
+			return handlerInput.responseBuilder
+                .speak(speechText)
+                .reprompt()
+				.addElicitSlotDirective(slotName)
+                .getResponse()
+		}
+
+		console.log(channels)
+		updatedSlots.messagechannel.value = channels[Number(updatedSlots.choice.value)-1] 
+		return handlerInput.responseBuilder
+			.addDelegateDirective(currentIntent)
+			.getResponse()
+	}
+
+
+	if(updatedSlots.messagechannel.value){
+		const {
+			accessToken
+		} = handlerInput.requestEnvelope.context.System.user;
+
+		const headers = await helperFunctions.login(accessToken);
+
+		let channels = await helperFunctions.resolveChannelname(updatedSlots.messagechannel.value, headers);
+
+		if (channels.length == 0){
+			speechText = `There is no channel named ${updatedSlots.messagechannel.value}. Anything else I can help you with?`
+			// let speechText = ri('POST_MESSAGE.NO_CHANNEL')
+			return handlerInput.responseBuilder
+				.speak(speechText)
+				.reprompt()
+				.getResponse()
+		}else if(channels.length == 1){
+			updatedSlots.messagechannel.value = channels[0].name
+		}else{
+			sessionAttributes.similarChannels = ""
+			speechText = "There are multiple channels with similar name. Please tell the serial number of desired channel. "
+			for (let i = 0; i < channels.length; i++){
+				speechText += channels[i].name + ", "
+				sessionAttributes.similarChannels += channels[i].name + " "
+			}
+			console.log(sessionAttributes.similarChannels)
+			// speechText = ri('POST_MESSAGE.SIMILAR_CHANNELS', {channel_names: speechText})
+			const slotName = 'choice'
+            
+            
+            return handlerInput.responseBuilder
+                .speak(speechText)
+                .reprompt()
+				.addElicitSlotDirective(slotName)
+                .getResponse()
+		}
+	}
+
     return handlerInput.responseBuilder
       .addDelegateDirective(currentIntent)
       .getResponse();
@@ -642,6 +708,10 @@ const DeniedPostMessageIntentHandler = {
 				"messagepost": {
 					"name": "messagepost",
 					"confirmationStatus": "NONE"
+				},
+				"choice": {
+					"name": "choice",
+					"confirmationStatus": "NONE"
 				}
 			}
 		  })
@@ -663,8 +733,9 @@ const PostMessageIntentHandler = {
 			} = handlerInput.requestEnvelope.context.System.user;
 
 			let message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
-			const channelNameData = helperFunctions.getStaticAndDynamicSlotValuesFromSlot(handlerInput.requestEnvelope.request.intent.slots.messagechannel);
-			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+			// const channelNameData = helperFunctions.getStaticAndDynamicSlotValuesFromSlot(handlerInput.requestEnvelope.request.intent.slots.messagechannel);
+			// const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+			const channelName = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value
 
 			const headers = await helperFunctions.login(accessToken);
 			const speechText = await helperFunctions.postMessage(channelName, message, headers);
