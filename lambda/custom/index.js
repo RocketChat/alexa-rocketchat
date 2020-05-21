@@ -2021,56 +2021,89 @@ const ResponseLog = {
 
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
-exports.handler = skillBuilder
-	.addRequestHandlers(
-		ProactiveEventHandler,
-		LaunchRequestHandler,
-		ChangeNotificationSettingsIntentHandler,
-		StartedCreateChannelIntentHandler,
-		InProgressCreateChannelIntentHandler,
-		DeniedCreateChannelIntentHandler,
-		CreateChannelIntentHandler,
-		StartedDeleteChannelIntentHandler,
-		InProgressDeleteChannelIntentHandler,
-		DeniedDeleteChannelIntentHandler,
-		DeleteChannelIntentHandler,
-		StartedPostMessageIntentHandler,
-		InProgressPostMessageIntentHandler,
-		DeniedPostMessageIntentHandler,
-		PostMessageIntentHandler,
-		StartedPostLongMessageIntentHandler,
-		InProgressPostLongMessageIntentHandler,
-		YesIntentHandler,
-		NoIntentHandler,
-		PostLongMessageIntentHandler,
-		PostEmojiMessageIntentHandler,
-		GetLastMessageFromChannelIntentHandler,
-		AddAllToChannelIntentHandler,
-		MakeModeratorIntentHandler,
-		AddOwnerIntentHandler,
-		ArchiveChannelIntentHandler,
-		GetUnreadMessagesIntentHandler,
-		CreateGrouplIntentHandler,
-		DeleteGroupIntentHandler,
-		MakeGroupModeratorIntentHandler,
-		MakeGroupOwnerIntentHandler,
-		PostGroupMessageIntentHandler,
-		PostGroupEmojiMessageIntentHandler,
-		GroupLastMessageIntentHandler,
-		GetGroupUnreadMessagesIntentHandler,
-		PostDirectMessageIntentHandler,
-		PostEmojiDirectMessageIntentHandler,
-		HelpIntentHandler,
-		CancelAndStopIntentHandler,
-		SessionEndedRequestHandler,
-		StartPlaybackHandler,
-		PausePlaybackHandler,
-		AudioControlPlaybackHandler,
-		AudioPlayerEventHandler
-	)
-	.addErrorHandlers(ErrorHandler)
-	.addRequestInterceptors(RequestLog)
-	.addResponseInterceptors(ResponseLog)
-	.withTableName(envVariables.dynamoDBTableName)
-	.withAutoCreateTable(true)
-	.lambda();
+const buildSkill = (skillBuilder) => 
+		skillBuilder
+		.addRequestHandlers(
+			ProactiveEventHandler,
+			LaunchRequestHandler,
+			ChangeNotificationSettingsIntentHandler,
+			StartedCreateChannelIntentHandler,
+			InProgressCreateChannelIntentHandler,
+			DeniedCreateChannelIntentHandler,
+			CreateChannelIntentHandler,
+			StartedDeleteChannelIntentHandler,
+			InProgressDeleteChannelIntentHandler,
+			DeniedDeleteChannelIntentHandler,
+			DeleteChannelIntentHandler,
+			StartedPostMessageIntentHandler,
+			InProgressPostMessageIntentHandler,
+			DeniedPostMessageIntentHandler,
+			PostMessageIntentHandler,
+			StartedPostLongMessageIntentHandler,
+			InProgressPostLongMessageIntentHandler,
+			YesIntentHandler,
+			NoIntentHandler,
+			PostLongMessageIntentHandler,
+			PostEmojiMessageIntentHandler,
+			GetLastMessageFromChannelIntentHandler,
+			AddAllToChannelIntentHandler,
+			MakeModeratorIntentHandler,
+			AddOwnerIntentHandler,
+			ArchiveChannelIntentHandler,
+			GetUnreadMessagesIntentHandler,
+			CreateGrouplIntentHandler,
+			DeleteGroupIntentHandler,
+			MakeGroupModeratorIntentHandler,
+			MakeGroupOwnerIntentHandler,
+			PostGroupMessageIntentHandler,
+			PostGroupEmojiMessageIntentHandler,
+			GroupLastMessageIntentHandler,
+			GetGroupUnreadMessagesIntentHandler,
+			PostDirectMessageIntentHandler,
+			PostEmojiDirectMessageIntentHandler,
+			HelpIntentHandler,
+			CancelAndStopIntentHandler,
+			SessionEndedRequestHandler,
+			StartPlaybackHandler,
+			PausePlaybackHandler,
+			AudioControlPlaybackHandler,
+			AudioPlayerEventHandler
+		)
+		.addErrorHandlers(ErrorHandler)
+		.addRequestInterceptors(RequestLog)
+		.addResponseInterceptors(ResponseLog)
+		.withTableName(envVariables.dynamoDBTableName)
+		.withAutoCreateTable(true)
+		.lambda();
+
+
+if(process.env.DEVELOPMENT){
+	require('dotenv').config()
+	require("ask-sdk-model")
+
+	var AWS = require('aws-sdk');
+	AWS.config.update({region: 'us-east-1'});
+	AWS.config.update({credentials: {
+		accessKeyId: process.env.ACCESS_KEY_ID,
+		secretAccessKey: process.env.SECRET_ACCESS_KEY
+	}})
+
+	buildSkill(skillBuilder)
+
+	const skill = skillBuilder.create();
+
+	const express = require('express');
+	const { ExpressAdapter } = require('ask-sdk-express-adapter');
+	const app = express();
+
+	const adapter = new ExpressAdapter(skill, false, false);
+	
+	app.post('/', adapter.getRequestHandlers());
+
+	const PORT = process.env.port || 3000
+	app.listen(PORT, () => {
+		console.log(`Listening at port ${PORT}`)
+	});
+}else{
+	exports.handler = buildSkill(skillBuilder)
+}
