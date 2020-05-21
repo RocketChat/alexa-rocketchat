@@ -918,6 +918,35 @@ const resolveChannelname = async (channelName, headers) => {
 	}
 }
 
+const resolveUsername = async (username, headers) => {
+try{
+	let subscriptions = await axios.get(apiEndpoints.getsubscriptionsurl, {
+		headers
+	})
+	.then(res => res.data.update)
+	.then(subscriptions => {
+		return subscriptions.filter(subscription => {
+			return subscription.t == 'd'
+		})
+	})
+	.then(subscriptions => {
+		return subscriptions.map(subscription => {
+			return {
+				name: subscription.name,
+				id: subscription._id,
+				type: subscription.t
+			}
+		})
+	})
+
+	let similarUsernames = subscriptions.filter((subscription) => stringSimilar.compareTwoStrings(username, subscription.name) > 0.3 )
+	return similarUsernames
+
+}catch(err){
+	console.log(err)
+}
+}
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -957,3 +986,4 @@ module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
 module.exports.resolveChannelname = resolveChannelname;
+module.exports.resolveUsername = resolveUsername;
