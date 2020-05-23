@@ -1982,6 +1982,7 @@ const SessionEndedRequestHandler = {
 	},
 	handle(handlerInput) {
 		console.log(`Session ended with reason: ${ handlerInput.requestEnvelope.request.reason }`);
+		helperFunctions.customLog({session_ended_reason: handlerInput.requestEnvelope.request.reason})
 
 		return handlerInput.responseBuilder
 			.addDirective({
@@ -1998,6 +1999,7 @@ const ErrorHandler = {
 	},
 	handle(handlerInput, error) {
 		console.log(`Error handled: ${ error.message }`);
+		helperFunctions.customLog({errorMessage: error.message})
 		const speechText = ri('ERRORS');
 
 		return handlerInput.jrb
@@ -2009,13 +2011,15 @@ const ErrorHandler = {
 
 const RequestLog = {
   process(handlerInput) {
-    console.log(`REQUEST ENVELOPE = ${JSON.stringify(handlerInput.requestEnvelope)}`);
+	console.log(`REQUEST ENVELOPE = ${JSON.stringify(handlerInput.requestEnvelope)}`);
+	helperFunctions.customLog(handlerInput.requestEnvelope)
   },
 };
 
 const ResponseLog = {
   process(handlerInput) {
-    console.log(`RESPONSE BUILDER = ${JSON.stringify(handlerInput)}`);
+	console.log(`RESPONSE BUILDER = ${JSON.stringify(handlerInput)}`);
+	helperFunctions.customLog(handlerInput.requestEnvelope)
   },
 };
 
