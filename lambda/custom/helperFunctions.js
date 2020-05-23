@@ -1,6 +1,7 @@
 const axios = require('axios');
 const apiEndpoints = require('./apiEndpoints');
 const envVariables = require('./config');
+const stringSimilar = require('string-similarity')
 
 const Jargon = require('@jargon/alexa-skill-sdk');
 const {
@@ -888,6 +889,47 @@ const postDirectMessage = async (message, roomid, headers) =>
 		return ri('POST_MESSAGE.ERROR');
 	});
 
+/*
+this function takes in a string as an input and returns an array of channel/group names which
+the user has joined and are similar to the input string
+*/
+const resolveChannelname = async (channelName, headers) => {
+	try {
+		let publicChannelsResponse = await axios.get(apiEndpoints.channellisturl, {
+			headers
+		}).then((res) => res.data)
+
+		let privateChannelsResponse = await axios.get(apiEndpoints.grouplisturl, {
+			headers
+		}).then((res) => res.data)
+
+		// adding public channels to the array
+		let channels = publicChannelsResponse.channels.map(channel => {
+			return {
+				name: channel.name,
+				id: channel._id,
+				type: channel.t}
+			})
+
+		// adding private channels to the array	
+		channels = channels.concat(privateChannelsResponse.groups.map(channel => {
+			return {
+				name: channel.name,
+				id: channel._id,
+				type: channel.t
+			}
+		}))
+
+		// using string similarity module to filter channels and groups which are similar to the input string
+		// here compareTwoStrings returns a rating which indicates how closely the strings match
+		// 0.3 is a rating being used here, which can be adjusted according to our needs
+		let similarChannels = channels.filter((channel) => stringSimilar.compareTwoStrings(channelName, channel.name) > 0.3 )    
+		return similarChannels
+	}catch (err) {
+		console.log(err)
+	}
+}
+
 // this functions logs the data to an external site
 const customLog = async (data) => {
 	try{
@@ -935,4 +977,5 @@ module.exports.groupUnreadMessages = groupUnreadMessages;
 module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
+module.exports.resolveChannelname = resolveChannelname;
 module.exports.customLog = customLog;
