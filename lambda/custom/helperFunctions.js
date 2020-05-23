@@ -930,6 +930,42 @@ const resolveChannelname = async (channelName, headers) => {
 	}
 }
 
+/* 
+this function takes a string an an input and returns an array of usernames 
+which the user is in contact with and is similar to the input string
+*/
+const resolveUsername = async (username, headers) => {
+	try{
+		let subscriptions = await axios.get(apiEndpoints.getsubscriptionsurl, {
+			headers
+		})
+		.then(res => res.data.update)
+		// the getsubscriptionsurl returns all subscriptions including private and public channels
+		// since we only need to resolve usernames we filter only direct message subscriptions
+		.then(subscriptions => {
+			return subscriptions.filter(subscription => {
+				return subscription.t == 'd' 
+			})
+		})
+		.then(subscriptions => {
+			return subscriptions.map(subscription => {
+				return {
+					name: subscription.name,
+					id: subscription._id,
+					type: subscription.t
+				}
+			})
+		})
+
+		// using string similarity module to filter usernames matching the input string
+		let similarUsernames = subscriptions.filter((subscription) => stringSimilar.compareTwoStrings(username, subscription.name) > 0.3 )
+		return similarUsernames
+
+	}catch(err){
+		console.log(err)
+	}
+}
+
 // this functions logs the data to an external site
 const customLog = async (data) => {
 	try{
@@ -978,4 +1014,5 @@ module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
 module.exports.resolveChannelname = resolveChannelname;
+module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
