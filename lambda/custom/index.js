@@ -1640,39 +1640,6 @@ const MakeGroupOwnerIntentHandler = {
 	},
 };
 
-const PostGroupMessageIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'PostGroupMessageIntent';
-	},
-	async handle(handlerInput) {
-		try {
-			const {
-				accessToken
-			} = handlerInput.requestEnvelope.context.System.user;
-
-			let message = handlerInput.requestEnvelope.request.intent.slots.groupmessage.value;
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.groupmessagechannelname.value;
-			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
-
-			const headers = await helperFunctions.login(accessToken);
-			const roomid = await helperFunctions.getGroupId(channelName, headers);
-			const speechText = await helperFunctions.postGroupMessage(roomid, message, headers);
-			let repromptText = ri('GENERIC_REPROMPT');
-
-
-			return handlerInput.jrb
-				.speak(speechText)
-				.speak(repromptText)
-				.reprompt(repromptText)
-				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
-				.getResponse();
-		} catch (error) {
-			console.error(error);
-		}
-	},
-};
-
 const PostGroupEmojiMessageIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -2250,7 +2217,6 @@ const buildSkill = (skillBuilder) =>
 			DeleteGroupIntentHandler,
 			MakeGroupModeratorIntentHandler,
 			MakeGroupOwnerIntentHandler,
-			PostGroupMessageIntentHandler,
 			PostGroupEmojiMessageIntentHandler,
 			GroupLastMessageIntentHandler,
 			GetGroupUnreadMessagesIntentHandler,

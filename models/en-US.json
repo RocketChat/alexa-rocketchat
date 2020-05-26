@@ -337,22 +337,6 @@
                     ]
                 },
                 {
-                    "name": "PostGroupMessageIntent",
-                    "slots": [
-                        {
-                            "name": "groupmessage",
-                            "type": "message"
-                        },
-                        {
-                            "name": "groupmessagechannelname",
-                            "type": "channelnames"
-                        }
-                    ],
-                    "samples": [
-                        "Send {groupmessage} To Private Channel {groupmessagechannelname}"
-                    ]
-                },
-                {
                     "name": "GroupLastMessageIntent",
                     "slots": [
                         {
