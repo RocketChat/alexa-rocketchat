@@ -1773,10 +1773,133 @@ const GetGroupUnreadMessagesIntentHandler = {
 	},
 };
 
+const StartedPostDirectMessageIntentHandler = {
+	canHandle(handlerInput) {
+	  return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+		handlerInput.requestEnvelope.request.intent.name === 'PostDirectMessageIntent' &&
+		handlerInput.requestEnvelope.request.dialogState === 'STARTED';
+	},
+	handle(handlerInput) {
+	  const currentIntent = handlerInput.requestEnvelope.request.intent;
+	  return handlerInput.responseBuilder
+		.addDelegateDirective(currentIntent)
+		.getResponse();
+	},
+};
+  
+const InProgressPostDirectMessageIntentHandler = {
+	canHandle(handlerInput) {
+	    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+			handlerInput.requestEnvelope.request.intent.name === 'PostDirectMessageIntent' &&
+			handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+			handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
+	},
+	async handle(handlerInput) {
+		const currentIntent = handlerInput.requestEnvelope.request.intent;
+		let updatedSlots = currentIntent.slots
+	
+		const attributesManager = handlerInput.attributesManager;
+		const sessionAttributes = attributesManager.getSessionAttributes() || {};
+  
+		// if the user has already made a choice for the username
+	  	if(updatedSlots.choice && updatedSlots.choice.value){
+
+			// get the array of similar usernames which was stored in session attributes
+			let directs = sessionAttributes.similarDirects.trim().split(' ')
+	
+			// if user makes an invalid choice, ask for an appropriate choice
+			if(Number(updatedSlots.choice.value) == 0 || Number(updatedSlots.choice.value) > directs.length) {
+				let similar_directs = directs.join(', ')
+				const speechText = ri('POST_MESSAGE.ASK_CHOICE', {choice_limit: directs.length, channels_list: similar_directs})
+				const slotName = 'choice'
+				return handlerInput.jrb
+					.speak(speechText)
+					.reprompt(speechText)
+					.addElicitSlotDirective(slotName)
+					.getResponse()
+			}
+  
+			updatedSlots.directmessageusername.value = directs[Number(updatedSlots.choice.value)-1] 
+			return handlerInput.responseBuilder
+				.addDelegateDirective(currentIntent)
+				.getResponse()
+		}
+	
+		// if the user has told username to alexa
+	  	if(updatedSlots.directmessageusername.value){
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+	
+			const headers = await helperFunctions.login(accessToken);
+	
+			// get the array of similar usernames
+			let channels = await helperFunctions.resolveUsername(updatedSlots.directmessageusername.value, headers);
+	
+			// if there are no matching usernames
+			if (channels.length == 0){
+				const speechText = ri('POST_MESSAGE.NO_USER', {username: updatedSlots.directmessageusername.value})
+				let repromptText = ri('GENERIC_REPROMPT');
+				return handlerInput.jrb
+					.speak(speechText)
+					.speak(repromptText)
+					.reprompt(repromptText)
+					.getResponse()
+			// if there's only one matching username, update the slot value to the matching username
+			}else if(channels.length == 1){
+				updatedSlots.directmessageusername.value = channels[0].name
+			// if there are multiple similar usernames
+			}else{
+				// store the similar usernames in sessions attributes
+				sessionAttributes.similarDirects = ""
+				for (let i = 0; i < channels.length; i++){
+					sessionAttributes.similarDirects += channels[i].name + " "
+				}
+				const slotName = 'choice'
+				let similar_directs = sessionAttributes.similarDirects.split(' ').join(', ')
+				
+				// ask the user for a correct choice
+				let speechText = ri('POST_MESSAGE.SIMILAR_USERS', {usernames: similar_directs})
+				
+				return handlerInput.jrb
+					.speak(speechText)
+					.reprompt(speechText)
+					.addElicitSlotDirective(slotName)
+					.getResponse()
+		  }
+	  }
+  
+	  return handlerInput.responseBuilder
+		.addDelegateDirective(currentIntent)
+		.getResponse();
+	},
+};
+  
+const DeniedPostDirectMessageIntentHandler = {
+	canHandle(handlerInput) {
+	return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+		handlerInput.requestEnvelope.request.intent.name === 'PostDirectMessageIntent' &&
+		handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+		handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
+	},
+	handle(handlerInput) {
+		let speechText = ri('POST_MESSAGE.DENIED');
+		let repromptText = ri('GENERIC_REPROMPT');
+
+		return handlerInput.jrb
+		.speak(speechText)
+		.speak(repromptText)
+		.reprompt(repromptText)
+		.getResponse()
+	},
+};
+	
 const PostDirectMessageIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'PostDirectMessageIntent';
+			handlerInput.requestEnvelope.request.intent.name === 'PostDirectMessageIntent'
+			&& handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
+			&& handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
 	async handle(handlerInput) {
 		try {
@@ -1785,8 +1908,9 @@ const PostDirectMessageIntentHandler = {
 			} = handlerInput.requestEnvelope.context.System.user;
 
 			let message = handlerInput.requestEnvelope.request.intent.slots.directmessage.value;
-			const userNameData = handlerInput.requestEnvelope.request.intent.slots.directmessageusername.value;
-			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
+			// const userNameData = handlerInput.requestEnvelope.request.intent.slots.directmessageusername.value;
+			// const userName = helperFunctions.replaceWhitespacesDots(userNameData);
+			const userName = handlerInput.requestEnvelope.request.intent.slots.directmessageusername.value
 
 			const headers = await helperFunctions.login(accessToken);
 			const roomid = await helperFunctions.createDMSession(userName, headers);
@@ -2106,6 +2230,10 @@ const buildSkill = (skillBuilder) =>
 			InProgressPostMessageIntentHandler,
 			DeniedPostMessageIntentHandler,
 			PostMessageIntentHandler,
+			StartedPostDirectMessageIntentHandler,
+			InProgressPostDirectMessageIntentHandler,
+			DeniedPostDirectMessageIntentHandler,
+			PostDirectMessageIntentHandler,
 			StartedPostLongMessageIntentHandler,
 			InProgressPostLongMessageIntentHandler,
 			YesIntentHandler,
@@ -2126,7 +2254,6 @@ const buildSkill = (skillBuilder) =>
 			PostGroupEmojiMessageIntentHandler,
 			GroupLastMessageIntentHandler,
 			GetGroupUnreadMessagesIntentHandler,
-			PostDirectMessageIntentHandler,
 			PostEmojiDirectMessageIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
