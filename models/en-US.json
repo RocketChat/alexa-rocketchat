@@ -122,6 +122,10 @@
                             "samples": [
                                 "{longmessage}"
                             ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
                         }
                     ],
                     "samples": [
