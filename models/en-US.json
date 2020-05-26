@@ -2,6 +2,11 @@
     "interactionModel": {
         "languageModel": {
             "invocationName": "rocket chat",
+            "modelConfiguration": {
+                "fallbackIntentSensitivity": {
+                    "level": "LOW"
+                }
+            },
             "intents": [
                 {
                     "name": "AMAZON.FallbackIntent",
@@ -57,6 +62,10 @@
                                 "delete channel {channeldelete}",
                                 "delete room {channeldelete}"
                             ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
                         }
                     ],
                     "samples": [
@@ -281,18 +290,6 @@
                     ],
                     "samples": [
                         "Create Private Channel {groupname}"
-                    ]
-                },
-                {
-                    "name": "DeleteGroupIntent",
-                    "slots": [
-                        {
-                            "name": "deletegroupname",
-                            "type": "channelnames"
-                        }
-                    ],
-                    "samples": [
-                        "Delete Private Channel {deletegroupname}"
                     ]
                 },
                 {
@@ -1802,6 +1799,7 @@
                 },
                 {
                     "name": "DeleteChannelIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
                     "confirmationRequired": true,
                     "prompts": {
                         "confirmation": "Confirm.Intent.1279935591703"
