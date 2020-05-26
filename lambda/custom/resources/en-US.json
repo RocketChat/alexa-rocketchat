@@ -46,12 +46,17 @@
         "DENIED": "Okay, let's try again."
     },
     "DELETE_CHANNEL": {
-        "SUCCESS": "I've deleted the channel {channelName}.",
+        "SUCCESS_CHANNEL": "I've deleted the channel {channelName}.",
+        "SUCCESS_GROUP": "I've deleted the private channel {channelName}",
+        "ASK_MORE": "Would you like to add more?",
+        "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
+        "NO_CHANNEL": "There is no channel named {channel_name}.",
+        "SIMILAR_CHANNELS": "There are multiple channels with similar name. Please tell the serial number of desired channel. {channel_names}.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Delete A Channel",
         "ERROR": "Sorry, I couldn't delete the channel {channelName} right now.",
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name.",
-        "DENIED": "Okay, let's try again."
+        "DENIED": "Okay, I won't delete the channel."
     },
     "GET_LAST_MESSAGE_FROM_CHANNEL": {
         "SUCCESS": "{name} says, {message}.",

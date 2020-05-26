@@ -175,7 +175,7 @@ const deleteChannel = async (channelName, headers) =>
 	.then((res) => res.data)
 	.then((res) => {
 		if (res.success === true) {
-			return ri('DELETE_CHANNEL.SUCCESS', {
+			return ri('DELETE_CHANNEL.SUCCESS_CHANNEL', {
 				channelName
 			});
 		} else {
@@ -636,7 +636,7 @@ const deleteGroup = async (channelName, headers) =>
 	.then((res) => res.data)
 	.then((res) => {
 		if (res.success === true) {
-			return ri('DELETE_CHANNEL.SUCCESS', {
+			return ri('DELETE_CHANNEL.SUCCESS_GROUP', {
 				channelName
 			});
 		} else {

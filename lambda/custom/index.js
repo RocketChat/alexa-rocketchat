@@ -458,17 +458,100 @@ const StartedDeleteChannelIntentHandler = {
 };
 
 const InProgressDeleteChannelIntentHandler = {
-  canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-      handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
-      handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
-	  handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
-  },
-  handle(handlerInput) {
-    const currentIntent = handlerInput.requestEnvelope.request.intent;
-    return handlerInput.responseBuilder
-      .addDelegateDirective(currentIntent)
-      .getResponse();
+  	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+		handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
+		handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+		handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
+  	},
+  	async handle(handlerInput) {
+		const currentIntent = handlerInput.requestEnvelope.request.intent;
+		let updatedSlots = currentIntent.slots
+
+		const attributesManager = handlerInput.attributesManager;
+		const sessionAttributes = attributesManager.getSessionAttributes() || {};
+
+		// if a choice is present and has a value, it means the user has already made a choice on which channel to choose from
+		if(updatedSlots.choice && updatedSlots.choice.value){
+
+			// get the array of channels which the user was asked for
+			let channels = sessionAttributes.similarChannels.trim().split(' ')
+
+			// if the user selects an invalid choice then ask for an appropriate choice
+			if(Number(updatedSlots.choice.value) == 0 || Number(updatedSlots.choice.value) > channels.length) {
+				let channels_list = ""
+				for(let elem of channels){
+					channels_list += elem.split(',')[0] + ", "
+				}
+				const speechText = ri('DELETE_CHANNEL.ASK_CHOICE', {choice_limit: channels.length, channels_list})
+				const slotName = 'choice'
+				return handlerInput.jrb
+					.speak(speechText)
+					.reprompt(speechText)
+					.addElicitSlotDirective(slotName)
+					.getResponse()
+			}
+
+			// if everything is correct then proceed to ask for confirmation
+			let channelDetails = channels[Number(updatedSlots.choice.value)-1].split(',')
+			console.log(channelDetails)
+			updatedSlots.channeldelete.value = channelDetails[0] 
+			sessionAttributes.channelType = channelDetails[1]
+			return handlerInput.responseBuilder
+				.addDelegateDirective(currentIntent)
+				.getResponse()
+		}
+
+		// if the user has told the channel name to alexa
+		if(updatedSlots.channeldelete.value){
+			const {
+				accessToken
+			} = handlerInput.requestEnvelope.context.System.user;
+
+			const headers = await helperFunctions.login(accessToken);
+
+			// get the array of similar channelnames
+			let channels = await helperFunctions.resolveChannelname(updatedSlots.channeldelete.value, headers);
+
+			// if there are no similar channels
+			if (channels.length == 0){
+				let speechText = ri('DELETE_CHANNEL.NO_CHANNEL', {channel_name: updatedSlots.channeldelete.value})
+				let repromptText = ri('GENERIC_REPROMPT');
+				return handlerInput.jrb
+					.speak(speechText)
+					.speak(repromptText)
+					.reprompt(repromptText)
+					.getResponse()
+			// if there's only one similar channel, then change the slot value to the matching channel		
+			}else if(channels.length == 1){
+				updatedSlots.channeldelete.value = channels[0].name
+				sessionAttributes.channelType = channels[0].type
+			// if there are multiple channels with similar names
+			}else{
+				// store the similar channels in sessions Attributes and ask the user for a choice	
+				sessionAttributes.similarChannels = ""
+				let channel_names = ""
+				for(let {name, type} of channels){
+					// A string which contains details of the channels "name,type name,type name,type..."
+					sessionAttributes.similarChannels += `${name},${type} `
+					channel_names += `${name}, `
+				}
+
+				let speechText = ri('DELETE_CHANNEL.SIMILAR_CHANNELS', {channel_names})
+				const slotName = 'choice'
+				
+				
+				return handlerInput.jrb
+					.speak(speechText)
+					.reprompt(speechText)
+					.addElicitSlotDirective(slotName)
+					.getResponse()
+			}
+		}
+
+		return handlerInput.responseBuilder
+		.addDelegateDirective(currentIntent)
+		.getResponse();
   },
 };
 
@@ -481,19 +564,12 @@ const DeniedDeleteChannelIntentHandler = {
 	},
 	handle(handlerInput) {
 		let speechText = ri('DELETE_CHANNEL.DENIED');
+		let repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
 		  .speak(speechText)
-		  .addDelegateDirective({
-			name: 'DeleteChannelIntent',
-			confirmationStatus: 'NONE',
-			slots: {
-				"channeldelete": {
-					"name": "channeldelete",
-					"confirmationStatus": "NONE"
-				}
-			}
-		  })
+		  .speak(repromptText)
+		  .reprompt(repromptText)
 		  .getResponse();
 	},
 };
@@ -510,12 +586,21 @@ const DeleteChannelIntentHandler = {
 			const {
 				accessToken
 			} = handlerInput.requestEnvelope.context.System.user;
+			const attributesManager = handlerInput.attributesManager;
+			const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.channeldelete.value;
-			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
+			const channelName = handlerInput.requestEnvelope.request.intent.slots.channeldelete.value;
 
 			const headers = await helperFunctions.login(accessToken);
-			const speechText = await helperFunctions.deleteChannel(channelName, headers);
+			let speechText
+			if (sessionAttributes.channelType == 'c'){
+				speechText = await helperFunctions.deleteChannel(channelName, headers);
+			} else {
+				speechText = await helperFunctions.deleteGroup(channelName, headers);
+			}
+			delete sessionAttributes.channelType
+			delete sessionAttributes.similarChannels
+			
 			let repromptText = ri('GENERIC_REPROMPT');
 
 			if (supportsAPL(handlerInput)) {
