@@ -37,5 +37,6 @@ module.exports = {
 	groupcounterurl: `${ serverurl }/api/v1/groups.counters?roomId=`,
 	createimurl: `${ serverurl }/api/v1/im.create`,
 	getsubscriptionsurl: `${serverurl}/api/v1/subscriptions.get`,
-	getmentionedmessagesurl: `${serverurl}/api/v1/chat.getMentionedMessages`
+	getmentionedmessagesurl: `${serverurl}/api/v1/chat.getMentionedMessages`,
+	reacttomessageurl: `${serverurl}/api/v1/chat.react`
 };

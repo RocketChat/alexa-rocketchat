@@ -1071,6 +1071,35 @@ const readUnreadMentions = async (roomId, roomName, count, headers) => {
 	}
 }
 
+const acknowledgeUnreadMentions = async (roomId, roomName, count, headers) => {
+	try{
+		if (count == 0) return ri('MENTIONS.NO_MENTIONS_ROOM', {roomName})
+
+		response = await axios.get(`${apiEndpoints.getmentionedmessagesurl}?roomId=${roomId}&count=${count}`, {
+			headers
+		}).then((res) => res.data)
+
+		if(response.success == true){
+			for (let index = 0; index < response.messages.length; index++ ){
+				let res = await axios.post(apiEndpoints.reacttomessageurl, {
+					messageId: response.messages[index]._id,
+					emoji: 'thumbsup',
+					shouldReact: true
+				}, {
+					headers
+				}).then((res) => res.data)
+				if(!res.success) return ri('MENTIONS.ERROR')
+			}
+			return ri('MENTIONS.REACTED', {count, roomName})
+		}else{
+			return ri('MENTIONS.ERROR')
+		}
+
+	}catch(err){
+		console.log(err.message)
+	}
+}
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1116,3 +1145,4 @@ module.exports.getAllUnreadMentions = getAllUnreadMentions;
 module.exports.getUnreadMentionsCountChannel = getUnreadMentionsCountChannel;
 module.exports.getUnreadMentionsCountGroup = getUnreadMentionsCountGroup;
 module.exports.readUnreadMentions = readUnreadMentions;
+module.exports.acknowledgeUnreadMentions = acknowledgeUnreadMentions;
