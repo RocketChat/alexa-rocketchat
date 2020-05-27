@@ -102,6 +102,7 @@
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate.",
         "NO_MENTIONS": "You don't have any unread mentions.",
         "NO_MENTIONS_ROOM": "You don't have any unread mentions in {roomName}.",
+        "REACTED": "I've acknowledged to {count} mentions in {roomName}.",
         "ERROR": "Sorry, I couldn't perform this request."
     },
     "AUDIO_NO_SUPPORT": "Sorry, this skill doesn't support that feature.",

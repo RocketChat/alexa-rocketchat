@@ -2025,6 +2025,7 @@ const ResponseLog = {
 
 const {GetMentionsIntentHandler} = require('./handlers/getMentions')
 const {ReadMentionsIntentHandler} = require('./handlers/readMentions')
+const {AcknowledgeMentionsIntentHandler} = require('./handlers/acknowledgeMentions')
 
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
@@ -2053,6 +2054,7 @@ const buildSkill = (skillBuilder) =>
 			NoIntentHandler,
 			PostLongMessageIntentHandler,
 			ReadMentionsIntentHandler,
+			AcknowledgeMentionsIntentHandler,
 			PostEmojiMessageIntentHandler,
 			GetLastMessageFromChannelIntentHandler,
 			AddAllToChannelIntentHandler,
