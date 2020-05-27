@@ -893,7 +893,7 @@ const postDirectMessage = async (message, roomid, headers) =>
 this function takes in a string as an input and returns an array of channel/group names which
 the user has joined and are similar to the input string
 */
-const resolveChannelname = async (channelName, headers) => {
+const resolveChannelname = async (channelName, headers, single = false) => {
 	try {
 		let publicChannelsResponse = await axios.get(apiEndpoints.channellisturl, {
 			headers
@@ -919,6 +919,13 @@ const resolveChannelname = async (channelName, headers) => {
 				type: channel.t
 			}
 		}))
+
+		if (single){
+			let channelNames = channels.map(channel => channel.name)
+			let channel = stringSimilar.findBestMatch(channelName, channelNames).bestMatch.target
+			console.log(channels.find((elem) => elem.name == channel))
+			return channels.find((elem) => elem.name == channel)
+		}
 
 		// using string similarity module to filter channels and groups which are similar to the input string
 		// here compareTwoStrings returns a rating which indicates how closely the strings match
@@ -1013,6 +1020,57 @@ const getAllUnreadMentions = async (headers) => {
 	}
 }
 
+const getUnreadMentionsCountChannel = async (roomName, headers) => {
+	try{
+		let response = await axios.get(`${apiEndpoints.counterurl}${roomName}`, {
+			headers
+		}).then(res => res.data)
+
+		return response.userMentions
+	}catch(err){
+		console.log(err)
+	}
+}
+
+const getUnreadMentionsCountGroup = async (roomId, headers) => {
+	try{
+		let response = await axios.get(`${apiEndpoints.groupcounterurl}${roomId}`, {
+			headers
+		}).then(res => res.data)
+
+		return response.userMentions
+	}catch(err) {
+		console.log(err)
+	}
+}
+
+const readUnreadMentions = async (roomId, roomName, count, headers) => {
+	try{
+		if (count == 0) return ri('MENTIONS.NO_MENTIONS_ROOM', {roomName})
+
+		response = await axios.get(`${apiEndpoints.getmentionedmessagesurl}?roomId=${roomId}&count=${count}`, {
+			headers
+		}).then((res) => res.data)
+
+		if(response.success == true){
+			let finalMessage = ""
+
+			response.messages.forEach(message => {
+				finalMessage += `${message.u.username} says, ${message.msg} <break time="0.7s"/>`
+			});
+
+			return ri('MENTIONS.READ_MENTIONS', {
+				finalMessage, count, roomName
+			})
+		}else{
+			return ri('MENTIONS.ERROR')
+		}
+
+	}catch(err){
+		console.log(err)
+	}
+}
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1054,4 +1112,7 @@ module.exports.getLastMessageType = getLastMessageType;
 module.exports.resolveChannelname = resolveChannelname;
 module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
-module.exports.getAllUnreadMentions = getAllUnreadMentions; 
+module.exports.getAllUnreadMentions = getAllUnreadMentions;
+module.exports.getUnreadMentionsCountChannel = getUnreadMentionsCountChannel;
+module.exports.getUnreadMentionsCountGroup = getUnreadMentionsCountGroup;
+module.exports.readUnreadMentions = readUnreadMentions;
