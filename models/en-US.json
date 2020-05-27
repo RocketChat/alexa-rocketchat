@@ -493,6 +493,24 @@
                         "get all mentions",
                         "get mentions"
                     ]
+                },
+                {
+                    "name": "ReadMentionsIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "from {channelname}",
+                                "{channelname}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "read mentions from channel {channelname}",
+                        "read mentions form {channelname}",
+                        "read mentions"
+                    ]
                 }
             ],
             "types": [
@@ -1875,6 +1893,23 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "ReadMentionsIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.179963255689.797794203402"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1994,6 +2029,15 @@
                     {
                         "type": "PlainText",
                         "value": "Alright, go on"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.179963255689.797794203402",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "From which channel?"
                     }
                 ]
             }
