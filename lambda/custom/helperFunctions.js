@@ -920,10 +920,10 @@ const resolveChannelname = async (channelName, headers, single = false) => {
 			}
 		}))
 
+		// this part returns only one channel which best matches the input string
 		if (single){
 			let channelNames = channels.map(channel => channel.name)
 			let channel = stringSimilar.findBestMatch(channelName, channelNames).bestMatch.target
-			console.log(channels.find((elem) => elem.name == channel))
 			return channels.find((elem) => elem.name == channel)
 		}
 
@@ -999,7 +999,6 @@ const getAllUnreadMentions = async (headers) => {
 				if(counters.userMentions == 0) continue
 				finalMessage += `${counters.userMentions} mentions in ${subscription.name}, `
 			} else if(subscription.t == 'p'){
-				console.log(subscription)
 				let counters = await axios.get(`${apiEndpoints.groupcounterurl}${subscription.rid}`, {
 					headers
 				}).then(res => res.data)
@@ -1012,11 +1011,7 @@ const getAllUnreadMentions = async (headers) => {
 		return ri('MENTIONS.MESSAGE', {finalMessage})
 	}catch(err) {
 		console.log(err.message)
-		if (err.response.status === 401) {
-			return ri('GET_UNREAD_MENTIONS_FROM_CHANNEL.AUTH_ERROR')
-		} else {
-			return ri('MENTIONS.ERROR')
-		}
+		return ri('MENTIONS.ERROR')
 	}
 }
 
@@ -1068,6 +1063,7 @@ const readUnreadMentions = async (roomId, roomName, count, headers) => {
 
 	}catch(err){
 		console.log(err)
+		return ri('MENTIONS.ERROR')
 	}
 }
 
@@ -1097,6 +1093,7 @@ const acknowledgeUnreadMentions = async (roomId, roomName, count, headers) => {
 
 	}catch(err){
 		console.log(err.message)
+		return ri('MENTIONS.ERROR')
 	}
 }
 

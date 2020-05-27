@@ -29,7 +29,6 @@ const ReadMentionsIntentHandler = {
 			} else {
 				count = await helperFunctions.getUnreadMentionsCountGroup(channel.id, headers);
             }
-            console.log(count)
             const speechText = await helperFunctions.readUnreadMentions(channel.id, channel.name, count, headers);
             let repromptText = ri('GENERIC_REPROMPT');
 
