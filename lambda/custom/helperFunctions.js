@@ -1043,7 +1043,7 @@ const readUnreadMentions = async (roomId, roomName, count, headers) => {
 	try{
 		if (count == 0) return ri('MENTIONS.NO_MENTIONS_ROOM', {roomName})
 
-		response = await axios.get(`${apiEndpoints.getmentionedmessagesurl}?roomId=${roomId}&count=${count}`, {
+		let response = await axios.get(`${apiEndpoints.getmentionedmessagesurl}?roomId=${roomId}&count=${count}`, {
 			headers
 		}).then((res) => res.data)
 
@@ -1071,7 +1071,7 @@ const acknowledgeUnreadMentions = async (roomId, roomName, count, headers) => {
 	try{
 		if (count == 0) return ri('MENTIONS.NO_MENTIONS_ROOM', {roomName})
 
-		response = await axios.get(`${apiEndpoints.getmentionedmessagesurl}?roomId=${roomId}&count=${count}`, {
+		let response = await axios.get(`${apiEndpoints.getmentionedmessagesurl}?roomId=${roomId}&count=${count}`, {
 			headers
 		}).then((res) => res.data)
 

@@ -1,4 +1,3 @@
-const Alexa = require('ask-sdk');
 const Jargon = require('@jargon/alexa-skill-sdk');
 const {
 	ri
@@ -16,8 +15,6 @@ const ReadMentionsIntentHandler = {
                 accessToken
             } = handlerInput.requestEnvelope.context.System.user;
 
-            const currentIntent = handlerInput.requestEnvelope.request.intent;
-            let updatedSlots = currentIntent.slots
             const headers = await helperFunctions.login(accessToken);
 
             let channelName = handlerInput.requestEnvelope.request.intent.slots.channelname.value;

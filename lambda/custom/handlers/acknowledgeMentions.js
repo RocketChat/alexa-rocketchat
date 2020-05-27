@@ -1,4 +1,3 @@
-const Alexa = require('ask-sdk');
 const Jargon = require('@jargon/alexa-skill-sdk');
 const {
 	ri
