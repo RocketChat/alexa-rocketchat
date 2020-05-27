@@ -990,6 +990,24 @@ const customLog = async (data) => {
 	}
 }
 
+const setStatus = async (message, headers) => {
+	try{
+		let response = await axios.post( apiEndpoints.setstatusurl , {
+			message
+		}, {
+			headers
+		}).then(res => res.data)
+
+		if(response.success){
+			return ri('STATUS.SUCCESS')
+		}
+		return ri('STATUS.ERROR')
+	}catch(err){
+		console.log(err)
+		return ri('STATUS.ERROR')
+	}
+}
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1031,3 +1049,4 @@ module.exports.getLastMessageType = getLastMessageType;
 module.exports.resolveChannelname = resolveChannelname;
 module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
+module.exports.setStatus = setStatus;
