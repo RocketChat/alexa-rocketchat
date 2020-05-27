@@ -2,6 +2,11 @@
     "interactionModel": {
         "languageModel": {
             "invocationName": "rocket chat",
+            "modelConfiguration": {
+                "fallbackIntentSensitivity": {
+                    "level": "LOW"
+                }
+            },
             "intents": [
                 {
                     "name": "AMAZON.FallbackIntent",
@@ -478,6 +483,24 @@
                 {
                     "name": "AMAZON.ScrollUpIntent",
                     "samples": []
+                },
+                {
+                    "name": "ChangeStatusIntent",
+                    "slots": [
+                        {
+                            "name": "statusmessage",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{statusmessage}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "change status to {statusmessage}",
+                        "set status to {statusmessage}",
+                        "change status",
+                        "set status"
+                    ]
                 }
             ],
             "types": [
@@ -1860,6 +1883,23 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "ChangeStatusIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "statusmessage",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.66651118599.1537942639584"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1979,6 +2019,15 @@
                     {
                         "type": "PlainText",
                         "value": "Alright, go on"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.66651118599.1537942639584",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Alright, what's the new status?"
                     }
                 ]
             }
