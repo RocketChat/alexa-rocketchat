@@ -975,6 +975,44 @@ const customLog = async (data) => {
 	}
 }
 
+const getAllUnreadMentions = async (headers) => {
+	try{
+
+		let subscriptions = await axios.get(apiEndpoints.getsubscriptionsurl, {
+			headers
+		})
+		.then(res => res.data.update)
+		let finalMessage = ""
+		for (let subscription of subscriptions){
+			if(subscription.t == 'c'){
+				let counters = await axios.get(`${apiEndpoints.counterurl}${subscription.name}`, {
+					headers
+				}).then(res => res.data)
+
+				if(counters.userMentions == 0) continue
+				finalMessage += `${counters.userMentions} mentions in ${subscription.name}, `
+			} else if(subscription.t == 'p'){
+				console.log(subscription)
+				let counters = await axios.get(`${apiEndpoints.groupcounterurl}${subscription.rid}`, {
+					headers
+				}).then(res => res.data)
+				if(counters.userMentions == 0) continue
+				finalMessage += `${counters.userMentions} mentions in ${subscription.name}, `
+			}
+		}
+
+		if (finalMessage == "") return ri('MENTIONS.NO_MENTIONS')
+		return ri('MENTIONS.MESSAGE', {finalMessage})
+	}catch(err) {
+		console.log(err.message)
+		if (err.response.status === 401) {
+			return ri('GET_UNREAD_MENTIONS_FROM_CHANNEL.AUTH_ERROR')
+		} else {
+			return ri('MENTIONS.ERROR')
+		}
+	}
+}
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1016,3 +1054,4 @@ module.exports.getLastMessageType = getLastMessageType;
 module.exports.resolveChannelname = resolveChannelname;
 module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
+module.exports.getAllUnreadMentions = getAllUnreadMentions; 
