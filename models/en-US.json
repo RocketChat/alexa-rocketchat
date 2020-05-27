@@ -511,6 +511,27 @@
                         "read mentions form {channelname}",
                         "read mentions"
                     ]
+                },
+                {
+                    "name": "AcknowledgeMentionsIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "to {channelname}",
+                                "channel {channelname}",
+                                "{channelname}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "react to mentions",
+                        "react to mentions in channel {channelname}",
+                        "react to mention in {channelname}",
+                        "react to mention",
+                        "acknowledge mention"
+                    ]
                 }
             ],
             "types": [
@@ -1910,6 +1931,23 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "AcknowledgeMentionsIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.737227584170.1411271417741"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -2038,6 +2076,15 @@
                     {
                         "type": "PlainText",
                         "value": "From which channel?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.737227584170.1411271417741",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "React in which channel?"
                     }
                 ]
             }
