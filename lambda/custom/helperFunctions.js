@@ -2,6 +2,7 @@ const axios = require('axios');
 const apiEndpoints = require('./apiEndpoints');
 const envVariables = require('./config');
 const stringSimilar = require('string-similarity')
+const settings = require('./settings')
 
 const Jargon = require('@jargon/alexa-skill-sdk');
 const {
@@ -923,7 +924,7 @@ const resolveChannelname = async (channelName, headers) => {
 		// using string similarity module to filter channels and groups which are similar to the input string
 		// here compareTwoStrings returns a rating which indicates how closely the strings match
 		// 0.3 is a rating being used here, which can be adjusted according to our needs
-		let similarChannels = channels.filter((channel) => stringSimilar.compareTwoStrings(channelName, channel.name) > 0.3 )    
+		let similarChannels = channels.filter((channel) => stringSimilar.compareTwoStrings(channelName, channel.name) > settings.similarity_index )    
 		return similarChannels
 	}catch (err) {
 		console.log(err)
@@ -958,7 +959,7 @@ const resolveUsername = async (username, headers) => {
 		})
 
 		// using string similarity module to filter usernames matching the input string
-		let similarUsernames = subscriptions.filter((subscription) => stringSimilar.compareTwoStrings(username, subscription.name) > 0.3 )
+		let similarUsernames = subscriptions.filter((subscription) => stringSimilar.compareTwoStrings(username, subscription.name) > settings.similarity_index )
 		return similarUsernames
 
 	}catch(err){
