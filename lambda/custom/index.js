@@ -2023,6 +2023,8 @@ const ResponseLog = {
   },
 };
 
+const {GetMentionsIntentHandler} = require('./handlers/getMentions')
+
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
 const buildSkill = (skillBuilder) => 
@@ -2030,6 +2032,7 @@ const buildSkill = (skillBuilder) =>
 		.addRequestHandlers(
 			ProactiveEventHandler,
 			LaunchRequestHandler,
+			GetMentionsIntentHandler,
 			ChangeNotificationSettingsIntentHandler,
 			StartedCreateChannelIntentHandler,
 			InProgressCreateChannelIntentHandler,

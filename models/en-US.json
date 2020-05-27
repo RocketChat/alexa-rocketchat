@@ -2,6 +2,11 @@
     "interactionModel": {
         "languageModel": {
             "invocationName": "rocket chat",
+            "modelConfiguration": {
+                "fallbackIntentSensitivity": {
+                    "level": "LOW"
+                }
+            },
             "intents": [
                 {
                     "name": "AMAZON.FallbackIntent",
@@ -478,6 +483,16 @@
                 {
                     "name": "AMAZON.ScrollUpIntent",
                     "samples": []
+                },
+                {
+                    "name": "GetMentionsIntent",
+                    "slots": [],
+                    "samples": [
+                        "any mentions",
+                        "mentions",
+                        "get all mentions",
+                        "get mentions"
+                    ]
                 }
             ],
             "types": [
