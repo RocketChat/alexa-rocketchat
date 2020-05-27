@@ -894,7 +894,7 @@ const postDirectMessage = async (message, roomid, headers) =>
 this function takes in a string as an input and returns an array of channel/group names which
 the user has joined and are similar to the input string
 */
-const resolveChannelname = async (channelName, headers) => {
+const resolveChannelname = async (channelName, headers, single = false) => {
 	try {
 		let publicChannelsResponse = await axios.get(apiEndpoints.channellisturl, {
 			headers
@@ -921,6 +921,13 @@ const resolveChannelname = async (channelName, headers) => {
 			}
 		}))
 
+		// this part returns only one channel which best matches the input string
+		if (single){
+			let channelNames = channels.map(channel => channel.name)
+			let channel = stringSimilar.findBestMatch(channelName, channelNames).bestMatch.target
+			return channels.find((elem) => elem.name == channel)
+		}
+
 		// using string similarity module to filter channels and groups which are similar to the input string
 		// here compareTwoStrings returns a rating which indicates how closely the strings match
 		// 0.3 is a rating being used here, which can be adjusted according to our needs
@@ -935,7 +942,7 @@ const resolveChannelname = async (channelName, headers) => {
 this function takes a string an an input and returns an array of usernames 
 which the user is in contact with and is similar to the input string
 */
-const resolveUsername = async (username, headers) => {
+const resolveUsername = async (username, headers, single = false) => {
 	try{
 		let subscriptions = await axios.get(apiEndpoints.getsubscriptionsurl, {
 			headers
@@ -957,6 +964,13 @@ const resolveUsername = async (username, headers) => {
 				}
 			})
 		})
+
+		// this part returns only one username which best matches the input string
+		if (single){
+			let usernames = subscriptions.map(subscription => subscription.name)
+			let user = stringSimilar.findBestMatch(username, usernames).bestMatch.target
+			return subscriptions.find((elem) => elem.name == user)
+		}
 
 		// using string similarity module to filter usernames matching the input string
 		let similarUsernames = subscriptions.filter((subscription) => stringSimilar.compareTwoStrings(username, subscription.name) > settings.similarity_index )
