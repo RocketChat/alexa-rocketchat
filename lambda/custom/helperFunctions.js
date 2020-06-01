@@ -2,7 +2,6 @@ const axios = require('axios');
 const apiEndpoints = require('./apiEndpoints');
 const envVariables = require('./config');
 const stringSimilar = require('string-similarity')
-const settings = require('./settings')
 
 const Jargon = require('@jargon/alexa-skill-sdk');
 const {
@@ -921,18 +920,24 @@ const resolveChannelname = async (channelName, headers, single = false) => {
 			}
 		}))
 
-		// this part returns only one channel which best matches the input string
-		if (single){
-			let channelNames = channels.map(channel => channel.name)
-			let channel = stringSimilar.findBestMatch(channelName, channelNames).bestMatch.target
-			return channels.find((elem) => elem.name == channel)
+		let bestIndex = 0
+		let bestMatchingChannel
+		let similarChannels = []
+		for(let channel of channels){
+			let index = stringSimilar.compareTwoStrings(channel.name, channelName)
+			console.log(channel.name, index)
+			if (index > bestIndex){
+				bestIndex = index
+				bestMatchingChannel = channel
+			}
+			if (index >= envVariables.lowerSimilarityIndex){
+				similarChannels.push(channel)
+			}
 		}
 
-		// using string similarity module to filter channels and groups which are similar to the input string
-		// here compareTwoStrings returns a rating which indicates how closely the strings match
-		// 0.3 is a rating being used here, which can be adjusted according to our needs
-		let similarChannels = channels.filter((channel) => stringSimilar.compareTwoStrings(channelName, channel.name) > settings.similarity_index )    
+		if (bestIndex >= envVariables.upperSimilarityIndex || single) return [bestMatchingChannel]
 		return similarChannels
+		
 	}catch (err) {
 		console.log(err)
 	}
@@ -965,16 +970,23 @@ const resolveUsername = async (username, headers, single = false) => {
 			})
 		})
 
-		// this part returns only one username which best matches the input string
-		if (single){
-			let usernames = subscriptions.map(subscription => subscription.name)
-			let user = stringSimilar.findBestMatch(username, usernames).bestMatch.target
-			return subscriptions.find((elem) => elem.name == user)
+		let bestIndex = 0
+		let bestMatchingUser
+		let similarUsers = []
+		for(let user of subscriptions){
+			let index = stringSimilar.compareTwoStrings(user.name, username)
+			console.log(user.name, index)
+			if (index > bestIndex){
+				bestIndex = index
+				bestMatchingUser = user
+			}
+			if (index >= envVariables.lowerSimilarityIndex){
+				similarUsers.push(user)
+			}
 		}
 
-		// using string similarity module to filter usernames matching the input string
-		let similarUsernames = subscriptions.filter((subscription) => stringSimilar.compareTwoStrings(username, subscription.name) > settings.similarity_index )
-		return similarUsernames
+		if (bestIndex >= envVariables.upperSimilarityIndex || single) return [bestMatchingUser]
+		return similarUsers
 
 	}catch(err){
 		console.log(err)
@@ -984,7 +996,7 @@ const resolveUsername = async (username, headers, single = false) => {
 // this functions logs the data to an external site
 const customLog = async (data) => {
 	try{
-		axios.post('http://my-logs.glitch.me/', (data))
+		axios.post(envVariables.customLogUrl, (data))
 	}catch(err){
 		console.log(err)
 	}

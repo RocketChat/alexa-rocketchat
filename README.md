@@ -319,6 +319,10 @@ Copy **https://pitangui.amazon.com/api/skill/link/YOURVENDORID** or **https://la
 ```
 ACCESS_KEY_ID=<your aws account access key ID>
 SECRET_ACCESS_KEY=<your aws account secret access key>
+SERVER_URL=<rocket chat server url>
+OAUTH_SERVICE_NAME=<oauth service name>
+DDB_NAME=<dynamo table name>
+CUSTOM_LOG_URL=<custom logger url(optional parameter)>
 ```
 
 3. From `./lambda/custom` folder, run `npm start` to start the server at port 3000.

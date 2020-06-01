@@ -2090,8 +2090,8 @@ if(process.env.DEVELOPMENT){
 	var AWS = require('aws-sdk');
 	AWS.config.update({region: 'us-east-1'});
 	AWS.config.update({credentials: {
-		accessKeyId: process.env.ACCESS_KEY_ID,
-		secretAccessKey: process.env.SECRET_ACCESS_KEY
+		accessKeyId: envVariables.awsAccessKeyId,
+		secretAccessKey: envVariables.awsSecretAccessKey
 	}})
 
 	buildSkill(skillBuilder)
@@ -2106,9 +2106,9 @@ if(process.env.DEVELOPMENT){
 	
 	app.post('/', adapter.getRequestHandlers());
 
-	const PORT = process.env.port || 3000
-	app.listen(PORT, () => {
-		console.log(`Listening at port ${PORT}`)
+	const port = process.env.PORT || 3000
+	app.listen(port, () => {
+		console.log(`Listening at port ${port}`)
 	});
 }else{
 	exports.handler = buildSkill(skillBuilder)
