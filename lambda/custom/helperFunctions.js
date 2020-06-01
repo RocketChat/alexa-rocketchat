@@ -935,6 +935,7 @@ const resolveChannelname = async (channelName, headers, single = false) => {
 			}
 		}
 
+		//if best matching name has passed the upper similarity index or if the function is called to return only best matching result
 		if (bestIndex >= envVariables.upperSimilarityIndex || single) return [bestMatchingChannel]
 		return similarChannels
 		
@@ -985,6 +986,7 @@ const resolveUsername = async (username, headers, single = false) => {
 			}
 		}
 
+		//if best matching name has passed the upper similarity index or if the function is called to return only best matching result
 		if (bestIndex >= envVariables.upperSimilarityIndex || single) return [bestMatchingUser]
 		return similarUsers
 

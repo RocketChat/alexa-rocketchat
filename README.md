@@ -312,6 +312,8 @@ Copy **https://pitangui.amazon.com/api/skill/link/YOURVENDORID** or **https://la
 
 ### Setting up Local development
 
+With this setup, develper can run the backend code of the skill in the system itself, leading to faster development.  
+Note: The below setups are optional and is not required for the code to run in aws lambda.
 
 1. Navigate to `./lambda/custom` folder and make a new file named .env
 
