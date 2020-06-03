@@ -1,0 +1,15 @@
+name: Lint
+
+on: [push]
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Run linters
+        uses: hallee/eslint-action@1.0.3
+        if: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }} 
+        with:
+          repo-token: ${{secrets.GITHUB_TOKEN}}
+          source-root: lambda/custom/
