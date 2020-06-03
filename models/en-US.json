@@ -1887,8 +1887,10 @@
                 {
                     "name": "ChangeStatusIntent",
                     "delegationStrategy": "ALWAYS",
-                    "confirmationRequired": false,
-                    "prompts": {},
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.1285618700688"
+                    },
                     "slots": [
                         {
                             "name": "statusmessage",
@@ -2028,6 +2030,15 @@
                     {
                         "type": "PlainText",
                         "value": "Alright, what's the new status?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.1285618700688",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to set status as, {statusmessage} . Is that correct?"
                     }
                 ]
             }

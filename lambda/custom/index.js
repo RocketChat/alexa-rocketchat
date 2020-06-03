@@ -2023,7 +2023,7 @@ const ResponseLog = {
   },
 };
 
-const {ChangeStatusIntentHandler} = require('./handlers/changeStatus')
+const {DeniedChangeStatusIntentHandler, ChangeStatusIntentHandler} = require('./handlers/changeStatus')
 
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
@@ -2067,6 +2067,7 @@ const buildSkill = (skillBuilder) =>
 			GetGroupUnreadMessagesIntentHandler,
 			PostDirectMessageIntentHandler,
 			PostEmojiDirectMessageIntentHandler,
+			DeniedChangeStatusIntentHandler,
 			ChangeStatusIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,

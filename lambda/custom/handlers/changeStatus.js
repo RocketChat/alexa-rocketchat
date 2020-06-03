@@ -4,6 +4,24 @@ const {
 } = Jargon;
 const {setStatus, login} = require('../helperFunctions')
 
+const DeniedChangeStatusIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+            handlerInput.requestEnvelope.request.intent.name === 'ChangeStatusIntent' &&
+            handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED'
+    },
+    handle(handlerInput) {
+        let speechText = ri('STATUS.DENIED')
+        let repromptText = ri('GENERIC_REPROMPT');
+
+        return handlerInput.jrb
+            .speak(speechText)
+            .speak(repromptText)
+            .reprompt(repromptText)
+            .getResponse();
+    }
+}
+
 const ChangeStatusIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -36,5 +54,6 @@ const ChangeStatusIntentHandler = {
 };
 
 module.exports = {
+    DeniedChangeStatusIntentHandler,
     ChangeStatusIntentHandler   
 } 

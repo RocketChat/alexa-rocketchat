@@ -98,6 +98,7 @@
     },
     "STATUS": {
         "SUCCESS": "Done.",
+        "DENIED": "Okay, I won't change your status.",
         "ERROR": "Sorry, I couldn't change your status."
     },
     "AUDIO_NO_SUPPORT": "Sorry, this skill doesn't support that feature.",
