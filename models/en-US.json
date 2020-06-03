@@ -489,8 +489,10 @@
                     "slots": [
                         {
                             "name": "statusmessage",
-                            "type": "AMAZON.SearchQuery",
+                            "type": "message",
                             "samples": [
+                                "set status as {statusmessage}",
+                                "change status to {statusmessage}",
                                 "{statusmessage}"
                             ]
                         }
@@ -1894,7 +1896,7 @@
                     "slots": [
                         {
                             "name": "statusmessage",
-                            "type": "AMAZON.SearchQuery",
+                            "type": "message",
                             "confirmationRequired": false,
                             "elicitationRequired": true,
                             "prompts": {

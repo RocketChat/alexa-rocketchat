@@ -97,7 +97,7 @@
         "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
     },
     "STATUS": {
-        "SUCCESS": "Done.",
+        "SUCCESS": "I've updated your status.",
         "DENIED": "Okay, I won't change your status.",
         "ERROR": "Sorry, I couldn't change your status."
     },
