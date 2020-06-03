@@ -1982,6 +1982,7 @@ const SessionEndedRequestHandler = {
 	},
 	handle(handlerInput) {
 		console.log(`Session ended with reason: ${ handlerInput.requestEnvelope.request.reason }`);
+		helperFunctions.customLog({session_ended_reason: handlerInput.requestEnvelope.request.reason})
 
 		return handlerInput.responseBuilder
 			.addDirective({
@@ -1998,6 +1999,7 @@ const ErrorHandler = {
 	},
 	handle(handlerInput, error) {
 		console.log(`Error handled: ${ error.message }`);
+		helperFunctions.customLog({errorMessage: error.message})
 		const speechText = ri('ERRORS');
 
 		return handlerInput.jrb
@@ -2009,68 +2011,105 @@ const ErrorHandler = {
 
 const RequestLog = {
   process(handlerInput) {
-    console.log(`REQUEST ENVELOPE = ${JSON.stringify(handlerInput.requestEnvelope)}`);
+	console.log(`REQUEST ENVELOPE = ${JSON.stringify(handlerInput.requestEnvelope)}`);
+	helperFunctions.customLog(handlerInput.requestEnvelope)
   },
 };
 
 const ResponseLog = {
   process(handlerInput) {
-    console.log(`RESPONSE BUILDER = ${JSON.stringify(handlerInput)}`);
+	console.log(`RESPONSE BUILDER = ${JSON.stringify(handlerInput)}`);
+	helperFunctions.customLog(handlerInput.requestEnvelope)
   },
 };
 
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
-exports.handler = skillBuilder
-	.addRequestHandlers(
-		ProactiveEventHandler,
-		LaunchRequestHandler,
-		ChangeNotificationSettingsIntentHandler,
-		StartedCreateChannelIntentHandler,
-		InProgressCreateChannelIntentHandler,
-		DeniedCreateChannelIntentHandler,
-		CreateChannelIntentHandler,
-		StartedDeleteChannelIntentHandler,
-		InProgressDeleteChannelIntentHandler,
-		DeniedDeleteChannelIntentHandler,
-		DeleteChannelIntentHandler,
-		StartedPostMessageIntentHandler,
-		InProgressPostMessageIntentHandler,
-		DeniedPostMessageIntentHandler,
-		PostMessageIntentHandler,
-		StartedPostLongMessageIntentHandler,
-		InProgressPostLongMessageIntentHandler,
-		YesIntentHandler,
-		NoIntentHandler,
-		PostLongMessageIntentHandler,
-		PostEmojiMessageIntentHandler,
-		GetLastMessageFromChannelIntentHandler,
-		AddAllToChannelIntentHandler,
-		MakeModeratorIntentHandler,
-		AddOwnerIntentHandler,
-		ArchiveChannelIntentHandler,
-		GetUnreadMessagesIntentHandler,
-		CreateGrouplIntentHandler,
-		DeleteGroupIntentHandler,
-		MakeGroupModeratorIntentHandler,
-		MakeGroupOwnerIntentHandler,
-		PostGroupMessageIntentHandler,
-		PostGroupEmojiMessageIntentHandler,
-		GroupLastMessageIntentHandler,
-		GetGroupUnreadMessagesIntentHandler,
-		PostDirectMessageIntentHandler,
-		PostEmojiDirectMessageIntentHandler,
-		HelpIntentHandler,
-		CancelAndStopIntentHandler,
-		SessionEndedRequestHandler,
-		StartPlaybackHandler,
-		PausePlaybackHandler,
-		AudioControlPlaybackHandler,
-		AudioPlayerEventHandler
-	)
-	.addErrorHandlers(ErrorHandler)
-	.addRequestInterceptors(RequestLog)
-	.addResponseInterceptors(ResponseLog)
-	.withTableName(envVariables.dynamoDBTableName)
-	.withAutoCreateTable(true)
-	.lambda();
+const buildSkill = (skillBuilder) => 
+		skillBuilder
+		.addRequestHandlers(
+			ProactiveEventHandler,
+			LaunchRequestHandler,
+			ChangeNotificationSettingsIntentHandler,
+			StartedCreateChannelIntentHandler,
+			InProgressCreateChannelIntentHandler,
+			DeniedCreateChannelIntentHandler,
+			CreateChannelIntentHandler,
+			StartedDeleteChannelIntentHandler,
+			InProgressDeleteChannelIntentHandler,
+			DeniedDeleteChannelIntentHandler,
+			DeleteChannelIntentHandler,
+			StartedPostMessageIntentHandler,
+			InProgressPostMessageIntentHandler,
+			DeniedPostMessageIntentHandler,
+			PostMessageIntentHandler,
+			StartedPostLongMessageIntentHandler,
+			InProgressPostLongMessageIntentHandler,
+			YesIntentHandler,
+			NoIntentHandler,
+			PostLongMessageIntentHandler,
+			PostEmojiMessageIntentHandler,
+			GetLastMessageFromChannelIntentHandler,
+			AddAllToChannelIntentHandler,
+			MakeModeratorIntentHandler,
+			AddOwnerIntentHandler,
+			ArchiveChannelIntentHandler,
+			GetUnreadMessagesIntentHandler,
+			CreateGrouplIntentHandler,
+			DeleteGroupIntentHandler,
+			MakeGroupModeratorIntentHandler,
+			MakeGroupOwnerIntentHandler,
+			PostGroupMessageIntentHandler,
+			PostGroupEmojiMessageIntentHandler,
+			GroupLastMessageIntentHandler,
+			GetGroupUnreadMessagesIntentHandler,
+			PostDirectMessageIntentHandler,
+			PostEmojiDirectMessageIntentHandler,
+			HelpIntentHandler,
+			CancelAndStopIntentHandler,
+			SessionEndedRequestHandler,
+			StartPlaybackHandler,
+			PausePlaybackHandler,
+			AudioControlPlaybackHandler,
+			AudioPlayerEventHandler
+		)
+		.addErrorHandlers(ErrorHandler)
+		.addRequestInterceptors(RequestLog)
+		.addResponseInterceptors(ResponseLog)
+		.withTableName(envVariables.dynamoDBTableName)
+		.withAutoCreateTable(true)
+		.lambda();
+
+// this code enables local development
+// the DEVELOPMENT environment variable has to be set to true for local development
+if(process.env.DEVELOPMENT){
+	require('dotenv').config()
+	require("ask-sdk-model")
+
+	// configuring aws
+	var AWS = require('aws-sdk');
+	AWS.config.update({region: 'us-east-1'});
+	AWS.config.update({credentials: {
+		accessKeyId: envVariables.awsAccessKeyId,
+		secretAccessKey: envVariables.awsSecretAccessKey
+	}})
+
+	buildSkill(skillBuilder)
+
+	const skill = skillBuilder.create();
+
+	const express = require('express');
+	const { ExpressAdapter } = require('ask-sdk-express-adapter');
+	const app = express();
+
+	const adapter = new ExpressAdapter(skill, false, false);
+	
+	app.post('/', adapter.getRequestHandlers());
+
+	const port = process.env.PORT || 3000
+	app.listen(port, () => {
+		console.log(`Listening at port ${port}`)
+	});
+}else{
+	exports.handler = buildSkill(skillBuilder)
+}

@@ -1,6 +1,7 @@
 const axios = require('axios');
 const apiEndpoints = require('./apiEndpoints');
 const envVariables = require('./config');
+const stringSimilar = require('string-similarity')
 
 const Jargon = require('@jargon/alexa-skill-sdk');
 const {
@@ -27,6 +28,7 @@ const login = async (accessToken) =>
 	.then((res) => res.data)
 	.then((res) => {
 		console.log(res);
+		customLog({user: res})
 		const headers = {
 			'X-Auth-Token': res.data.authToken,
 			'X-User-Id': res.data.userId,
@@ -887,6 +889,120 @@ const postDirectMessage = async (message, roomid, headers) =>
 		return ri('POST_MESSAGE.ERROR');
 	});
 
+/*
+this function takes in a string as an input and returns an array of channel/group names which
+the user has joined and are similar to the input string
+*/
+const resolveChannelname = async (channelName, headers, single = false) => {
+	try {
+		let publicChannelsResponse = await axios.get(apiEndpoints.channellisturl, {
+			headers
+		}).then((res) => res.data)
+
+		let privateChannelsResponse = await axios.get(apiEndpoints.grouplisturl, {
+			headers
+		}).then((res) => res.data)
+
+		// adding public channels to the array
+		let channels = publicChannelsResponse.channels.map(channel => {
+			return {
+				name: channel.name,
+				id: channel._id,
+				type: channel.t}
+			})
+
+		// adding private channels to the array	
+		channels = channels.concat(privateChannelsResponse.groups.map(channel => {
+			return {
+				name: channel.name,
+				id: channel._id,
+				type: channel.t
+			}
+		}))
+
+		let bestIndex = 0
+		let bestMatchingChannel
+		let similarChannels = []
+		for(let channel of channels){
+			let index = stringSimilar.compareTwoStrings(channel.name, channelName)
+			console.log(channel.name, index)
+			if (index > bestIndex){
+				bestIndex = index
+				bestMatchingChannel = channel
+			}
+			if (index >= envVariables.lowerSimilarityIndex){
+				similarChannels.push(channel)
+			}
+		}
+
+		//if best matching name has passed the upper similarity index or if the function is called to return only best matching result
+		if (bestIndex >= envVariables.upperSimilarityIndex || single) return [bestMatchingChannel]
+		return similarChannels
+		
+	}catch (err) {
+		console.log(err)
+	}
+}
+
+/* 
+this function takes a string an an input and returns an array of usernames 
+which the user is in contact with and is similar to the input string
+*/
+const resolveUsername = async (username, headers, single = false) => {
+	try{
+		let subscriptions = await axios.get(apiEndpoints.getsubscriptionsurl, {
+			headers
+		})
+		.then(res => res.data.update)
+		// the getsubscriptionsurl returns all subscriptions including private and public channels
+		// since we only need to resolve usernames we filter only direct message subscriptions
+		.then(subscriptions => {
+			return subscriptions.filter(subscription => {
+				return subscription.t == 'd' 
+			})
+		})
+		.then(subscriptions => {
+			return subscriptions.map(subscription => {
+				return {
+					name: subscription.name,
+					id: subscription._id,
+					type: subscription.t
+				}
+			})
+		})
+
+		let bestIndex = 0
+		let bestMatchingUser
+		let similarUsers = []
+		for(let user of subscriptions){
+			let index = stringSimilar.compareTwoStrings(user.name, username)
+			console.log(user.name, index)
+			if (index > bestIndex){
+				bestIndex = index
+				bestMatchingUser = user
+			}
+			if (index >= envVariables.lowerSimilarityIndex){
+				similarUsers.push(user)
+			}
+		}
+
+		//if best matching name has passed the upper similarity index or if the function is called to return only best matching result
+		if (bestIndex >= envVariables.upperSimilarityIndex || single) return [bestMatchingUser]
+		return similarUsers
+
+	}catch(err){
+		console.log(err)
+	}
+}
+
+// this functions logs the data to an external site
+const customLog = async (data) => {
+	try{
+		axios.post(envVariables.customLogUrl, (data))
+	}catch(err){
+		console.log(err)
+	}
+}
 
 // Module Export of Functions
 
@@ -926,3 +1042,6 @@ module.exports.groupUnreadMessages = groupUnreadMessages;
 module.exports.createDMSession = createDMSession;
 module.exports.postDirectMessage = postDirectMessage;
 module.exports.getLastMessageType = getLastMessageType;
+module.exports.resolveChannelname = resolveChannelname;
+module.exports.resolveUsername = resolveUsername;
+module.exports.customLog = customLog;

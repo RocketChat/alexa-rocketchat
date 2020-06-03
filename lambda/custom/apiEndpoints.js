@@ -11,6 +11,7 @@ module.exports = {
 	loginUrl: `${ serverurl }/api/v1/login`,
 	meUrl: `${ serverurl }/api/v1/me`,
 	channellisturl: `${ serverurl }/api/v1/channels.list.joined`,
+	grouplisturl: `${ serverurl }/api/v1/groups.list`,
 	createchannelurl: `${ serverurl }/api/v1/channels.create`,
 	deletechannelurl: `${ serverurl }/api/v1/channels.delete`,
 	postmessageurl: `${ serverurl }/api/v1/chat.postMessage`,
@@ -35,4 +36,5 @@ module.exports = {
 	groupmessageurl: `${ serverurl }/api/v1/groups.messages?roomId=`,
 	groupcounterurl: `${ serverurl }/api/v1/groups.counters?roomId=`,
 	createimurl: `${ serverurl }/api/v1/im.create`,
+	getsubscriptionsurl: `${serverurl}/api/v1/subscriptions.get`,
 };
