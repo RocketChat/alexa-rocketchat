@@ -259,40 +259,6 @@ const NoIntentHandler = {
 	},
 };
 
-const AddOwnerIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent';
-	},
-	async handle(handlerInput) {
-		try {
-
-			const userNameData = handlerInput.requestEnvelope.request.intent.slots.ownerusername.value;
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.ownerchannelname.value;
-			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
-			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
-
-			const {
-				accessToken
-			} = handlerInput.requestEnvelope.context.System.user;
-			const headers = await helperFunctions.login(accessToken);
-			const userid = await helperFunctions.getUserId(userName, headers);
-			const roomid = await helperFunctions.getRoomId(channelName, headers);
-			const speechText = await helperFunctions.addOwner(userName, channelName, userid, roomid, headers);
-			let repromptText = ri('GENERIC_REPROMPT');
-
-			return handlerInput.jrb
-				.speak(speechText)
-				.speak(repromptText)
-				.reprompt(repromptText)
-				.withSimpleCard(ri('ADD_OWNER.CARD_TITLE'), speechText)
-				.getResponse();
-		} catch (error) {
-			console.error(error);
-		}
-	},
-};
-
 const ArchiveChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -757,6 +723,8 @@ const {
 const { PostEmojiMessageIntentHandler } = require('./handlers/postEmojiMessage')
 
 const { GetLastMessageFromChannelIntentHandler } = require('./handlers/getLastMessageFromChannel')
+
+const { AddOwnerIntentHandler } = require('./handlers/addOwner')
 
 const {
 	StartPlaybackHandler,
