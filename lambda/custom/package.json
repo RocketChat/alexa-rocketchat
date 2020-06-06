@@ -25,6 +25,7 @@
     "ask-sdk-express-adapter": "^2.1.0",
     "ask-sdk-model": "^1.28.0",
     "aws-sdk": "^2.683.0",
+    "babel-eslint": "^10.1.0",
     "dotenv": "^8.2.0",
     "eslint": "^5.16.0",
     "express": "^4.17.1",
