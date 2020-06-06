@@ -32,9 +32,8 @@ module.exports = {
 	groupinfourl: `${ serverurl }/api/v1/groups.info?roomName=`,
 	addgroupmoderatorurl: `${ serverurl }/api/v1/groups.addModerator`,
 	addgroupownerurl: `${ serverurl }/api/v1/groups.addOwner`,
-	postmessageurl: `${ serverurl }/api/v1/chat.postMessage`,
 	groupmessageurl: `${ serverurl }/api/v1/groups.messages?roomId=`,
 	groupcounterurl: `${ serverurl }/api/v1/groups.counters?roomId=`,
 	createimurl: `${ serverurl }/api/v1/im.create`,
-	getsubscriptionsurl: `${serverurl}/api/v1/subscriptions.get`,
+	getsubscriptionsurl: `${ serverurl }/api/v1/subscriptions.get`,
 };
