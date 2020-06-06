@@ -259,41 +259,6 @@ const NoIntentHandler = {
 	},
 };
 
-const MakeModeratorIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'MakeModeratorIntent';
-	},
-	async handle(handlerInput) {
-		try {
-
-			const userNameData = handlerInput.requestEnvelope.request.intent.slots.moderatorusername.value;
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.moderatorchannelname.value;
-			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
-			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
-
-			const {
-				accessToken
-			} = handlerInput.requestEnvelope.context.System.user;
-			const headers = await helperFunctions.login(accessToken);
-			const userid = await helperFunctions.getUserId(userName, headers);
-			const roomid = await helperFunctions.getRoomId(channelName, headers);
-			const speechText = await helperFunctions.makeModerator(userName, channelName, userid, roomid, headers);
-			let repromptText = ri('GENERIC_REPROMPT');
-
-
-			return handlerInput.jrb
-				.speak(speechText)
-				.speak(repromptText)
-				.reprompt(repromptText)
-				.withSimpleCard(ri('MAKE_MODERATOR.CARD_TITLE'), speechText)
-				.getResponse();
-		} catch (error) {
-			console.error(error);
-		}
-	},
-};
-
 const AddOwnerIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -802,6 +767,8 @@ const {
 const { GetUnreadMessagesIntentHandler } = require('./handlers/getUnreadMessages')
 
 const { AddAllToChannelIntentHandler } = require('./handlers/addAllToChannel')
+
+const { MakeModeratorIntentHandler } = require('./handlers/makeModerator')
 
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
