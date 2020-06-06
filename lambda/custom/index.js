@@ -259,40 +259,6 @@ const NoIntentHandler = {
 	},
 };
 
-const PostEmojiMessageIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'PostEmojiMessageIntent';
-	},
-	async handle(handlerInput) {
-		try {
-			const {
-				accessToken
-			} = handlerInput.requestEnvelope.context.System.user;
-
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
-			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
-			const emojiData = handlerInput.requestEnvelope.request.intent.slots.emoji.value;
-			const emoji = helperFunctions.emojiTranslateFunc(emojiData);
-			const messageData = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
-			const message = messageData + emoji;
-
-			const headers = await helperFunctions.login(accessToken);
-			const speechText = await helperFunctions.postMessage(channelName, message, headers);
-			let repromptText = ri('GENERIC_REPROMPT');
-
-			return handlerInput.jrb
-				.speak(speechText)
-				.speak(repromptText)
-				.reprompt(repromptText)
-				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
-				.getResponse();
-		} catch (error) {
-			console.error(error);
-		}
-	},
-};
-
 const GetLastMessageFromChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -1315,6 +1281,8 @@ const {
 	InProgressPostLongMessageIntentHandler,
 	PostLongMessageIntentHandler
 } = require('./handlers/postLongMessage')
+
+const { PostEmojiMessageIntentHandler } = require('./handlers/postEmojiMessage')
 
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
