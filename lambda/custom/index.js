@@ -26,16 +26,6 @@ function supportsAPL(handlerInput) {
 	return aplInterface != null && aplInterface != undefined;
 }
 
-function supportsDisplay(handlerInput) {
-	const hasDisplay =
-	  handlerInput.requestEnvelope.context &&
-	  handlerInput.requestEnvelope.context.System &&
-	  handlerInput.requestEnvelope.context.System.device &&
-	  handlerInput.requestEnvelope.context.System.device.supportedInterfaces &&
-	  handlerInput.requestEnvelope.context.System.device.supportedInterfaces.Display;
-	return hasDisplay;
-}
-
 // Alexa Intent Functions
 
 const ProactiveEventHandler = {
@@ -459,42 +449,6 @@ const GetGroupUnreadMessagesIntentHandler = {
 	},
 };
 
-const PostEmojiDirectMessageIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'PostEmojiDirectMessageIntent';
-	},
-	async handle(handlerInput) {
-		try {
-			const {
-				accessToken
-			} = handlerInput.requestEnvelope.context.System.user;
-
-			const messageData = handlerInput.requestEnvelope.request.intent.slots.directmessage.value;
-			const userNameData = handlerInput.requestEnvelope.request.intent.slots.directmessageusername.value;
-			const userName = helperFunctions.replaceWhitespacesDots(userNameData);
-			const emojiData = handlerInput.requestEnvelope.request.intent.slots.directmessageemojiname.value;
-			const emoji = helperFunctions.emojiTranslateFunc(emojiData);
-			const message = messageData + emoji;
-
-			const headers = await helperFunctions.login(accessToken);
-			const roomid = await helperFunctions.createDMSession(userName, headers);
-			const speechText = await helperFunctions.postDirectMessage(message, roomid, headers);
-			let repromptText = ri('GENERIC_REPROMPT');
-
-
-			return handlerInput.jrb
-				.speak(speechText)
-				.speak(repromptText)
-				.reprompt(repromptText)
-				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
-				.getResponse();
-		} catch (error) {
-			console.error(error);
-		}
-	},
-};
-
 const HelpIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -680,6 +634,8 @@ const { AddAllToChannelIntentHandler } = require('./handlers/addAllToChannel')
 const { MakeModeratorIntentHandler } = require('./handlers/makeModerator')
 
 const { CreateGrouplIntentHandler } = require('./handlers/createGroup')
+
+const { PostEmojiDirectMessageIntentHandler } = require('./handlers/postEmojiDirectMessage')
 
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
