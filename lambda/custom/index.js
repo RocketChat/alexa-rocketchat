@@ -259,37 +259,6 @@ const NoIntentHandler = {
 	},
 };
 
-const ArchiveChannelIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'ArchiveChannelIntent';
-	},
-	async handle(handlerInput) {
-		try {
-
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.archivechannelname.value;
-			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
-
-			const {
-				accessToken
-			} = handlerInput.requestEnvelope.context.System.user;
-			const headers = await helperFunctions.login(accessToken);
-			const roomid = await helperFunctions.getRoomId(channelName, headers);
-			const speechText = await helperFunctions.archiveChannel(channelName, roomid, headers);
-			let repromptText = ri('GENERIC_REPROMPT');
-
-			return handlerInput.jrb
-				.speak(speechText)
-				.speak(repromptText)
-				.reprompt(repromptText)
-				.withSimpleCard(ri('ARCHIVE_CHANNEL.CARD_TITLE'), speechText)
-				.getResponse();
-		} catch (error) {
-			console.error(error);
-		}
-	},
-};
-
 const CreateGrouplIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -725,6 +694,8 @@ const { PostEmojiMessageIntentHandler } = require('./handlers/postEmojiMessage')
 const { GetLastMessageFromChannelIntentHandler } = require('./handlers/getLastMessageFromChannel')
 
 const { AddOwnerIntentHandler } = require('./handlers/addOwner')
+
+const { ArchiveChannelIntentHandler } = require('./handlers/archiveChannel')
 
 const {
 	StartPlaybackHandler,
