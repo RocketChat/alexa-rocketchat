@@ -259,36 +259,6 @@ const NoIntentHandler = {
 	},
 };
 
-const CreateGrouplIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'CreateGroupIntent';
-	},
-	async handle(handlerInput) {
-		try {
-			const {
-				accessToken
-			} = handlerInput.requestEnvelope.context.System.user;
-
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.groupname.value;
-			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
-
-			const headers = await helperFunctions.login(accessToken);
-			const speechText = await helperFunctions.createGroup(channelName, headers);
-			let repromptText = ri('GENERIC_REPROMPT');
-
-			return handlerInput.jrb
-				.speak(speechText)
-				.speak(repromptText)
-				.reprompt(repromptText)
-				.withSimpleCard(ri('CREATE_CHANNEL.CARD_TITLE'), speechText)
-				.getResponse();
-		} catch (error) {
-			console.error(error);
-		}
-	},
-};
-
 const DeleteGroupIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -708,6 +678,8 @@ const { GetUnreadMessagesIntentHandler } = require('./handlers/getUnreadMessages
 const { AddAllToChannelIntentHandler } = require('./handlers/addAllToChannel')
 
 const { MakeModeratorIntentHandler } = require('./handlers/makeModerator')
+
+const { CreateGrouplIntentHandler } = require('./handlers/createGroup')
 
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
