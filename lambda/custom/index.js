@@ -13,10 +13,6 @@ const {
 	ri
 } = Jargon;
 
-//Permissions for Notifications
-const PERMISSIONS = {
-	NOTIFICATION_PERMISSION: 'alexa::devices:all:notifications:write'
-};
 
 //APL Compaitability Checker Function
 
@@ -54,59 +50,7 @@ const ProactiveEventHandler = {
 
 
 
-const ChangeNotificationSettingsIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'ChangeNotificationSettingsIntent';
-	},
-	async handle(handlerInput) {
-		const attributesManager = handlerInput.attributesManager;
-		const attributes = await attributesManager.getPersistentAttributes() || {};
 
-		const notificationsFor = helperFunctions.slotValue(handlerInput.requestEnvelope.request.intent.slots.notificationsFor);
-		let speechText = '';
-		let repromptText = ri('GENERIC_REPROMPT');
-
-		if (attributes.hasOwnProperty("optForNotifications") && attributes.hasOwnProperty("notificationsSettings")) {
-			if (attributes.optForNotifications == true) {
-				if (attributes.notificationsSettings == notificationsFor) {
-					if (notificationsFor === "userMentions") {
-						speechText = ri('NOTIFICATION_SETTINGS.ERROR_ALREADY_USERMENTIONS');
-					} else {
-						speechText = ri('NOTIFICATION_SETTINGS.ERROR_ALREADY_UNREADS');
-					}
-				} else {
-					attributes.notificationsSettings = notificationsFor;
-					if (notificationsFor === "userMentions") {
-						speechText = ri('NOTIFICATION_SETTINGS.SUCCESS_USERMENTIONS');
-					} else {
-						speechText = ri('NOTIFICATION_SETTINGS.SUCCESS_UNREADS');
-					}
-					handlerInput.attributesManager.setPersistentAttributes(attributes);
-					await handlerInput.attributesManager.savePersistentAttributes();
-				}
-			} else {
-				speechText = ri('NOTIFICATION_SETTINGS.ERROR_TURNED_OFF');
-				return handlerInput.jrb
-					.speak(speechText)
-					.withAskForPermissionsConsentCard([PERMISSIONS.NOTIFICATION_PERMISSION])
-					.getResponse();
-			}
-		} else {
-			speechText = ri('NOTIFICATION_SETTINGS.ERROR');
-			return handlerInput.jrb
-				.speak(speechText)
-				.withAskForPermissionsConsentCard([PERMISSIONS.NOTIFICATION_PERMISSION])
-				.getResponse();
-		}
-		return handlerInput.jrb
-			.speak(speechText)
-			.speak(repromptText)
-			.reprompt(repromptText)
-			.withSimpleCard(ri('NOTIFICATION_SETTINGS.CARD_TITLE'), speechText)
-			.getResponse();
-	},
-};
 
 const YesIntentHandler = {
 	canHandle(handlerInput) {
@@ -376,6 +320,8 @@ const ResponseLog = {
 	helperFunctions.customLog(handlerInput.requestEnvelope)
   },
 };
+
+const { ChangeNotificationSettingsIntentHandler } = require('./handlers/changeNotificationSettings')
 
 const { LaunchRequestHandler } = require('./handlers/launchRequest')
 
