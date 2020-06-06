@@ -259,37 +259,6 @@ const NoIntentHandler = {
 	},
 };
 
-const AddAllToChannelIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'AddAllToChannelIntent';
-	},
-	async handle(handlerInput) {
-		try {
-
-			const {
-				accessToken
-			} = handlerInput.requestEnvelope.context.System.user;
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.addallchannelname.value;
-			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
-
-			const headers = await helperFunctions.login(accessToken);
-			const roomid = await helperFunctions.getRoomId(channelName, headers);
-			const speechText = await helperFunctions.addAll(channelName, roomid, headers);
-			let repromptText = ri('GENERIC_REPROMPT');
-
-			return handlerInput.jrb
-				.speak(speechText)
-				.speak(repromptText)
-				.reprompt(repromptText)
-				.withSimpleCard(ri('ADD_ALL_TO_CHANNEL.CARD_TITLE'), speechText)
-				.getResponse();
-		} catch (error) {
-			console.error(error);
-		}
-	},
-};
-
 const MakeModeratorIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -831,6 +800,8 @@ const {
 } = require('./handlers/playback')
 
 const { GetUnreadMessagesIntentHandler } = require('./handlers/getUnreadMessages')
+
+const { AddAllToChannelIntentHandler } = require('./handlers/addAllToChannel')
 
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
