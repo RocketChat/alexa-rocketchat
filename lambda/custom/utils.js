@@ -1,8 +1,7 @@
 // APL Compaitability Checker Function
 const supportsAPL = (handlerInput) => {
 	const { supportedInterfaces } = handlerInput.requestEnvelope.context.System.device;
-	const aplInterface = supportedInterfaces['Alexa.Presentation.APL'];
-	return aplInterface != null && aplInterface !== undefined;
+	return !!supportedInterfaces['Alexa.Presentation.APL'];
 };
 
 const supportsDisplay = (handlerInput) => {
