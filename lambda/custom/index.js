@@ -12,68 +12,68 @@ const Jargon = require('@jargon/alexa-skill-sdk');
 const {
 	ProactiveEventHandler,
 	ChangeNotificationSettingsIntentHandler,
-} = require('./handlers/changeNotificationSettings');
+} = require('./handlers/NotificationSettingHandlers');
 
-const { LaunchRequestHandler } = require('./handlers/launchRequest');
+const { LaunchRequestHandler } = require('./handlers/LaunchRequestHandler');
 
 const {
 	StartedCreateChannelIntentHandler,
 	InProgressCreateChannelIntentHandler,
 	DeniedCreateChannelIntentHandler,
 	CreateChannelIntentHandler,
-} = require('./handlers/createChannel');
+} = require('./handlers/CreateChannelIntentHandlers');
 
 const {
 	StartedDeleteChannelIntentHandler,
 	InProgressDeleteChannelIntentHandler,
 	DeniedDeleteChannelIntentHandler,
 	DeleteChannelIntentHandler,
-} = require('./handlers/deleteChannel');
+} = require('./handlers/DeleteChannelIntentHandlers');
 
 const {
 	StartedPostMessageIntentHandler,
 	InProgressPostMessageIntentHandler,
 	DeniedPostMessageIntentHandler,
 	PostMessageIntentHandler,
-} = require('./handlers/postMessage');
+} = require('./handlers/PostMessageIntentHandlers');
 
 const {
 	StartedPostDirectMessageIntentHandler,
 	InProgressPostDirectMessageIntentHandler,
 	DeniedPostDirectMessageIntentHandler,
 	PostDirectMessageIntentHandler,
-} = require('./handlers/directMessage');
+} = require('./handlers/PostDirectMessageIntentHandlers');
 
 const {
 	StartedPostLongMessageIntentHandler,
 	InProgressPostLongMessageIntentHandler,
 	PostLongMessageIntentHandler,
-} = require('./handlers/postLongMessage');
+} = require('./handlers/PostLongMessageIntentHandlers');
 
-const { PostEmojiMessageIntentHandler } = require('./handlers/postEmojiMessage');
+const { PostEmojiMessageIntentHandler } = require('./handlers/PostEmojiMessageIntentHandler');
 
-const { GetLastMessageFromChannelIntentHandler } = require('./handlers/getLastMessageFromChannel');
+const { GetLastMessageFromChannelIntentHandler } = require('./handlers/GetLastMessageFromChannelIntentHandler');
 
-const { AddOwnerIntentHandler } = require('./handlers/addOwner');
+const { AddOwnerIntentHandler } = require('./handlers/AddOwnerIntentHandler');
 
-const { ArchiveChannelIntentHandler } = require('./handlers/archiveChannel');
+const { ArchiveChannelIntentHandler } = require('./handlers/ArchiveChannelIntentHandler');
 
 const {
 	StartPlaybackHandler,
 	AudioControlPlaybackHandler,
 	PausePlaybackHandler,
 	AudioPlayerEventHandler,
-} = require('./handlers/playback');
+} = require('./handlers/PlaybackIntentHandlers');
 
-const { GetUnreadMessagesIntentHandler } = require('./handlers/getUnreadMessages');
+const { GetUnreadMessagesIntentHandler } = require('./handlers/GetUnreadMessagesIntentHandler');
 
-const { AddAllToChannelIntentHandler } = require('./handlers/addAllToChannel');
+const { AddAllToChannelIntentHandler } = require('./handlers/AddAllToChannelIntentHandler');
 
-const { MakeModeratorIntentHandler } = require('./handlers/makeModerator');
+const { MakeModeratorIntentHandler } = require('./handlers/MakeModeratorIntentHandler');
 
-const { CreateGrouplIntentHandler } = require('./handlers/createGroup');
+const { CreateGrouplIntentHandler } = require('./handlers/CreateGrouplIntentHandler');
 
-const { PostEmojiDirectMessageIntentHandler } = require('./handlers/postEmojiDirectMessage');
+const { PostEmojiDirectMessageIntentHandler } = require('./handlers/PostEmojiDirectMessageIntentHandler');
 
 const {
 	DeleteGroupIntentHandler,
@@ -82,7 +82,7 @@ const {
 	PostGroupEmojiMessageIntentHandler,
 	GroupLastMessageIntentHandler,
 	GetGroupUnreadMessagesIntentHandler,
-} = require('./handlers/privateChannelIntents');
+} = require('./handlers/PrivateChannelIntents');
 
 const {
 	YesIntentHandler,
@@ -91,7 +91,7 @@ const {
 	HelpIntentHandler,
 } = require('./handlers/builtinIntents');
 
-const { SessionEndedRequestHandler } = require('./handlers/helperIntents');
+const { SessionEndedRequestHandler } = require('./handlers/SessionEndedRequestHandler');
 
 const { ErrorHandler } = require('./handlers/ErrorHandler');
 
