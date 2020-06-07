@@ -118,8 +118,48 @@ request.intent.name === 'AMAZON.PauseIntent');
 	},
 };
 
+const AudioPlayerEventHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type.startsWith('AudioPlayer.');
+	},
+	async handle(handlerInput) {
+
+		const { attributesManager } = handlerInput;
+		const attributes = await attributesManager.getPersistentAttributes() || {};
+		attributes.inPlaybackSession = true;
+
+		const audioPlayerEventName = handlerInput.requestEnvelope.request.type.split('.')[1];
+
+		switch (audioPlayerEventName) {
+			case 'PlaybackStarted':
+				attributes.inPlaybackSession = true;
+				break;
+			case 'PlaybackFinished':
+				attributes.inPlaybackSession = false;
+				break;
+			case 'PlaybackStopped':
+				attributes.inPlaybackSession = true;
+				break;
+			case 'PlaybackNearlyFinished':
+				attributes.inPlaybackSession = true;
+				break;
+			case 'PlaybackFailed':
+				attributes.inPlaybackSession = false;
+				console.log('Playback Failed : %j', handlerInput.requestEnvelope.request.error);
+				return;
+			default:
+				throw new Error('Should never reach here!');
+		}
+
+		await handlerInput.attributesManager.savePersistentAttributes();
+
+		return handlerInput.responseBuilder.getResponse();
+	},
+};
+
 module.exports = {
 	StartPlaybackHandler,
 	AudioControlPlaybackHandler,
 	PausePlaybackHandler,
+	AudioPlayerEventHandler,
 };
