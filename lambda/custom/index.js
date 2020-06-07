@@ -52,188 +52,7 @@ const ProactiveEventHandler = {
 
 
 
-const YesIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'AMAZON.YesIntent';
-	},
-	handle(handlerInput) {
-		
-		const attributesManager = handlerInput.attributesManager;
-		const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
-		return handlerInput.jrb
-		  .speak(ri('POST_MESSAGE.CONFIRM_MORE'))
-		  .reprompt(ri('POST_MESSAGE.CONFIRM_MORE_REPROMPT'))
-		  .addElicitSlotDirective("longmessage", {
-			name: 'PostLongMessageIntent',
-			confirmationStatus: 'NONE',
-			slots: {
-				"channelname": {
-					"name": "channelname",
-					"value": sessionAttributes.channelName,
-					"confirmationStatus": "NONE"
-				},
-				"longmessage": {
-					"name": "longmessage",
-					"confirmationStatus": "NONE"
-				}
-			}
-		  })
-		  .getResponse();
-	},
-};
-
-
-const NoIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'AMAZON.NoIntent';
-	},
-	async handle(handlerInput) {
-		try {
-			const attributesManager = handlerInput.attributesManager;
-			const sessionAttributes = attributesManager.getSessionAttributes() || {};
-
-			if(sessionAttributes.postLongMessageIntentOnProgress){
-				delete sessionAttributes.postLongMessageIntentOnProgress
-				delete sessionAttributes.channelConfirm
-				const {
-					accessToken
-				} = handlerInput.requestEnvelope.context.System.user;
-
-
-
-				let channelName = sessionAttributes.channelName;
-				let message = sessionAttributes.message;
-
-				delete sessionAttributes.channelName;
-				delete sessionAttributes.message;
-
-				const headers = await helperFunctions.login(accessToken);
-				const speechText = await helperFunctions.postMessage(channelName, message, headers);
-				let repromptText = ri('GENERIC_REPROMPT');
-
-
-				if (supportsAPL(handlerInput)) {
-
-					return handlerInput.jrb
-					.speak(speechText)
-					.speak(repromptText)
-					.reprompt(repromptText)
-					.addDirective({
-						type: 'Alexa.Presentation.APL.RenderDocument',
-						version: '1.0',
-						document: layouts.postMessageLayout,
-						datasources: {
-
-							"PostMessageData": {
-								"type": "object",
-								"objectId": "rcPostMessage",
-								"backgroundImage": {
-									"contentDescription": null,
-									"smallSourceUrl": null,
-									"largeSourceUrl": null,
-									"sources": [
-										{
-											"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
-											"size": "small",
-											"widthPixels": 0,
-											"heightPixels": 0
-										},
-										{
-											"url": "https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png",
-											"size": "large",
-											"widthPixels": 0,
-											"heightPixels": 0
-										}
-									]
-								},
-								"textContent": {
-									"channelname": {
-										"type": "PlainText",
-										"text": `#${channelName}`
-									},
-									"message": {
-										"type": "PlainText",
-										"text": message
-									}
-								},
-								"logoUrl": "https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png"
-							}
-
-						}
-					})
-					.getResponse();
-
-				} else {
-					return handlerInput.jrb
-					.speak(speechText)
-					.speak(repromptText)
-					.reprompt(repromptText)
-					.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
-					.getResponse();
-				}
-			} else {
-				const speechText = ri('GOODBYE.MESSAGE');
-
-				return handlerInput.jrb
-					.speak(speechText)
-					.withSimpleCard(ri('GOODBYE.CARD_TITLE'), speechText)
-					.addDirective({
-						type: 'Dialog.UpdateDynamicEntities',
-						updateBehavior: 'CLEAR'
-					})
-					.getResponse();
-			}
-
-		} catch (error) {
-			console.error(error);
-		}
-	},
-};
-
-const HelpIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
-	},
-	handle(handlerInput) {
-		const speechText = ri('HELP.MESSAGE');
-
-		return handlerInput.jrb
-			.speak(speechText)
-			.reprompt(speechText)
-			.withSimpleCard(ri('HELP.CARD_TITLE'), speechText)
-			.getResponse();
-	},
-};
-
-const CancelAndStopIntentHandler = {
-	async canHandle(handlerInput) {
-		const attributesManager = handlerInput.attributesManager;
-		const attributes = await attributesManager.getPersistentAttributes() || {};
-	
-		if(!attributes.hasOwnProperty('inPlaybackSession') || attributes.inPlaybackSession == false){
-			return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			(handlerInput.requestEnvelope.request.intent.name === 'AMAZON.CancelIntent' ||
-				handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent' ||
-					handlerInput.requestEnvelope.request.intent.name === 'AMAZON.PauseIntent');
-		}
-	},
-	handle(handlerInput) {
-		const speechText = ri('GOODBYE.MESSAGE');
-
-		return handlerInput.jrb
-			.speak(speechText)
-			.withSimpleCard(ri('GOODBYE.CARD_TITLE'), speechText)
-			.addDirective({
-				type: 'Dialog.UpdateDynamicEntities',
-				updateBehavior: 'CLEAR'
-			})
-			.getResponse();
-	},
-};
 
 const AudioPlayerEventHandler = {
 	canHandle(handlerInput) {
@@ -392,6 +211,13 @@ const {
     GetGroupUnreadMessagesIntentHandler
 } = require('./handlers/privateChannelIntents')
 
+const {
+	YesIntentHandler,
+	NoIntentHandler,
+	CancelAndStopIntentHandler,
+	HelpIntentHandler
+} = require('./handlers/builtinIntents')
+
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
 const buildSkill = (skillBuilder) => 
@@ -445,8 +271,8 @@ const buildSkill = (skillBuilder) =>
 			AudioPlayerEventHandler
 		)
 		.addErrorHandlers(ErrorHandler)
-		.addRequestInterceptors(RequestLog)
-		.addResponseInterceptors(ResponseLog)
+		// .addRequestInterceptors(RequestLog)
+		// .addResponseInterceptors(ResponseLog)
 		.withTableName(envVariables.dynamoDBTableName)
 		.withAutoCreateTable(true)
 		.lambda();
