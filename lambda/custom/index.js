@@ -2,10 +2,8 @@
 /* eslint-disable  no-console */
 
 const Alexa = require('ask-sdk');
-const JSON = require('circular-json');
 const helperFunctions = require('./helperFunctions');
 const envVariables = require('./config');
-const layouts = require('./APL/layouts');
 
 // Jargon for Localization
 const Jargon = require('@jargon/alexa-skill-sdk');
@@ -13,14 +11,6 @@ const {
 	ri
 } = Jargon;
 
-
-//APL Compaitability Checker Function
-
-function supportsAPL(handlerInput) {
-	const supportedInterfaces = handlerInput.requestEnvelope.context.System.device.supportedInterfaces;
-	const aplInterface = supportedInterfaces['Alexa.Presentation.APL'];
-	return aplInterface != null && aplInterface != undefined;
-}
 
 // Alexa Intent Functions
 
@@ -126,20 +116,6 @@ const ErrorHandler = {
 	},
 };
 
-const RequestLog = {
-  process(handlerInput) {
-	console.log(`REQUEST ENVELOPE = ${JSON.stringify(handlerInput.requestEnvelope)}`);
-	helperFunctions.customLog(handlerInput.requestEnvelope)
-  },
-};
-
-const ResponseLog = {
-  process(handlerInput) {
-	console.log(`RESPONSE BUILDER = ${JSON.stringify(handlerInput)}`);
-	helperFunctions.customLog(handlerInput.requestEnvelope)
-  },
-};
-
 const { ChangeNotificationSettingsIntentHandler } = require('./handlers/changeNotificationSettings')
 
 const { LaunchRequestHandler } = require('./handlers/launchRequest')
@@ -218,6 +194,11 @@ const {
 	HelpIntentHandler
 } = require('./handlers/builtinIntents')
 
+const {
+	RequestLog,
+	ResponseLog
+} = require('./interceptors')
+
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
 const buildSkill = (skillBuilder) => 
@@ -271,8 +252,8 @@ const buildSkill = (skillBuilder) =>
 			AudioPlayerEventHandler
 		)
 		.addErrorHandlers(ErrorHandler)
-		// .addRequestInterceptors(RequestLog)
-		// .addResponseInterceptors(ResponseLog)
+		.addRequestInterceptors(RequestLog)
+		.addResponseInterceptors(ResponseLog)
 		.withTableName(envVariables.dynamoDBTableName)
 		.withAutoCreateTable(true)
 		.lambda();
