@@ -62,6 +62,7 @@ const {
 	StartPlaybackHandler,
 	AudioControlPlaybackHandler,
 	PausePlaybackHandler,
+	AudioPlayerEventHandler,
 } = require('./handlers/playback');
 
 const { GetUnreadMessagesIntentHandler } = require('./handlers/getUnreadMessages');
@@ -91,7 +92,6 @@ const {
 } = require('./handlers/builtinIntents');
 
 const {
-	AudioPlayerEventHandler,
 	SessionEndedRequestHandler,
 	ErrorHandler,
 } = require('./handlers/helperIntents');
