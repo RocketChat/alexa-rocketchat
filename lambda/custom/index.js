@@ -91,10 +91,9 @@ const {
 	HelpIntentHandler,
 } = require('./handlers/builtinIntents');
 
-const {
-	SessionEndedRequestHandler,
-	ErrorHandler,
-} = require('./handlers/helperIntents');
+const { SessionEndedRequestHandler } = require('./handlers/helperIntents');
+
+const { ErrorHandler } = require('./handlers/ErrorHandler');
 
 const {
 	RequestLog,
