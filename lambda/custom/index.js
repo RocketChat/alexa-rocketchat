@@ -85,11 +85,13 @@ const {
 } = require('./handlers/PrivateChannelIntents');
 
 const {
-	YesIntentHandler,
-	NoIntentHandler,
 	CancelAndStopIntentHandler,
 	HelpIntentHandler,
 } = require('./handlers/builtinIntents');
+
+const { YesIntentHandler } = require('./handlers/YesIntentHandler');
+
+const { NoIntentHandler } = require('./handlers/NoIntentHandler');
 
 const { SessionEndedRequestHandler } = require('./handlers/SessionEndedRequestHandler');
 
