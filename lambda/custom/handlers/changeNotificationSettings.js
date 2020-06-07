@@ -1,5 +1,5 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { slotValue } = require('../helperFunctions');
+const { slotValue } = require('../utils');
 
 // Permissions for Notifications
 const PERMISSIONS = {
