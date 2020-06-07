@@ -1,5 +1,15 @@
 {
     "extends": [
         "@rocket.chat/eslint-config"
-    ]
+    ],
+    "parser": "babel-eslint",
+    "settings": {
+        "import/resolver": {
+          "node": {
+            "extensions": [
+              ".js"
+            ]
+          }
+        }
+    }
 }
