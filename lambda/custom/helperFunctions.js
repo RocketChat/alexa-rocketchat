@@ -28,7 +28,7 @@ const login = async (accessToken) =>
 		.then((res) => res.data)
 		.then((res) => {
 			console.log(res);
-			customLog({ user: res });
+			customLog({ user: res }); // eslint-disable-line no-use-before-define
 			const headers = {
 				'X-Auth-Token': res.data.authToken,
 				'X-User-Id': res.data.userId,
@@ -74,7 +74,7 @@ const createPersonalAccessToken = async (headers) =>
 			if (
 				err.response.data.errorType === 'error-token-already-exists'
 			) {
-				return await removePersonalAccessToken(headers);
+				return await removePersonalAccessToken(headers); // eslint-disable-line no-use-before-define
 			}
 			return '';
 		});

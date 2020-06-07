@@ -2,112 +2,107 @@
 /* eslint-disable  no-console */
 
 const Alexa = require('ask-sdk');
-const helperFunctions = require('./helperFunctions');
 const envVariables = require('./config');
 
 // Jargon for Localization
 const Jargon = require('@jargon/alexa-skill-sdk');
-const {
-	ri
-} = Jargon;
-
 
 // Alexa Intent Functions
 
-const { ChangeNotificationSettingsIntentHandler } = require('./handlers/changeNotificationSettings')
+const { ChangeNotificationSettingsIntentHandler } = require('./handlers/changeNotificationSettings');
 
-const { LaunchRequestHandler } = require('./handlers/launchRequest')
+const { LaunchRequestHandler } = require('./handlers/launchRequest');
 
-const { 
+const {
 	StartedCreateChannelIntentHandler,
 	InProgressCreateChannelIntentHandler,
 	DeniedCreateChannelIntentHandler,
-	CreateChannelIntentHandler
-} = require('./handlers/createChannel')
+	CreateChannelIntentHandler,
+} = require('./handlers/createChannel');
 
 const {
 	StartedDeleteChannelIntentHandler,
 	InProgressDeleteChannelIntentHandler,
 	DeniedDeleteChannelIntentHandler,
-	DeleteChannelIntentHandler
-} = require('./handlers/deleteChannel')
+	DeleteChannelIntentHandler,
+} = require('./handlers/deleteChannel');
 
 const {
 	StartedPostMessageIntentHandler,
 	InProgressPostMessageIntentHandler,
 	DeniedPostMessageIntentHandler,
-	PostMessageIntentHandler
-} = require('./handlers/postMessage')
+	PostMessageIntentHandler,
+} = require('./handlers/postMessage');
 
 const {
-    StartedPostDirectMessageIntentHandler,
-    InProgressPostDirectMessageIntentHandler,
-    DeniedPostDirectMessageIntentHandler,
-    PostDirectMessageIntentHandler
-} = require('./handlers/directMessage')
+	StartedPostDirectMessageIntentHandler,
+	InProgressPostDirectMessageIntentHandler,
+	DeniedPostDirectMessageIntentHandler,
+	PostDirectMessageIntentHandler,
+} = require('./handlers/directMessage');
 
 const {
 	StartedPostLongMessageIntentHandler,
 	InProgressPostLongMessageIntentHandler,
-	PostLongMessageIntentHandler
-} = require('./handlers/postLongMessage')
+	PostLongMessageIntentHandler,
+} = require('./handlers/postLongMessage');
 
-const { PostEmojiMessageIntentHandler } = require('./handlers/postEmojiMessage')
+const { PostEmojiMessageIntentHandler } = require('./handlers/postEmojiMessage');
 
-const { GetLastMessageFromChannelIntentHandler } = require('./handlers/getLastMessageFromChannel')
+const { GetLastMessageFromChannelIntentHandler } = require('./handlers/getLastMessageFromChannel');
 
-const { AddOwnerIntentHandler } = require('./handlers/addOwner')
+const { AddOwnerIntentHandler } = require('./handlers/addOwner');
 
-const { ArchiveChannelIntentHandler } = require('./handlers/archiveChannel')
+const { ArchiveChannelIntentHandler } = require('./handlers/archiveChannel');
 
 const {
 	StartPlaybackHandler,
-    AudioControlPlaybackHandler,
-    PausePlaybackHandler
-} = require('./handlers/playback')
+	AudioControlPlaybackHandler,
+	PausePlaybackHandler,
+} = require('./handlers/playback');
 
-const { GetUnreadMessagesIntentHandler } = require('./handlers/getUnreadMessages')
+const { GetUnreadMessagesIntentHandler } = require('./handlers/getUnreadMessages');
 
-const { AddAllToChannelIntentHandler } = require('./handlers/addAllToChannel')
+const { AddAllToChannelIntentHandler } = require('./handlers/addAllToChannel');
 
-const { MakeModeratorIntentHandler } = require('./handlers/makeModerator')
+const { MakeModeratorIntentHandler } = require('./handlers/makeModerator');
 
-const { CreateGrouplIntentHandler } = require('./handlers/createGroup')
+const { CreateGrouplIntentHandler } = require('./handlers/createGroup');
 
-const { PostEmojiDirectMessageIntentHandler } = require('./handlers/postEmojiDirectMessage')
+const { PostEmojiDirectMessageIntentHandler } = require('./handlers/postEmojiDirectMessage');
 
 const {
 	DeleteGroupIntentHandler,
-    MakeGroupModeratorIntentHandler,
-    MakeGroupOwnerIntentHandler,
-    PostGroupEmojiMessageIntentHandler,
-    GroupLastMessageIntentHandler,
-    GetGroupUnreadMessagesIntentHandler
-} = require('./handlers/privateChannelIntents')
+	MakeGroupModeratorIntentHandler,
+	MakeGroupOwnerIntentHandler,
+	PostGroupEmojiMessageIntentHandler,
+	GroupLastMessageIntentHandler,
+	GetGroupUnreadMessagesIntentHandler,
+} = require('./handlers/privateChannelIntents');
 
 const {
 	YesIntentHandler,
 	NoIntentHandler,
 	CancelAndStopIntentHandler,
-	HelpIntentHandler
-} = require('./handlers/builtinIntents')
+	HelpIntentHandler,
+} = require('./handlers/builtinIntents');
 
 const {
 	ProactiveEventHandler,
-    AudioPlayerEventHandler,
-    SessionEndedRequestHandler,
-    ErrorHandler
-} = require('./handlers/helperIntents')
+	AudioPlayerEventHandler,
+	SessionEndedRequestHandler,
+	ErrorHandler,
+} = require('./handlers/helperIntents');
 
 const {
 	RequestLog,
-	ResponseLog
-} = require('./interceptors')
+	ResponseLog,
+} = require('./interceptors');
 
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
-const buildSkill = (skillBuilder) => 
-		skillBuilder
+const buildSkill = (skillBuilder) =>
+	skillBuilder
 		.addRequestHandlers(
 			ProactiveEventHandler,
 			LaunchRequestHandler,
@@ -165,19 +160,19 @@ const buildSkill = (skillBuilder) =>
 
 // this code enables local development
 // the DEVELOPMENT environment variable has to be set to true for local development
-if(process.env.DEVELOPMENT){
-	require('dotenv').config()
-	require("ask-sdk-model")
+if (process.env.DEVELOPMENT) {
+	require('dotenv').config();
+	require('ask-sdk-model');
 
 	// configuring aws
-	var AWS = require('aws-sdk');
-	AWS.config.update({region: 'us-east-1'});
-	AWS.config.update({credentials: {
+	const AWS = require('aws-sdk');
+	AWS.config.update({ region: 'us-east-1' });
+	AWS.config.update({ credentials: {
 		accessKeyId: envVariables.awsAccessKeyId,
-		secretAccessKey: envVariables.awsSecretAccessKey
-	}})
+		secretAccessKey: envVariables.awsSecretAccessKey,
+	} });
 
-	buildSkill(skillBuilder)
+	buildSkill(skillBuilder);
 
 	const skill = skillBuilder.create();
 
@@ -186,13 +181,13 @@ if(process.env.DEVELOPMENT){
 	const app = express();
 
 	const adapter = new ExpressAdapter(skill, false, false);
-	
+
 	app.post('/', adapter.getRequestHandlers());
 
-	const port = process.env.PORT || 3000
+	const port = process.env.PORT || 3000;
 	app.listen(port, () => {
-		console.log(`Listening at port ${port}`)
+		console.log(`Listening at port ${ port }`);
 	});
-}else{
-	exports.handler = buildSkill(skillBuilder)
+} else {
+	exports.handler = buildSkill(skillBuilder);
 }
