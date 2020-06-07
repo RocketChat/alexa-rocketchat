@@ -9,7 +9,10 @@ const Jargon = require('@jargon/alexa-skill-sdk');
 
 // Alexa Intent Functions
 
-const { ChangeNotificationSettingsIntentHandler } = require('./handlers/changeNotificationSettings');
+const {
+	ProactiveEventHandler,
+	ChangeNotificationSettingsIntentHandler,
+} = require('./handlers/changeNotificationSettings');
 
 const { LaunchRequestHandler } = require('./handlers/launchRequest');
 
@@ -88,7 +91,6 @@ const {
 } = require('./handlers/builtinIntents');
 
 const {
-	ProactiveEventHandler,
 	AudioPlayerEventHandler,
 	SessionEndedRequestHandler,
 	ErrorHandler,

@@ -6,6 +6,29 @@ const PERMISSIONS = {
 	NOTIFICATION_PERMISSION: 'alexa::devices:all:notifications:write',
 };
 
+const ProactiveEventHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'AlexaSkillEvent.ProactiveSubscriptionChanged';
+	},
+	async handle(handlerInput) {
+		const { attributesManager } = handlerInput;
+		const attributes = await attributesManager.getPersistentAttributes() || {};
+
+		if (handlerInput.requestEnvelope.request.hasOwnProperty('body')) {
+			if (attributes.hasOwnProperty('optForNotifications')) {
+				attributes.optForNotifications = !attributes.optForNotifications;
+			} else {
+				attributes.optForNotifications = true;
+			}
+		} else {
+			attributes.optForNotifications = false;
+		}
+
+		handlerInput.attributesManager.setPersistentAttributes(attributes);
+		await handlerInput.attributesManager.savePersistentAttributes();
+	},
+};
+
 const ChangeNotificationSettingsIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -61,5 +84,6 @@ const ChangeNotificationSettingsIntentHandler = {
 };
 
 module.exports = {
+	ProactiveEventHandler,
 	ChangeNotificationSettingsIntentHandler,
 };
