@@ -1,7 +1,7 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
 const { getStaticAndDynamicSlotValuesFromSlot, replaceWhitespacesFunc, login, postMessage } = require('../helperFunctions');
 const { supportsAPL } = require('../utils');
-const { postMessageLayout } = require('../APL/layouts');
+const titleMessageTemplate = require('../APL/templates/titleMessageTemplate');
 
 const StartedPostMessageIntentHandler = {
 	canHandle(handlerInput) {
@@ -82,7 +82,10 @@ const PostMessageIntentHandler = {
 			const headers = await login(accessToken);
 			const speechText = await postMessage(channelName, message, headers);
 			const repromptText = ri('GENERIC_REPROMPT');
-
+			const data = {
+				title: `Message sent to #${ channelName }`,
+				message,
+			};
 
 			if (supportsAPL(handlerInput)) {
 
@@ -90,49 +93,7 @@ const PostMessageIntentHandler = {
 					.speak(speechText)
 					.speak(repromptText)
 					.reprompt(repromptText)
-					.addDirective({
-						type: 'Alexa.Presentation.APL.RenderDocument',
-						version: '1.0',
-						document: postMessageLayout,
-						datasources: {
-
-							PostMessageData: {
-								type: 'object',
-								objectId: 'rcPostMessage',
-								backgroundImage: {
-									contentDescription: null,
-									smallSourceUrl: null,
-									largeSourceUrl: null,
-									sources: [
-										{
-											url: 'https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png',
-											size: 'small',
-											widthPixels: 0,
-											heightPixels: 0,
-										},
-										{
-											url: 'https://user-images.githubusercontent.com/41849970/60673516-82021100-9e95-11e9-8a9c-cc68cfe5acf1.png',
-											size: 'large',
-											widthPixels: 0,
-											heightPixels: 0,
-										},
-									],
-								},
-								textContent: {
-									channelname: {
-										type: 'PlainText',
-										text: `#${ channelName }`,
-									},
-									message: {
-										type: 'PlainText',
-										text: message,
-									},
-								},
-								logoUrl: 'https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png',
-							},
-
-						},
-					})
+					.addDirective(titleMessageTemplate(data))
 					.getResponse();
 
 			} else {
