@@ -1,7 +1,7 @@
 /* eslint-disable  func-names */
 /* eslint-disable  no-console */
 
-const Alexa = require('ask-sdk');
+const Alexa = require('ask-sdk')
 const JSON = require('circular-json');
 const helperFunctions = require('./helperFunctions');
 const envVariables = require('./config');
