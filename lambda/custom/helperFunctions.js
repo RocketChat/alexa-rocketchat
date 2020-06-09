@@ -866,7 +866,6 @@ const resolveChannelname = async (channelName, headers, single = false) => {
 		const similarChannels = [];
 		for (const channel of channels) {
 			const index = stringSimilar.compareTwoStrings(channel.name, channelName);
-			console.log(channel.name, index);
 			if (index > bestIndex) {
 				bestIndex = index;
 				bestMatchingChannel = channel;
@@ -909,7 +908,6 @@ const resolveUsername = async (username, headers, single = false) => {
 		const similarUsers = [];
 		for (const user of subscriptions) {
 			const index = stringSimilar.compareTwoStrings(user.name, username);
-			console.log(user.name, index);
 			if (index > bestIndex) {
 				bestIndex = index;
 				bestMatchingUser = user;
