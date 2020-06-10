@@ -98,6 +98,13 @@ const { SessionEndedRequestHandler } = require('./handlers/SessionEndedRequestHa
 const { ErrorHandler } = require('./handlers/ErrorHandler');
 
 const {
+	StartedSetAnnouncementIntentHandler,
+	InProgressSetAnnouncementIntentHandler,
+	DeniedSetAnnouncementIntentHandler,
+	SetAnnouncementIntentHandler,
+} = require('./handlers/SetAnnouncementIntentHandlers');
+
+const {
 	RequestLog,
 	ResponseLog,
 } = require('./interceptors');
@@ -146,6 +153,10 @@ const buildSkill = (skillBuilder) =>
 			GroupLastMessageIntentHandler,
 			GetGroupUnreadMessagesIntentHandler,
 			PostEmojiDirectMessageIntentHandler,
+			StartedSetAnnouncementIntentHandler,
+			InProgressSetAnnouncementIntentHandler,
+			DeniedSetAnnouncementIntentHandler,
+			SetAnnouncementIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,
