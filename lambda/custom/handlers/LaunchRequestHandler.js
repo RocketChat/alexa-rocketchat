@@ -1,7 +1,8 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
 const { login, createPersonalAccessToken, getUserName, channelList } = require('../helperFunctions');
-const { authorisationErrorLayout, homePageLayout } = require('../APL/layouts');
+const { authorisationErrorLayout } = require('../APL/layouts');
 const { supportsAPL } = require('../utils');
+const homePageTemplate = require('../APL/templates/homePageTemplate');
 
 
 const LaunchRequestHandler = {
@@ -107,48 +108,15 @@ const LaunchRequestHandler = {
 		await handlerInput.attributesManager.savePersistentAttributes();
 
 		if (supportsAPL(handlerInput)) {
+			const data = {
+				title: 'Welcome to Rocket.Chat',
+				hint: 'Try, "Alexa, Send a message"',
+			};
 
 			return handlerInput.jrb
 				.speak(speechText)
 				.reprompt(speechText)
-				.addDirective({
-					type: 'Alexa.Presentation.APL.RenderDocument',
-					version: '1.0',
-					document: homePageLayout,
-					datasources: {
-						RCHomePageData: {
-							type: 'object',
-							objectId: 'rcHomePage',
-							backgroundImage: {
-								contentDescription: null,
-								smallSourceUrl: null,
-								largeSourceUrl: null,
-								sources: [
-									{
-										url: 'https://user-images.githubusercontent.com/41849970/60758741-64b97800-a038-11e9-9798-45b3b8a89b31.png',
-										size: 'small',
-										widthPixels: 0,
-										heightPixels: 0,
-									},
-									{
-										url: 'https://user-images.githubusercontent.com/41849970/60758741-64b97800-a038-11e9-9798-45b3b8a89b31.png',
-										size: 'large',
-										widthPixels: 0,
-										heightPixels: 0,
-									},
-								],
-							},
-							textContent: {
-								primaryText: {
-									type: 'PlainText',
-									text: 'Welcome to Rocket.Chat',
-								},
-							},
-							logoUrl: 'https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png',
-							hintText: 'Try, "Alexa, send a message"',
-						},
-					},
-				})
+				.addDirective(homePageTemplate(data))
 				.addDirective({
 					type: 'Dialog.UpdateDynamicEntities',
 					updateBehavior: 'REPLACE',
