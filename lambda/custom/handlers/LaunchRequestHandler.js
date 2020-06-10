@@ -1,8 +1,8 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
 const { login, createPersonalAccessToken, getUserName, channelList } = require('../helperFunctions');
-const { authorisationErrorLayout } = require('../APL/layouts');
 const { supportsAPL } = require('../utils');
 const homePageTemplate = require('../APL/templates/homePageTemplate');
+const errorMessageTemplate = require('../APL/templates/errorMessageTemplate');
 
 
 const LaunchRequestHandler = {
@@ -18,51 +18,15 @@ const LaunchRequestHandler = {
 			const speechText = ri('WELCOME.ERROR');
 
 			if (supportsAPL(handlerInput)) {
+				const data = {
+					error: 'AUTHORISED PERSONNEL ONLY',
+					message: 'To start using this skill, please use the companion app to authenticate.',
+				};
 
 				return handlerInput.jrb
 					.speak(speechText)
 					.reprompt(speechText)
-					.addDirective({
-						type: 'Alexa.Presentation.APL.RenderDocument',
-						version: '1.0',
-						document: authorisationErrorLayout,
-						datasources: {
-							AuthorisationErrorPageData: {
-								type: 'object',
-								objectId: 'rcAuthorisation',
-								backgroundImage: {
-									contentDescription: null,
-									smallSourceUrl: null,
-									largeSourceUrl: null,
-									sources: [
-										{
-											url: 'https://user-images.githubusercontent.com/41849970/60644955-126c3180-9e55-11e9-9147-7820655f3c0b.png',
-											size: 'small',
-											widthPixels: 0,
-											heightPixels: 0,
-										},
-										{
-											url: 'https://user-images.githubusercontent.com/41849970/60644955-126c3180-9e55-11e9-9147-7820655f3c0b.png',
-											size: 'large',
-											widthPixels: 0,
-											heightPixels: 0,
-										},
-									],
-								},
-								textContent: {
-									primaryText: {
-										type: 'PlainText',
-										text: 'AUTHORISED PERSONNEL ONLY',
-									},
-									secondaryText: {
-										type: 'PlainText',
-										text: 'To start using this skill, please use the companion app to authenticate.',
-									},
-								},
-								logoUrl: 'https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png',
-							},
-						},
-					})
+					.addDirective(errorMessageTemplate(data))
 					.getResponse();
 
 			} else {
