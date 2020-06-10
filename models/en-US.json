@@ -491,6 +491,35 @@
                 {
                     "name": "AMAZON.ScrollUpIntent",
                     "samples": []
+                },
+                {
+                    "name": "SetAnnouncementIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "in channel {channelname}",
+                                "channel {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "announcement",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{announcement}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "Set announcement in {channelname}",
+                        "Set announcement in channel {channelname}",
+                        "Set an announcement"
+                    ]
                 }
             ],
             "types": [
@@ -1901,6 +1930,41 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "SetAnnouncementIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.432711597445"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.432711597445.840419366335"
+                            }
+                        },
+                        {
+                            "name": "announcement",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.432711597445.359632651461"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -2047,6 +2111,33 @@
                     {
                         "type": "PlainText",
                         "value": "You want to send {directmessage} to {directmessageusername} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.432711597445.359632651461",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What announcement do you want to set?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.432711597445.840419366335",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to set the announcement in?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.432711597445",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to set, {announcement} , as announcement in {channelname} , is that correct?"
                     }
                 ]
             }
