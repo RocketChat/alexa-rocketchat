@@ -935,6 +935,31 @@ const customLog = async (data) => {
 	}
 };
 
+const setAnnouncement = async (room, announcement, headers) => {
+	try {
+		const url = room.type === 'c' ? apiEndpoints.setannouncementchannel : apiEndpoints.setannouncementgroup;
+		const response = await axios.post(url, {
+			roomId: room.id, announcement,
+		}, {
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) {
+			return ri('CHANNEL_DETAILS.SET_ANNOUNCEMENT_SUCCESS');
+		}
+		return ri('CHANNEL_DETAILS.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('CHANNEL_DETAILS.ERROR');
+		} else if (err.response.status === 401) {
+			return ri('CHANNEL_DETAILS.AUTH_ERROR');
+		} else {
+			return ri('CHANNEL_DETAILS.ERROR');
+		}
+	}
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -974,3 +999,4 @@ module.exports.getLastMessageType = getLastMessageType;
 module.exports.resolveChannelname = resolveChannelname;
 module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
+module.exports.setAnnouncement = setAnnouncement;
