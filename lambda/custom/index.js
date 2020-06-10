@@ -102,6 +102,13 @@ const { RequestLog } = require('./handlers/Interceptors/RequestLog');
 
 const APLLocalisationRequestInterceptor = require('./handlers/Interceptors/APLLocalisationRequestInterceptor');
 
+const {
+	StartedSetAnnouncementIntentHandler,
+	InProgressSetAnnouncementIntentHandler,
+	DeniedSetAnnouncementIntentHandler,
+	SetAnnouncementIntentHandler,
+} = require('./handlers/SetAnnouncementIntentHandlers');
+
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
 const buildSkill = (skillBuilder) =>
@@ -146,6 +153,10 @@ const buildSkill = (skillBuilder) =>
 			GroupLastMessageIntentHandler,
 			GetGroupUnreadMessagesIntentHandler,
 			PostEmojiDirectMessageIntentHandler,
+			StartedSetAnnouncementIntentHandler,
+			InProgressSetAnnouncementIntentHandler,
+			DeniedSetAnnouncementIntentHandler,
+			SetAnnouncementIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,
