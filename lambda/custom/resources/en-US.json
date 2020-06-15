@@ -107,6 +107,7 @@
     "CHANNEL_DETAILS": {
         "SET_ANNOUNCEMENT_SUCCESS": "I've set the announcement.",
         "SET_ANNOUNCEMENT_DENIED": "Okay, I won't set the announcement.",
+        "NOT_AUTHORISED": "Sorry, You are not authorised to perform this.",
         "ERROR": "Sorry, I couldn't do it at the moment.",
         "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate."
     },

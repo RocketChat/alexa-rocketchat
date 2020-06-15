@@ -950,6 +950,9 @@ const setAnnouncement = async (room, announcement, headers) => {
 		return ri('CHANNEL_DETAILS.ERROR');
 
 	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-action-not-allowed') {
+			return ri('CHANNEL_DETAILS.NOT_AUTHORISED');
+		}
 		if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
 			return ri('CHANNEL_DETAILS.ERROR');
 		} else if (err.response.status === 401) {
