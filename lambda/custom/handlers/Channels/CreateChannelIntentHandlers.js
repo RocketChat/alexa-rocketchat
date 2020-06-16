@@ -1,7 +1,7 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, createChannel, replaceWhitespacesFunc } = require('../helperFunctions');
-const { supportsAPL } = require('../utils');
-const { createChannelLayout } = require('../APL/layouts');
+const { login, createChannel, replaceWhitespacesFunc } = require('../../helperFunctions');
+const { supportsAPL } = require('../../utils');
+const { createChannelLayout } = require('../../APL/layouts');
 
 const StartedCreateChannelIntentHandler = {
 	canHandle(handlerInput) {

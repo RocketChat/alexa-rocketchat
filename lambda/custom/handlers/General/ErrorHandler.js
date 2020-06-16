@@ -1,5 +1,5 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { customLog } = require('../helperFunctions');
+const { customLog } = require('../../helperFunctions');
 
 const ErrorHandler = {
 	canHandle() {

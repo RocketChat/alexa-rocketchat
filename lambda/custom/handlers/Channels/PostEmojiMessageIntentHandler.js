@@ -1,5 +1,5 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, replaceWhitespacesFunc, emojiTranslateFunc, postMessage } = require('../helperFunctions');
+const { login, replaceWhitespacesFunc, emojiTranslateFunc, postMessage } = require('../../helperFunctions');
 
 const PostEmojiMessageIntentHandler = {
 	canHandle(handlerInput) {

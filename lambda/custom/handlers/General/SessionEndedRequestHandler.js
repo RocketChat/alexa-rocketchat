@@ -1,4 +1,4 @@
-const { customLog } = require('../helperFunctions');
+const { customLog } = require('../../helperFunctions');
 
 const SessionEndedRequestHandler = {
 	canHandle(handlerInput) {

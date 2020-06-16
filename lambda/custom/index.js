@@ -12,68 +12,68 @@ const Jargon = require('@jargon/alexa-skill-sdk');
 const {
 	ProactiveEventHandler,
 	ChangeNotificationSettingsIntentHandler,
-} = require('./handlers/NotificationSettingHandlers');
+} = require('./handlers/Notifications/NotificationSettingHandlers');
 
-const { LaunchRequestHandler } = require('./handlers/LaunchRequestHandler');
+const { LaunchRequestHandler } = require('./handlers/General/LaunchRequestHandler');
 
 const {
 	StartedCreateChannelIntentHandler,
 	InProgressCreateChannelIntentHandler,
 	DeniedCreateChannelIntentHandler,
 	CreateChannelIntentHandler,
-} = require('./handlers/CreateChannelIntentHandlers');
+} = require('./handlers/Channels/CreateChannelIntentHandlers');
 
 const {
 	StartedDeleteChannelIntentHandler,
 	InProgressDeleteChannelIntentHandler,
 	DeniedDeleteChannelIntentHandler,
 	DeleteChannelIntentHandler,
-} = require('./handlers/DeleteChannelIntentHandlers');
+} = require('./handlers/Channels/DeleteChannelIntentHandlers');
 
 const {
 	StartedPostMessageIntentHandler,
 	InProgressPostMessageIntentHandler,
 	DeniedPostMessageIntentHandler,
 	PostMessageIntentHandler,
-} = require('./handlers/PostMessageIntentHandlers');
+} = require('./handlers/Channels/PostMessageIntentHandlers');
 
 const {
 	StartedPostDirectMessageIntentHandler,
 	InProgressPostDirectMessageIntentHandler,
 	DeniedPostDirectMessageIntentHandler,
 	PostDirectMessageIntentHandler,
-} = require('./handlers/PostDirectMessageIntentHandlers');
+} = require('./handlers/Direct/PostDirectMessageIntentHandlers');
 
 const {
 	StartedPostLongMessageIntentHandler,
 	InProgressPostLongMessageIntentHandler,
 	PostLongMessageIntentHandler,
-} = require('./handlers/PostLongMessageIntentHandlers');
+} = require('./handlers/Channels/PostLongMessageIntentHandlers');
 
-const { PostEmojiMessageIntentHandler } = require('./handlers/PostEmojiMessageIntentHandler');
+const { PostEmojiMessageIntentHandler } = require('./handlers/Channels/PostEmojiMessageIntentHandler');
 
-const { GetLastMessageFromChannelIntentHandler } = require('./handlers/GetLastMessageFromChannelIntentHandler');
+const { GetLastMessageFromChannelIntentHandler } = require('./handlers/Channels/GetLastMessageFromChannelIntentHandler');
 
-const { AddOwnerIntentHandler } = require('./handlers/AddOwnerIntentHandler');
+const { AddOwnerIntentHandler } = require('./handlers/Channels/AddOwnerIntentHandler');
 
-const { ArchiveChannelIntentHandler } = require('./handlers/ArchiveChannelIntentHandler');
+const { ArchiveChannelIntentHandler } = require('./handlers/Channels/ArchiveChannelIntentHandler');
 
 const {
 	StartPlaybackHandler,
 	AudioControlPlaybackHandler,
 	PausePlaybackHandler,
 	AudioPlayerEventHandler,
-} = require('./handlers/PlaybackIntentHandlers');
+} = require('./handlers/General/PlaybackIntentHandlers');
 
-const { GetUnreadMessagesIntentHandler } = require('./handlers/GetUnreadMessagesIntentHandler');
+const { GetUnreadMessagesIntentHandler } = require('./handlers/Channels/GetUnreadMessagesIntentHandler');
 
-const { AddAllToChannelIntentHandler } = require('./handlers/AddAllToChannelIntentHandler');
+const { AddAllToChannelIntentHandler } = require('./handlers/Channels/AddAllToChannelIntentHandler');
 
-const { MakeModeratorIntentHandler } = require('./handlers/MakeModeratorIntentHandler');
+const { MakeModeratorIntentHandler } = require('./handlers/Channels/MakeModeratorIntentHandler');
 
-const { CreateGrouplIntentHandler } = require('./handlers/CreateGrouplIntentHandler');
+const { CreateGrouplIntentHandler } = require('./handlers/Channels/CreateGrouplIntentHandler');
 
-const { PostEmojiDirectMessageIntentHandler } = require('./handlers/PostEmojiDirectMessageIntentHandler');
+const { PostEmojiDirectMessageIntentHandler } = require('./handlers/Direct/PostEmojiDirectMessageIntentHandler');
 
 const {
 	DeleteGroupIntentHandler,
@@ -82,25 +82,24 @@ const {
 	PostGroupEmojiMessageIntentHandler,
 	GroupLastMessageIntentHandler,
 	GetGroupUnreadMessagesIntentHandler,
-} = require('./handlers/PrivateChannelIntents');
+} = require('./handlers/Channels/PrivateChannelIntents');
 
 const {
 	CancelAndStopIntentHandler,
 	HelpIntentHandler,
-} = require('./handlers/builtinIntents');
+} = require('./handlers/General/builtinIntents');
 
-const { YesIntentHandler } = require('./handlers/YesIntentHandler');
+const { YesIntentHandler } = require('./handlers/General/YesIntentHandler');
 
-const { NoIntentHandler } = require('./handlers/NoIntentHandler');
+const { NoIntentHandler } = require('./handlers/General/NoIntentHandler');
 
-const { SessionEndedRequestHandler } = require('./handlers/SessionEndedRequestHandler');
+const { SessionEndedRequestHandler } = require('./handlers/General/SessionEndedRequestHandler');
 
-const { ErrorHandler } = require('./handlers/ErrorHandler');
+const { ErrorHandler } = require('./handlers/General/ErrorHandler');
 
-const {
-	RequestLog,
-	ResponseLog,
-} = require('./interceptors');
+const { ResponseLog } = require('./handlers/Interceptors/ResponseLog');
+
+const { RequestLog } = require('./handlers/Interceptors/RequestLog');
 
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 

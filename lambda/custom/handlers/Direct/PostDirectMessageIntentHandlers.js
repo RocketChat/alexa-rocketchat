@@ -1,5 +1,5 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, resolveUsername, createDMSession, postDirectMessage } = require('../helperFunctions');
+const { login, resolveUsername, createDMSession, postDirectMessage } = require('../../helperFunctions');
 
 
 const StartedPostDirectMessageIntentHandler = {
