@@ -15,6 +15,7 @@
         "SUCCESS": "Welcome To Rocket Chat Alexa Skill. What Would you like to do today?",
         "SUCCESS_RETURN_USER": "Welcome back! What Would you like to do today?",
         "CARD_TITLE": "Welcome To Rocket.Chat",
+        "HINT": "Try, 'Alexa, Send a message'.",
         "AUTH_ERROR_TITLE": "AUTHORISED PERSONNEL ONLY",
         "ERROR": "UMM, To start using this skill, please use the companion app to authenticate."
     },
