@@ -15,7 +15,8 @@
         "SUCCESS": "Welcome To Rocket Chat Alexa Skill. What Would you like to do today?",
         "SUCCESS_RETURN_USER": "Welcome back! What Would you like to do today?",
         "CARD_TITLE": "Welcome To Rocket.Chat",
-        "ERROR": "To start using this skill, please use the companion app to authenticate."
+        "AUTH_ERROR_TITLE": "AUTHORISED PERSONNEL ONLY",
+        "ERROR": "UMM, To start using this skill, please use the companion app to authenticate."
     },
     "NOTIFICATION_SETTINGS": {
         "SUCCESS_USERMENTIONS": "I have updated your settings. You will now receive notifications for user mentions only.",

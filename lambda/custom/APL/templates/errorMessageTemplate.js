@@ -1,7 +1,7 @@
 const layout = require('../layouts/errorMessageLayout.json');
 const APLconfig = require('../APLconfig');
 
-const template = ({ error, message }) => ({
+const template = ({ errorTitle, errorMessage }) => ({
 	type: 'Alexa.Presentation.APL.RenderDocument',
 	version: '1.0',
 	document: layout,
@@ -31,11 +31,11 @@ const template = ({ error, message }) => ({
 			textContent: {
 				primaryText: {
 					type: 'PlainText',
-					text: error,
+					text: errorTitle,
 				},
 				secondaryText: {
 					type: 'PlainText',
-					text: message,
+					text: errorMessage,
 				},
 			},
 			logoUrl: APLconfig.logoUrl,
