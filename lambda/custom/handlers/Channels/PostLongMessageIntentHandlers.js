@@ -1,5 +1,5 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, resolveChannelname } = require('../helperFunctions');
+const { login, resolveChannelname } = require('../../helperFunctions');
 
 
 const StartedPostLongMessageIntentHandler = {

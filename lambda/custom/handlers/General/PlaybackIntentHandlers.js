@@ -1,5 +1,5 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { supportsDisplay } = require('../utils');
+const { supportsDisplay } = require('../../utils');
 
 
 const StartPlaybackHandler = {

@@ -1,5 +1,5 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const helperFunctions = require('../helperFunctions');
+const helperFunctions = require('../../helperFunctions');
 
 const DeleteGroupIntentHandler = {
 	canHandle(handlerInput) {

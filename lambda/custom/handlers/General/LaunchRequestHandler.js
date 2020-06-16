@@ -1,8 +1,8 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, createPersonalAccessToken, getUserName, channelList } = require('../helperFunctions');
-const { supportsAPL } = require('../utils');
-const homePageTemplate = require('../APL/templates/homePageTemplate');
-const errorMessageTemplate = require('../APL/templates/errorMessageTemplate');
+const { login, createPersonalAccessToken, getUserName, channelList } = require('../../helperFunctions');
+const { supportsAPL } = require('../../utils');
+const homePageTemplate = require('../../APL/templates/homePageTemplate');
+const errorMessageTemplate = require('../../APL/templates/errorMessageTemplate');
 
 
 const LaunchRequestHandler = {

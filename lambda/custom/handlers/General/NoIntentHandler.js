@@ -1,7 +1,7 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, postMessage } = require('../helperFunctions');
-const { supportsAPL } = require('../utils');
-const titleMessageTemplate = require('../APL/templates/titleMessageTemplate');
+const { login, postMessage } = require('../../helperFunctions');
+const { supportsAPL } = require('../../utils');
+const titleMessageTemplate = require('../../APL/templates/titleMessageTemplate');
 
 
 const NoIntentHandler = {

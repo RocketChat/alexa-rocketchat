@@ -1,7 +1,7 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { replaceWhitespacesFunc, login, deleteChannel } = require('../helperFunctions');
-const { deleteChannelLayout } = require('../APL/layouts');
-const { supportsAPL } = require('../utils');
+const { replaceWhitespacesFunc, login, deleteChannel } = require('../../helperFunctions');
+const { deleteChannelLayout } = require('../../APL/layouts');
+const { supportsAPL } = require('../../utils');
 
 
 const StartedDeleteChannelIntentHandler = {

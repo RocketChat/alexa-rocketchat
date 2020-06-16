@@ -1,7 +1,7 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const helperFunctions = require('../helperFunctions');
-const layouts = require('../APL/layouts');
-const { supportsAPL, supportsDisplay } = require('../utils');
+const helperFunctions = require('../../helperFunctions');
+const layouts = require('../../APL/layouts');
+const { supportsAPL, supportsDisplay } = require('../../utils');
 
 
 const GetLastMessageFromChannelIntentHandler = {
