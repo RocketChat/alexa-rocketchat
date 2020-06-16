@@ -19,8 +19,8 @@ const LaunchRequestHandler = {
 
 			if (supportsAPL(handlerInput)) {
 				const data = {
-					error: 'AUTHORISED PERSONNEL ONLY',
-					message: 'To start using this skill, please use the companion app to authenticate.',
+					errorTitle: handlerInput.translate('WELCOME.AUTH_ERROR_TITLE'),
+					errorMessage: handlerInput.translate('WELCOME.ERROR'),
 				};
 
 				return handlerInput.jrb
