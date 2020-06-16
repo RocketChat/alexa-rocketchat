@@ -146,7 +146,7 @@ const PostMessageIntentHandler = {
 			const speechText = await postMessage(channelName, message, headers);
 			const repromptText = ri('GENERIC_REPROMPT');
 			const data = {
-				title: `Message sent to #${ channelName }`,
+				title: handlerInput.translate('POST_MESSAGE.APL_SUCCESS', { channelName }),
 				message,
 			};
 

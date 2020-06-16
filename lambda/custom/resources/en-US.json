@@ -29,6 +29,7 @@
         "ERROR_ALREADY_UNREADS": "Your notification settings are already set to unread messages."
     },
     "POST_MESSAGE": {
+        "APL_SUCCESS": "Message sent to #{channelName}.",
         "SUCCESS": "I've sent your message.",
         "ASK_MORE": "Would you like to add more?",
         "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
