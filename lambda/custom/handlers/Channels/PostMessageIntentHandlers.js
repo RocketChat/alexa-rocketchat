@@ -1,7 +1,7 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
 const { login, resolveChannelname, postMessage } = require('../../helperFunctions');
 const { supportsAPL } = require('../../utils');
-const titleMessageTemplate = require('../../APL/templates/titleMessageTemplate');
+const titleMessageBoxTemplate = require('../../APL/templates/titleMessageBoxTemplate');
 
 const StartedPostMessageIntentHandler = {
 	canHandle(handlerInput) {
@@ -156,7 +156,7 @@ const PostMessageIntentHandler = {
 					.speak(speechText)
 					.speak(repromptText)
 					.reprompt(repromptText)
-					.addDirective(titleMessageTemplate(data))
+					.addDirective(titleMessageBoxTemplate(data))
 					.getResponse();
 
 			} else {
