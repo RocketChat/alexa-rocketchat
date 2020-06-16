@@ -1,4 +1,4 @@
-const layout = require('../layouts/titleMessageBoxLayout.json.json');
+const layout = require('../layouts/titleMessageBoxLayout.json');
 const APLconfig = require('../APLconfig');
 
 const template = ({ title, message }) => ({

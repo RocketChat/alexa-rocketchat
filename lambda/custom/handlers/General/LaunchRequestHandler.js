@@ -1,7 +1,7 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
 const { login, createPersonalAccessToken, getUserName, channelList } = require('../../helperFunctions');
 const { supportsAPL } = require('../../utils');
-const homePageTemplate = require('../../APL/templates/homePageTemplate');
+const titleHintTemplate = require('../../APL/templates/titleHintTemplate');
 const errorMessageTemplate = require('../../APL/templates/errorMessageTemplate');
 
 
@@ -73,14 +73,14 @@ const LaunchRequestHandler = {
 
 		if (supportsAPL(handlerInput)) {
 			const data = {
-				title: 'Welcome to Rocket.Chat',
-				hint: 'Try, "Alexa, Send a message"',
+				title: handlerInput.translate('WELCOME.CARD_TITLE'),
+				hint: handlerInput.translate('WELCOME.HINT'),
 			};
 
 			return handlerInput.jrb
 				.speak(speechText)
 				.reprompt(speechText)
-				.addDirective(homePageTemplate(data))
+				.addDirective(titleHintTemplate(data))
 				.addDirective({
 					type: 'Dialog.UpdateDynamicEntities',
 					updateBehavior: 'REPLACE',

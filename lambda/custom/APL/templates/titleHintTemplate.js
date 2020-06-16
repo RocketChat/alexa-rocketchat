@@ -1,4 +1,4 @@
-const layout = require('../layouts/homePageLayout.json');
+const layout = require('../layouts/titleHintLayout.json');
 const APLconfig = require('../APLconfig');
 
 const template = ({ title, hint }) => ({
