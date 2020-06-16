@@ -36,7 +36,7 @@ const NoIntentHandler = {
 
 				if (supportsAPL(handlerInput)) {
 					const data = {
-						title: `Message sent to #${ channelName }`,
+						title: handlerInput.translate('POST_MESSAGE.APL_SUCCESS', { channelName }),
 						message,
 					};
 
