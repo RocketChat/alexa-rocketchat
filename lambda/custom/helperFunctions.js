@@ -899,7 +899,8 @@ const resolveUsername = async (username, headers, single = false) => {
 			.then((subscriptions) => subscriptions.filter((subscription) => subscription.t === 'd'))
 			.then((subscriptions) => subscriptions.map((subscription) => ({
 				name: subscription.name,
-				id: subscription._id,
+				// the last 17 characters of the rid property represents the id of the user
+				id: subscription.rid.slice(-17,),
 				type: subscription.t,
 			})));
 
@@ -932,6 +933,43 @@ const customLog = async (data) => {
 		axios.post(envVariables.customLogUrl, (data));
 	} catch (err) {
 		console.log(err);
+	}
+};
+
+const addLeader = async (roomId, userId, roomname, username, headers) => {
+	try {
+		const response = await axios.post('https://bots.rocket.chat/api/v1/channels.addLeader', {
+			roomId, userId,
+		},
+		{
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) {
+			return ri('ROOM_ROLES.ADD_LEADER_SUCCESS');
+		}
+
+		return ri('ROOM_ROLES.ERROR');
+
+	} catch (err) {
+		console.log(err);
+		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+			return ri('ROOM_ROLES.ERROR_NOT_ALLOWED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+			return ri('ROOM_ROLES.INVALID_USER', { username });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-already-leader') {
+			return ri('ROOM_ROLES.ALREADY_LEADER', { username, roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
+			return ri('ROOM_ROLES.USER_NOT_MEMBER', { username, roomname });
+		} else if (err.response.status === 401) {
+			return ri('ROOM_ROLES.AUTH_ERROR');
+		} else {
+			return ri('ROOM_ROLES.ERROR');
+		}
 	}
 };
 
@@ -974,3 +1012,4 @@ module.exports.getLastMessageType = getLastMessageType;
 module.exports.resolveChannelname = resolveChannelname;
 module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
+module.exports.addLeader = addLeader;
