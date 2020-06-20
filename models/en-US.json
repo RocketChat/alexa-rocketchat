@@ -491,6 +491,38 @@
                 {
                     "name": "AMAZON.ScrollUpIntent",
                     "samples": []
+                },
+                {
+                    "name": "AddLeaderIntent",
+                    "slots": [
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{username}",
+                                "set {username}",
+                                "user {username}"
+                            ]
+                        },
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "{channelname}",
+                                "channel {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "Add leader to group",
+                        "Add leader to channel",
+                        "Add leader to {channelname}",
+                        "Add leader"
+                    ]
                 }
             ],
             "types": [
@@ -1901,6 +1933,42 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "AddLeaderIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.969670625304"
+                    },
+                    "slots": [
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.969670625304.359535257121",
+                                "elicitation": "Elicit.Slot.969670625304.359535257121"
+                            }
+                        },
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.969670625304.385533606691"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -2047,6 +2115,42 @@
                     {
                         "type": "PlainText",
                         "value": "You want to send {directmessage} to {directmessageusername} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.969670625304.359535257121",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to set the leader as?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.969670625304.359535257121",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "{username} , did I get that right?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.969670625304.385533606691",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to add the leader for?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.969670625304",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to set {username} as leader of {channelname} , is that correct?"
                     }
                 ]
             }
