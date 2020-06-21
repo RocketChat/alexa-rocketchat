@@ -84,10 +84,9 @@ const {
 	GetGroupUnreadMessagesIntentHandler,
 } = require('./handlers/Channels/PrivateChannelIntents');
 
-const {
-	CancelAndStopIntentHandler,
-	HelpIntentHandler,
-} = require('./handlers/General/builtinIntents');
+const { HelpIntentHandler } = require('./handlers/General/HelpIntentHandler');
+
+const { CancelAndStopIntentHandler } = require('./handlers/General/CancelAndStopIntentHandler');
 
 const { YesIntentHandler } = require('./handlers/General/YesIntentHandler');
 
