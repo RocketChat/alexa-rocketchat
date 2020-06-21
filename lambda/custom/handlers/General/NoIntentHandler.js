@@ -65,6 +65,7 @@ const NoIntentHandler = {
 						type: 'Dialog.UpdateDynamicEntities',
 						updateBehavior: 'CLEAR',
 					})
+					.withShouldEndSession(true)
 					.getResponse();
 			}
 

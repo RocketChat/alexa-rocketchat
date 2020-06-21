@@ -33,11 +33,12 @@ const CancelAndStopIntentHandler = {
 
 		return handlerInput.jrb
 			.speak(speechText)
-			.withSimplesuppoCard(ri('GOODBYE.CARD_TITLE'), speechText)
+			.withSimpleCard(ri('GOODBYE.CARD_TITLE'), speechText)
 			.addDirective({
 				type: 'Dialog.UpdateDynamicEntities',
 				updateBehavior: 'CLEAR',
 			})
+			.withShouldEndSession(true)
 			.getResponse();
 	},
 };
