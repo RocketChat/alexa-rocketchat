@@ -106,16 +106,17 @@
     },
     "RESOLVE_CHANNEL":{
         "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
-        "NO_CHANNEL":"There is no channel named {channel_name}.",
+        "NO_CHANNEL":"You are not part of any channel or group named {channel_name}.",
         "SIMILAR_CHANNELS": "There are multiple channels with similar name. Please tell the serial number of desired channel. {channel_names}."
     },
     "RESOLVE_USERNAME":{
         "ASK_CHOICE": "Please select between one and {choice_limit}. {users_list}.",
-        "NO_USER":"There is no user named {username}.",
+        "NO_USER":"There is no user named {username} in your contacts list.",
         "SIMILAR_USERS": "There are multiple users with similar username. Please tell the serial number of desired user. {user_names}."
     },
     "ROOM_ROLES":{
-        "ADD_LEADER_SUCCESS": "A new leader has been added.",
+        "ADD_LEADER_SUCCESS": "{username} is now the leader of {roomname}.",
+        "ADD_LEADER_DENIED": "Okay.",
         "ALREADY_LEADER": "{username} is already a leader of {roomname}.",
         "USER_NOT_MEMBER": "{username} is not a member of room {roomname}.",
         "ERROR_NOT_ALLOWED": "Sorry, you don't have the right to perform this operation.",

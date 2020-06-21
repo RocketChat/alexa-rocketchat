@@ -936,17 +936,27 @@ const customLog = async (data) => {
 	}
 };
 
-const addLeader = async (roomId, userId, roomname, username, headers) => {
+const addLeader = async (roomId, userId, roomname, username, type, headers) => {
 	try {
-		const response = await axios.post('https://bots.rocket.chat/api/v1/channels.addLeader', {
-			roomId, userId,
-		},
-		{
-			headers,
-		}).then((res) => res.data);
+		let response;
+		if (type === 'c') {
+			response = await axios.post(apiEndpoints.addleadertochannelurl, {
+				roomId, userId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		} else if (type === 'p') {
+			response = await axios.post(apiEndpoints.addleadertogroupurl, {
+				roomId, userId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		}
 
 		if (response.success) {
-			return ri('ROOM_ROLES.ADD_LEADER_SUCCESS');
+			return ri('ROOM_ROLES.ADD_LEADER_SUCCESS', { username, roomname });
 		}
 
 		return ri('ROOM_ROLES.ERROR');
