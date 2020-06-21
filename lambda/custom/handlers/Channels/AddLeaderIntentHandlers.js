@@ -18,7 +18,7 @@ const AddLeaderIntentHandler = {
 
 		const headers = await login(accessToken);
 
-		const speakOutput = await addLeader(sessionAttributes.channel.id, sessionAttributes.user.id, sessionAttributes.channel.name, sessionAttributes.user.name, headers);
+		const speakOutput = await addLeader(sessionAttributes.channel.id, sessionAttributes.user.id, sessionAttributes.channel.name, sessionAttributes.user.name, sessionAttributes.channel.type, headers);
 		const repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
@@ -37,12 +37,13 @@ const DeniedAddLeaderIntentHandler = {
 	},
 	handle(handlerInput) {
 
-		const speakOutput = "Okay, I won't add any leader, anything else I can help you with?";
-		console.log('The request was DENIED');
+		const speakOutput = ri('ROOM_ROLES.ADD_LEADER_DENIED');
+		const repromptText = ri('GENERIC_REPROMPT');
 
-		return handlerInput.responseBuilder
+		return handlerInput.jrb
 			.speak(speakOutput)
-			.reprompt()
+			.speak(repromptText)
+			.reprompt(repromptText)
 			.getResponse();
 	},
 };
