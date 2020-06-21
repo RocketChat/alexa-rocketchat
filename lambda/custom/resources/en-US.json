@@ -17,7 +17,7 @@
         "CARD_TITLE": "Welcome To Rocket.Chat",
         "HINT": "Try, 'Alexa, Send a message'.",
         "AUTH_ERROR_TITLE": "AUTHORISED PERSONNEL ONLY",
-        "ERROR": "UMM, To start using this skill, please use the companion app to authenticate."
+        "ERROR": "To start using this skill, please use the companion app to authenticate."
     },
     "NOTIFICATION_SETTINGS": {
         "SUCCESS_USERMENTIONS": "I have updated your settings. You will now receive notifications for user mentions only.",
