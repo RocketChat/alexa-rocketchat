@@ -983,6 +983,45 @@ const addLeader = async (roomId, userId, roomname, username, type, headers) => {
 	}
 };
 
+const getUsersWithRolesFromRoom = async (recognisedUsername, roomId, type, role, headers) => {
+	try {
+		const response = await axios.get(`https://bots.rocket.chat/api/v1/groups.roles?roomId=${ roomId }`, {
+			headers,
+		}).then((res) => res.data);
+
+		const users = [];
+		for (const user of response.roles) {
+			if (user.roles.includes(role)) {
+				users.push(user.u);
+			}
+		}
+
+		if (!response.success) {
+			return 'error';
+		}
+
+		const similarUsers = users.filter((user) => stringSimilar.compareTwoStrings(recognisedUsername, user.username) > 0.2);
+
+		console.log(similarUsers);
+		return similarUsers;
+
+	} catch (err) {
+		console.log(err);
+		if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
+			return 'You are not part of this room';
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return 'no such room';
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return 'no such room';
+		} else if (err.response.status === 401) {
+			return 'login before using this intent';
+		} else {
+			return 'error';
+		}
+	}
+
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1023,3 +1062,4 @@ module.exports.resolveChannelname = resolveChannelname;
 module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
 module.exports.addLeader = addLeader;
+module.exports.getUsersWithRolesFromRoom = getUsersWithRolesFromRoom;
