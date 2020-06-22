@@ -1,6 +1,6 @@
 const Alexa = require('ask-sdk-core');
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, getUsersWithRolesFromRoom, resolveChannelname } = require('../../helperFunctions');
+const { login, removeLeader, getUsersWithRolesFromRoom, resolveChannelname } = require('../../helperFunctions');
 
 const RemoveLeaderIntentHandler = {
 	canHandle(handlerInput) {
@@ -18,15 +18,13 @@ const RemoveLeaderIntentHandler = {
 
 		const headers = await login(accessToken);
 
-		const speakOutput = `${ sessionAttributes.user.username } is no longer a leader of ${ sessionAttributes.channel.name }.`;
-        
-		// const speakOutput = await addLeader(sessionAttributes.channel.id, sessionAttributes.user.id, sessionAttributes.channel.name, sessionAttributes.user.name, sessionAttributes.channel.type, headers);
+		const speakOutput = await removeLeader(sessionAttributes.channel.id, sessionAttributes.user._id, sessionAttributes.channel.name, sessionAttributes.user.username, sessionAttributes.channel.type, headers);
 		const repromptText = ri('GENERIC_REPROMPT');
 
-		return handlerInput.responseBuilder
+		return handlerInput.jrb
 			.speak(speakOutput)
-			// .speak(repromptText)
-			.reprompt()
+			.speak(repromptText)
+			.reprompt(repromptText)
 			.getResponse();
 	},
 };
@@ -85,7 +83,7 @@ const UnconfirmedLeaderRemoveLeaderIntentHandler = {
 
 			// if everything is correct then proceed to ask for confirmation
 			const userDetails = users[Number(updatedSlots.choice.value) - 1];
-			updatedSlots.username.value = userDetails.name;
+			updatedSlots.username.value = userDetails.username;
 			sessionAttributes.user = userDetails;
 			delete updatedSlots.choice.value;
 			return handlerInput.responseBuilder
@@ -114,7 +112,7 @@ const UnconfirmedLeaderRemoveLeaderIntentHandler = {
 					.getResponse();
 				// if there's only one similar channel, then change the slot value to the matching channel
 			} else if (users.length === 1) {
-				updatedSlots.username.value = users[0].name;
+				updatedSlots.username.value = users[0].username;
 				sessionAttributes.user = users[0];
 			} else {
 				sessionAttributes.similarusers = users;
