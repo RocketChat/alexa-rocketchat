@@ -1022,6 +1022,40 @@ const getUsersWithRolesFromRoom = async (recognisedUsername, roomId, type, role,
 
 };
 
+const removeLeader = async (roomId, userId, roomname, username, type, headers) => {
+	try {
+		const response = await axios.post('https://open.rocket.chat/api/v1/channels.removeLeader', {
+			roomId, userId,
+		},
+		{
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) { return 'successfully removed as leader'; }
+
+		return 'error';
+
+	} catch (err) {
+		console.log(err);
+		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+			return 'you cannot do this operation';
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return 'no such channel';
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return 'no such group';
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+			return 'invalid user';
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-leader') {
+			return 'user is not a leader';
+		} else if (err.response.status === 401) {
+			return 'login before using this intent';
+		} else {
+			return 'error';
+		}
+	}
+
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1063,3 +1097,4 @@ module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
 module.exports.addLeader = addLeader;
 module.exports.getUsersWithRolesFromRoom = getUsersWithRolesFromRoom;
+module.exports.removeLeader = removeLeader;
