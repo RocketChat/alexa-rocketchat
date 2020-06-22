@@ -38,4 +38,8 @@ module.exports = {
 	getsubscriptionsurl: `${ serverurl }/api/v1/subscriptions.get`,
 	addleadertochannelurl: `${ serverurl }/api/v1/channels.addLeader`,
 	addleadertogroupurl: `${ serverurl }/api/v1/groups.addLeader`,
+	removeleaderfromchannelurl: `${ serverurl }/api/v1/channels.removeLeader`,
+	removeleaderfromgroupurl: `${ serverurl }/api/v1/groups.removeLeader`,
+	getrolesfromchannelurl: `${ serverurl }/api/v1/channels.roles`,
+	getrolesfromgroupurl: `${ serverurl }/api/v1/groups.roles`,
 };

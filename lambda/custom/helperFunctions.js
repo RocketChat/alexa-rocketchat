@@ -985,9 +985,16 @@ const addLeader = async (roomId, userId, roomname, username, type, headers) => {
 
 const getUsersWithRolesFromRoom = async (recognisedUsername, roomId, type, role, headers) => {
 	try {
-		const response = await axios.get(`https://bots.rocket.chat/api/v1/groups.roles?roomId=${ roomId }`, {
-			headers,
-		}).then((res) => res.data);
+		let response;
+		if (type === 'c') {
+			response = await axios.get(`${ apiEndpoints.getrolesfromchannelurl }?roomId=${ roomId }`, {
+				headers,
+			}).then((res) => res.data);
+		} else if (type === 'p') {
+			response = await axios.get(`${ apiEndpoints.getrolesfromgroupurl }?roomId=${ roomId }`, {
+				headers,
+			}).then((res) => res.data);
+		}
 
 		const users = [];
 		for (const user of response.roles) {
@@ -1005,6 +1012,7 @@ const getUsersWithRolesFromRoom = async (recognisedUsername, roomId, type, role,
 		console.log(similarUsers);
 		return similarUsers;
 
+	// all the below errors will not be reached with the current conversation flow
 	} catch (err) {
 		console.log(err);
 		if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
@@ -1024,33 +1032,44 @@ const getUsersWithRolesFromRoom = async (recognisedUsername, roomId, type, role,
 
 const removeLeader = async (roomId, userId, roomname, username, type, headers) => {
 	try {
-		const response = await axios.post('https://open.rocket.chat/api/v1/channels.removeLeader', {
-			roomId, userId,
-		},
-		{
-			headers,
-		}).then((res) => res.data);
+		let response;
+		if (type === 'c') {
+			response = await axios.post(apiEndpoints.removeleaderfromchannelurl, {
+				roomId, userId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		} else if (type === 'p') {
+			response = await axios.post(apiEndpoints.removeleaderfromgroupurl, {
+				roomId, userId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		}
 
-		if (response.success) { return 'successfully removed as leader'; }
 
-		return 'error';
+		if (response.success) { return ri('ROOM_ROLES.REMOVE_LEADER_SUCCESS', { username, roomname }); }
+
+		return ri('ROOM_ROLES.ERROR');
 
 	} catch (err) {
 		console.log(err);
 		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
-			return 'you cannot do this operation';
+			return ri('ROOM_ROLES.ERROR_NOT_ALLOWED');
 		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
-			return 'no such channel';
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
 		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
-			return 'no such group';
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
 		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
-			return 'invalid user';
+			return ri('ROOM_ROLES.INVALID_USER', { username });
 		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-leader') {
-			return 'user is not a leader';
+			return ri('ROOM_ROLES.USER_NOT_LEADER', { username, roomname });
 		} else if (err.response.status === 401) {
-			return 'login before using this intent';
+			return ri('ROOM_ROLES.AUTH_ERROR');
 		} else {
-			return 'error';
+			return ri('ROOM_ROLES.ERROR');
 		}
 	}
 
