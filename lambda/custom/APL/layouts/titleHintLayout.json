@@ -1,0 +1,391 @@
+{
+    "type": "APL",
+    "version": "1.1",
+    "settings": {
+        "idleTimeout": 120000
+    },
+    "theme": "dark",
+    "import": [
+        {
+            "name": "alexa-layouts",
+            "version": "1.0.0"
+        }
+    ],
+    "resources": [
+        {
+            "description": "Stock color for the light theme",
+            "colors": {
+                "colorTextPrimary": "#151920"
+            }
+        },
+        {
+            "description": "Stock color for the dark theme",
+            "when": "${viewport.theme == 'dark'}",
+            "colors": {
+                "colorTextPrimary": "#f0f1ef"
+            }
+        },
+        {
+            "description": "Standard font sizes",
+            "dimensions": {
+                "textSizeBody": 48,
+                "textSizePrimary": 27,
+                "textSizeSecondary": 23,
+                "textSizeSecondaryHint": 25
+            }
+        },
+        {
+            "description": "Common spacing values",
+            "dimensions": {
+                "spacingThin": 6,
+                "spacingSmall": 12,
+                "spacingMedium": 24,
+                "spacingLarge": 48,
+                "spacingExtraLarge": 72
+            }
+        },
+        {
+            "description": "Common margins and padding",
+            "dimensions": {
+                "marginTop": 40,
+                "marginLeft": 60,
+                "marginRight": 60,
+                "marginBottom": 40
+            }
+        }
+    ],
+    "styles": {
+        "textStyleBase": {
+            "description": "Base font description; set color",
+            "values": [
+                {
+                    "color": "@colorTextPrimary"
+                }
+            ]
+        },
+        "textStyleBase0": {
+            "description": "Thin version of basic font",
+            "extend": "textStyleBase",
+            "values": {
+                "fontWeight": "100"
+            }
+        },
+        "textStyleBase1": {
+            "description": "Light version of basic font",
+            "extend": "textStyleBase",
+            "values": {
+                "fontWeight": "300"
+            }
+        },
+        "mixinBody": {
+            "values": {
+                "fontSize": "@textSizeBody"
+            }
+        },
+        "mixinPrimary": {
+            "values": {
+                "fontSize": "@textSizePrimary"
+            }
+        },
+        "mixinSecondary": {
+            "values": {
+                "fontSize": "@textSizeSecondary"
+            }
+        },
+        "textStylePrimary": {
+            "extend": [
+                "textStyleBase1",
+                "mixinPrimary"
+            ]
+        },
+        "textStyleSecondary": {
+            "extend": [
+                "textStyleBase0",
+                "mixinSecondary"
+            ]
+        },
+        "textStyleBody": {
+            "extend": [
+                "textStyleBase1",
+                "mixinBody"
+            ]
+        },
+        "textStyleSecondaryHint": {
+            "values": {
+                "fontFamily": "Bookerly",
+                "fontStyle": "italic",
+                "fontSize": "@textSizeSecondaryHint",
+                "color": "@colorTextPrimary"
+            }
+        }
+    },
+    "onMount": [
+        {
+            "type": "Sequential",
+            "commands": [
+                {
+                    "type": "Parallel",
+                    "commands": "<COMPONENT_ON_MOUNT_COMMANDS>"
+                }
+            ],
+            "finally": "<DOCUMENT_ON_MOUNT_COMMAND>"
+        }
+    ],
+    "graphics": {
+        "parameterizedCircle": {
+            "type": "AVG",
+            "version": "1.0",
+            "height": 100,
+            "width": 100,
+            "items": {
+                "type": "path",
+                "fill": "red",
+                "stroke": "blue",
+                "strokeWidth": 4,
+                "pathData": "M 50 0 L 100 50 L 50 100 L 0 50 z"
+            }
+        }
+    },
+    "commands": {
+        "slideInFromRight": {
+            "parameters": [
+                "distance"
+            ],
+            "command": {
+                "type": "AnimateItem",
+                "easing": "ease-in-out",
+                "duration": 300,
+                "values": [
+                    {
+                        "property": "opacity",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "property": "transformX",
+                        "from": "${distance}",
+                        "to": 0
+                    }
+                ]
+            }
+        }
+    },
+    "layouts": {},
+    "mainTemplate": {
+        "parameters": [
+            "payload"
+        ],
+        "items": [
+            {
+                "type": "Container",
+                "when": "${@viewportProfile == @hubRoundSmall}",
+                "height": "100vh",
+                "items": [
+                    {
+                        "type": "Image",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "paddingLeft": "575",
+                        "source": "${payload.RCHomePageData.backgroundImage.sources[0].url}",
+                        "scale": "best-fill",
+                        "align": "right",
+                        "overlayColor": "rgba(black,0.5)",
+                        "position": "absolute"
+                    },
+                    {
+                        "headerAttributionImage": "${payload.RCHomePageData.logoUrl}",
+                        "type": "AlexaHeader"
+                    },
+                    {
+                        "type": "Container",
+                        "grow": 1,
+                        "justifyContent": "${viewport.shape == 'round' ? 'center' : 'end'}",
+                        "items": [
+                            {
+                                "type": "Text",
+                                "style": "textStyleBody",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "textAlign": "${viewport.shape == 'round' ? 'center' : 'left'}",
+                                "text": "${payload.RCHomePageData.textContent.primaryText.text}",
+                                "fontWeight": "bold",
+                                "letterSpacing": "1",
+                                "left": "10",
+                                "bottom": "50"
+                            }
+                        ]
+                    },
+                    {
+                        "footerHint": "${payload.RCHomePageData.hintText}",
+                        "type": "AlexaFooter",
+                        "when": "${viewport.shape != 'round'}"
+                    }
+                ]
+            },
+            {
+                "type": "Container",
+                "when": "${@viewportProfile == @hubLandscapeSmall}",
+                "height": "100vh",
+                "items": [
+                    {
+                        "type": "Image",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "source": "${payload.RCHomePageData.backgroundImage.sources[0].url}",
+                        "scale": "fill",
+                        "overlayColor": "rgba(black,0.5)",
+                        "position": "absolute"
+                    },
+                    {
+                        "headerAttributionImage": "${payload.RCHomePageData.logoUrl}",
+                        "type": "AlexaHeader"
+                    },
+                    {
+                        "type": "Container",
+                        "grow": 1,
+                        "justifyContent": "${viewport.shape == 'round' ? 'center' : 'end'}",
+                        "items": [
+                            {
+                                "type": "Text",
+                                "style": "textStyleBody",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "textAlign": "${viewport.shape == 'round' ? 'center' : 'left'}",
+                                "text": "${payload.RCHomePageData.textContent.primaryText.text}",
+                                "fontWeight": "bold"
+                            }
+                        ]
+                    },
+                    {
+                        "footerHint": "${payload.RCHomePageData.hintText}",
+                        "type": "AlexaFooter",
+                        "when": "${viewport.shape != 'round'}"
+                    }
+                ]
+            },
+            {
+                "type": "Container",
+                "when": "${@viewportProfile == @hubLandscapeMedium}",
+                "height": "100vh",
+                "items": [
+                    {
+                        "type": "Image",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "source": "${payload.RCHomePageData.backgroundImage.sources[0].url}",
+                        "scale": "best-fill",
+                        "overlayColor": "rgba(black,0.5)",
+                        "position": "absolute"
+                    },
+                    {
+                        "headerAttributionImage": "${payload.RCHomePageData.logoUrl}",
+                        "type": "AlexaHeader"
+                    },
+                    {
+                        "type": "Container",
+                        "grow": 1,
+                        "justifyContent": "${viewport.shape == 'round' ? 'center' : 'end'}",
+                        "items": [
+                            {
+                                "type": "Text",
+                                "style": "textStyleBody",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "textAlign": "${viewport.shape == 'round' ? 'center' : 'left'}",
+                                "text": "${payload.RCHomePageData.textContent.primaryText.text}",
+                                "fontWeight": "bold"
+                            }
+                        ]
+                    },
+                    {
+                        "footerHint": "${payload.RCHomePageData.hintText}",
+                        "type": "AlexaFooter",
+                        "when": "${viewport.shape != 'round'}"
+                    }
+                ]
+            },
+            {
+                "type": "Container",
+                "when": "${@viewportProfile == @hubLandscapeLarge}",
+                "height": "100vh",
+                "items": [
+                    {
+                        "type": "Image",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "source": "${payload.RCHomePageData.backgroundImage.sources[0].url}",
+                        "scale": "best-fill",
+                        "overlayColor": "rgba(black,0.5)",
+                        "position": "absolute"
+                    },
+                    {
+                        "headerAttributionImage": "${payload.RCHomePageData.logoUrl}",
+                        "type": "AlexaHeader"
+                    },
+                    {
+                        "type": "Container",
+                        "grow": 1,
+                        "justifyContent": "${viewport.shape == 'round' ? 'center' : 'end'}",
+                        "items": [
+                            {
+                                "type": "Text",
+                                "style": "textStyleBody",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "textAlign": "${viewport.shape == 'round' ? 'center' : 'left'}",
+                                "text": "${payload.RCHomePageData.textContent.primaryText.text}",
+                                "fontWeight": "bold"
+                            }
+                        ]
+                    },
+                    {
+                        "footerHint": "${payload.RCHomePageData.hintText}",
+                        "type": "AlexaFooter",
+                        "when": "${viewport.shape != 'round'}"
+                    }
+                ]
+            },
+            {
+                "type": "Container",
+                "when": "${@viewportProfile == @tvLandscapeXLarge}",
+                "height": "100vh",
+                "items": [
+                    {
+                        "type": "Image",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "source": "${payload.RCHomePageData.backgroundImage.sources[0].url}",
+                        "scale": "best-fill",
+                        "overlayColor": "rgba(black,0.5)",
+                        "position": "absolute"
+                    },
+                    {
+                        "headerAttributionImage": "${payload.RCHomePageData.logoUrl}",
+                        "type": "AlexaHeader"
+                    },
+                    {
+                        "type": "Container",
+                        "grow": 1,
+                        "justifyContent": "${viewport.shape == 'round' ? 'center' : 'end'}",
+                        "items": [
+                            {
+                                "type": "Text",
+                                "style": "textStyleBody",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "textAlign": "${viewport.shape == 'round' ? 'center' : 'left'}",
+                                "text": "${payload.RCHomePageData.textContent.primaryText.text}",
+                                "fontWeight": "bold"
+                            }
+                        ]
+                    },
+                    {
+                        "footerHint": "${payload.RCHomePageData.hintText}",
+                        "type": "AlexaFooter",
+                        "when": "${viewport.shape != 'round'}"
+                    }
+                ]
+            }
+        ]
+    }
+}

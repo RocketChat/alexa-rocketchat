@@ -15,6 +15,8 @@
         "SUCCESS": "Welcome To Rocket Chat Alexa Skill. What Would you like to do today?",
         "SUCCESS_RETURN_USER": "Welcome back! What Would you like to do today?",
         "CARD_TITLE": "Welcome To Rocket.Chat",
+        "HINT": "Try, 'Alexa, Send a message'.",
+        "AUTH_ERROR_TITLE": "AUTHORISED PERSONNEL ONLY",
         "ERROR": "To start using this skill, please use the companion app to authenticate."
     },
     "NOTIFICATION_SETTINGS": {
@@ -27,14 +29,20 @@
         "ERROR_ALREADY_UNREADS": "Your notification settings are already set to unread messages."
     },
     "POST_MESSAGE": {
+        "APL_SUCCESS": "Message sent to #{channelName}.",
         "SUCCESS": "I've sent your message.",
         "ASK_MORE": "Would you like to add more?",
+        "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
+        "NO_CHANNEL": "There is no channel named {channel_name}.",
+        "NO_USER": "There's no one named {username}.",
+        "SIMILAR_CHANNELS": "There are multiple channels with similar name. Please tell the serial number of desired channel. {channel_names}.",
+        "SIMILAR_USERS": "There are multiple users with similar username. Please tell the serial number of desired user. {usernames}.",
         "CONFIRM_MORE": "Okay, go on.",
         "CONFIRM_MORE_REPROMPT": "Please continue your message.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Post A Message",
         "ERROR": "Sorry, I couldn't send your message right now.",
-        "DENIED": "Okay, let's try again."
+        "DENIED": "Okay, I won't send the message."
     },
     "CREATE_CHANNEL": {
         "SUCCESS": "I've created your channel {channelName}.",

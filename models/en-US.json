@@ -2,6 +2,11 @@
     "interactionModel": {
         "languageModel": {
             "invocationName": "rocket chat",
+            "modelConfiguration": {
+                "fallbackIntentSensitivity": {
+                    "level": "LOW"
+                }
+            },
             "intents": [
                 {
                     "name": "AMAZON.FallbackIntent",
@@ -84,6 +89,10 @@
                                 "to {messagechannel}",
                                 "{messagechannel}"
                             ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
                         }
                     ],
                     "samples": [
@@ -113,6 +122,10 @@
                             "samples": [
                                 "{longmessage}"
                             ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
                         }
                     ],
                     "samples": [
@@ -328,22 +341,6 @@
                     ]
                 },
                 {
-                    "name": "PostGroupMessageIntent",
-                    "slots": [
-                        {
-                            "name": "groupmessage",
-                            "type": "message"
-                        },
-                        {
-                            "name": "groupmessagechannelname",
-                            "type": "channelnames"
-                        }
-                    ],
-                    "samples": [
-                        "Send {groupmessage} To Private Channel {groupmessagechannelname}"
-                    ]
-                },
-                {
                     "name": "GroupLastMessageIntent",
                     "slots": [
                         {
@@ -392,14 +389,30 @@
                     "slots": [
                         {
                             "name": "directmessage",
-                            "type": "message"
+                            "type": "message",
+                            "samples": [
+                                "send {directmessage} to {directmessageusername}",
+                                "send that {directmessage}",
+                                "send {directmessage}",
+                                "{directmessage}"
+                            ]
                         },
                         {
                             "name": "directmessageusername",
-                            "type": "rocketchatusernames"
+                            "type": "rocketchatusernames",
+                            "samples": [
+                                "send to {directmessageusername}",
+                                "to {directmessageusername}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
                         }
                     ],
                     "samples": [
+                        "direct message {directmessage}",
+                        "direct message",
                         "direct message {directmessage} recipient {directmessageusername}"
                     ]
                 },
@@ -1860,6 +1873,34 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "PostDirectMessageIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.815783476386"
+                    },
+                    "slots": [
+                        {
+                            "name": "directmessage",
+                            "type": "message",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.815783476386.304844926870"
+                            }
+                        },
+                        {
+                            "name": "directmessageusername",
+                            "type": "rocketchatusernames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.815783476386.883504582759"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1979,6 +2020,33 @@
                     {
                         "type": "PlainText",
                         "value": "Alright, go on"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.815783476386.304844926870",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What message would you like to send?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.815783476386.883504582759",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to send the message to?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.815783476386",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to send {directmessage} to {directmessageusername} , is that correct?"
                     }
                 ]
             }
