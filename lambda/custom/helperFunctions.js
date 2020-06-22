@@ -935,6 +935,32 @@ const customLog = async (data) => {
 	}
 };
 
+const readPinnedMessages = async (roomId, channelname, headers) => {
+	try {
+		const response = await axios.get(`${ apiEndpoints.readpinnedmessagesurl }?roomId=${ roomId }`, {
+			headers,
+		}).then((res) => res.data);
+
+		if (!response.success) { return ri('PINNED_MESSAGES.ERROR'); }
+		if (response.count === 0) { return ri('PINNED_MESSAGES.NO_PINNED_MESSAGES', { channelname }); }
+
+		const messages = [];
+		for (const message of response.messages) {
+			messages.push([message.u.username, message.msg]);
+		}
+		return messages;
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ERROR_INVALID_ROOM');
+		} else if (err.response.status === 401) {
+			return ri('AUTH_ERROR');
+		} else {
+			return ri('ERROR');
+		}
+	}
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -974,3 +1000,4 @@ module.exports.getLastMessageType = getLastMessageType;
 module.exports.resolveChannelname = resolveChannelname;
 module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
+module.exports.readPinnedMessages = readPinnedMessages;

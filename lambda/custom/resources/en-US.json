@@ -104,6 +104,21 @@
         "ERROR": "Sorry, I couldn't archive this channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
     },
+    "RESOLVE_CHANNEL":{
+        "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
+        "NO_CHANNEL":"There is no channel named {channel_name}.",
+        "SIMILAR_CHANNELS": "There are multiple channels with similar name. Please tell the serial number of desired channel. {channel_names}."
+    },
+    "PINNED_MESSAGES":{
+        "SUCCESS_ALL": "Here are all the pinned messages from {channelname}. {pinned_messages}.",
+        "SUCCESS_FEW": "There are {no_of_pinned_messages} pinned messages in the channel {channelname}, here are few. {pinned_messages}.",
+        "NO_PINNED_MESSAGES": "There are no pinned messages in channel {channelname}.",
+        "ERROR": "Sorry, I'm unable to process you request."
+
+    },
+    "ERROR_INVALID_ROOM": "There's no such room.",
+    "ERROR": "Sorry, I'm unable to process you request.",
+    "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate.",
     "AUDIO_NO_SUPPORT": "Sorry, this skill doesn't support that feature.",
     "GENERIC_REPROMPT": "Anything else I can help you with?"
 }
