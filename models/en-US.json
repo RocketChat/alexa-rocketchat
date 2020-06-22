@@ -523,6 +523,37 @@
                         "Add leader to {channelname}",
                         "Add leader"
                     ]
+                },
+                {
+                    "name": "RemoveLeaderIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "from channel {channelname}",
+                                "from {channelname}",
+                                "{channelname}"
+                            ]
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{username}",
+                                "remove {username}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "remove leader from channel {channelname}",
+                        "remove leader from {channelname}",
+                        "remove leader"
+                    ]
                 }
             ],
             "types": [
@@ -1969,6 +2000,42 @@
                             "prompts": {}
                         }
                     ]
+                },
+                {
+                    "name": "RemoveLeaderIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.395040613949"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.395040613949.910277543812",
+                                "elicitation": "Elicit.Slot.395040613949.910277543812"
+                            }
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.395040613949.1089955939850"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -2119,6 +2186,33 @@
                 ]
             },
             {
+                "id": "Elicit.Slot.432711597445.359632651461",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What announcement do you want to set?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.432711597445.840419366335",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to set the announcement in?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.432711597445",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to set, {announcement} , as announcement in {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
                 "id": "Elicit.Slot.969670625304.359535257121",
                 "variations": [
                     {
@@ -2151,6 +2245,42 @@
                     {
                         "type": "PlainText",
                         "value": "You want to set {username} as leader of {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.395040613949.910277543812",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to remove the leader from?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.395040613949.910277543812",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "{channelname} , did I get that right?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.395040613949.1089955939850",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to remove as leader?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.395040613949",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to remove {username} as leader of {channelname} , is that correct?"
                     }
                 ]
             }
