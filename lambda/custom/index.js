@@ -84,6 +84,10 @@ const {
 	GetGroupUnreadMessagesIntentHandler,
 } = require('./handlers/Channels/PrivateChannelIntents');
 
+const {
+	ReadPinnedMessagesIntentHandler,
+} = require('./handlers/Channels/ReadPinnedMessagesIntentHandlers');
+
 const { HelpIntentHandler } = require('./handlers/General/HelpIntentHandler');
 
 const { CancelAndStopIntentHandler } = require('./handlers/General/CancelAndStopIntentHandler');
@@ -146,6 +150,7 @@ const buildSkill = (skillBuilder) =>
 			GroupLastMessageIntentHandler,
 			GetGroupUnreadMessagesIntentHandler,
 			PostEmojiDirectMessageIntentHandler,
+			ReadPinnedMessagesIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,
