@@ -11,7 +11,7 @@ const APLLocalisationRequestInterceptor = {
 				const resource = require(resourceFilePath);
 
 				// get the value of the requested input key
-				let output = (eval(`resource.${ input }`));
+				let output = resource[input];
 				if (!output) {
 					return 'invalid';
 				}
