@@ -193,7 +193,7 @@ const UnconfirmedChannelAddLeaderIntentHandler = {
 			const channels = await resolveChannelname(updatedSlots.channelname.value, headers);
 
 			if (channels.length === 0) {
-				const speechText = ri('RESOLVE_CHANNEL.NO_CHANNEL', { channelname: updatedSlots.channelname.value });
+				const speechText = ri('RESOLVE_CHANNEL.NO_CHANNEL', { channel_name: updatedSlots.channelname.value });
 				const repromptText = ri('GENERIC_REPROMPT');
 				return handlerInput.jrb
 					.speak(speechText)

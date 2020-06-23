@@ -1007,7 +1007,7 @@ const getUsersWithRolesFromRoom = async (recognisedUsername, roomId, type, role,
 			return 'error';
 		}
 
-		const similarUsers = users.filter((user) => stringSimilar.compareTwoStrings(recognisedUsername, user.username) > 0.2);
+		const similarUsers = users.filter((user) => stringSimilar.compareTwoStrings(recognisedUsername, user.username) > envVariables.lowestSimilarityIndex);
 
 		console.log(similarUsers);
 		return similarUsers;
