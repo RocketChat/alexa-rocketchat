@@ -99,11 +99,10 @@ const UnconfirmedLeaderRemoveLeaderIntentHandler = {
 			const headers = await login(accessToken);
 
 			// get the array of similar usernames
-			// const users = await resolveUsername(updatedSlots.username.value, headers);
 			const users = await getUsersWithRolesFromRoom(updatedSlots.username.value, sessionAttributes.channel.id, sessionAttributes.channel.type, 'leader', headers);
 
 			if (users.length === 0) {
-				const speechText = ri('RESOLVE_USERNAME.NO_USER', { username: updatedSlots.username.value });
+				const speechText = ri('ROOM_ROLES.USER_NOT_LEADER', { username: updatedSlots.username.value, roomname: sessionAttributes.channel.name });
 				const repromptText = ri('GENERIC_REPROMPT');
 				return handlerInput.jrb
 					.speak(speechText)
