@@ -21,7 +21,6 @@ module.exports = {
 	addallurl: `${ serverurl }/api/v1/channels.addAll`,
 	makemoderatorurl: `${ serverurl }/api/v1/channels.addModerator`,
 	addownerurl: `${ serverurl }/api/v1/channels.addOwner`,
-	archivechannelurl: `${ serverurl }/api/v1/channels.archive`,
 	counterurl: `${ serverurl }/api/v1/channels.counters?roomName=`,
 	markasreadurl: `${ serverurl }/api/v1/subscriptions.read`,
 	generatetokenurl: `${ serverurl }/api/v1/users.generatePersonalAccessToken`,
@@ -36,4 +35,6 @@ module.exports = {
 	groupcounterurl: `${ serverurl }/api/v1/groups.counters?roomId=`,
 	createimurl: `${ serverurl }/api/v1/im.create`,
 	getsubscriptionsurl: `${ serverurl }/api/v1/subscriptions.get`,
+	archivechannelurl: `${ serverurl }/api/v1/channels.archive`,
+	archivegroupurl: `${ serverurl }/api/v1/groups.archive`,
 };
