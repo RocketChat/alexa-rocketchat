@@ -56,7 +56,12 @@ const { GetLastMessageFromChannelIntentHandler } = require('./handlers/Channels/
 
 const { AddOwnerIntentHandler } = require('./handlers/Channels/AddOwnerIntentHandler');
 
-const { ArchiveChannelIntentHandler } = require('./handlers/Channels/ArchiveChannelIntentHandler');
+const {
+	StartedArchiveChannelIntentHandler,
+	InProgressArchiveChannelIntentHandler,
+	DeniedArchiveChannelIntentHandler,
+	ArchiveChannelIntentHandler,
+} = require('./handlers/Channels/ArchiveChannelIntentHandler');
 
 const {
 	StartPlaybackHandler,
@@ -146,6 +151,10 @@ const buildSkill = (skillBuilder) =>
 			GroupLastMessageIntentHandler,
 			GetGroupUnreadMessagesIntentHandler,
 			PostEmojiDirectMessageIntentHandler,
+			StartedArchiveChannelIntentHandler,
+			InProgressArchiveChannelIntentHandler,
+			DeniedArchiveChannelIntentHandler,
+			ArchiveChannelIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,

@@ -97,12 +97,20 @@
         "ERROR": "Sorry, I couldn't assign a owner to the channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I couldn't assign a owner to channel {channelName} right now."
     },
+    "RESOLVE_CHANNEL":{
+        "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
+        "NO_CHANNEL":"There is no channel named {channel_name}.",
+        "SIMILAR_CHANNELS": "There are multiple channels with similar name. Please tell the serial number of desired channel. {channel_names}."
+    },
     "ARCHIVE_CHANNEL": {
-        "SUCCESS": "{channelName} is now archived.",
+        "SUCCESS": "{roomname} is now archived.",
+        "NOT_AUTHORISED": "You cannot perform this operation.",
+        "ROOM_ALREAD_ARCHIVED": "{roomname} is already archived.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Archive Channel",
+        "DENIED": "Okay.",
         "ERROR": "Sorry, I couldn't archive this channel right now.",
-        "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
+        "ERROR_NOT_FOUND": "The room {roomname} does not exist."
     },
     "AUDIO_NO_SUPPORT": "Sorry, this skill doesn't support that feature.",
     "GENERIC_REPROMPT": "Anything else I can help you with?"
