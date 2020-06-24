@@ -36,4 +36,6 @@ module.exports = {
 	groupcounterurl: `${ serverurl }/api/v1/groups.counters?roomId=`,
 	createimurl: `${ serverurl }/api/v1/im.create`,
 	getsubscriptionsurl: `${ serverurl }/api/v1/subscriptions.get`,
+	leavechannelurl: `${ serverurl }/api/v1/channels.leave`,
+	leavegroupurl: `${ serverurl }/api/v1/groups.leave`,
 };
