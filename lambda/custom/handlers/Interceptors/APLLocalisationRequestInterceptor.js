@@ -20,10 +20,8 @@ const APLLocalisationRequestInterceptor = {
 					return 'invalid';
 				}
 
-				// if there are multiple values (i.e. if it's an object), get a random value
-				if (output && typeof(output) === 'object') {
-					output = randomProperty(output);
-				}
+				// if there are multiple values, get a random value
+				output = randomProperty(output);
 
 				// replace the parameters in the value with input data
 				let key; let value;
