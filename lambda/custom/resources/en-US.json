@@ -104,6 +104,20 @@
         "ERROR": "Sorry, I couldn't archive this channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
     },
+    "RESOLVE_CHANNEL":{
+        "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
+        "NO_CHANNEL":"There is no channel named {channel_name}.",
+        "SIMILAR_CHANNELS": "There are multiple channels with similar name. Please tell the serial number of desired channel. {channel_names}."
+    },
+    "LEAVE_CHANNEL": {
+        "SUCCESS": "You have left the room {roomname}.",
+        "DENIED": "Okay.",
+        "ERROR_LAST_OWNER": "You are the last owner, Please set new owner before leaving the room.",
+        "ERROR": "Sorry, I couldn't perform this operaton.",
+        "USER_NOT_IN_ROOM": "You are not part of {roomname}.",
+        "ERROR_NOT_FOUND": "The room {roomname} does not exist."
+    },
+    "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate.",
     "AUDIO_NO_SUPPORT": "Sorry, this skill doesn't support that feature.",
     "GENERIC_REPROMPT": "Anything else I can help you with?"
 }
