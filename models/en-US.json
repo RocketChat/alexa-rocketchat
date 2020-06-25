@@ -601,6 +601,26 @@
                         "Leave channel {channelname}",
                         "Leave channel"
                     ]
+                },
+                {
+                    "name": "UnarchiveChannelIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "channel {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "Unarchive channel {channelname}",
+                        "Unarchive channel"
+                    ]
                 }
             ],
             "types": [
@@ -2145,6 +2165,32 @@
                             "prompts": {}
                         }
                     ]
+                },
+                {
+                    "name": "UnarchiveChannelIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.562355055148"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.562355055148.420926033918"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -2435,6 +2481,24 @@
                     {
                         "type": "PlainText",
                         "value": "You want to archive channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.562355055148.420926033918",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel or group do you want to unarchive?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.562355055148",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to unarchive channel {channelname} , is that correct?"
                     }
                 ]
             }
