@@ -64,6 +64,13 @@ const {
 } = require('./handlers/Channels/ArchiveChannelIntentHandler');
 
 const {
+	StartedUnarchiveChannelIntentHandler,
+	InProgressUnarchiveChannelIntentHandler,
+	DeniedUnarchiveChannelIntentHandler,
+	UnarchiveChannelIntentHandler,
+} = require('./handlers/Channels/UnarchiveChannelIntentHandlers');
+
+const {
 	StartPlaybackHandler,
 	AudioControlPlaybackHandler,
 	PausePlaybackHandler,
@@ -155,6 +162,10 @@ const buildSkill = (skillBuilder) =>
 			InProgressArchiveChannelIntentHandler,
 			DeniedArchiveChannelIntentHandler,
 			ArchiveChannelIntentHandler,
+			StartedUnarchiveChannelIntentHandler,
+			InProgressUnarchiveChannelIntentHandler,
+			DeniedUnarchiveChannelIntentHandler,
+			UnarchiveChannelIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,
