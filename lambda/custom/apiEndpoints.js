@@ -37,4 +37,6 @@ module.exports = {
 	getsubscriptionsurl: `${ serverurl }/api/v1/subscriptions.get`,
 	archivechannelurl: `${ serverurl }/api/v1/channels.archive`,
 	archivegroupurl: `${ serverurl }/api/v1/groups.archive`,
+	unarchivechannelurl: `${ serverurl }/api/v1/channels.unarchive`,
+	unarchivegroupurl: `${ serverurl }/api/v1/groups.unarchive`,
 };
