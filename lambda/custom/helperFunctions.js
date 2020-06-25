@@ -959,7 +959,6 @@ const leaveChannel = async (roomId, roomname, type, headers) => {
 		return ri('LEAVE_CHANNEL.ERROR');
 
 	} catch (err) {
-		// console.log(err);
 		if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
 			return ri('LEAVE_CHANNEL.USER_NOT_IN_ROOM', { roomname });
 		} else if (err.response.data.errorType && err.response.data.errorType === 'error-you-are-last-owner') {
@@ -971,6 +970,7 @@ const leaveChannel = async (roomId, roomname, type, headers) => {
 		} else if (err.response.status === 401) {
 			return ri('AUTH_ERROR');
 		} else {
+			console.log(err);
 			return ri('LEAVE_CHANNEL.ERROR');
 		}
 	}
