@@ -580,6 +580,35 @@
                         "set topic in {channelname}",
                         "set topic"
                     ]
+                },
+                {
+                    "name": "RenameChannelIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "channel {channelname}",
+                                "rename {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "newname",
+                            "type": "channelnames",
+                            "samples": [
+                                "{newname}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "rename channel {channelname} to {newname}",
+                        "rename channel {channelname}",
+                        "rename channel"
+                    ]
                 }
             ],
             "types": [
@@ -2095,6 +2124,41 @@
                             "prompts": {}
                         }
                     ]
+                },
+                {
+                    "name": "RenameChannelIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.1557922805728"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1557922805728.468153225532"
+                            }
+                        },
+                        {
+                            "name": "newname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1557922805728.1561823419533"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -2322,6 +2386,33 @@
                     {
                         "type": "PlainText",
                         "value": "You want to set topic as, {topic} , in channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1557922805728.468153225532",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel or group do you want to rename?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1557922805728.1561823419533",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Tell the new name"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.1557922805728",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to rename, {channelname} , to {newname} , is that correct?"
                     }
                 ]
             }
