@@ -953,7 +953,7 @@ const setAnnouncement = async (room, announcement, headers) => {
 		if (err.response.data.errorType && err.response.data.errorType === 'error-action-not-allowed') {
 			return ri('CHANNEL_DETAILS.NOT_AUTHORISED');
 		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
-			return ri('CHANNEL_DETAILS.ERROR');
+			return ri('CHANNEL_DETAILS.ERROR_NOT_FOUND', { roomname: room.name });
 		} else if (err.response.status === 401) {
 			return ri('CHANNEL_DETAILS.AUTH_ERROR');
 		} else {
@@ -982,7 +982,7 @@ const setDescription = async (room, description, headers) => {
 		if (err.response.data.errorType && err.response.data.errorType === 'error-action-not-allowed') {
 			return ri('CHANNEL_DETAILS.NOT_AUTHORISED');
 		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
-			return ri('CHANNEL_DETAILS.ERROR');
+			return ri('CHANNEL_DETAILS.ERROR_NOT_FOUND', { roomname: room.name });
 		} else if (err.response.status === 401) {
 			return ri('CHANNEL_DETAILS.AUTH_ERROR');
 		} else {
@@ -1010,7 +1010,40 @@ const setTopic = async (room, topic, headers) => {
 		if (err.response.data.errorType && err.response.data.errorType === 'error-action-not-allowed') {
 			return ri('CHANNEL_DETAILS.NOT_AUTHORISED');
 		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('CHANNEL_DETAILS.ERROR_NOT_FOUND', { roomname: room.name });
+		} else if (err.response.status === 401) {
+			return ri('CHANNEL_DETAILS.AUTH_ERROR');
+		} else {
+			console.log(err);
 			return ri('CHANNEL_DETAILS.ERROR');
+		}
+	}
+};
+
+const renameChannel = async (room, newname, headers) => {
+	try {
+		const url = room.type === 'c' ? apiEndpoints.renamechannelurl : apiEndpoints.renamegroupurl;
+		// remove whitespaces from the newname
+		newname = newname.trim().split(' ').join('');
+		const response = await axios.post(url, {
+			roomId: room.id, name: newname,
+		}, {
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) {
+			return ri('CHANNEL_DETAILS.RENAME_ROOM_SUCCESS', { oldname: room.name, newname, success: true });
+		}
+		return ri('CHANNEL_DETAILS.ERROR');
+
+	} catch (err) {
+		console.log(err);
+		if (err.response.data.errorType && err.response.data.errorType === 'error-action-not-allowed') {
+			return ri('CHANNEL_DETAILS.NOT_AUTHORISED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('CHANNEL_DETAILS.ERROR_NOT_FOUND', { roomname: room.name });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-duplicate-channel-name') {
+			return ri('CHANNEL_DETAILS.ERROR_NAME_TAKEN', { newname });
 		} else if (err.response.status === 401) {
 			return ri('CHANNEL_DETAILS.AUTH_ERROR');
 		} else {
@@ -1062,3 +1095,4 @@ module.exports.customLog = customLog;
 module.exports.setAnnouncement = setAnnouncement;
 module.exports.setDescription = setDescription;
 module.exports.setTopic = setTopic;
+module.exports.renameChannel = renameChannel;

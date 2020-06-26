@@ -42,4 +42,6 @@ module.exports = {
 	setdescriptiongroupurl: `${ serverurl }/api/v1/groups.setDescription`,
 	settopicchannelurl: `${ serverurl }/api/v1/channels.setTopic`,
 	settopicgroupurl: `${ serverurl }/api/v1/groups.setTopic`,
+	renamechannelurl: `${ serverurl }/api/v1/channels.rename`,
+	renamegroupurl: `${ serverurl }/api/v1/groups.rename`,
 };

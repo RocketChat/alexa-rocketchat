@@ -111,9 +111,13 @@
         "SET_DESCRIPTION_DENIED": "Okay.",
         "SET_TOPIC_SUCCESS": "I've set the topic in, {roomname}.",
         "SET_TOPIC_DENIED": "Okay.",
+        "RENAME_ROOM_SUCCESS": "{oldname}, is now {newname}.",
+        "RENAME_ROOM_DENIED": "Okay.",
+        "ERROR_NAME_TAKEN": "The name {newname} is already taken.",
         "NOT_AUTHORISED": "Sorry, You are not authorised to perform this.",
         "ERROR": "Sorry, I couldn't do it at the moment.",
-        "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate."
+        "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate.",
+        "ERROR_NOT_FOUND": "Sorry, I couldn't find room named {roomname}."
     },
     "RESOLVE_CHANNEL":{
         "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
