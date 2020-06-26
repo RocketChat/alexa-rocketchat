@@ -520,6 +520,34 @@
                         "Set announcement in channel {channelname}",
                         "Set an announcement"
                     ]
+                },
+                {
+                    "name": "SetDescriptionIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "in channel {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "description",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "set as {description}",
+                                "{description}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "Set Description in {channelname}",
+                        "Set Description"
+                    ]
                 }
             ],
             "types": [
@@ -1965,6 +1993,41 @@
                             "prompts": {}
                         }
                     ]
+                },
+                {
+                    "name": "SetDescriptionIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.1021295711950"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1021295711950.136707123612"
+                            }
+                        },
+                        {
+                            "name": "description",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1021295711950.393007007157"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -2138,6 +2201,33 @@
                     {
                         "type": "PlainText",
                         "value": "You want to set, {announcement} , as announcement in {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.1021295711950",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to set description as {description} , in channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1021295711950.136707123612",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to set the description in?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1021295711950.393007007157",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What do you want to set the description as?"
                     }
                 ]
             }
