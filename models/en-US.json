@@ -548,6 +548,38 @@
                         "Set Description in {channelname}",
                         "Set Description"
                     ]
+                },
+                {
+                    "name": "SetTopicIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "in channel {channelname}",
+                                "in {channelname}",
+                                "for {channelname}",
+                                "{channelname}"
+                            ]
+                        },
+                        {
+                            "name": "topic",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{topic}",
+                                "set {topic}",
+                                "set as {topic}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "set topic in {channelname}",
+                        "set topic"
+                    ]
                 }
             ],
             "types": [
@@ -2028,6 +2060,41 @@
                             "prompts": {}
                         }
                     ]
+                },
+                {
+                    "name": "SetTopicIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.787882232668"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.787882232668.850639523689"
+                            }
+                        },
+                        {
+                            "name": "topic",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.787882232668.743434617447"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -2228,6 +2295,33 @@
                     {
                         "type": "PlainText",
                         "value": "What do you want to set the description as?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.787882232668.850639523689",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "For which channel?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.787882232668.743434617447",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Tell the topic which you want to set?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.787882232668",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to set topic as, {topic} , in channel {channelname} , is that correct?"
                     }
                 ]
             }
