@@ -109,6 +109,8 @@
         "SET_ANNOUNCEMENT_DENIED": "Okay, I won't set the announcement.",
         "SET_DESCRIPTION_SUCCESS": "I've set the description in, {roomname}.",
         "SET_DESCRIPTION_DENIED": "Okay.",
+        "SET_TOPIC_SUCCESS": "I've set the topic in, {roomname}.",
+        "SET_TOPIC_DENIED": "Okay.",
         "NOT_AUTHORISED": "Sorry, You are not authorised to perform this.",
         "ERROR": "Sorry, I couldn't do it at the moment.",
         "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate."

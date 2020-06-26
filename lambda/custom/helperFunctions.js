@@ -937,7 +937,7 @@ const customLog = async (data) => {
 
 const setAnnouncement = async (room, announcement, headers) => {
 	try {
-		const url = room.type === 'c' ? apiEndpoints.setannouncementchannel : apiEndpoints.setannouncementgroup;
+		const url = room.type === 'c' ? apiEndpoints.setannouncementchannelurl : apiEndpoints.setannouncementgroupurl;
 		const response = await axios.post(url, {
 			roomId: room.id, announcement,
 		}, {
@@ -957,6 +957,7 @@ const setAnnouncement = async (room, announcement, headers) => {
 		} else if (err.response.status === 401) {
 			return ri('CHANNEL_DETAILS.AUTH_ERROR');
 		} else {
+			console.log(err);
 			return ri('CHANNEL_DETAILS.ERROR');
 		}
 	}
@@ -964,7 +965,7 @@ const setAnnouncement = async (room, announcement, headers) => {
 
 const setDescription = async (room, description, headers) => {
 	try {
-		const url = room.type === 'c' ? apiEndpoints.setdescriptionchannel : apiEndpoints.setdescriptiongroup;
+		const url = room.type === 'c' ? apiEndpoints.setdescriptionchannelurl : apiEndpoints.setdescriptiongroupurl;
 		const response = await axios.post(url, {
 			roomId: room.id, description,
 		}, {
@@ -985,6 +986,35 @@ const setDescription = async (room, description, headers) => {
 		} else if (err.response.status === 401) {
 			return ri('CHANNEL_DETAILS.AUTH_ERROR');
 		} else {
+			console.log(err);
+			return ri('CHANNEL_DETAILS.ERROR');
+		}
+	}
+};
+
+const setTopic = async (room, topic, headers) => {
+	try {
+		const url = room.type === 'c' ? apiEndpoints.settopicchannelurl : apiEndpoints.settopicgroupurl;
+		const response = await axios.post(url, {
+			roomId: room.id, topic,
+		}, {
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) {
+			return ri('CHANNEL_DETAILS.SET_TOPIC_SUCCESS', { roomname: room.name, success: true });
+		}
+		return ri('CHANNEL_DETAILS.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-action-not-allowed') {
+			return ri('CHANNEL_DETAILS.NOT_AUTHORISED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('CHANNEL_DETAILS.ERROR');
+		} else if (err.response.status === 401) {
+			return ri('CHANNEL_DETAILS.AUTH_ERROR');
+		} else {
+			console.log(err);
 			return ri('CHANNEL_DETAILS.ERROR');
 		}
 	}
@@ -1031,3 +1061,4 @@ module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
 module.exports.setAnnouncement = setAnnouncement;
 module.exports.setDescription = setDescription;
+module.exports.setTopic = setTopic;
