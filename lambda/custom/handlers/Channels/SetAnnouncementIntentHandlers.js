@@ -1,7 +1,7 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, resolveChannelname, setAnnouncement } = require('../helperFunctions');
-const { supportsAPL } = require('../utils');
-const titleMessageTemplate = require('../APL/templates/titleMessageTemplate');
+const { login, resolveChannelname, setAnnouncement } = require('../../helperFunctions');
+const { supportsAPL } = require('../../utils');
+const titleMessageTemplate = require('../../APL/templates/titleMessageBoxTemplate');
 
 
 const StartedSetAnnouncementIntentHandler = {
