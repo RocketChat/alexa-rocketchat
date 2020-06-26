@@ -123,6 +123,13 @@ const {
 	SetTopicIntentHandler,
 } = require('./handlers/Channels/SetTopicIntentHandlers');
 
+const {
+	StartedRenameChannelIntentHandler,
+	InProgressRenameChannelIntentHandler,
+	DeniedRenameChannelIntentHandler,
+	RenameChannelIntentHandler,
+} = require('./handlers/Channels/RenameChannelIntentHandlers');
+
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
 const buildSkill = (skillBuilder) =>
@@ -179,6 +186,10 @@ const buildSkill = (skillBuilder) =>
 			InProgressSetTopicIntentHandler,
 			DeniedSetTopicIntentHandler,
 			SetTopicIntentHandler,
+			StartedRenameChannelIntentHandler,
+			InProgressRenameChannelIntentHandler,
+			DeniedRenameChannelIntentHandler,
+			RenameChannelIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,
