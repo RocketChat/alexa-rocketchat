@@ -109,6 +109,13 @@ const {
 	SetAnnouncementIntentHandler,
 } = require('./handlers/Channels/SetAnnouncementIntentHandlers');
 
+const {
+	StartedSetDescriptionIntentHandler,
+	InProgressSetDescriptionIntentHandler,
+	DeniedSetDescriptionIntentHandler,
+	SetDescriptionIntentHandler,
+} = require('./handlers/Channels/SetDescriptionIntentHandlers');
+
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
 const buildSkill = (skillBuilder) =>
@@ -157,6 +164,10 @@ const buildSkill = (skillBuilder) =>
 			InProgressSetAnnouncementIntentHandler,
 			DeniedSetAnnouncementIntentHandler,
 			SetAnnouncementIntentHandler,
+			StartedSetDescriptionIntentHandler,
+			InProgressSetDescriptionIntentHandler,
+			DeniedSetDescriptionIntentHandler,
+			SetDescriptionIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,

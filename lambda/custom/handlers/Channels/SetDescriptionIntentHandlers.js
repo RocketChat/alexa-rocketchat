@@ -1,13 +1,13 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, resolveChannelname, setAnnouncement } = require('../../helperFunctions');
+const { login, resolveChannelname, setDescription } = require('../../helperFunctions');
 const { supportsAPL } = require('../../utils');
 const titleMessageTemplate = require('../../APL/templates/titleMessageBoxTemplate');
 
 
-const StartedSetAnnouncementIntentHandler = {
+const StartedSetDescriptionIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-        handlerInput.requestEnvelope.request.intent.name === 'SetAnnouncementIntent' &&
+        handlerInput.requestEnvelope.request.intent.name === 'SetDescriptionIntent' &&
         handlerInput.requestEnvelope.request.dialogState === 'STARTED';
 	},
 	handle(handlerInput) {
@@ -18,10 +18,10 @@ const StartedSetAnnouncementIntentHandler = {
 	},
 };
 
-const InProgressSetAnnouncementIntentHandler = {
+const InProgressSetDescriptionIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-          handlerInput.requestEnvelope.request.intent.name === 'SetAnnouncementIntent' &&
+          handlerInput.requestEnvelope.request.intent.name === 'SetDescriptionIntent' &&
           handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
           handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
 	},
@@ -113,15 +113,15 @@ const InProgressSetAnnouncementIntentHandler = {
 	},
 };
 
-const DeniedSetAnnouncementIntentHandler = {
+const DeniedSetDescriptionIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-          handlerInput.requestEnvelope.request.intent.name === 'SetAnnouncementIntent' &&
+          handlerInput.requestEnvelope.request.intent.name === 'SetDescriptionIntent' &&
           handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
           handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
 	},
 	handle(handlerInput) {
-		const speechText = ri('CHANNEL_DETAILS.SET_ANNOUNCEMENT_DENIED');
+		const speechText = ri('CHANNEL_DETAILS.SET_DESCRIPTION_DENIED');
 		const repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
@@ -132,10 +132,10 @@ const DeniedSetAnnouncementIntentHandler = {
 	},
 };
 
-const SetAnnouncementIntentHandler = {
+const SetDescriptionIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-              handlerInput.requestEnvelope.request.intent.name === 'SetAnnouncementIntent'
+              handlerInput.requestEnvelope.request.intent.name === 'SetDescriptionIntent'
               && handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
               && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
@@ -148,10 +148,10 @@ const SetAnnouncementIntentHandler = {
 			const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
 			const channelName = handlerInput.requestEnvelope.request.intent.slots.channelname.value;
-			const announcement = handlerInput.requestEnvelope.request.intent.slots.announcement.value;
+			const description = handlerInput.requestEnvelope.request.intent.slots.description.value;
 
 			const headers = await login(accessToken);
-			const speechText = await setAnnouncement(sessionAttributes.channel, announcement, headers);
+			const speechText = await setDescription(sessionAttributes.channel, description, headers);
 			console.log(sessionAttributes.channel);
 
 			delete sessionAttributes.similarChannels;
@@ -161,8 +161,8 @@ const SetAnnouncementIntentHandler = {
 
 			if (supportsAPL(handlerInput)) {
 				const data = {
-					title: handlerInput.translate('CHANNEL_DETAILS.SET_ANNOUNCEMENT_SUCCESS', { roomname: channelName }),
-					message: announcement,
+					title: handlerInput.translate('CHANNEL_DETAILS.SET_DESCRIPTION_SUCCESS', { roomname: channelName }),
+					message: description,
 				};
 
 				return handlerInput.jrb
@@ -189,8 +189,8 @@ const SetAnnouncementIntentHandler = {
 };
 
 module.exports = {
-	StartedSetAnnouncementIntentHandler,
-	InProgressSetAnnouncementIntentHandler,
-	DeniedSetAnnouncementIntentHandler,
-	SetAnnouncementIntentHandler,
+	StartedSetDescriptionIntentHandler,
+	InProgressSetDescriptionIntentHandler,
+	DeniedSetDescriptionIntentHandler,
+	SetDescriptionIntentHandler,
 };
