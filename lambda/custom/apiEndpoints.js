@@ -38,4 +38,6 @@ module.exports = {
 	getsubscriptionsurl: `${ serverurl }/api/v1/subscriptions.get`,
 	setannouncementchannel: `${ serverurl }/api/v1/channels.setAnnouncement`,
 	setannouncementgroup: `${ serverurl }/api/v1/groups.setAnnouncement`,
+	setdescriptionchannel: `${ serverurl }/api/v1/channels.setDescription`,
+	setdescriptiongroup: `${ serverurl }/api/v1/groups.setDescription`,
 };

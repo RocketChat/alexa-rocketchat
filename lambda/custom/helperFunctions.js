@@ -945,15 +945,42 @@ const setAnnouncement = async (room, announcement, headers) => {
 		}).then((res) => res.data);
 
 		if (response.success) {
-			return ri('CHANNEL_DETAILS.SET_ANNOUNCEMENT_SUCCESS');
+			return ri('CHANNEL_DETAILS.SET_ANNOUNCEMENT_SUCCESS', { roomname: room.name });
 		}
 		return ri('CHANNEL_DETAILS.ERROR');
 
 	} catch (err) {
 		if (err.response.data.errorType && err.response.data.errorType === 'error-action-not-allowed') {
 			return ri('CHANNEL_DETAILS.NOT_AUTHORISED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('CHANNEL_DETAILS.ERROR');
+		} else if (err.response.status === 401) {
+			return ri('CHANNEL_DETAILS.AUTH_ERROR');
+		} else {
+			return ri('CHANNEL_DETAILS.ERROR');
 		}
-		if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+	}
+};
+
+const setDescription = async (room, description, headers) => {
+	try {
+		const url = room.type === 'c' ? apiEndpoints.setdescriptionchannel : apiEndpoints.setdescriptiongroup;
+		const response = await axios.post(url, {
+			roomId: room.id, description,
+		}, {
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) {
+			return ri('CHANNEL_DETAILS.SET_DESCRIPTION_SUCCESS', { roomname: room.name });
+		}
+
+		return ri('CHANNEL_DETAILS.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-action-not-allowed') {
+			return ri('CHANNEL_DETAILS.NOT_AUTHORISED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
 			return ri('CHANNEL_DETAILS.ERROR');
 		} else if (err.response.status === 401) {
 			return ri('CHANNEL_DETAILS.AUTH_ERROR');
@@ -1003,3 +1030,4 @@ module.exports.resolveChannelname = resolveChannelname;
 module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
 module.exports.setAnnouncement = setAnnouncement;
+module.exports.setDescription = setDescription;
