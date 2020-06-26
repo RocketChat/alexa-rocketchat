@@ -945,7 +945,7 @@ const setAnnouncement = async (room, announcement, headers) => {
 		}).then((res) => res.data);
 
 		if (response.success) {
-			return ri('CHANNEL_DETAILS.SET_ANNOUNCEMENT_SUCCESS', { roomname: room.name });
+			return ri('CHANNEL_DETAILS.SET_ANNOUNCEMENT_SUCCESS', { roomname: room.name, success: true });
 		}
 		return ri('CHANNEL_DETAILS.ERROR');
 
@@ -973,7 +973,7 @@ const setDescription = async (room, description, headers) => {
 		}).then((res) => res.data);
 
 		if (response.success) {
-			return ri('CHANNEL_DETAILS.SET_DESCRIPTION_SUCCESS', { roomname: room.name });
+			return ri('CHANNEL_DETAILS.SET_DESCRIPTION_SUCCESS', { roomname: room.name, success: true });
 		}
 
 		return ri('CHANNEL_DETAILS.ERROR');

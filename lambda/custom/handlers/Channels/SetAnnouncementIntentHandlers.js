@@ -152,7 +152,6 @@ const SetAnnouncementIntentHandler = {
 
 			const headers = await login(accessToken);
 			const speechText = await setAnnouncement(sessionAttributes.channel, announcement, headers);
-			console.log(sessionAttributes.channel);
 
 			delete sessionAttributes.similarChannels;
 			delete sessionAttributes.channel;
@@ -160,17 +159,32 @@ const SetAnnouncementIntentHandler = {
 			const repromptText = ri('GENERIC_REPROMPT');
 
 			if (supportsAPL(handlerInput)) {
-				const data = {
-					title: handlerInput.translate('CHANNEL_DETAILS.SET_ANNOUNCEMENT_SUCCESS', { roomname: channelName }),
-					message: announcement,
-				};
+				if (speechText.params && speechText.params.success) {
+					const data = {
+						title: handlerInput.translate('CHANNEL_DETAILS.SET_ANNOUNCEMENT_SUCCESS', { roomname: channelName }),
+						message: announcement,
+					};
 
-				return handlerInput.jrb
-					.speak(speechText)
-					.speak(repromptText)
-					.reprompt(repromptText)
-					.addDirective(titleMessageTemplate(data))
-					.getResponse();
+					return handlerInput.jrb
+						.speak(speechText)
+						.speak(repromptText)
+						.reprompt(repromptText)
+						.addDirective(titleMessageTemplate(data))
+						.getResponse();
+
+				} else {
+					const data = {
+						title: handlerInput.translate('CHANNEL_DETAILS.ERROR'),
+						message: '',
+					};
+
+					return handlerInput.jrb
+						.speak(speechText)
+						.speak(repromptText)
+						.reprompt(repromptText)
+						.addDirective(titleMessageTemplate(data))
+						.getResponse();
+				}
 
 			} else {
 
