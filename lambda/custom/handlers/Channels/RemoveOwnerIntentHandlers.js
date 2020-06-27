@@ -1,12 +1,12 @@
 const Alexa = require('ask-sdk-core');
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, removeLeader } = require('../../helperFunctions');
+const { login, removeOwner } = require('../../helperFunctions');
 const { resolveChannel, resolveUserWithRole } = require('../../utils');
 
-const StartedRemoveLeaderIntentHandler = {
+const StartedRemoveOwnerIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-        handlerInput.requestEnvelope.request.intent.name === 'RemoveLeaderIntent' &&
+        handlerInput.requestEnvelope.request.intent.name === 'RemoveOwnerIntent' &&
         handlerInput.requestEnvelope.request.dialogState === 'STARTED';
 	},
 	handle(handlerInput) {
@@ -22,7 +22,7 @@ const StartedRemoveLeaderIntentHandler = {
 		delete sessionAttributes.similarChannels;
 
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
-			return resolveUserWithRole(handlerInput, 'leader');
+			return resolveUserWithRole(handlerInput, 'owner');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
 			return resolveChannel(handlerInput);
 		}
@@ -33,10 +33,10 @@ const StartedRemoveLeaderIntentHandler = {
 	},
 };
 
-const RemoveLeaderIntentHandler = {
+const RemoveOwnerIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'RemoveLeaderIntent'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'RemoveOwnerIntent'
             && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
 	async handle(handlerInput) {
@@ -49,7 +49,7 @@ const RemoveLeaderIntentHandler = {
 
 		const headers = await login(accessToken);
 
-		const speakOutput = await removeLeader(sessionAttributes.channel.id, sessionAttributes.user._id, sessionAttributes.channel.name, sessionAttributes.user.username, sessionAttributes.channel.type, headers);
+		const speakOutput = await removeOwner(sessionAttributes.channel.id, sessionAttributes.user._id, sessionAttributes.channel.name, sessionAttributes.user.username, sessionAttributes.channel.type, headers);
 		const repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
@@ -60,10 +60,10 @@ const RemoveLeaderIntentHandler = {
 	},
 };
 
-const DeniedRemoveLeaderIntentHandler = {
+const DeniedRemoveOwnerIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'RemoveLeaderIntent'
+            && handlerInput.requestEnvelope.request.intent.name === 'RemoveOwnerIntent'
             && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
 	},
 	handle(handlerInput) {
@@ -79,10 +79,10 @@ const DeniedRemoveLeaderIntentHandler = {
 	},
 };
 
-const InProgressRemoveLeaderIntentHandler = {
+const InProgressRemoveOwnerIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'RemoveLeaderIntent'
+            && handlerInput.requestEnvelope.request.intent.name === 'RemoveOwnerIntent'
             && handlerInput.requestEnvelope.request.dialogState !== 'COMPLETED';
 	},
 	handle(handlerInput) {
@@ -90,7 +90,7 @@ const InProgressRemoveLeaderIntentHandler = {
 		const intentSlots = intent.slots;
 
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
-			return resolveUserWithRole(handlerInput, 'leader');
+			return resolveUserWithRole(handlerInput, 'owner');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
 			return resolveChannel(handlerInput);
 		}
@@ -102,8 +102,8 @@ const InProgressRemoveLeaderIntentHandler = {
 };
 
 module.exports = {
-	StartedRemoveLeaderIntentHandler,
-	RemoveLeaderIntentHandler,
-	DeniedRemoveLeaderIntentHandler,
-	InProgressRemoveLeaderIntentHandler,
+	StartedRemoveOwnerIntentHandler,
+	RemoveOwnerIntentHandler,
+	DeniedRemoveOwnerIntentHandler,
+	InProgressRemoveOwnerIntentHandler,
 };
