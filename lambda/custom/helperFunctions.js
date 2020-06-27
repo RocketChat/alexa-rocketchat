@@ -899,7 +899,8 @@ const resolveUsername = async (username, headers, single = false) => {
 			.then((subscriptions) => subscriptions.filter((subscription) => subscription.t === 'd'))
 			.then((subscriptions) => subscriptions.map((subscription) => ({
 				name: subscription.name,
-				id: subscription._id,
+				// the last 17 characters of the rid property of subscription represents the id of the user
+				id: subscription.rid.slice(-17,),
 				type: subscription.t,
 			})));
 
@@ -976,6 +977,38 @@ const leaveChannel = async (roomId, roomname, type, headers) => {
 	}
 };
 
+const inviteUser = async (roomId, userId, roomname, username, type, headers) => {
+	try {
+		const url = type === 'c' ? apiEndpoints.invitetochannelurl : apiEndpoints.invitetogroupurl;
+		const response = await axios.post(url, {
+			roomId, userId,
+		},
+		{
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) { return ri('INVITE_USER.SUCCESS', { username, roomname }); }
+
+		return ri('INVITE_USER.ERROR');
+
+	} catch (err) {
+		console.log(err);
+		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+			return ri('ERROR_NOT_ALLOWED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+			return ri('ERROR_INVALID_USER', { username });
+		} else if (err.response.status === 401) {
+			return ri('AUTH_ERROR');
+		} else {
+			return ri('INVITE_USER.ERROR');
+		}
+	}
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1016,3 +1049,4 @@ module.exports.resolveChannelname = resolveChannelname;
 module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
 module.exports.leaveChannel = leaveChannel;
+module.exports.inviteUser = inviteUser;

@@ -38,4 +38,6 @@ module.exports = {
 	getsubscriptionsurl: `${ serverurl }/api/v1/subscriptions.get`,
 	leavechannelurl: `${ serverurl }/api/v1/channels.leave`,
 	leavegroupurl: `${ serverurl }/api/v1/groups.leave`,
+	invitetochannelurl: `${ serverurl }/api/v1/channels.invite`,
+	invitetogroupurl: `${ serverurl }/api/v1/groups.invite`,
 };
