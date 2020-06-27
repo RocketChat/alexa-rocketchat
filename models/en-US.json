@@ -213,12 +213,20 @@
                     "name": "ArchiveChannelIntent",
                     "slots": [
                         {
-                            "name": "archivechannelname",
-                            "type": "channelnames"
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "archive {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
                         }
                     ],
                     "samples": [
-                        "archive {archivechannelname}"
+                        "archive channel",
+                        "archive {channelname}"
                     ]
                 },
                 {
@@ -553,6 +561,210 @@
                         "remove leader from channel {channelname}",
                         "remove leader from {channelname}",
                         "remove leader"
+                    ]
+                },
+                {
+                    "name": "ReadPinnedMessagesIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "{channelname}",
+                                "from channel {channelname}",
+                                "from {channelname}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "read pinned messages from {channelname}",
+                        "read pinned messages"
+                    ]
+                },
+                {
+                    "name": "LeaveChannelIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "channel {channelname}",
+                                "leave {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "Leave channel {channelname}",
+                        "Leave channel"
+                    ]
+                },
+                {
+                    "name": "UnarchiveChannelIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "channel {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "Unarchive channel {channelname}",
+                        "Unarchive channel"
+                    ]
+                },
+                {
+                    "name": "SetAnnouncementIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "in channel {channelname}",
+                                "channel {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "announcement",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "set {announcement}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "set announcement",
+                        "Set announcement in channl {channelname}",
+                        "Set announcement in {channelname}"
+                    ]
+                },
+                {
+                    "name": "SetDescriptionIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "in {channelname}",
+                                "in channel {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "description",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "set {description}",
+                                "set as {description}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "Set description in {channelname}",
+                        "Set description"
+                    ]
+                },
+                {
+                    "name": "SetTopicIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "set in {channelname}",
+                                "in {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "topic",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "set as {topic}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "set topic in {channelname}",
+                        "set topic"
+                    ]
+                },
+                {
+                    "name": "RenameChannelIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "channel {channelname}",
+                                "rename {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "newname",
+                            "type": "channelnames",
+                            "samples": [
+                                "{newname}",
+                                "new name is {newname}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "rename channel {channelname} to {newname}",
+                        "rename channel {channelname}",
+                        "rename channel"
+                    ]
+                },
+                {
+                    "name": "RemoveOwnerIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "remove from {channelname}",
+                                "from {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "remove {username}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "remove owner from channel {channelname}",
+                        "remove owner from {channelname}",
+                        "remove owner"
                     ]
                 }
             ],
@@ -2036,6 +2248,270 @@
                             "prompts": {}
                         }
                     ]
+                },
+                {
+                    "name": "ReadPinnedMessagesIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.801639937455.472739613625"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "LeaveChannelIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.1332057814989"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1332057814989.1100611672440"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ArchiveChannelIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.45254670481"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.45254670481.832091299073"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "UnarchiveChannelIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.562355055148"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.562355055148.420926033918"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "SetAnnouncementIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.694933260184"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.694933260184.94116224804"
+                            }
+                        },
+                        {
+                            "name": "announcement",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.694933260184.236979036874"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "SetDescriptionIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.1558699166034"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1558699166034.1347266098739"
+                            }
+                        },
+                        {
+                            "name": "description",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1558699166034.985145374285"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "SetTopicIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.583855588190"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.583855588190.268911026298"
+                            }
+                        },
+                        {
+                            "name": "topic",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.583855588190.1137986087938"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "RenameChannelIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.15722896196"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.15722896196.844436793762"
+                            }
+                        },
+                        {
+                            "name": "newname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.15722896196.113497634608"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "RemoveOwnerIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.839572519219"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.839572519219.466067032738",
+                                "elicitation": "Elicit.Slot.839572519219.466067032738"
+                            }
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.839572519219.1448107458381"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -2281,6 +2757,213 @@
                     {
                         "type": "PlainText",
                         "value": "You want to remove {username} as leader of {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.801639937455.472739613625",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want the pinned message from?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.1332057814989",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to leave channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1332057814989.1100611672440",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel or group do you want to leave?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.45254670481.832091299073",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to archive?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.45254670481",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to archive channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.562355055148.420926033918",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel or group do you want to unarchive?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.562355055148",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to unarchive channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.694933260184",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to set, {announcement} , as announcement in channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.694933260184.94116224804",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to set the announcement in?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.694933260184.236979036874",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What announcement do you want to set?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1558699166034.1347266098739",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to set the description in?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1558699166034.985145374285",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What do you want to set description as?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.1558699166034",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to set description as, {description} , in channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.583855588190",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to set topic as, {topic} , in channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.583855588190.268911026298",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to set the topic in?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.583855588190.1137986087938",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What do you want to set the topic as?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.15722896196",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to rename, {channelname} , as {newname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.15722896196.844436793762",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel or group do you want to rename?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.15722896196.113497634608",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Tell the new name."
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.839572519219.466067032738",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to remove the owner from?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.839572519219.466067032738",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You mean {channelname} , right?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.839572519219.1448107458381",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to remove as owner?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.839572519219",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to remove, {username} , as owner of {channelname} , is that correct?"
                     }
                 ]
             }
