@@ -1113,6 +1113,43 @@ const removeOwner = async (roomId, userId, roomname, username, type, headers) =>
 	}
 
 };
+
+const removeModerator = async (roomId, userId, roomname, username, type, headers) => {
+	try {
+		const url = type === 'c' ? apiEndpoints.removemoderatorfromchannelurl : apiEndpoints.removemoderatorfromgroupurl;
+
+		const response = await axios.post(url, {
+			roomId, userId,
+		},
+		{
+			headers,
+		}).then((res) => res.data);
+
+
+		if (response.success) { return ri('ROOM_ROLES.REMOVE_MODERATOR_SUCCESS', { username, roomname }); }
+
+		return ri('ROOM_ROLES.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+			return ri('ROOM_ROLES.ERROR_NOT_ALLOWED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+			return ri('ROOM_ROLES.INVALID_USER', { username });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-moderator') {
+			return ri('ROOM_ROLES.USER_NOT_MODERATOR', { username, roomname });
+		} else if (err.response.status === 401) {
+			return ri('ROOM_ROLES.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('ROOM_ROLES.ERROR');
+		}
+	}
+
+};
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1156,3 +1193,4 @@ module.exports.addLeader = addLeader;
 module.exports.getUsersWithRolesFromRoom = getUsersWithRolesFromRoom;
 module.exports.removeLeader = removeLeader;
 module.exports.removeOwner = removeOwner;
+module.exports.removeModerator = removeModerator;

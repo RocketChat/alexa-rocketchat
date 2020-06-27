@@ -120,6 +120,7 @@
         "ALREADY_LEADER": "{username} is already a leader of {roomname}.",
         "REMOVE_LEADER_SUCCESS": "{username} is no longer a leader of {roomname}.",
         "REMOVE_OWNER_SUCCESS": "{username} is no longer an owner of {roomname}.",
+        "REMOVE_MODERATOR_SUCCESS": "{username} is no longer a moderator of {roomname}.",
         "ERROR_REMOVE_LAST_OWNER": "This is a last owner. Please set a new owner before removing this one.",
         "USER_NOT_LEADER": "{username} is not a leader of {roomname}.",
         "USER_NOT_OWNER": "{username} is not an owner of {roomname}.",
