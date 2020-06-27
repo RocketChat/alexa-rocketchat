@@ -178,22 +178,6 @@
                     ]
                 },
                 {
-                    "name": "MakeModeratorIntent",
-                    "slots": [
-                        {
-                            "name": "moderatorusername",
-                            "type": "rocketchatusernames"
-                        },
-                        {
-                            "name": "moderatorchannelname",
-                            "type": "channelnames"
-                        }
-                    ],
-                    "samples": [
-                        "make {moderatorusername} moderator of {moderatorchannelname}"
-                    ]
-                },
-                {
                     "name": "ArchiveChannelIntent",
                     "slots": [
                         {
@@ -298,22 +282,6 @@
                     ],
                     "samples": [
                         "Delete Private Channel {deletegroupname}"
-                    ]
-                },
-                {
-                    "name": "MakeGroupModeratorIntent",
-                    "slots": [
-                        {
-                            "name": "groupmoderatorusername",
-                            "type": "rocketchatusernames"
-                        },
-                        {
-                            "name": "groupmoderatorchannelname",
-                            "type": "channelnames"
-                        }
-                    ],
-                    "samples": [
-                        "Make {groupmoderatorusername} Moderator Of Private Channel {groupmoderatorchannelname}"
                     ]
                 },
                 {
@@ -791,6 +759,35 @@
                     "samples": [
                         "add owner in {channelname}",
                         "add owner"
+                    ]
+                },
+                {
+                    "name": "AddModeratorIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "in {channelname}",
+                                "in channel {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "set {username}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "add moderator in channel {channelname}",
+                        "make moderator in {channelname}",
+                        "add moderator"
                     ]
                 }
             ],
@@ -2610,6 +2607,42 @@
                             "prompts": {}
                         }
                     ]
+                },
+                {
+                    "name": "AddModeratorIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.437014854497"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.437014854497.157868203857",
+                                "elicitation": "Elicit.Slot.437014854497.157868203857"
+                            }
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.437014854497.624036719675"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -3134,6 +3167,42 @@
                     {
                         "type": "PlainText",
                         "value": "You want to set, {username} , as an owner of {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.437014854497.157868203857",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to add moderator in?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.437014854497.157868203857",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "{channelname} , did I get that right?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.437014854497.624036719675",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to set the moderator as?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.437014854497",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to set, {username} , as moderator of {channelname} , is that correct?"
                     }
                 ]
             }
