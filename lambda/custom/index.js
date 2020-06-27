@@ -71,6 +71,13 @@ const {
 const { ArchiveChannelIntentHandler } = require('./handlers/Channels/ArchiveChannelIntentHandler');
 
 const {
+	StartedLeaveChannelIntentHandler,
+	InProgressLeaveChannelIntentHandler,
+	DeniedLeaveChannelIntentHandler,
+	LeaveChannelIntentHandler,
+} = require('./handlers/Channels/LeaveChannelIntentHandlers');
+
+const {
 	StartPlaybackHandler,
 	AudioControlPlaybackHandler,
 	PausePlaybackHandler,
@@ -202,6 +209,10 @@ const buildSkill = (skillBuilder) =>
 			RemoveModeratorIntentHandler,
 			DeniedRemoveModeratorIntentHandler,
 			InProgressRemoveModeratorIntentHandler,
+			StartedLeaveChannelIntentHandler,
+			InProgressLeaveChannelIntentHandler,
+			DeniedLeaveChannelIntentHandler,
+			LeaveChannelIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,
