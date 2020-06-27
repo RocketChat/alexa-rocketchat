@@ -90,13 +90,6 @@
         "ERROR": "Sorry, I am unable to add all users to the channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I am unable to add all users to channel {channelName} right now."
     },
-    "ADD_OWNER": {
-        "SUCCESS": "{userName} is now the owner of {channelName}.",
-        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
-        "CARD_TITLE": "Add Owner",
-        "ERROR": "Sorry, I couldn't assign a owner to the channel right now.",
-        "ERROR_NOT_FOUND": "Sorry, I couldn't assign a owner to channel {channelName} right now."
-    },
     "ARCHIVE_CHANNEL": {
         "SUCCESS": "{channelName} is now archived.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
@@ -116,8 +109,10 @@
     },
     "ROOM_ROLES":{
         "ADD_LEADER_SUCCESS": "{username} is now the leader of {roomname}.",
+        "ADD_OWNER_SUCCESS": "{username} is now an owner of {roomname}.",
         "ADD_LEADER_DENIED": "Okay.",
         "ALREADY_LEADER": "{username} is already a leader of {roomname}.",
+        "ALREADY_OWNER": "{username} is already an owner of {roomname}.",
         "REMOVE_LEADER_SUCCESS": "{username} is no longer a leader of {roomname}.",
         "REMOVE_OWNER_SUCCESS": "{username} is no longer an owner of {roomname}.",
         "REMOVE_MODERATOR_SUCCESS": "{username} is no longer a moderator of {roomname}.",
