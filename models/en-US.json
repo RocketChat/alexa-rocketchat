@@ -766,6 +766,35 @@
                         "remove owner from {channelname}",
                         "remove owner"
                     ]
+                },
+                {
+                    "name": "RemoveModeratorIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "remove from channel {channelname}",
+                                "from {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "remove {username}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "remove moderator from channel {channelname}",
+                        "remove moderator from {channelname}",
+                        "remove moderator"
+                    ]
                 }
             ],
             "types": [
@@ -2512,6 +2541,42 @@
                             "prompts": {}
                         }
                     ]
+                },
+                {
+                    "name": "RemoveModeratorIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.226847919348"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.226847919348.878189168754",
+                                "elicitation": "Elicit.Slot.226847919348.878189168754"
+                            }
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.226847919348.535930901642"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -2964,6 +3029,42 @@
                     {
                         "type": "PlainText",
                         "value": "You want to remove, {username} , as owner of {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.226847919348.878189168754",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to remove the moderator from?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.226847919348.878189168754",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "{channelname} , did I get that right?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.226847919348.535930901642",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to remove moderator as?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.226847919348",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to remove, {username} , as moderator of {channelname} , is that correct?"
                     }
                 ]
             }
