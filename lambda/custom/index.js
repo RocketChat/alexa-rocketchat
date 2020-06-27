@@ -61,6 +61,13 @@ const {
 	InProgressAddOwnerIntentHandler,
 } = require('./handlers/Channels/AddOwnerIntentHandler');
 
+const {
+	StartedAddModeratorIntentHandler,
+	AddModeratorIntentHandler,
+	DeniedAddModeratorIntentHandler,
+	InProgressAddModeratorIntentHandler,
+} = require('./handlers/Channels/AddModeratorIntentHandlers');
+
 const { ArchiveChannelIntentHandler } = require('./handlers/Channels/ArchiveChannelIntentHandler');
 
 const {
@@ -171,6 +178,10 @@ const buildSkill = (skillBuilder) =>
 			AddOwnerIntentHandler,
 			DeniedAddOwnerIntentHandler,
 			InProgressAddOwnerIntentHandler,
+			StartedAddModeratorIntentHandler,
+			AddModeratorIntentHandler,
+			DeniedAddModeratorIntentHandler,
+			InProgressAddModeratorIntentHandler,
 			ArchiveChannelIntentHandler,
 			GetUnreadMessagesIntentHandler,
 			CreateGrouplIntentHandler,
