@@ -81,15 +81,12 @@ const { GetUnreadMessagesIntentHandler } = require('./handlers/Channels/GetUnrea
 
 const { AddAllToChannelIntentHandler } = require('./handlers/Channels/AddAllToChannelIntentHandler');
 
-const { MakeModeratorIntentHandler } = require('./handlers/Channels/MakeModeratorIntentHandler');
-
 const { CreateGrouplIntentHandler } = require('./handlers/Channels/CreateGrouplIntentHandler');
 
 const { PostEmojiDirectMessageIntentHandler } = require('./handlers/Direct/PostEmojiDirectMessageIntentHandler');
 
 const {
 	DeleteGroupIntentHandler,
-	MakeGroupModeratorIntentHandler,
 	PostGroupEmojiMessageIntentHandler,
 	GroupLastMessageIntentHandler,
 	GetGroupUnreadMessagesIntentHandler,
@@ -173,7 +170,6 @@ const buildSkill = (skillBuilder) =>
 			PostEmojiMessageIntentHandler,
 			GetLastMessageFromChannelIntentHandler,
 			AddAllToChannelIntentHandler,
-			MakeModeratorIntentHandler,
 			StartedAddOwnerIntentHandler,
 			AddOwnerIntentHandler,
 			DeniedAddOwnerIntentHandler,
@@ -186,7 +182,6 @@ const buildSkill = (skillBuilder) =>
 			GetUnreadMessagesIntentHandler,
 			CreateGrouplIntentHandler,
 			DeleteGroupIntentHandler,
-			MakeGroupModeratorIntentHandler,
 			PostGroupEmojiMessageIntentHandler,
 			GroupLastMessageIntentHandler,
 			GetGroupUnreadMessagesIntentHandler,
