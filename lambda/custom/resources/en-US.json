@@ -119,6 +119,8 @@
         "ADD_LEADER_DENIED": "Okay.",
         "ALREADY_LEADER": "{username} is already a leader of {roomname}.",
         "REMOVE_LEADER_SUCCESS": "{username} is no longer a leader of {roomname}.",
+        "REMOVE_OWNER_SUCCESS": "{username} is no longer an owner of {roomname}.",
+        "ERROR_REMOVE_LAST_OWNER": "This is a last owner. Please set a new owner before removing this one.",
         "USER_NOT_LEADER": "{username} is not a leader of {roomname}.",
         "USER_NOT_OWNER": "{username} is not an owner of {roomname}.",
         "USER_NOT_MODERATOR": "{username} is not a moderator of {roomname}.",
@@ -127,6 +129,7 @@
         "ERROR_ROOM_NOT_FOUND": "There's no room named {roomname}.",
         "INVALID_USER": "There's no user named {username}.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
+        "DENIED": "Okay.",
         "ERROR": "Sorry, I couldn't perform this operation."
     },
     "AUDIO_NO_SUPPORT": "Sorry, this skill doesn't support that feature.",
