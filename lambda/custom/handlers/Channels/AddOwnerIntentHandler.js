@@ -1,40 +1,109 @@
+const Alexa = require('ask-sdk-core');
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { replaceWhitespacesDots, replaceWhitespacesFunc, login, getRoomId, getUserId, addOwner } = require('../../helperFunctions');
+const { login, addOwner } = require('../../helperFunctions');
+const { resolveChannel, resolveUser } = require('../../utils');
+
+const StartedAddOwnerIntentHandler = {
+	canHandle(handlerInput) {
+		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+        handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent' &&
+        handlerInput.requestEnvelope.request.dialogState === 'STARTED';
+	},
+	handle(handlerInput) {
+		const currentIntent = handlerInput.requestEnvelope.request.intent;
+		const intentSlots = currentIntent.slots;
+
+		const { attributesManager } = handlerInput;
+		const sessionAttributes = attributesManager.getSessionAttributes() || {};
+
+		delete sessionAttributes.user;
+		delete sessionAttributes.channel;
+		delete sessionAttributes.similarusers;
+		delete sessionAttributes.similarChannels;
+
+		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
+			return resolveUser(handlerInput);
+		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
+			return resolveChannel(handlerInput);
+		}
+
+		return handlerInput.responseBuilder
+			.addDelegateDirective(currentIntent)
+			.getResponse();
+	},
+};
 
 const AddOwnerIntentHandler = {
 	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent';
+		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AddOwnerIntent'
+            && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
 	async handle(handlerInput) {
-		try {
+		const {
+			accessToken,
+		} = handlerInput.requestEnvelope.context.System.user;
 
-			const userNameData = handlerInput.requestEnvelope.request.intent.slots.ownerusername.value;
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.ownerchannelname.value;
-			const userName = replaceWhitespacesDots(userNameData);
-			const channelName = replaceWhitespacesFunc(channelNameData);
+		const { attributesManager } = handlerInput;
+		const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
-			const {
-				accessToken,
-			} = handlerInput.requestEnvelope.context.System.user;
-			const headers = await login(accessToken);
-			const userid = await getUserId(userName, headers);
-			const roomid = await getRoomId(channelName, headers);
-			const speechText = await addOwner(userName, channelName, userid, roomid, headers);
-			const repromptText = ri('GENERIC_REPROMPT');
+		const headers = await login(accessToken);
 
-			return handlerInput.jrb
-				.speak(speechText)
-				.speak(repromptText)
-				.reprompt(repromptText)
-				.withSimpleCard(ri('ADD_OWNER.CARD_TITLE'), speechText)
-				.getResponse();
-		} catch (error) {
-			console.error(error);
+		const speakOutput = await addOwner(sessionAttributes.channel.id, sessionAttributes.user.id, sessionAttributes.channel.name, sessionAttributes.user.name, sessionAttributes.channel.type, headers);
+		const repromptText = ri('GENERIC_REPROMPT');
+
+		return handlerInput.jrb
+			.speak(speakOutput)
+			.speak(repromptText)
+			.reprompt(repromptText)
+			.getResponse();
+	},
+};
+
+const DeniedAddOwnerIntentHandler = {
+	canHandle(handlerInput) {
+		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent'
+            && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
+	},
+	handle(handlerInput) {
+
+		const speakOutput = ri('ROOM_ROLES.DENIED');
+		const repromptText = ri('GENERIC_REPROMPT');
+
+		return handlerInput.jrb
+			.speak(speakOutput)
+			.speak(repromptText)
+			.reprompt(repromptText)
+			.getResponse();
+	},
+};
+
+const InProgressAddOwnerIntentHandler = {
+	canHandle(handlerInput) {
+		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent'
+            && handlerInput.requestEnvelope.request.dialogState !== 'COMPLETED';
+	},
+	handle(handlerInput) {
+		const { intent } = handlerInput.requestEnvelope.request;
+		const intentSlots = intent.slots;
+
+		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
+			return resolveUser(handlerInput);
+		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
+			return resolveChannel(handlerInput);
 		}
+
+		return handlerInput.responseBuilder
+			.addDelegateDirective(intent)
+			.getResponse();
 	},
 };
 
 module.exports = {
+	StartedAddOwnerIntentHandler,
 	AddOwnerIntentHandler,
+	DeniedAddOwnerIntentHandler,
+	InProgressAddOwnerIntentHandler,
 };
