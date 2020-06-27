@@ -1,5 +1,5 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, resolveChannelname } = require('./helperFunctions');
+const { login, resolveChannelname, resolveUsername } = require('./helperFunctions');
 
 // APL Compaitability Checker Function
 const supportsAPL = (handlerInput) => {
@@ -106,6 +106,7 @@ const resolveChannel = async (handlerInput) => {
 		const channelDetails = channels[Number(updatedSlots.choice.value) - 1];
 		updatedSlots.channelname.value = channelDetails.name;
 		sessionAttributes.channel = channelDetails;
+		delete updatedSlots.choice.value;
 		return handlerInput.responseBuilder
 			.addDelegateDirective(currentIntent)
 			.getResponse();
@@ -161,6 +162,88 @@ const resolveChannel = async (handlerInput) => {
 		.getResponse();
 };
 
+const resolveUser = async (handlerInput) => {
+	const updatedIntent = handlerInput.requestEnvelope.request.intent;
+	const updatedSlots = updatedIntent.slots;
+
+	const { attributesManager } = handlerInput;
+	const sessionAttributes = attributesManager.getSessionAttributes() || {};
+
+	if (!sessionAttributes.user && updatedSlots.choice && updatedSlots.choice.value) {
+		// get the array of users which the user was asked for
+		const users = sessionAttributes.similarusers;
+
+		// if the user selects an invalid choice then ask for an appropriate choice
+		if (Number(updatedSlots.choice.value) === 0 || Number(updatedSlots.choice.value) > users.length) {
+			let users_list = '';
+			for (const { name } of users) {
+				users_list += `${ name }, `;
+			}
+			const speechText = ri('RESOLVE_USERNAME.ASK_CHOICE', { choice_limit: users.length, users_list });
+			const slotName = 'choice';
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.addElicitSlotDirective(slotName)
+				.getResponse();
+		}
+
+		// if everything is correct then proceed to ask for confirmation
+		const userDetails = users[Number(updatedSlots.choice.value) - 1];
+		updatedSlots.username.value = userDetails.name;
+		sessionAttributes.user = userDetails;
+		delete updatedSlots.choice.value;
+		return handlerInput.responseBuilder
+			.addDelegateDirective(updatedIntent)
+			.getResponse();
+	}
+
+	if (!sessionAttributes.user && updatedSlots.username.value) {
+		const {
+			accessToken,
+		} = handlerInput.requestEnvelope.context.System.user;
+
+		const headers = await login(accessToken);
+
+		// get the array of similar usernames
+		const users = await resolveUsername(updatedSlots.username.value, headers);
+
+		if (users.length === 0) {
+			const speechText = ri('RESOLVE_USERNAME.NO_USER', { username: updatedSlots.username.value });
+			const repromptText = ri('GENERIC_REPROMPT');
+			return handlerInput.jrb
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse();
+			// if there's only one similar username, then change the slot value to the matching username
+		} else if (users.length === 1) {
+			updatedSlots.username.value = users[0].name;
+			sessionAttributes.user = users[0];
+		} else {
+			sessionAttributes.similarusers = users;
+			let user_names = '';
+			for (const { name } of users) {
+				user_names += `${ name }, `;
+			}
+
+			const speechText = ri('RESOLVE_USERNAME.SIMILAR_USERS', { user_names });
+			const slotName = 'choice';
+
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.addElicitSlotDirective(slotName)
+				.getResponse();
+		}
+	}
+
+	return handlerInput.responseBuilder
+		.addDelegateDirective(updatedIntent)
+		.getResponse();
+};
+
 module.exports = {
 	supportsAPL,
 	supportsDisplay,
@@ -168,4 +251,5 @@ module.exports = {
 	randomProperty,
 	getStaticAndDynamicSlotValuesFromSlot,
 	resolveChannel,
+	resolveUser,
 };
