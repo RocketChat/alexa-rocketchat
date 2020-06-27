@@ -66,6 +66,13 @@ const {
 } = require('./handlers/Channels/LeaveChannelIntentHandlers');
 
 const {
+	StartedInviteUserIntentHandler,
+	InviteUserIntentHandler,
+	DeniedInviteUserIntentHandler,
+	InProgressInviteUserIntentHandler,
+} = require('./handlers/Channels/InviteUserIntentHandlers');
+
+const {
 	StartPlaybackHandler,
 	AudioControlPlaybackHandler,
 	PausePlaybackHandler,
@@ -157,6 +164,10 @@ const buildSkill = (skillBuilder) =>
 			InProgressLeaveChannelIntentHandler,
 			DeniedLeaveChannelIntentHandler,
 			LeaveChannelIntentHandler,
+			StartedInviteUserIntentHandler,
+			InviteUserIntentHandler,
+			DeniedInviteUserIntentHandler,
+			InProgressInviteUserIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,
