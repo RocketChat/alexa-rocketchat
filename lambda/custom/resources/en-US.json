@@ -110,9 +110,11 @@
     "ROOM_ROLES":{
         "ADD_LEADER_SUCCESS": "{username} is now the leader of {roomname}.",
         "ADD_OWNER_SUCCESS": "{username} is now an owner of {roomname}.",
+        "ADD_MODERATOR_SUCCESS": "{username} is now a moderator of {roomname}.",
         "ADD_LEADER_DENIED": "Okay.",
         "ALREADY_LEADER": "{username} is already a leader of {roomname}.",
         "ALREADY_OWNER": "{username} is already an owner of {roomname}.",
+        "ALREADY_MODERATOR": "{username} is already a moderator of {roomname}.",
         "REMOVE_LEADER_SUCCESS": "{username} is no longer a leader of {roomname}.",
         "REMOVE_OWNER_SUCCESS": "{username} is no longer an owner of {roomname}.",
         "REMOVE_MODERATOR_SUCCESS": "{username} is no longer a moderator of {roomname}.",

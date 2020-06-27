@@ -392,38 +392,6 @@ const getRoomId = async (channelName, headers) =>
 			console.log(err.message);
 		});
 
-const makeModerator = async (userName, channelName, userid, roomid, headers) =>
-	await axios
-		.post(
-			apiEndpoints.makemoderatorurl, {
-				userId: userid,
-				roomId: roomid,
-			}, {
-				headers,
-			}
-		)
-		.then((res) => res.data)
-		.then((res) => {
-			if (res.success === true) {
-				return ri('MAKE_MODERATOR.SUCCESS', {
-					userName,
-					channelName,
-				});
-			} else {
-				return ri('MAKE_MODERATOR.ERROR');
-			}
-		})
-		.catch((err) => {
-			console.log(err.message);
-			if (err.response.status === 401) {
-				return ri('MAKE_MODERATOR.AUTH_ERROR');
-			} else {
-				return ri('MAKE_MODERATOR.ERROR_NOT_FOUND', {
-					channelName,
-				});
-			}
-		});
-
 const addAll = async (channelName, roomid, headers) =>
 	await axios
 		.post(
@@ -582,38 +550,6 @@ const getGroupId = async (channelName, headers) =>
 		.then((res) => `${ res.group._id }`)
 		.catch((err) => {
 			console.log(err.message);
-		});
-
-const addGroupModerator = async (userName, channelName, userid, roomid, headers) =>
-	await axios
-		.post(
-			apiEndpoints.addgroupmoderatorurl, {
-				userId: userid,
-				roomId: roomid,
-			}, {
-				headers,
-			}
-		)
-		.then((res) => res.data)
-		.then((res) => {
-			if (res.success === true) {
-				return ri('MAKE_MODERATOR.SUCCESS', {
-					userName,
-					channelName,
-				});
-			} else {
-				return ri('MAKE_MODERATOR.ERROR');
-			}
-		})
-		.catch((err) => {
-			console.log(err.message);
-			if (err.response.status === 401) {
-				return ri('MAKE_MODERATOR.AUTH_ERROR');
-			} else {
-				return ri('MAKE_MODERATOR.ERROR_NOT_FOUND', {
-					channelName,
-				});
-			}
 		});
 
 const postGroupMessage = async (roomid, message, headers) =>
@@ -1104,7 +1040,6 @@ const addOwner = async (roomId, userId, roomname, username, type, headers) => {
 		return ri('ROOM_ROLES.ERROR');
 
 	} catch (err) {
-		console.log(err);
 		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
 			return ri('ROOM_ROLES.ERROR_NOT_ALLOWED');
 		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
@@ -1120,6 +1055,46 @@ const addOwner = async (roomId, userId, roomname, username, type, headers) => {
 		} else if (err.response.status === 401) {
 			return ri('ROOM_ROLES.AUTH_ERROR');
 		} else {
+			console.log(err);
+			return ri('ROOM_ROLES.ERROR');
+		}
+	}
+};
+
+const addModerator = async (roomId, userId, roomname, username, type, headers) => {
+	try {
+		const url = type === 'c' ? apiEndpoints.addmoderatortochannelurl : apiEndpoints.addmoderatortogroupurl;
+
+		const response = await axios.post(url, {
+			roomId, userId,
+		},
+		{
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) {
+			return ri('ROOM_ROLES.ADD_MODERATOR_SUCCESS', { username, roomname });
+		}
+
+		return ri('ROOM_ROLES.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+			return ri('ROOM_ROLES.ERROR_NOT_ALLOWED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+			return ri('ROOM_ROLES.INVALID_USER', { username });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-already-moderator') {
+			return ri('ROOM_ROLES.ALREADY_MODERATOR', { username, roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
+			return ri('ROOM_ROLES.USER_NOT_MEMBER', { username, roomname });
+		} else if (err.response.status === 401) {
+			return ri('ROOM_ROLES.AUTH_ERROR');
+		} else {
+			console.log(err);
 			return ri('ROOM_ROLES.ERROR');
 		}
 	}
@@ -1138,7 +1113,6 @@ module.exports.getLastMessageFileDowloadURL = getLastMessageFileDowloadURL;
 module.exports.getUserId = getUserId;
 module.exports.getUserName = getUserName;
 module.exports.getRoomId = getRoomId;
-module.exports.makeModerator = makeModerator;
 module.exports.addAll = addAll;
 module.exports.addOwner = addOwner;
 module.exports.archiveChannel = archiveChannel;
@@ -1151,7 +1125,6 @@ module.exports.readMessages = readMessages;
 module.exports.createGroup = createGroup;
 module.exports.deleteGroup = deleteGroup;
 module.exports.getGroupId = getGroupId;
-module.exports.addGroupModerator = addGroupModerator;
 module.exports.postGroupMessage = postGroupMessage;
 module.exports.groupLastMessage = groupLastMessage;
 module.exports.getGroupUnreadCounter = getGroupUnreadCounter;
@@ -1167,3 +1140,4 @@ module.exports.getUsersWithRolesFromRoom = getUsersWithRolesFromRoom;
 module.exports.removeLeader = removeLeader;
 module.exports.removeOwner = removeOwner;
 module.exports.removeModerator = removeModerator;
+module.exports.addModerator = addModerator;
