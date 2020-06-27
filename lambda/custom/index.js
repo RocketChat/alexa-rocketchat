@@ -83,7 +83,6 @@ const { PostEmojiDirectMessageIntentHandler } = require('./handlers/Direct/PostE
 const {
 	DeleteGroupIntentHandler,
 	MakeGroupModeratorIntentHandler,
-	MakeGroupOwnerIntentHandler,
 	PostGroupEmojiMessageIntentHandler,
 	GroupLastMessageIntentHandler,
 	GetGroupUnreadMessagesIntentHandler,
@@ -177,7 +176,6 @@ const buildSkill = (skillBuilder) =>
 			CreateGrouplIntentHandler,
 			DeleteGroupIntentHandler,
 			MakeGroupModeratorIntentHandler,
-			MakeGroupOwnerIntentHandler,
 			PostGroupEmojiMessageIntentHandler,
 			GroupLastMessageIntentHandler,
 			GetGroupUnreadMessagesIntentHandler,
