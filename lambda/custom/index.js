@@ -89,9 +89,8 @@ const { HelpIntentHandler } = require('./handlers/General/HelpIntentHandler');
 const { CancelAndStopIntentHandler } = require('./handlers/General/CancelAndStopIntentHandler');
 
 const {
+	StartedAddLeaderIntentHandler,
 	DeniedAddLeaderIntentHandler,
-	UnconfirmedLeaderAddLeaderIntentHandler,
-	UnconfirmedChannelAddLeaderIntentHandler,
 	InProgressAddLeaderIntentHandler,
 	AddLeaderIntentHandler,
 } = require('./handlers/Channels/AddLeaderIntentHandlers');
@@ -161,10 +160,9 @@ const buildSkill = (skillBuilder) =>
 			GroupLastMessageIntentHandler,
 			GetGroupUnreadMessagesIntentHandler,
 			PostEmojiDirectMessageIntentHandler,
+			StartedAddLeaderIntentHandler,
 			AddLeaderIntentHandler,
 			DeniedAddLeaderIntentHandler,
-			UnconfirmedLeaderAddLeaderIntentHandler,
-			UnconfirmedChannelAddLeaderIntentHandler,
 			InProgressAddLeaderIntentHandler,
 			StartedRemoveLeaderIntentHandler,
 			RemoveLeaderIntentHandler,

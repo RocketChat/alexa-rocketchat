@@ -22,10 +22,8 @@ const StartedRemoveLeaderIntentHandler = {
 		delete sessionAttributes.similarChannels;
 
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
-			console.log('resolve user ran');
 			return resolveUserWithRole(handlerInput, 'leader');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
-			console.log('resolve channel ran');
 			return resolveChannel(handlerInput);
 		}
 
