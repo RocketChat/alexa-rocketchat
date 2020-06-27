@@ -1,3 +1,6 @@
+const { ri } = require('@jargon/alexa-skill-sdk');
+const { login, resolveChannelname, getUsersWithRolesFromRoom } = require('./helperFunctions');
+
 // APL Compaitability Checker Function
 const supportsAPL = (handlerInput) => {
 	const { supportedInterfaces } = handlerInput.requestEnvelope.context.System.device;
@@ -71,10 +74,191 @@ const randomProperty = function(obj) {
 	return obj[keys[keys.length * Math.random() << 0]];
 };
 
+const resolveChannel = async (handlerInput) => {
+	const currentIntent = handlerInput.requestEnvelope.request.intent;
+	const updatedSlots = currentIntent.slots;
+
+	const { attributesManager } = handlerInput;
+	const sessionAttributes = attributesManager.getSessionAttributes() || {};
+
+	// if a choice is present and has a value, it means the user has already made a choice on which channel to choose from
+	if (!sessionAttributes.channel && updatedSlots.choice && updatedSlots.choice.value) {
+
+		// get the array of channels which the user was asked for
+		const channels = sessionAttributes.similarChannels;
+
+		// if the user selects an invalid choice then ask for an appropriate choice
+		if (Number(updatedSlots.choice.value) === 0 || Number(updatedSlots.choice.value) > channels.length) {
+			let channels_list = '';
+			for (const { name } of channels) {
+				channels_list += `${ name }, `;
+			}
+			const speechText = ri('RESOLVE_CHANNEL.ASK_CHOICE', { choice_limit: channels.length, channels_list });
+			const slotName = 'choice';
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.addElicitSlotDirective(slotName)
+				.getResponse();
+		}
+
+		// if everything is correct then proceed to ask for confirmation
+		const channelDetails = channels[Number(updatedSlots.choice.value) - 1];
+		updatedSlots.channelname.value = channelDetails.name;
+		sessionAttributes.channel = channelDetails;
+		delete updatedSlots.choice.value;
+		return handlerInput.responseBuilder
+			.addDelegateDirective(currentIntent)
+			.getResponse();
+	}
+
+	// if the user has told the channel name to alexa
+	if (updatedSlots.channelname.value && !sessionAttributes.channel) {
+		const {
+			accessToken,
+		} = handlerInput.requestEnvelope.context.System.user;
+
+		const headers = await login(accessToken);
+
+		// get the array of similar channelnames
+		const channels = await resolveChannelname(updatedSlots.channelname.value, headers);
+
+		// if there are no similar channels
+		if (channels.length === 0) {
+			const speechText = ri('RESOLVE_CHANNEL.NO_CHANNEL', { channel_name: updatedSlots.channelname.value });
+			const repromptText = ri('GENERIC_REPROMPT');
+			return handlerInput.jrb
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse();
+			// if there's only one similar channel, then change the slot value to the matching channel
+		} else if (channels.length === 1) {
+			updatedSlots.channelname.value = channels[0].name;
+			sessionAttributes.channel = channels[0];
+			// if there are multiple channels with similar names
+		} else {
+			// store the similar channels in sessions Attributes and ask the user for a choice
+			sessionAttributes.similarChannels = channels;
+			let channel_names = '';
+			for (const { name } of channels) {
+				channel_names += `${ name }, `;
+			}
+
+			const speechText = ri('RESOLVE_CHANNEL.SIMILAR_CHANNELS', { channel_names });
+			const slotName = 'choice';
+
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.addElicitSlotDirective(slotName)
+				.getResponse();
+		}
+	}
+
+	return handlerInput.responseBuilder
+		.addDelegateDirective(currentIntent)
+		.getResponse();
+};
+
+const resolveUserWithRole = async (handlerInput, role) => {
+	const updatedIntent = handlerInput.requestEnvelope.request.intent;
+	const updatedSlots = updatedIntent.slots;
+
+	const { attributesManager } = handlerInput;
+	const sessionAttributes = attributesManager.getSessionAttributes() || {};
+
+	if (updatedSlots.choice && updatedSlots.choice.value) {
+		// get the array of users which the user was asked for
+		const users = sessionAttributes.similarusers;
+
+		// if the user selects an invalid choice then ask for an appropriate choice
+		if (Number(updatedSlots.choice.value) === 0 || Number(updatedSlots.choice.value) > users.length) {
+			let users_list = '';
+			for (const { username } of users) {
+				users_list += `${ username }, `;
+			}
+			const speechText = ri('RESOLVE_USERNAME.ASK_CHOICE', { choice_limit: users.length, users_list });
+			const slotName = 'choice';
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.addElicitSlotDirective(slotName)
+				.getResponse();
+		}
+
+		// if everything is correct then proceed to ask for confirmation
+		const userDetails = users[Number(updatedSlots.choice.value) - 1];
+		updatedSlots.username.value = userDetails.username;
+		sessionAttributes.user = userDetails;
+		delete updatedSlots.choice.value;
+		return handlerInput.responseBuilder
+			.addDelegateDirective(updatedIntent)
+			.getResponse();
+	}
+
+	if (updatedSlots.username.value) {
+		const {
+			accessToken,
+		} = handlerInput.requestEnvelope.context.System.user;
+
+		const headers = await login(accessToken);
+
+		// get the array of similar usernames
+		const users = await getUsersWithRolesFromRoom(updatedSlots.username.value, sessionAttributes.channel.id, sessionAttributes.channel.type, role, headers);
+
+		if (users.length === 0) {
+			let speechText;
+
+			if (role === 'leader') {
+				speechText = ri('ROOM_ROLES.USER_NOT_LEADER', { username: updatedSlots.username.value, roomname: sessionAttributes.channel.name });
+			} else if (role === 'owner') {
+				speechText = ri('ROOM_ROLES.USER_NOT_OWNER', { username: updatedSlots.username.value, roomname: sessionAttributes.channel.name });
+			} else if (role === 'moderator') {
+				speechText = ri('ROOM_ROLES.USER_NOT_MODERATOR', { username: updatedSlots.username.value, roomname: sessionAttributes.channel.name });
+			}
+
+			const repromptText = ri('GENERIC_REPROMPT');
+			return handlerInput.jrb
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse();
+			// if there's only one similar channel, then change the slot value to the matching channel
+		} else if (users.length === 1) {
+			updatedSlots.username.value = users[0].username;
+			sessionAttributes.user = users[0];
+		} else {
+			sessionAttributes.similarusers = users;
+			let user_names = '';
+			for (const { username } of users) {
+				user_names += `${ username }, `;
+			}
+
+			const speechText = ri('RESOLVE_USERNAME.SIMILAR_USERS', { user_names });
+			const slotName = 'choice';
+
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.addElicitSlotDirective(slotName)
+				.getResponse();
+		}
+	}
+
+	return handlerInput.responseBuilder
+		.addDelegateDirective(updatedIntent)
+		.getResponse();
+};
+
 module.exports = {
 	supportsAPL,
 	supportsDisplay,
 	slotValue,
 	randomProperty,
 	getStaticAndDynamicSlotValuesFromSlot,
+	resolveChannel,
+	resolveUserWithRole,
 };

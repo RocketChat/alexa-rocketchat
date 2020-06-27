@@ -97,10 +97,9 @@ const {
 } = require('./handlers/Channels/AddLeaderIntentHandlers');
 
 const {
+	StartedRemoveLeaderIntentHandler,
 	RemoveLeaderIntentHandler,
 	DeniedRemoveLeaderIntentHandler,
-	UnconfirmedLeaderRemoveLeaderIntentHandler,
-	UnconfirmedChannelRemoveLeaderIntentHandler,
 	InProgressRemoveLeaderIntentHandler,
 } = require('./handlers/Channels/RemoveLeaderIntentHandlers');
 
@@ -167,10 +166,9 @@ const buildSkill = (skillBuilder) =>
 			UnconfirmedLeaderAddLeaderIntentHandler,
 			UnconfirmedChannelAddLeaderIntentHandler,
 			InProgressAddLeaderIntentHandler,
+			StartedRemoveLeaderIntentHandler,
 			RemoveLeaderIntentHandler,
 			DeniedRemoveLeaderIntentHandler,
-			UnconfirmedLeaderRemoveLeaderIntentHandler,
-			UnconfirmedChannelRemoveLeaderIntentHandler,
 			InProgressRemoveLeaderIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,

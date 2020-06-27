@@ -120,6 +120,8 @@
         "ALREADY_LEADER": "{username} is already a leader of {roomname}.",
         "REMOVE_LEADER_SUCCESS": "{username} is no longer a leader of {roomname}.",
         "USER_NOT_LEADER": "{username} is not a leader of {roomname}.",
+        "USER_NOT_OWNER": "{username} is not an owner of {roomname}.",
+        "USER_NOT_MODERATOR": "{username} is not a moderator of {roomname}.",
         "USER_NOT_MEMBER": "{username} is not a member of room {roomname}.",
         "ERROR_NOT_ALLOWED": "Sorry, you don't have the right to perform this operation.",
         "ERROR_ROOM_NOT_FOUND": "There's no room named {roomname}.",
