@@ -109,6 +109,13 @@ const {
 	InProgressRemoveOwnerIntentHandler,
 } = require('./handlers/Channels/RemoveOwnerIntentHandlers');
 
+const {
+	StartedRemoveModeratorIntentHandler,
+	RemoveModeratorIntentHandler,
+	DeniedRemoveModeratorIntentHandler,
+	InProgressRemoveModeratorIntentHandler,
+} = require('./handlers/Channels/RemoveModeratorIntentHandlers');
+
 const { YesIntentHandler } = require('./handlers/General/YesIntentHandler');
 
 const { NoIntentHandler } = require('./handlers/General/NoIntentHandler');
@@ -179,6 +186,10 @@ const buildSkill = (skillBuilder) =>
 			RemoveOwnerIntentHandler,
 			DeniedRemoveOwnerIntentHandler,
 			InProgressRemoveOwnerIntentHandler,
+			StartedRemoveModeratorIntentHandler,
+			RemoveModeratorIntentHandler,
+			DeniedRemoveModeratorIntentHandler,
+			InProgressRemoveModeratorIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,
