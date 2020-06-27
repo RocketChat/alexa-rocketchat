@@ -31,7 +31,8 @@ const GetLastMessageFromChannelIntentHandler = {
 				const speechText = await helperFunctions.channelLastMessage(channelName, headers);
 
 				const playBehavior = 'REPLACE_ALL';
-				const token = fileurl.split('/').slice(-2)[0];
+				// eslint-disable-next-line prefer-template
+				const token = 'token' + Math.random();
 				const offsetInMilliseconds = 0;
 
 				attributes.inPlaybackSession = true;
