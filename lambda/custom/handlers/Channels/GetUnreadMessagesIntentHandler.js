@@ -14,7 +14,7 @@ const GetUnreadMessagesIntentHandler = {
 			} = handlerInput.requestEnvelope.context.System.user;
 
 			const headers = await login(accessToken);
-			const response = await resolveChannelname(handlerInput.requestEnvelope.request.intent.slots.readunreadschannel.value, headers);
+			const response = await resolveChannelname(handlerInput.requestEnvelope.request.intent.slots.readunreadschannel.value, headers, true);
 			const room = response[0];
 			let speechText;
 			if (room.type === 'c') {
