@@ -127,6 +127,13 @@
         "ERROR": "Sorry, the invite was unsuccessful.",
         "DENIED": "Okay."
     },
+    "KICK_USER": {
+        "SUCCESS": "{username} was removed from {roomname}.",
+        "ERROR": "Sorry, there was an error",
+        "DENIED": "Okay.",
+        "ERROR_USER_NOT_IN_ROOM": "{username} is not a member of room {roomname}.",
+        "ERROR_YOU_ARE_LAST_OWNER": "You are last owner. Please set a new owner before leaving room."
+    },
     "ERROR_NOT_FOUND": "The room {roomname} does not exist.",
     "ERROR_NOT_ALLOWED": "Sorry, only authorised users can perform this operation.",
     "ERROR_INVALID_USER": "The username {username} does not exist.",
