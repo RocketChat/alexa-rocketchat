@@ -22,9 +22,9 @@ const StartedRemoveModeratorIntentHandler = {
 		delete sessionAttributes.similarChannels;
 
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
-			return resolveUserWithRole(handlerInput, 'moderator');
+			return resolveUserWithRole(handlerInput, 'username', 'choice', 'moderator');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
-			return resolveChannel(handlerInput);
+			return resolveChannel(handlerInput, 'channelname', 'choice');
 		}
 
 		return handlerInput.responseBuilder
@@ -90,9 +90,9 @@ const InProgressRemoveModeratorIntentHandler = {
 		const intentSlots = intent.slots;
 
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
-			return resolveUserWithRole(handlerInput, 'moderator');
+			return resolveUserWithRole(handlerInput, 'username', 'choice', 'moderator');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
-			return resolveChannel(handlerInput);
+			return resolveChannel(handlerInput, 'channelname', 'choice');
 		}
 
 		return handlerInput.responseBuilder

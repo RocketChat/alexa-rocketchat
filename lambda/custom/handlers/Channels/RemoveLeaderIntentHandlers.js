@@ -22,9 +22,9 @@ const StartedRemoveLeaderIntentHandler = {
 		delete sessionAttributes.similarChannels;
 
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
-			return resolveUserWithRole(handlerInput, 'leader');
+			return resolveUserWithRole(handlerInput, 'username', 'choice', 'leader');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
-			return resolveChannel(handlerInput);
+			return resolveChannel(handlerInput, 'channelname', 'choice');
 		}
 
 		return handlerInput.responseBuilder
@@ -90,9 +90,9 @@ const InProgressRemoveLeaderIntentHandler = {
 		const intentSlots = intent.slots;
 
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
-			return resolveUserWithRole(handlerInput, 'leader');
+			return resolveUserWithRole(handlerInput, 'username', 'choice', 'leader');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
-			return resolveChannel(handlerInput);
+			return resolveChannel(handlerInput, 'channelname', 'choice');
 		}
 
 		return handlerInput.responseBuilder

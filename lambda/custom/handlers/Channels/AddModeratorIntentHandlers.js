@@ -22,9 +22,9 @@ const StartedAddModeratorIntentHandler = {
 		delete sessionAttributes.similarChannels;
 
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
-			return resolveUser(handlerInput);
+			return resolveUser(handlerInput, 'username', 'choice');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
-			return resolveChannel(handlerInput);
+			return resolveChannel(handlerInput, 'channelname', 'choice');
 		}
 
 		return handlerInput.responseBuilder
@@ -90,9 +90,9 @@ const InProgressAddModeratorIntentHandler = {
 		const intentSlots = intent.slots;
 
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
-			return resolveUser(handlerInput);
+			return resolveUser(handlerInput, 'username', 'choice');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
-			return resolveChannel(handlerInput);
+			return resolveChannel(handlerInput, 'channelname', 'choice');
 		}
 
 		return handlerInput.responseBuilder
