@@ -1,7 +1,7 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { replaceWhitespacesFunc, login, deleteChannel } = require('../../helperFunctions');
-const { deleteChannelLayout } = require('../../APL/layouts');
-const { supportsAPL } = require('../../utils');
+const { login, deleteChannel, deleteGroup } = require('../../helperFunctions');
+const { supportsAPL, resolveChannel } = require('../../utils');
+const burgerTemplate = require('../../APL/templates/burgerTemplate');
 
 
 const StartedDeleteChannelIntentHandler = {
@@ -10,26 +10,26 @@ const StartedDeleteChannelIntentHandler = {
         handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
         handlerInput.requestEnvelope.request.dialogState === 'STARTED';
 	},
-	handle(handlerInput) {
-		const currentIntent = handlerInput.requestEnvelope.request.intent;
-		return handlerInput.responseBuilder
-			.addDelegateDirective(currentIntent)
-			.getResponse();
+	async handle(handlerInput) {
+
+		const { attributesManager } = handlerInput;
+		const sessionAttributes = attributesManager.getSessionAttributes() || {};
+
+		delete sessionAttributes.channel;
+
+		return resolveChannel(handlerInput, 'channeldelete', 'selection');
 	},
 };
 
 const InProgressDeleteChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-        handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
-        handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
-        handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
+          handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
+          handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
+          handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
 	},
-	handle(handlerInput) {
-		const currentIntent = handlerInput.requestEnvelope.request.intent;
-		return handlerInput.responseBuilder
-			.addDelegateDirective(currentIntent)
-			.getResponse();
+	async handle(handlerInput) {
+		return resolveChannel(handlerInput, 'channeldelete', 'selection');
 	},
 };
 
@@ -42,19 +42,12 @@ const DeniedDeleteChannelIntentHandler = {
 	},
 	handle(handlerInput) {
 		const speechText = ri('DELETE_CHANNEL.DENIED');
+		const repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
 			.speak(speechText)
-			.addDelegateDirective({
-				name: 'DeleteChannelIntent',
-				confirmationStatus: 'NONE',
-				slots: {
-					channeldelete: {
-						name: 'channeldelete',
-						confirmationStatus: 'NONE',
-					},
-				},
-			})
+			.speak(repromptText)
+			.reprompt(repromptText)
 			.getResponse();
 	},
 };
@@ -71,76 +64,46 @@ const DeleteChannelIntentHandler = {
 			const {
 				accessToken,
 			} = handlerInput.requestEnvelope.context.System.user;
-
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.channeldelete.value;
-			const channelName = replaceWhitespacesFunc(channelNameData);
+			const { attributesManager } = handlerInput;
+			const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
 			const headers = await login(accessToken);
-			const speechText = await deleteChannel(channelName, headers);
+			let speechText;
+			const room = sessionAttributes.channel;
+			if (room.type === 'c') {
+				speechText = await deleteChannel(room.name, headers);
+			} else {
+				speechText = await deleteGroup(room.name, headers);
+			}
+
 			const repromptText = ri('GENERIC_REPROMPT');
 
 			if (supportsAPL(handlerInput)) {
+				const data = {
+					top: 'channel',
+					message: `#${ room.name }`,
+					bottom: 'deleted successfully',
+				};
+
+				delete sessionAttributes.similarChannels;
+				delete sessionAttributes.channel;
 
 				return handlerInput.jrb
 					.speak(speechText)
 					.speak(repromptText)
 					.reprompt(repromptText)
-					.addDirective({
-						type: 'Alexa.Presentation.APL.RenderDocument',
-						version: '1.0',
-						document: deleteChannelLayout,
-						datasources: {
-
-							DeleteChannelPageData: {
-								type: 'object',
-								objectId: 'rcDeleteChannel',
-								backgroundImage: {
-									contentDescription: null,
-									smallSourceUrl: null,
-									largeSourceUrl: null,
-									sources: [
-										{
-											url: 'https://user-images.githubusercontent.com/41849970/60651516-fcb23880-9e63-11e9-8efb-1e590a41489e.png',
-											size: 'small',
-											widthPixels: 0,
-											heightPixels: 0,
-										},
-										{
-											url: 'https://user-images.githubusercontent.com/41849970/60651516-fcb23880-9e63-11e9-8efb-1e590a41489e.png',
-											size: 'large',
-											widthPixels: 0,
-											heightPixels: 0,
-										},
-									],
-								},
-								textContent: {
-									placeholder: {
-										type: 'PlainText',
-										text: 'Channel',
-									},
-									channelname: {
-										type: 'PlainText',
-										text: `#${ speechText.params.channelName }`,
-									},
-									successful: {
-										type: 'PlainText',
-										text: 'deleted successfully.',
-									},
-								},
-								logoUrl: 'https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png',
-							},
-
-						},
-					})
+					.addDirective(burgerTemplate(data))
 					.getResponse();
 
 			} else {
 
+				delete sessionAttributes.similarChannels;
+				delete sessionAttributes.channel;
+
 				return handlerInput.jrb
 					.speak(speechText)
 					.speak(repromptText)
 					.reprompt(repromptText)
-					.withSimpleCard(ri('DELETE_CHANNEL.CARD_TITLE'), speechText)
 					.getResponse();
 
 			}

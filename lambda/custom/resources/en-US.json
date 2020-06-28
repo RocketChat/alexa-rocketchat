@@ -59,7 +59,7 @@
         "CARD_TITLE": "Delete A Channel",
         "ERROR": "Sorry, I couldn't delete the channel {channelName} right now.",
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name.",
-        "DENIED": "Okay, let's try again."
+        "DENIED": "Okay."
     },
     "GET_LAST_MESSAGE_FROM_CHANNEL": {
         "SUCCESS": "{name} says, {message}.",
