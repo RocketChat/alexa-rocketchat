@@ -74,7 +74,7 @@ const randomProperty = function(obj) {
 	return obj[keys[keys.length * Math.random() << 0]];
 };
 
-const resolveChannel = async (handlerInput) => {
+const resolveChannel = async (handlerInput, channelSlotname, choiceSlotname) => {
 	const currentIntent = handlerInput.requestEnvelope.request.intent;
 	const updatedSlots = currentIntent.slots;
 
@@ -82,19 +82,19 @@ const resolveChannel = async (handlerInput) => {
 	const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
 	// if a choice is present and has a value, it means the user has already made a choice on which channel to choose from
-	if (!sessionAttributes.channel && updatedSlots.choice && updatedSlots.choice.value) {
+	if (!sessionAttributes.channel && updatedSlots[choiceSlotname] && updatedSlots[choiceSlotname].value) {
 
 		// get the array of channels which the user was asked for
 		const channels = sessionAttributes.similarChannels;
 
 		// if the user selects an invalid choice then ask for an appropriate choice
-		if (Number(updatedSlots.choice.value) === 0 || Number(updatedSlots.choice.value) > channels.length) {
+		if (Number(updatedSlots[choiceSlotname].value) === 0 || Number(updatedSlots[choiceSlotname].value) > channels.length) {
 			let channels_list = '';
 			for (const { name } of channels) {
 				channels_list += `${ name }, `;
 			}
 			const speechText = ri('RESOLVE_CHANNEL.ASK_CHOICE', { choice_limit: channels.length, channels_list });
-			const slotName = 'choice';
+			const slotName = choiceSlotname;
 			return handlerInput.jrb
 				.speak(speechText)
 				.reprompt(speechText)
@@ -103,17 +103,17 @@ const resolveChannel = async (handlerInput) => {
 		}
 
 		// if everything is correct then proceed to ask for confirmation
-		const channelDetails = channels[Number(updatedSlots.choice.value) - 1];
-		updatedSlots.channelname.value = channelDetails.name;
+		const channelDetails = channels[Number(updatedSlots[choiceSlotname].value) - 1];
+		updatedSlots[channelSlotname].value = channelDetails.name;
 		sessionAttributes.channel = channelDetails;
-		delete updatedSlots.choice.value;
+		delete updatedSlots[choiceSlotname].value;
 		return handlerInput.responseBuilder
 			.addDelegateDirective(currentIntent)
 			.getResponse();
 	}
 
 	// if the user has told the channel name to alexa
-	if (updatedSlots.channelname.value && !sessionAttributes.channel) {
+	if (updatedSlots[channelSlotname].value && !sessionAttributes.channel) {
 		const {
 			accessToken,
 		} = handlerInput.requestEnvelope.context.System.user;
@@ -121,11 +121,11 @@ const resolveChannel = async (handlerInput) => {
 		const headers = await login(accessToken);
 
 		// get the array of similar channelnames
-		const channels = await resolveChannelname(updatedSlots.channelname.value, headers);
+		const channels = await resolveChannelname(updatedSlots[channelSlotname].value, headers);
 
 		// if there are no similar channels
 		if (channels.length === 0) {
-			const speechText = ri('RESOLVE_CHANNEL.NO_CHANNEL', { channel_name: updatedSlots.channelname.value });
+			const speechText = ri('RESOLVE_CHANNEL.NO_CHANNEL', { channel_name: updatedSlots[channelSlotname].value });
 			const repromptText = ri('GENERIC_REPROMPT');
 			return handlerInput.jrb
 				.speak(speechText)
@@ -134,7 +134,7 @@ const resolveChannel = async (handlerInput) => {
 				.getResponse();
 			// if there's only one similar channel, then change the slot value to the matching channel
 		} else if (channels.length === 1) {
-			updatedSlots.channelname.value = channels[0].name;
+			updatedSlots[channelSlotname].value = channels[0].name;
 			sessionAttributes.channel = channels[0];
 			// if there are multiple channels with similar names
 		} else {
@@ -146,7 +146,7 @@ const resolveChannel = async (handlerInput) => {
 			}
 
 			const speechText = ri('RESOLVE_CHANNEL.SIMILAR_CHANNELS', { channel_names });
-			const slotName = 'choice';
+			const slotName = choiceSlotname;
 
 
 			return handlerInput.jrb
@@ -162,25 +162,25 @@ const resolveChannel = async (handlerInput) => {
 		.getResponse();
 };
 
-const resolveUser = async (handlerInput) => {
+const resolveUser = async (handlerInput, userSlotname, choiceSlotname) => {
 	const updatedIntent = handlerInput.requestEnvelope.request.intent;
 	const updatedSlots = updatedIntent.slots;
 
 	const { attributesManager } = handlerInput;
 	const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
-	if (!sessionAttributes.user && updatedSlots.choice && updatedSlots.choice.value) {
+	if (!sessionAttributes.user && updatedSlots[choiceSlotname] && updatedSlots[choiceSlotname].value) {
 		// get the array of users which the user was asked for
 		const users = sessionAttributes.similarusers;
 
 		// if the user selects an invalid choice then ask for an appropriate choice
-		if (Number(updatedSlots.choice.value) === 0 || Number(updatedSlots.choice.value) > users.length) {
+		if (Number(updatedSlots[choiceSlotname].value) === 0 || Number(updatedSlots[choiceSlotname].value) > users.length) {
 			let users_list = '';
 			for (const { name } of users) {
 				users_list += `${ name }, `;
 			}
 			const speechText = ri('RESOLVE_USERNAME.ASK_CHOICE', { choice_limit: users.length, users_list });
-			const slotName = 'choice';
+			const slotName = choiceSlotname;
 			return handlerInput.jrb
 				.speak(speechText)
 				.reprompt(speechText)
@@ -189,16 +189,16 @@ const resolveUser = async (handlerInput) => {
 		}
 
 		// if everything is correct then proceed to ask for confirmation
-		const userDetails = users[Number(updatedSlots.choice.value) - 1];
-		updatedSlots.username.value = userDetails.name;
+		const userDetails = users[Number(updatedSlots[choiceSlotname].value) - 1];
+		updatedSlots[userSlotname].value = userDetails.name;
 		sessionAttributes.user = userDetails;
-		delete updatedSlots.choice.value;
+		delete updatedSlots[choiceSlotname].value;
 		return handlerInput.responseBuilder
 			.addDelegateDirective(updatedIntent)
 			.getResponse();
 	}
 
-	if (!sessionAttributes.user && updatedSlots.username.value) {
+	if (!sessionAttributes.user && updatedSlots[userSlotname].value) {
 		const {
 			accessToken,
 		} = handlerInput.requestEnvelope.context.System.user;
@@ -206,10 +206,10 @@ const resolveUser = async (handlerInput) => {
 		const headers = await login(accessToken);
 
 		// get the array of similar usernames
-		const users = await resolveUsername(updatedSlots.username.value, headers);
+		const users = await resolveUsername(updatedSlots[userSlotname].value, headers);
 
 		if (users.length === 0) {
-			const speechText = ri('RESOLVE_USERNAME.NO_USER', { username: updatedSlots.username.value });
+			const speechText = ri('RESOLVE_USERNAME.NO_USER', { username: updatedSlots[userSlotname].value });
 			const repromptText = ri('GENERIC_REPROMPT');
 			return handlerInput.jrb
 				.speak(speechText)
@@ -218,7 +218,7 @@ const resolveUser = async (handlerInput) => {
 				.getResponse();
 			// if there's only one similar username, then change the slot value to the matching username
 		} else if (users.length === 1) {
-			updatedSlots.username.value = users[0].name;
+			updatedSlots[userSlotname].value = users[0].name;
 			sessionAttributes.user = users[0];
 		} else {
 			sessionAttributes.similarusers = users;
@@ -228,7 +228,7 @@ const resolveUser = async (handlerInput) => {
 			}
 
 			const speechText = ri('RESOLVE_USERNAME.SIMILAR_USERS', { user_names });
-			const slotName = 'choice';
+			const slotName = choiceSlotname;
 
 
 			return handlerInput.jrb
@@ -244,25 +244,25 @@ const resolveUser = async (handlerInput) => {
 		.getResponse();
 };
 
-const resolveUserWithRole = async (handlerInput, role) => {
+const resolveUserWithRole = async (handlerInput, userSlotname, choiceSlotname, role) => {
 	const updatedIntent = handlerInput.requestEnvelope.request.intent;
 	const updatedSlots = updatedIntent.slots;
 
 	const { attributesManager } = handlerInput;
 	const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
-	if (!sessionAttributes.user && updatedSlots.choice && updatedSlots.choice.value) {
+	if (!sessionAttributes.user && updatedSlots[choiceSlotname] && updatedSlots[choiceSlotname].value) {
 		// get the array of users which the user was asked for
 		const users = sessionAttributes.similarusers;
 
 		// if the user selects an invalid choice then ask for an appropriate choice
-		if (Number(updatedSlots.choice.value) === 0 || Number(updatedSlots.choice.value) > users.length) {
+		if (Number(updatedSlots[choiceSlotname].value) === 0 || Number(updatedSlots[choiceSlotname].value) > users.length) {
 			let users_list = '';
 			for (const { username } of users) {
 				users_list += `${ username }, `;
 			}
 			const speechText = ri('RESOLVE_USERNAME.ASK_CHOICE', { choice_limit: users.length, users_list });
-			const slotName = 'choice';
+			const slotName = choiceSlotname;
 			return handlerInput.jrb
 				.speak(speechText)
 				.reprompt(speechText)
@@ -271,16 +271,16 @@ const resolveUserWithRole = async (handlerInput, role) => {
 		}
 
 		// if everything is correct then proceed to ask for confirmation
-		const userDetails = users[Number(updatedSlots.choice.value) - 1];
-		updatedSlots.username.value = userDetails.username;
+		const userDetails = users[Number(updatedSlots[choiceSlotname].value) - 1];
+		updatedSlots[userSlotname].value = userDetails.username;
 		sessionAttributes.user = userDetails;
-		delete updatedSlots.choice.value;
+		delete updatedSlots[choiceSlotname].value;
 		return handlerInput.responseBuilder
 			.addDelegateDirective(updatedIntent)
 			.getResponse();
 	}
 
-	if (!sessionAttributes.user && updatedSlots.username.value) {
+	if (!sessionAttributes.user && updatedSlots[userSlotname].value) {
 		const {
 			accessToken,
 		} = handlerInput.requestEnvelope.context.System.user;
@@ -288,17 +288,17 @@ const resolveUserWithRole = async (handlerInput, role) => {
 		const headers = await login(accessToken);
 
 		// get the array of similar usernames
-		const users = await getUsersWithRolesFromRoom(updatedSlots.username.value, sessionAttributes.channel.id, sessionAttributes.channel.type, role, headers);
+		const users = await getUsersWithRolesFromRoom(updatedSlots[userSlotname].value, sessionAttributes.channel.id, sessionAttributes.channel.type, role, headers);
 
 		if (users.length === 0) {
 			let speechText;
 
 			if (role === 'leader') {
-				speechText = ri('ROOM_ROLES.USER_NOT_LEADER', { username: updatedSlots.username.value, roomname: sessionAttributes.channel.name });
+				speechText = ri('ROOM_ROLES.USER_NOT_LEADER', { username: updatedSlots[userSlotname].value, roomname: sessionAttributes.channel.name });
 			} else if (role === 'owner') {
-				speechText = ri('ROOM_ROLES.USER_NOT_OWNER', { username: updatedSlots.username.value, roomname: sessionAttributes.channel.name });
+				speechText = ri('ROOM_ROLES.USER_NOT_OWNER', { username: updatedSlots[userSlotname].value, roomname: sessionAttributes.channel.name });
 			} else if (role === 'moderator') {
-				speechText = ri('ROOM_ROLES.USER_NOT_MODERATOR', { username: updatedSlots.username.value, roomname: sessionAttributes.channel.name });
+				speechText = ri('ROOM_ROLES.USER_NOT_MODERATOR', { username: updatedSlots[userSlotname].value, roomname: sessionAttributes.channel.name });
 			}
 
 			const repromptText = ri('GENERIC_REPROMPT');
@@ -309,7 +309,7 @@ const resolveUserWithRole = async (handlerInput, role) => {
 				.getResponse();
 			// if there's only one similar channel, then change the slot value to the matching channel
 		} else if (users.length === 1) {
-			updatedSlots.username.value = users[0].username;
+			updatedSlots[userSlotname].value = users[0].username;
 			sessionAttributes.user = users[0];
 		} else {
 			sessionAttributes.similarusers = users;
@@ -319,7 +319,7 @@ const resolveUserWithRole = async (handlerInput, role) => {
 			}
 
 			const speechText = ri('RESOLVE_USERNAME.SIMILAR_USERS', { user_names });
-			const slotName = 'choice';
+			const slotName = choiceSlotname;
 
 
 			return handlerInput.jrb
