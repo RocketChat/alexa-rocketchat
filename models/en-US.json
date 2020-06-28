@@ -820,6 +820,37 @@
                         "invite user to {channelname}",
                         "invite user"
                     ]
+                },
+                {
+                    "name": "KickUserIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "from channel {channelname}",
+                                "from {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "user {username}",
+                                "kick {username}",
+                                "remove {username}"
+                            ]
+                        },
+                        {
+                            "name": "selection",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "kick user from channel {channelname}",
+                        "remove user from {channelname}",
+                        "kick user"
+                    ]
                 }
             ],
             "types": [
@@ -2709,6 +2740,42 @@
                             "prompts": {}
                         }
                     ]
+                },
+                {
+                    "name": "KickUserIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.632136221730"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.632136221730.571552015872",
+                                "elicitation": "Elicit.Slot.632136221730.571552015872"
+                            }
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.632136221730.1091599696582"
+                            }
+                        },
+                        {
+                            "name": "selection",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -3422,6 +3489,42 @@
                     {
                         "type": "PlainText",
                         "value": "You want to invite, {username} , to channel, {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.632136221730.571552015872",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to remove the user from?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.632136221730.571552015872",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "{channelname} , did I get that right?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.632136221730.1091599696582",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to remove?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.632136221730",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to remove {username} , from channel {channelname} , is that correct?"
                     }
                 ]
             }
