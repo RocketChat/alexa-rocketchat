@@ -88,7 +88,6 @@ const {
 	MakeGroupOwnerIntentHandler,
 	PostGroupEmojiMessageIntentHandler,
 	GroupLastMessageIntentHandler,
-	GetGroupUnreadMessagesIntentHandler,
 } = require('./handlers/Channels/PrivateChannelIntents');
 
 const { HelpIntentHandler } = require('./handlers/General/HelpIntentHandler');
@@ -151,7 +150,6 @@ const buildSkill = (skillBuilder) =>
 			MakeGroupOwnerIntentHandler,
 			PostGroupEmojiMessageIntentHandler,
 			GroupLastMessageIntentHandler,
-			GetGroupUnreadMessagesIntentHandler,
 			PostEmojiDirectMessageIntentHandler,
 			StartedLeaveChannelIntentHandler,
 			InProgressLeaveChannelIntentHandler,

@@ -169,43 +169,10 @@ const GroupLastMessageIntentHandler = {
 	},
 };
 
-const GetGroupUnreadMessagesIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'ReadGroupUnreadsIntent';
-	},
-	async handle(handlerInput) {
-		try {
-			const {
-				accessToken,
-			} = handlerInput.requestEnvelope.context.System.user;
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.groupunreadschannelname.value;
-			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
-
-			const headers = await helperFunctions.login(accessToken);
-			const roomid = await helperFunctions.getGroupId(channelName, headers);
-			const unreadCount = await helperFunctions.getGroupUnreadCounter(roomid, headers);
-			const speechText = await helperFunctions.groupUnreadMessages(channelName, roomid, unreadCount, headers);
-			const repromptText = ri('GENERIC_REPROMPT');
-
-
-			return handlerInput.jrb
-				.speak(speechText)
-				.speak(repromptText)
-				.reprompt(repromptText)
-				.withSimpleCard(ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.CARD_TITLE'), speechText)
-				.getResponse();
-		} catch (error) {
-			console.error(error);
-		}
-	},
-};
-
 module.exports = {
 	DeleteGroupIntentHandler,
 	MakeGroupModeratorIntentHandler,
 	MakeGroupOwnerIntentHandler,
 	PostGroupEmojiMessageIntentHandler,
 	GroupLastMessageIntentHandler,
-	GetGroupUnreadMessagesIntentHandler,
 };
