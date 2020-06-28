@@ -314,18 +314,6 @@
                     ]
                 },
                 {
-                    "name": "ReadGroupUnreadsIntent",
-                    "slots": [
-                        {
-                            "name": "groupunreadschannelname",
-                            "type": "channelnames"
-                        }
-                    ],
-                    "samples": [
-                        "Read Unread Messages From Private Channel {groupunreadschannelname}"
-                    ]
-                },
-                {
                     "name": "PostGroupEmojiMessageIntent",
                     "slots": [
                         {
