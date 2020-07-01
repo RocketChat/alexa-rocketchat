@@ -74,6 +74,12 @@ const randomProperty = function(obj) {
 	return obj[keys[keys.length * Math.random() << 0]];
 };
 
+const randomKeyValue = function(obj) {
+	const keys = Object.keys(obj);
+	const randomIndex = keys.length * Math.random() << 0;
+	return { key: keys[randomIndex], value: obj[keys[randomIndex]] };
+};
+
 const resolveChannel = async (handlerInput) => {
 	const currentIntent = handlerInput.requestEnvelope.request.intent;
 	const updatedSlots = currentIntent.slots;
@@ -166,6 +172,7 @@ module.exports = {
 	supportsDisplay,
 	slotValue,
 	randomProperty,
+	randomKeyValue,
 	getStaticAndDynamicSlotValuesFromSlot,
 	resolveChannel,
 };
