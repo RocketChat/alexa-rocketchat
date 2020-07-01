@@ -20,6 +20,12 @@ const NoIntentHandler = {
 						.reprompt(speechText)
 						.getResponse();
 				} else {
+					delete sessionAttributes.postLongMessageConfirmation;
+					delete sessionAttributes.postLongMessageIntentOnProgress;
+					delete sessionAttributes.channelConfirm;
+					delete sessionAttributes.channelName;
+					delete sessionAttributes.message;
+
 					const speechText = ri('POST_MESSAGE.DENIED');
 					const repromptText = ri('GENERIC_REPROMPT');
 					return handlerInput.jrb
