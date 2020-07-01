@@ -119,7 +119,11 @@
     },
     "HINTS": {
         "GetUnreadMessagesIntent": "Get unread messages from channel",
-        "GetLastMessageFromChannelIntent": "Read last message from channel"
+        "GetLastMessageFromChannelIntent": "Read last message from channel",
+        "PostDirectMessageIntent": "Post direct message",
+        "PostEmojiMessageIntent": "Read Pinned messages from channel",
+        "ChangeStatusIntent": "Change my status",
+        "GetMentionsIntent": "Get my mentions"
     },
     "HINT_TRANSITION": "You can try saying",
     "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate.",
