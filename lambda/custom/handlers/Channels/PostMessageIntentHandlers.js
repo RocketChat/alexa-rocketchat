@@ -1,5 +1,5 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, resolveChannelname, postMessage } = require('../../helperFunctions');
+const { login, resolveChannelname, postMessage, emojiTranslateFunc } = require('../../helperFunctions');
 const { supportsAPL } = require('../../utils');
 const titleMessageBoxTemplate = require('../../APL/templates/titleMessageBoxTemplate');
 
@@ -137,10 +137,13 @@ const PostMessageIntentHandler = {
 				accessToken,
 			} = handlerInput.requestEnvelope.context.System.user;
 
-			const message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
+			let message = handlerInput.requestEnvelope.request.intent.slots.messagepost.value;
 			// const channelNameData = getStaticAndDynamicSlotValuesFromSlot(handlerInput.requestEnvelope.request.intent.slots.messagechannel);
 			// const channelName = replaceWhitespacesFunc(channelNameData);
 			const channelName = handlerInput.requestEnvelope.request.intent.slots.messagechannel.value;
+			if (handlerInput.requestEnvelope.request.intent.slots.postmessageemoji.value) {
+				message += emojiTranslateFunc(handlerInput.requestEnvelope.request.intent.slots.postmessageemoji.value);
+			}
 
 			const headers = await login(accessToken);
 			const speechText = await postMessage(channelName, message, headers);
