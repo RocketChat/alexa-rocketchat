@@ -50,8 +50,6 @@ const {
 	PostLongMessageIntentHandler,
 } = require('./handlers/Channels/PostLongMessageIntentHandlers');
 
-const { PostEmojiMessageIntentHandler } = require('./handlers/Channels/PostEmojiMessageIntentHandler');
-
 const { GetLastMessageFromChannelIntentHandler } = require('./handlers/Channels/GetLastMessageFromChannelIntentHandler');
 
 const { AddOwnerIntentHandler } = require('./handlers/Channels/AddOwnerIntentHandler');
@@ -86,7 +84,6 @@ const {
 	DeleteGroupIntentHandler,
 	MakeGroupModeratorIntentHandler,
 	MakeGroupOwnerIntentHandler,
-	PostGroupEmojiMessageIntentHandler,
 	GroupLastMessageIntentHandler,
 	GetGroupUnreadMessagesIntentHandler,
 } = require('./handlers/Channels/PrivateChannelIntents');
@@ -138,7 +135,6 @@ const buildSkill = (skillBuilder) =>
 			YesIntentHandler,
 			NoIntentHandler,
 			PostLongMessageIntentHandler,
-			PostEmojiMessageIntentHandler,
 			GetLastMessageFromChannelIntentHandler,
 			AddAllToChannelIntentHandler,
 			MakeModeratorIntentHandler,
@@ -149,7 +145,6 @@ const buildSkill = (skillBuilder) =>
 			DeleteGroupIntentHandler,
 			MakeGroupModeratorIntentHandler,
 			MakeGroupOwnerIntentHandler,
-			PostGroupEmojiMessageIntentHandler,
 			GroupLastMessageIntentHandler,
 			GetGroupUnreadMessagesIntentHandler,
 			PostEmojiDirectMessageIntentHandler,
