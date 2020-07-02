@@ -216,26 +216,6 @@
                     ]
                 },
                 {
-                    "name": "PostEmojiMessageIntent",
-                    "slots": [
-                        {
-                            "name": "messagepost",
-                            "type": "message"
-                        },
-                        {
-                            "name": "emoji",
-                            "type": "emoji"
-                        },
-                        {
-                            "name": "messagechannel",
-                            "type": "channelnames"
-                        }
-                    ],
-                    "samples": [
-                        "send {messagepost} emoji {emoji}  to {messagechannel}"
-                    ]
-                },
-                {
                     "name": "ChangeNotificationSettingsIntent",
                     "slots": [
                         {
@@ -311,26 +291,6 @@
                     ],
                     "samples": [
                         "Read Unread Messages From Private Channel {groupunreadschannelname}"
-                    ]
-                },
-                {
-                    "name": "PostGroupEmojiMessageIntent",
-                    "slots": [
-                        {
-                            "name": "groupemojimessage",
-                            "type": "message"
-                        },
-                        {
-                            "name": "groupmessageemojiname",
-                            "type": "emoji"
-                        },
-                        {
-                            "name": "groupmessageemojichannelname",
-                            "type": "channelnames"
-                        }
-                    ],
-                    "samples": [
-                        "Send {groupemojimessage} emoji {groupmessageemojiname} to Private Channel {groupmessageemojichannelname}"
                     ]
                 },
                 {
