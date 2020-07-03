@@ -16,6 +16,7 @@ module.exports = {
 	deletechannelurl: `${ serverurl }/api/v1/channels.delete`,
 	postmessageurl: `${ serverurl }/api/v1/chat.postMessage`,
 	channelmessageurl: `${ serverurl }/api/v1/channels.messages?roomName=`,
+	groupmessagenameurl: `${ serverurl }/api/v1/groups.messages?roomName=`,
 	channelinfourl: `${ serverurl }/api/v1/channels.info?roomName=`,
 	userinfourl: `${ serverurl }/api/v1/users.info?username=`,
 	addallurl: `${ serverurl }/api/v1/channels.addAll`,

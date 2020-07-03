@@ -224,9 +224,9 @@ const postMessage = async (channelName, message, headers) =>
 			}
 		});
 
-const getLastMessageType = async (channelName, headers) =>
+const getLastMessageType = async (channelName, type, headers) =>
 	await axios
-		.get(`${ apiEndpoints.channelmessageurl }${ channelName }`, {
+		.get(`${ type === 'c' ? apiEndpoints.channelmessageurl : apiEndpoints.groupmessagenameurl }${ channelName }`, {
 			headers,
 		})
 		.then((res) => res.data)
@@ -241,9 +241,9 @@ const getLastMessageType = async (channelName, headers) =>
 			console.log(err.message);
 		});
 
-const channelLastMessage = async (channelName, headers) =>
+const channelLastMessage = async (channelName, type, headers) =>
 	await axios
-		.get(`${ apiEndpoints.channelmessageurl }${ channelName }`, {
+		.get(`${ type === 'c' ? apiEndpoints.channelmessageurl : apiEndpoints.groupmessagenameurl }${ channelName }`, {
 			headers,
 		})
 		.then((res) => res.data)
@@ -290,9 +290,9 @@ const readMessages = async (roomid, headers) =>
 		});
 
 
-const getLastMessageFileURL = async (channelName, headers) =>
+const getLastMessageFileURL = async (channelName, type, headers) =>
 	await axios
-		.get(`${ apiEndpoints.channelmessageurl }${ channelName }`, {
+		.get(`${ type === 'c' ? apiEndpoints.channelmessageurl : apiEndpoints.groupmessagenameurl }${ channelName }`, {
 			headers,
 		})
 		.then((res) => res.data)
