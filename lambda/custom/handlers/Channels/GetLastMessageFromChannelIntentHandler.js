@@ -16,19 +16,19 @@ const GetLastMessageFromChannelIntentHandler = {
 			} = handlerInput.requestEnvelope.context.System.user;
 
 			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.getmessagechannelname.value;
-			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
 			const headers = await helperFunctions.login(accessToken);
-
-			const messageType = await helperFunctions.getLastMessageType(channelName, headers);
+			const bestMatchingRoom = await helperFunctions.resolveChannelname(channelNameData, headers, true);
+			const roomDetails = bestMatchingRoom[0];
+			const messageType = await helperFunctions.getLastMessageType(roomDetails.name, roomDetails.type, headers);
 
 			if (messageType.includes('audio')) {
 
 				const { attributesManager } = handlerInput;
 				const attributes = await attributesManager.getPersistentAttributes() || {};
 
-				const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
+				const fileurl = await helperFunctions.getLastMessageFileURL(roomDetails.name, roomDetails.type, headers);
 				const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
-				const speechText = await helperFunctions.channelLastMessage(channelName, headers);
+				const speechText = await helperFunctions.channelLastMessage(roomDetails.name, roomDetails.type, headers);
 
 				const playBehavior = 'REPLACE_ALL';
 				// eslint-disable-next-line prefer-template
@@ -78,7 +78,7 @@ const GetLastMessageFromChannelIntentHandler = {
 
 				if (messageType === 'textmessage') {
 
-					const speechText = await helperFunctions.channelLastMessage(channelName, headers);
+					const speechText = await helperFunctions.channelLastMessage(roomDetails.name, roomDetails.type, headers);
 					const repromptText = ri('GENERIC_REPROMPT');
 
 					return handlerInput.jrb
@@ -131,9 +131,9 @@ const GetLastMessageFromChannelIntentHandler = {
 
 				} else if (messageType.includes('image')) {
 
-					const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
+					const fileurl = await helperFunctions.getLastMessageFileURL(roomDetails.name, roomDetails.type, headers);
 					const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
-					const messageData = await helperFunctions.channelLastMessage(channelName, headers);
+					const messageData = await helperFunctions.channelLastMessage(roomDetails.name, roomDetails.type, headers);
 					const speechText = `${ messageData.params.name } sent you an image message.`;
 					const repromptText = ri('GENERIC_REPROMPT');
 
@@ -184,9 +184,9 @@ const GetLastMessageFromChannelIntentHandler = {
 
 				} else if (messageType.includes('video')) {
 
-					const fileurl = await helperFunctions.getLastMessageFileURL(channelName, headers);
+					const fileurl = await helperFunctions.getLastMessageFileURL(roomDetails.name, roomDetails.type, headers);
 					const download = await helperFunctions.getLastMessageFileDowloadURL(fileurl, headers);
-					const speechText = await helperFunctions.channelLastMessage(channelName, headers);
+					const speechText = await helperFunctions.channelLastMessage(roomDetails.name, roomDetails.type, headers);
 					const repromptText = ri('GENERIC_REPROMPT');
 
 
@@ -287,7 +287,7 @@ const GetLastMessageFromChannelIntentHandler = {
 
 			} else if (messageType === 'textmessage') {
 
-				const speechText = await helperFunctions.channelLastMessage(channelName, headers);
+				const speechText = await helperFunctions.channelLastMessage(roomDetails.name, roomDetails.type, headers);
 				const repromptText = ri('GENERIC_REPROMPT');
 
 				return handlerInput.jrb
