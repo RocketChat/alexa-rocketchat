@@ -87,7 +87,6 @@ const {
 	MakeGroupModeratorIntentHandler,
 	MakeGroupOwnerIntentHandler,
 	PostGroupEmojiMessageIntentHandler,
-	GroupLastMessageIntentHandler,
 	GetGroupUnreadMessagesIntentHandler,
 } = require('./handlers/Channels/PrivateChannelIntents');
 
@@ -150,7 +149,6 @@ const buildSkill = (skillBuilder) =>
 			MakeGroupModeratorIntentHandler,
 			MakeGroupOwnerIntentHandler,
 			PostGroupEmojiMessageIntentHandler,
-			GroupLastMessageIntentHandler,
 			GetGroupUnreadMessagesIntentHandler,
 			PostEmojiDirectMessageIntentHandler,
 			StartedLeaveChannelIntentHandler,

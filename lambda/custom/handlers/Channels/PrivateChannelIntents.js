@@ -137,38 +137,6 @@ const PostGroupEmojiMessageIntentHandler = {
 	},
 };
 
-const GroupLastMessageIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'GroupLastMessageIntent';
-	},
-	async handle(handlerInput) {
-		try {
-			const {
-				accessToken,
-			} = handlerInput.requestEnvelope.context.System.user;
-
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.grouplastmessagechannelname.value;
-			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
-
-			const headers = await helperFunctions.login(accessToken);
-			const roomid = await helperFunctions.getGroupId(channelName, headers);
-			const speechText = await helperFunctions.groupLastMessage(channelName, roomid, headers);
-			const repromptText = ri('GENERIC_REPROMPT');
-
-
-			return handlerInput.jrb
-				.speak(speechText)
-				.speak(repromptText)
-				.reprompt(repromptText)
-				.withSimpleCard(ri('GET_LAST_MESSAGE_FROM_CHANNEL.CARD_TITLE'), speechText)
-				.getResponse();
-		} catch (error) {
-			console.error(error);
-		}
-	},
-};
-
 const GetGroupUnreadMessagesIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -206,6 +174,5 @@ module.exports = {
 	MakeGroupModeratorIntentHandler,
 	MakeGroupOwnerIntentHandler,
 	PostGroupEmojiMessageIntentHandler,
-	GroupLastMessageIntentHandler,
 	GetGroupUnreadMessagesIntentHandler,
 };
