@@ -341,18 +341,6 @@
                     ]
                 },
                 {
-                    "name": "GroupLastMessageIntent",
-                    "slots": [
-                        {
-                            "name": "grouplastmessagechannelname",
-                            "type": "channelnames"
-                        }
-                    ],
-                    "samples": [
-                        "Read Last Message From Private Channel {grouplastmessagechannelname}"
-                    ]
-                },
-                {
                     "name": "ReadGroupUnreadsIntent",
                     "slots": [
                         {
