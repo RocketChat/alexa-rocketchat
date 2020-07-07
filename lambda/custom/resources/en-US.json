@@ -117,6 +117,7 @@
         "USER_NOT_IN_ROOM": "You are not part of {roomname}.",
         "ERROR_NOT_FOUND": "The room {roomname} does not exist."
     },
+    "FALLBACK_MSG": "Sorry, I don't know about that.",
     "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate.",
     "AUDIO_NO_SUPPORT": "Sorry, this skill doesn't support that feature.",
     "GENERIC_REPROMPT": "Anything else I can help you with?"
