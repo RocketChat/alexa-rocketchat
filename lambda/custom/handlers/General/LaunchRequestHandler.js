@@ -27,6 +27,7 @@ const LaunchRequestHandler = {
 					.speak(speechText)
 					.reprompt(speechText)
 					.addDirective(errorMessageTemplate(data))
+					.withShouldEndSession(true)
 					.getResponse();
 
 			} else {
@@ -35,6 +36,7 @@ const LaunchRequestHandler = {
 					.speak(speechText)
 					.reprompt(speechText)
 					.withSimpleCard(ri('WELCOME.CARD_TITLE'), speechText)
+					.withShouldEndSession(true)
 					.getResponse();
 
 			}
