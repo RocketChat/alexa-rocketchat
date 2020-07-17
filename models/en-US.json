@@ -818,7 +818,9 @@
                     "samples": [
                         "invite user to channel {channelname}",
                         "invite user to {channelname}",
-                        "invite user"
+                        "invite user",
+                        "add user",
+                        "add user in channel {channelname}"
                     ]
                 },
                 {
