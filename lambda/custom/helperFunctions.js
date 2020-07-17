@@ -771,10 +771,14 @@ const resolveUsername = async (username, headers, single = false) => {
 			.then((subscriptions) => subscriptions.filter((subscription) => subscription.t === 'd'))
 			.then((subscriptions) => subscriptions.map((subscription) => ({
 				name: subscription.name,
-				// the last 17 characters of the rid property represents the id of the user
-				id: subscription.rid.slice(-17,),
+				// the rid property is a combination of id's of two users involved in the direct chat
+				// removing the id of the current user from rid will give id of the other user
+				id: subscription.rid.replace(subscription.u._id, ''),
 				type: subscription.t,
 			})));
+
+		// Note: A different method can be used to get the list of direct message users from contacts
+		// const subscriptions must be of the form [{name: 'username', id: 'user id', type: 'd'}, ...]
 
 		let bestIndex = 0;
 		let bestMatchingUser;
