@@ -789,6 +789,70 @@
                         "make moderator in {channelname}",
                         "add moderator"
                     ]
+                },
+                {
+                    "name": "InviteUserIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "to channel {channelname}",
+                                "to {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "send invite to {username}",
+                                "add {username}",
+                                "invite {username}"
+                            ]
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "invite user to channel {channelname}",
+                        "invite user to {channelname}",
+                        "invite user",
+                        "add user",
+                        "add user in channel {channelname}"
+                    ]
+                },
+                {
+                    "name": "KickUserIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "from channel {channelname}",
+                                "from {channelname}"
+                            ]
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "user {username}",
+                                "kick {username}",
+                                "remove {username}"
+                            ]
+                        },
+                        {
+                            "name": "selection",
+                            "type": "AMAZON.Ordinal"
+                        }
+                    ],
+                    "samples": [
+                        "kick user from channel {channelname}",
+                        "remove user from {channelname}",
+                        "kick user"
+                    ]
                 }
             ],
             "types": [
@@ -2643,6 +2707,77 @@
                             "prompts": {}
                         }
                     ]
+                },
+                {
+                    "name": "InviteUserIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.485687859193"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.485687859193.22188146981"
+                            }
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.485687859193.238984600341"
+                            }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "KickUserIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.632136221730"
+                    },
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.632136221730.571552015872",
+                                "elicitation": "Elicit.Slot.632136221730.571552015872"
+                            }
+                        },
+                        {
+                            "name": "username",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.632136221730.1091599696582"
+                            }
+                        },
+                        {
+                            "name": "selection",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -3329,6 +3464,69 @@
                     {
                         "type": "PlainText",
                         "value": "Which channel or group do you want to leave?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.485687859193.22188146981",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to invite the user to?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.485687859193.238984600341",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to invite?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.485687859193",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to invite, {username} , to channel, {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.632136221730.571552015872",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to remove the user from?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.632136221730.571552015872",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "{channelname} , did I get that right?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.632136221730.1091599696582",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to remove?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.632136221730",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to remove {username} , from channel {channelname} , is that correct?"
                     }
                 ]
             }

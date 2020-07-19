@@ -48,4 +48,8 @@ module.exports = {
 	getrolesfromgroupurl: `${ serverurl }/api/v1/groups.roles`,
 	leavechannelurl: `${ serverurl }/api/v1/channels.leave`,
 	leavegroupurl: `${ serverurl }/api/v1/groups.leave`,
+	invitetochannelurl: `${ serverurl }/api/v1/channels.invite`,
+	invitetogroupurl: `${ serverurl }/api/v1/groups.invite`,
+	kickuserfromchannelurl: `${ serverurl }/api/v1/channels.kick`,
+	kickuserfromgroupurl: `${ serverurl }/api/v1/groups.kick`,
 };
