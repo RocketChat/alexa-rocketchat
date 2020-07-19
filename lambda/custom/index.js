@@ -54,7 +54,19 @@ const { PostEmojiMessageIntentHandler } = require('./handlers/Channels/PostEmoji
 
 const { GetLastMessageFromChannelIntentHandler } = require('./handlers/Channels/GetLastMessageFromChannelIntentHandler');
 
-const { AddOwnerIntentHandler } = require('./handlers/Channels/AddOwnerIntentHandler');
+const {
+	StartedAddOwnerIntentHandler,
+	AddOwnerIntentHandler,
+	DeniedAddOwnerIntentHandler,
+	InProgressAddOwnerIntentHandler,
+} = require('./handlers/Channels/AddOwnerIntentHandler');
+
+const {
+	StartedAddModeratorIntentHandler,
+	AddModeratorIntentHandler,
+	DeniedAddModeratorIntentHandler,
+	InProgressAddModeratorIntentHandler,
+} = require('./handlers/Channels/AddModeratorIntentHandlers');
 
 const { ArchiveChannelIntentHandler } = require('./handlers/Channels/ArchiveChannelIntentHandler');
 
@@ -90,16 +102,12 @@ const { GetUnreadMessagesIntentHandler } = require('./handlers/Channels/GetUnrea
 
 const { AddAllToChannelIntentHandler } = require('./handlers/Channels/AddAllToChannelIntentHandler');
 
-const { MakeModeratorIntentHandler } = require('./handlers/Channels/MakeModeratorIntentHandler');
-
 const { CreateGrouplIntentHandler } = require('./handlers/Channels/CreateGrouplIntentHandler');
 
 const { PostEmojiDirectMessageIntentHandler } = require('./handlers/Direct/PostEmojiDirectMessageIntentHandler');
 
 const {
 	DeleteGroupIntentHandler,
-	MakeGroupModeratorIntentHandler,
-	MakeGroupOwnerIntentHandler,
 	PostGroupEmojiMessageIntentHandler,
 	GroupLastMessageIntentHandler,
 	GetGroupUnreadMessagesIntentHandler,
@@ -108,6 +116,34 @@ const {
 const { HelpIntentHandler } = require('./handlers/General/HelpIntentHandler');
 
 const { CancelAndStopIntentHandler } = require('./handlers/General/CancelAndStopIntentHandler');
+
+const {
+	StartedAddLeaderIntentHandler,
+	DeniedAddLeaderIntentHandler,
+	InProgressAddLeaderIntentHandler,
+	AddLeaderIntentHandler,
+} = require('./handlers/Channels/AddLeaderIntentHandlers');
+
+const {
+	StartedRemoveLeaderIntentHandler,
+	RemoveLeaderIntentHandler,
+	DeniedRemoveLeaderIntentHandler,
+	InProgressRemoveLeaderIntentHandler,
+} = require('./handlers/Channels/RemoveLeaderIntentHandlers');
+
+const {
+	StartedRemoveOwnerIntentHandler,
+	RemoveOwnerIntentHandler,
+	DeniedRemoveOwnerIntentHandler,
+	InProgressRemoveOwnerIntentHandler,
+} = require('./handlers/Channels/RemoveOwnerIntentHandlers');
+
+const {
+	StartedRemoveModeratorIntentHandler,
+	RemoveModeratorIntentHandler,
+	DeniedRemoveModeratorIntentHandler,
+	InProgressRemoveModeratorIntentHandler,
+} = require('./handlers/Channels/RemoveModeratorIntentHandlers');
 
 const { YesIntentHandler } = require('./handlers/General/YesIntentHandler');
 
@@ -155,18 +191,38 @@ const buildSkill = (skillBuilder) =>
 			PostEmojiMessageIntentHandler,
 			GetLastMessageFromChannelIntentHandler,
 			AddAllToChannelIntentHandler,
-			MakeModeratorIntentHandler,
+			StartedAddOwnerIntentHandler,
 			AddOwnerIntentHandler,
+			DeniedAddOwnerIntentHandler,
+			InProgressAddOwnerIntentHandler,
+			StartedAddModeratorIntentHandler,
+			AddModeratorIntentHandler,
+			DeniedAddModeratorIntentHandler,
+			InProgressAddModeratorIntentHandler,
 			ArchiveChannelIntentHandler,
 			GetUnreadMessagesIntentHandler,
 			CreateGrouplIntentHandler,
 			DeleteGroupIntentHandler,
-			MakeGroupModeratorIntentHandler,
-			MakeGroupOwnerIntentHandler,
 			PostGroupEmojiMessageIntentHandler,
 			GroupLastMessageIntentHandler,
 			GetGroupUnreadMessagesIntentHandler,
 			PostEmojiDirectMessageIntentHandler,
+			StartedAddLeaderIntentHandler,
+			AddLeaderIntentHandler,
+			DeniedAddLeaderIntentHandler,
+			InProgressAddLeaderIntentHandler,
+			StartedRemoveLeaderIntentHandler,
+			RemoveLeaderIntentHandler,
+			DeniedRemoveLeaderIntentHandler,
+			InProgressRemoveLeaderIntentHandler,
+			StartedRemoveOwnerIntentHandler,
+			RemoveOwnerIntentHandler,
+			DeniedRemoveOwnerIntentHandler,
+			InProgressRemoveOwnerIntentHandler,
+			StartedRemoveModeratorIntentHandler,
+			RemoveModeratorIntentHandler,
+			DeniedRemoveModeratorIntentHandler,
+			InProgressRemoveModeratorIntentHandler,
 			StartedLeaveChannelIntentHandler,
 			InProgressLeaveChannelIntentHandler,
 			DeniedLeaveChannelIntentHandler,

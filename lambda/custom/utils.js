@@ -1,5 +1,5 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, resolveChannelname, resolveUsername } = require('./helperFunctions');
+const { login, resolveChannelname, resolveUsername, getUsersWithRolesFromRoom } = require('./helperFunctions');
 
 // APL Compaitability Checker Function
 const supportsAPL = (handlerInput) => {
@@ -70,8 +70,12 @@ const getStaticAndDynamicSlotValuesFromSlot = (slot) => {
 
 // returns a random property from an object
 const randomProperty = function(obj) {
-	const keys = Object.keys(obj);
-	return obj[keys[keys.length * Math.random() << 0]];
+	if (typeof obj === 'string') {
+		return obj;
+	} else {
+		const keys = Object.keys(obj);
+		return obj[keys[keys.length * Math.random() << 0]];
+	}
 };
 
 const resolveChannel = async (handlerInput, channelSlotname, choiceSlotname) => {
@@ -244,6 +248,97 @@ const resolveUser = async (handlerInput, userSlotname, choiceSlotname) => {
 		.getResponse();
 };
 
+const resolveUserWithRole = async (handlerInput, userSlotname, choiceSlotname, role) => {
+	const updatedIntent = handlerInput.requestEnvelope.request.intent;
+	const updatedSlots = updatedIntent.slots;
+
+	const { attributesManager } = handlerInput;
+	const sessionAttributes = attributesManager.getSessionAttributes() || {};
+
+	if (!sessionAttributes.user && updatedSlots[choiceSlotname] && updatedSlots[choiceSlotname].value) {
+		// get the array of users which the user was asked for
+		const users = sessionAttributes.similarusers;
+
+		// if the user selects an invalid choice then ask for an appropriate choice
+		if (Number(updatedSlots[choiceSlotname].value) === 0 || Number(updatedSlots[choiceSlotname].value) > users.length) {
+			let users_list = '';
+			for (const { username } of users) {
+				users_list += `${ username }, `;
+			}
+			const speechText = ri('RESOLVE_USERNAME.ASK_CHOICE', { choice_limit: users.length, users_list });
+			const slotName = choiceSlotname;
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.addElicitSlotDirective(slotName)
+				.getResponse();
+		}
+
+		// if everything is correct then proceed to ask for confirmation
+		const userDetails = users[Number(updatedSlots[choiceSlotname].value) - 1];
+		updatedSlots[userSlotname].value = userDetails.username;
+		sessionAttributes.user = userDetails;
+		delete updatedSlots[choiceSlotname].value;
+		return handlerInput.responseBuilder
+			.addDelegateDirective(updatedIntent)
+			.getResponse();
+	}
+
+	if (!sessionAttributes.user && updatedSlots[userSlotname].value) {
+		const {
+			accessToken,
+		} = handlerInput.requestEnvelope.context.System.user;
+
+		const headers = await login(accessToken);
+
+		// get the array of similar usernames
+		const users = await getUsersWithRolesFromRoom(updatedSlots[userSlotname].value, sessionAttributes.channel.id, sessionAttributes.channel.type, role, headers);
+
+		if (users.length === 0) {
+			let speechText;
+
+			if (role === 'leader') {
+				speechText = ri('ROOM_ROLES.USER_NOT_LEADER', { username: updatedSlots[userSlotname].value, roomname: sessionAttributes.channel.name });
+			} else if (role === 'owner') {
+				speechText = ri('ROOM_ROLES.USER_NOT_OWNER', { username: updatedSlots[userSlotname].value, roomname: sessionAttributes.channel.name });
+			} else if (role === 'moderator') {
+				speechText = ri('ROOM_ROLES.USER_NOT_MODERATOR', { username: updatedSlots[userSlotname].value, roomname: sessionAttributes.channel.name });
+			}
+
+			const repromptText = ri('GENERIC_REPROMPT');
+			return handlerInput.jrb
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse();
+			// if there's only one similar channel, then change the slot value to the matching channel
+		} else if (users.length === 1) {
+			updatedSlots[userSlotname].value = users[0].username;
+			sessionAttributes.user = users[0];
+		} else {
+			sessionAttributes.similarusers = users;
+			let user_names = '';
+			for (const { username } of users) {
+				user_names += `${ username }, `;
+			}
+
+			const speechText = ri('RESOLVE_USERNAME.SIMILAR_USERS', { user_names });
+			const slotName = choiceSlotname;
+
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.addElicitSlotDirective(slotName)
+				.getResponse();
+		}
+	}
+
+	return handlerInput.responseBuilder
+		.addDelegateDirective(updatedIntent)
+		.getResponse();
+};
+
 module.exports = {
 	supportsAPL,
 	supportsDisplay,
@@ -252,4 +347,5 @@ module.exports = {
 	getStaticAndDynamicSlotValuesFromSlot,
 	resolveChannel,
 	resolveUser,
+	resolveUserWithRole,
 };
