@@ -78,6 +78,12 @@ const YesIntentHandler = {
 					},
 				})
 				.getResponse();
+		} else {
+			const speechText = ri('YES_PROMPT');
+			return handlerInput.jrb
+				.speak(speechText)
+				.reprompt(speechText)
+				.getResponse();
 		}
 
 
