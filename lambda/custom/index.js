@@ -113,6 +113,8 @@ const {
 	GetGroupUnreadMessagesIntentHandler,
 } = require('./handlers/Channels/PrivateChannelIntents');
 
+const { FallbackIntentHandler } = require('./handlers/General/FallbackIntentHandler');
+
 const { HelpIntentHandler } = require('./handlers/General/HelpIntentHandler');
 
 const { CancelAndStopIntentHandler } = require('./handlers/General/CancelAndStopIntentHandler');
@@ -229,6 +231,7 @@ const buildSkill = (skillBuilder) =>
 			InProgressLeaveChannelIntentHandler,
 			DeniedLeaveChannelIntentHandler,
 			LeaveChannelIntentHandler,
+			FallbackIntentHandler,
 			StartedInviteUserIntentHandler,
 			InviteUserIntentHandler,
 			DeniedInviteUserIntentHandler,

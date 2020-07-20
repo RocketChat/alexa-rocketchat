@@ -160,6 +160,7 @@
         "GetMentionsIntent": "Get my mentions"
     },
     "HINT_TRANSITION": "You can try saying",
+    "FALLBACK_MSG": "Sorry, I don't know about that.",
     "ERROR_NOT_FOUND": "The room {roomname} does not exist.",
     "ERROR_NOT_ALLOWED": "Sorry, only authorised users can perform this operation.",
     "ERROR_INVALID_USER": "The username {username} does not exist.",
