@@ -161,11 +161,11 @@ const createChannel = async (channelName, headers) =>
 			}
 		});
 
-const deleteChannel = async (channelName, headers) =>
-	await axios
+const deleteRoom = (roomDetails, headers) =>
+	axios
 		.post(
-			apiEndpoints.deletechannelurl, {
-				roomName: channelName,
+			roomDetails.type === 'c' ? apiEndpoints.deletechannelurl : apiEndpoints.deletegroupurl, {
+				roomName: roomDetails.name,
 			}, {
 				headers,
 			}
@@ -174,11 +174,11 @@ const deleteChannel = async (channelName, headers) =>
 		.then((res) => {
 			if (res.success === true) {
 				return ri('DELETE_CHANNEL.SUCCESS', {
-					channelName,
+					channelName: roomDetails.name, success: true,
 				});
 			} else {
 				return ri('DELETE_CHANNEL.ERROR', {
-					channelName,
+					channelName: roomDetails.name,
 				});
 			}
 		})
@@ -186,13 +186,15 @@ const deleteChannel = async (channelName, headers) =>
 			console.log(err.message);
 			if (err.response.data.errorType === 'error-room-not-found') {
 				return ri('DELETE_CHANNEL.ERROR_NOT_FOUND', {
-					channelName,
+					channelName: roomDetails.name,
 				});
+			} else if (err.response.data.errorType === 'error-not-allowed') {
+				return ri('DELETE_CHANNEL.NOT_AUTHORISED');
 			} else if (err.response.status === 401) {
 				return ri('DELETE_CHANNEL.AUTH_ERROR');
 			} else {
 				return ri('DELETE_CHANNEL.ERROR', {
-					channelName,
+					channelName: roomDetails.name,
 				});
 			}
 		});
@@ -500,42 +502,6 @@ const createGroup = async (channelName, headers) =>
 				});
 			} else {
 				return ri('CREATE_CHANNEL.ERROR', {
-					channelName,
-				});
-			}
-		});
-
-const deleteGroup = async (channelName, headers) =>
-	await axios
-		.post(
-			apiEndpoints.deletegroupurl, {
-				roomName: channelName,
-			}, {
-				headers,
-			}
-		)
-		.then((res) => res.data)
-		.then((res) => {
-			if (res.success === true) {
-				return ri('DELETE_CHANNEL.SUCCESS', {
-					channelName,
-				});
-			} else {
-				return ri('DELETE_CHANNEL.ERROR', {
-					channelName,
-				});
-			}
-		})
-		.catch((err) => {
-			console.log(err.message);
-			if (err.response.data.errorType === 'error-room-not-found') {
-				return ri('DELETE_CHANNEL.ERROR_NOT_FOUND', {
-					channelName,
-				});
-			} else if (err.response.status === 401) {
-				return ri('DELETE_CHANNEL.AUTH_ERROR');
-			} else {
-				return ri('DELETE_CHANNEL.ERROR', {
 					channelName,
 				});
 			}
@@ -1218,7 +1184,7 @@ module.exports.login = login;
 module.exports.createPersonalAccessToken = createPersonalAccessToken;
 module.exports.channelList = channelList;
 module.exports.createChannel = createChannel;
-module.exports.deleteChannel = deleteChannel;
+module.exports.deleteRoom = deleteRoom;
 module.exports.postMessage = postMessage;
 module.exports.channelLastMessage = channelLastMessage;
 module.exports.getLastMessageFileURL = getLastMessageFileURL;
@@ -1236,7 +1202,6 @@ module.exports.replaceWhitespacesDots = replaceWhitespacesDots;
 module.exports.emojiTranslateFunc = emojiTranslateFunc;
 module.exports.readMessages = readMessages;
 module.exports.createGroup = createGroup;
-module.exports.deleteGroup = deleteGroup;
 module.exports.getGroupId = getGroupId;
 module.exports.postGroupMessage = postGroupMessage;
 module.exports.groupLastMessage = groupLastMessage;

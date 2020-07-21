@@ -107,7 +107,6 @@ const { CreateGrouplIntentHandler } = require('./handlers/Channels/CreateGrouplI
 const { PostEmojiDirectMessageIntentHandler } = require('./handlers/Direct/PostEmojiDirectMessageIntentHandler');
 
 const {
-	DeleteGroupIntentHandler,
 	PostGroupEmojiMessageIntentHandler,
 	GroupLastMessageIntentHandler,
 	GetGroupUnreadMessagesIntentHandler,
@@ -206,7 +205,6 @@ const buildSkill = (skillBuilder) =>
 			ArchiveChannelIntentHandler,
 			GetUnreadMessagesIntentHandler,
 			CreateGrouplIntentHandler,
-			DeleteGroupIntentHandler,
 			PostGroupEmojiMessageIntentHandler,
 			GroupLastMessageIntentHandler,
 			GetGroupUnreadMessagesIntentHandler,

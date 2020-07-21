@@ -62,6 +62,10 @@
                                 "delete channel {channeldelete}",
                                 "delete room {channeldelete}"
                             ]
+                        },
+                        {
+                            "name": "selection",
+                            "type": "AMAZON.Ordinal"
                         }
                     ],
                     "samples": [
@@ -118,14 +122,21 @@
                         },
                         {
                             "name": "longmessage",
-                            "type": "AMAZON.SearchQuery",
+                            "type": "message",
                             "samples": [
+                                "add emoji {emoji}",
+                                "add {longmessage} with emoji {emoji}",
+                                "add {longmessage}",
                                 "{longmessage}"
                             ]
                         },
                         {
                             "name": "choice",
                             "type": "AMAZON.Ordinal"
+                        },
+                        {
+                            "name": "emoji",
+                            "type": "emoji"
                         }
                     ],
                     "samples": [
@@ -270,18 +281,6 @@
                     ],
                     "samples": [
                         "Create Private Channel {groupname}"
-                    ]
-                },
-                {
-                    "name": "DeleteGroupIntent",
-                    "slots": [
-                        {
-                            "name": "deletegroupname",
-                            "type": "channelnames"
-                        }
-                    ],
-                    "samples": [
-                        "Delete Private Channel {deletegroupname}"
                     ]
                 },
                 {
@@ -2177,6 +2176,7 @@
                 },
                 {
                     "name": "DeleteChannelIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
                     "confirmationRequired": true,
                     "prompts": {
                         "confirmation": "Confirm.Intent.1279935591703"
@@ -2227,12 +2227,26 @@
                         },
                         {
                             "name": "longmessage",
-                            "type": "AMAZON.SearchQuery",
+                            "type": "message",
                             "confirmationRequired": false,
                             "elicitationRequired": true,
                             "prompts": {
                                 "elicitation": "Elicit.Slot.622819296016.128404170246"
                             }
+                        },
+                        {
+                            "name": "choice",
+                            "type": "AMAZON.Ordinal",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "emoji",
+                            "type": "emoji",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
                         }
                     ]
                 },
@@ -3342,16 +3356,88 @@
                 ]
             },
             {
-                "id": "Elicit.Slot.432711597445.359632651461",
+                "id": "Elicit.Slot.45254670481.832091299073",
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "What announcement do you want to set?"
+                        "value": "Which channel do you want to archive?"
                     }
                 ]
             },
             {
-                "id": "Elicit.Slot.432711597445.840419366335",
+                "id": "Elicit.Slot.485687859193.22188146981",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to invite the user to?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.45254670481",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to archive channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.485687859193.238984600341",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to invite?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.562355055148.420926033918",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel or group do you want to unarchive?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.485687859193",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to invite, {username} , to channel, {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.562355055148",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to unarchive channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.632136221730.571552015872",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to remove the user from?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.694933260184",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to set, {announcement} , as announcement in channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.694933260184.94116224804",
                 "variations": [
                     {
                         "type": "PlainText",
@@ -3360,61 +3446,142 @@
                 ]
             },
             {
-                "id": "Confirm.Intent.432711597445",
+                "id": "Elicit.Slot.694933260184.236979036874",
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "You want to set, {announcement} , as announcement in {channelname} , is that correct?"
+                        "value": "What announcement do you want to set?"
                     }
                 ]
             },
             {
-                "id": "Elicit.Slot.969670625304.359535257121",
+                "id": "Elicit.Slot.1558699166034.1347266098739",
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "Who do you want to set the leader as?"
+                        "value": "Which channel do you want to set the description in?"
                     }
                 ]
             },
             {
-                "id": "Confirm.Slot.969670625304.359535257121",
+                "id": "Elicit.Slot.1558699166034.985145374285",
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "{username} , did I get that right?"
+                        "value": "What do you want to set description as?"
                     }
                 ]
             },
             {
-                "id": "Elicit.Slot.969670625304.385533606691",
+                "id": "Confirm.Intent.1558699166034",
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "Which channel do you want to add the leader for?"
+                        "value": "You want to set description as, {description} , in channel {channelname} , is that correct?"
                     }
                 ]
             },
             {
-                "id": "Confirm.Intent.969670625304",
+                "id": "Confirm.Intent.583855588190",
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "You want to set {username} as leader of {channelname} , is that correct?"
+                        "value": "You want to set topic as, {topic} , in channel {channelname} , is that correct?"
                     }
                 ]
             },
             {
-                "id": "Elicit.Slot.395040613949.910277543812",
+                "id": "Elicit.Slot.583855588190.268911026298",
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "Which channel do you want to remove the leader from?"
+                        "value": "Which channel do you want to set the topic in?"
                     }
                 ]
             },
             {
-                "id": "Confirm.Slot.395040613949.910277543812",
+                "id": "Elicit.Slot.583855588190.1137986087938",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What do you want to set the topic as?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.15722896196",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to rename, {channelname} , as {newname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.15722896196.844436793762",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel or group do you want to rename?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.15722896196.113497634608",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Tell the new name."
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.839572519219.466067032738",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to remove the owner from?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.839572519219.466067032738",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You mean {channelname} , right?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.839572519219.1448107458381",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to remove as owner?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.839572519219",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to remove, {username} , as owner of {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.226847919348.878189168754",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to remove the moderator from?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.226847919348.878189168754",
                 "variations": [
                     {
                         "type": "PlainText",
@@ -3423,47 +3590,119 @@
                 ]
             },
             {
-                "id": "Elicit.Slot.395040613949.1089955939850",
+                "id": "Elicit.Slot.226847919348.535930901642",
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "Who do you want to remove as leader?"
+                        "value": "Who do you want to remove moderator as?"
                     }
                 ]
             },
             {
-                "id": "Confirm.Intent.395040613949",
+                "id": "Confirm.Intent.226847919348",
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "You want to remove {username} as leader of {channelname} , is that correct?"
+                        "value": "You want to remove, {username} , as moderator of {channelname} , is that correct?"
                     }
                 ]
             },
             {
-                "id": "Elicit.Slot.801639937455.472739613625",
+                "id": "Elicit.Slot.112387963703.775412830818",
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "Which channel do you want the pinned message from?"
+                        "value": "Which channel do you want to set the owner in?"
                     }
                 ]
             },
             {
-                "id": "Confirm.Intent.1332057814989",
+                "id": "Confirm.Slot.112387963703.775412830818",
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "You want to leave channel {channelname} , is that correct?"
+                        "value": "{channelname} , did I get that right?"
                     }
                 ]
             },
             {
-                "id": "Elicit.Slot.1332057814989.1100611672440",
+                "id": "Elicit.Slot.112387963703.1288781361061",
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "Which channel or group do you want to leave?"
+                        "value": "Who do you want to set the owner as?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.112387963703",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to set, {username} , as an owner of {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.437014854497.157868203857",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to add moderator in?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.437014854497.157868203857",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "{channelname} , did I get that right?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.632136221730.571552015872",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "{channelname} , did I get that right?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.437014854497.624036719675",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to set the moderator as?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.632136221730.1091599696582",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to remove?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.437014854497",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to set, {username} , as moderator of {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.632136221730",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to remove {username} , from channel {channelname} , is that correct?"
                     }
                 ]
             },
