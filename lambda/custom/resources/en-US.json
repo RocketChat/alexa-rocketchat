@@ -39,6 +39,7 @@
         "SIMILAR_USERS": "There are multiple users with similar username. Please tell the serial number of desired user. {usernames}.",
         "CONFIRM_MORE": "Okay, go on.",
         "CONFIRM_MORE_REPROMPT": "Please continue your message.",
+        "POST_LONG_MESSAGE_CONFIRMATION": "You want to send, {longmessage}, to channel {channelName}, is that correct?",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Post A Message",
         "ERROR": "Sorry, I couldn't send your message right now.",
@@ -91,13 +92,6 @@
         "ERROR": "Sorry, I am unable to add all users to the channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I am unable to add all users to channel {channelName} right now."
     },
-    "ADD_OWNER": {
-        "SUCCESS": "{userName} is now the owner of {channelName}.",
-        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
-        "CARD_TITLE": "Add Owner",
-        "ERROR": "Sorry, I couldn't assign a owner to the channel right now.",
-        "ERROR_NOT_FOUND": "Sorry, I couldn't assign a owner to channel {channelName} right now."
-    },
     "ARCHIVE_CHANNEL": {
         "SUCCESS": "{channelName} is now archived.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
@@ -107,8 +101,36 @@
     },
     "RESOLVE_CHANNEL":{
         "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
-        "NO_CHANNEL":"There is no channel named {channel_name}.",
+        "NO_CHANNEL":"You are not part of any channel or group named {channel_name}.",
         "SIMILAR_CHANNELS": "There are multiple channels with similar name. Please tell the serial number of desired channel. {channel_names}."
+    },
+    "RESOLVE_USERNAME":{
+        "ASK_CHOICE": "Please select between one and {choice_limit}. {users_list}.",
+        "NO_USER":"There is no user named {username} in your contacts list.",
+        "SIMILAR_USERS": "There are multiple users with similar username. Please tell the serial number of desired user. {user_names}."
+    },
+    "ROOM_ROLES":{
+        "ADD_LEADER_SUCCESS": "{username} is now the leader of {roomname}.",
+        "ADD_OWNER_SUCCESS": "{username} is now an owner of {roomname}.",
+        "ADD_MODERATOR_SUCCESS": "{username} is now a moderator of {roomname}.",
+        "ADD_LEADER_DENIED": "Okay.",
+        "ALREADY_LEADER": "{username} is already a leader of {roomname}.",
+        "ALREADY_OWNER": "{username} is already an owner of {roomname}.",
+        "ALREADY_MODERATOR": "{username} is already a moderator of {roomname}.",
+        "REMOVE_LEADER_SUCCESS": "{username} is no longer a leader of {roomname}.",
+        "REMOVE_OWNER_SUCCESS": "{username} is no longer an owner of {roomname}.",
+        "REMOVE_MODERATOR_SUCCESS": "{username} is no longer a moderator of {roomname}.",
+        "ERROR_REMOVE_LAST_OWNER": "This is a last owner. Please set a new owner before removing this one.",
+        "USER_NOT_LEADER": "{username} is not a leader of {roomname}.",
+        "USER_NOT_OWNER": "{username} is not an owner of {roomname}.",
+        "USER_NOT_MODERATOR": "{username} is not a moderator of {roomname}.",
+        "USER_NOT_MEMBER": "{username} is not a member of room {roomname}.",
+        "ERROR_NOT_ALLOWED": "Sorry, you don't have the right to perform this operation.",
+        "ERROR_ROOM_NOT_FOUND": "There's no room named {roomname}.",
+        "INVALID_USER": "There's no user named {username}.",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
+        "DENIED": "Okay.",
+        "ERROR": "Sorry, I couldn't perform this operation."
     },
     "LEAVE_CHANNEL": {
         "SUCCESS": "You have left the room {roomname}.",
@@ -118,7 +140,33 @@
         "USER_NOT_IN_ROOM": "You are not part of {roomname}.",
         "ERROR_NOT_FOUND": "The room {roomname} does not exist."
     },
-    "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate.",
+    "INVITE_USER": {
+        "SUCCESS": "{username} has been invited to {roomname}.",
+        "ERROR": "Sorry, the invite was unsuccessful.",
+        "DENIED": "Okay."
+    },
+    "KICK_USER": {
+        "SUCCESS": "{username} was removed from {roomname}.",
+        "ERROR": "Sorry, there was an error",
+        "DENIED": "Okay.",
+        "ERROR_USER_NOT_IN_ROOM": "{username} is not a member of room {roomname}.",
+        "ERROR_YOU_ARE_LAST_OWNER": "You are last owner. Please set a new owner before leaving room."
+    },
+    "HINTS": {
+        "GetUnreadMessagesIntent": "Get unread messages from channel",
+        "GetLastMessageFromChannelIntent": "Read last message from channel",
+        "PostDirectMessageIntent": "Post direct message",
+        "PostEmojiMessageIntent": "Read Pinned messages from channel",
+        "ChangeStatusIntent": "Change my status",
+        "GetMentionsIntent": "Get my mentions"
+    },
+    "HINT_TRANSITION": "You can try saying",
+    "FALLBACK_MSG": "Sorry, I don't know about that.",
+    "ERROR_NOT_FOUND": "The room {roomname} does not exist.",
+    "ERROR_NOT_ALLOWED": "Sorry, only authorised users can perform this operation.",
+    "ERROR_INVALID_USER": "The username {username} does not exist.",
+    "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate.",
     "AUDIO_NO_SUPPORT": "Sorry, this skill doesn't support that feature.",
-    "GENERIC_REPROMPT": "Anything else I can help you with?"
+    "GENERIC_REPROMPT": "Anything else I can help you with?",
+    "YES_PROMPT": "What would you like to do?"
 }

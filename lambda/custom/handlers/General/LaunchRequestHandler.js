@@ -25,16 +25,16 @@ const LaunchRequestHandler = {
 
 				return handlerInput.jrb
 					.speak(speechText)
-					.reprompt(speechText)
 					.addDirective(errorMessageTemplate(data))
+					.withShouldEndSession(true)
 					.getResponse();
 
 			} else {
 
 				return handlerInput.jrb
 					.speak(speechText)
-					.reprompt(speechText)
 					.withSimpleCard(ri('WELCOME.CARD_TITLE'), speechText)
+					.withShouldEndSession(true)
 					.getResponse();
 
 			}

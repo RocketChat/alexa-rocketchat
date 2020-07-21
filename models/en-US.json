@@ -817,7 +817,9 @@
                     "samples": [
                         "invite user to channel {channelname}",
                         "invite user to {channelname}",
-                        "invite user"
+                        "invite user",
+                        "add user",
+                        "add user in channel {channelname}"
                     ]
                 },
                 {
@@ -3354,132 +3356,6 @@
                 ]
             },
             {
-                "id": "Elicit.Slot.432711597445.359632651461",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "What announcement do you want to set?"
-                    }
-                ]
-            },
-            {
-                "id": "Elicit.Slot.432711597445.840419366335",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Which channel do you want to set the announcement in?"
-                    }
-                ]
-            },
-            {
-                "id": "Confirm.Intent.432711597445",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "You want to set, {announcement} , as announcement in {channelname} , is that correct?"
-                    }
-                ]
-            },
-            {
-                "id": "Elicit.Slot.969670625304.359535257121",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Who do you want to set the leader as?"
-                    }
-                ]
-            },
-            {
-                "id": "Confirm.Slot.969670625304.359535257121",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "{username} , did I get that right?"
-                    }
-                ]
-            },
-            {
-                "id": "Elicit.Slot.969670625304.385533606691",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Which channel do you want to add the leader for?"
-                    }
-                ]
-            },
-            {
-                "id": "Confirm.Intent.969670625304",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "You want to set {username} as leader of {channelname} , is that correct?"
-                    }
-                ]
-            },
-            {
-                "id": "Elicit.Slot.395040613949.910277543812",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Which channel do you want to remove the leader from?"
-                    }
-                ]
-            },
-            {
-                "id": "Confirm.Slot.395040613949.910277543812",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "{channelname} , did I get that right?"
-                    }
-                ]
-            },
-            {
-                "id": "Elicit.Slot.395040613949.1089955939850",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Who do you want to remove as leader?"
-                    }
-                ]
-            },
-            {
-                "id": "Confirm.Intent.395040613949",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "You want to remove {username} as leader of {channelname} , is that correct?"
-                    }
-                ]
-            },
-            {
-                "id": "Elicit.Slot.801639937455.472739613625",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Which channel do you want the pinned message from?"
-                    }
-                ]
-            },
-            {
-                "id": "Confirm.Intent.1332057814989",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "You want to leave channel {channelname} , is that correct?"
-                    }
-                ]
-            },
-            {
-                "id": "Elicit.Slot.1332057814989.1100611672440",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Which channel or group do you want to leave?"
-                    }
-                ]
-            },
-            {
                 "id": "Elicit.Slot.45254670481.832091299073",
                 "variations": [
                     {
@@ -3818,6 +3694,69 @@
                     {
                         "type": "PlainText",
                         "value": "You want to set, {username} , as moderator of {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.632136221730",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to remove {username} , from channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.485687859193.22188146981",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to invite the user to?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.485687859193.238984600341",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to invite?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.485687859193",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to invite, {username} , to channel, {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.632136221730.571552015872",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to remove the user from?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.632136221730.571552015872",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "{channelname} , did I get that right?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.632136221730.1091599696582",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who do you want to remove?"
                     }
                 ]
             },
