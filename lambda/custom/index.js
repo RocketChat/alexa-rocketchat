@@ -161,6 +161,8 @@ const { RequestLog } = require('./handlers/Interceptors/RequestLog');
 
 const APLLocalisationRequestInterceptor = require('./handlers/Interceptors/APLLocalisationRequestInterceptor');
 
+const { HintGenerationResponseInterceptor } = require('./handlers/Interceptors/HintGenerationResponseInterceptor');
+
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
 const buildSkill = (skillBuilder) =>
@@ -251,7 +253,10 @@ const buildSkill = (skillBuilder) =>
 			RequestLog,
 			APLLocalisationRequestInterceptor,
 		)
-		.addResponseInterceptors(ResponseLog)
+		.addResponseInterceptors(
+			HintGenerationResponseInterceptor,
+			ResponseLog,
+		)
 		.withTableName(envVariables.dynamoDBTableName)
 		.withAutoCreateTable(true)
 		.lambda();
