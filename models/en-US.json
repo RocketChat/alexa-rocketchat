@@ -284,18 +284,6 @@
                     ]
                 },
                 {
-                    "name": "DeleteGroupIntent",
-                    "slots": [
-                        {
-                            "name": "deletegroupname",
-                            "type": "channelnames"
-                        }
-                    ],
-                    "samples": [
-                        "Delete Private Channel {deletegroupname}"
-                    ]
-                },
-                {
                     "name": "GroupLastMessageIntent",
                     "slots": [
                         {
