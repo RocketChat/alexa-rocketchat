@@ -571,42 +571,6 @@ const createGroup = async (channelName, headers) =>
 			}
 		});
 
-const deleteGroup = async (channelName, headers) =>
-	await axios
-		.post(
-			apiEndpoints.deletegroupurl, {
-				roomName: channelName,
-			}, {
-				headers,
-			}
-		)
-		.then((res) => res.data)
-		.then((res) => {
-			if (res.success === true) {
-				return ri('DELETE_CHANNEL.SUCCESS', {
-					channelName,
-				});
-			} else {
-				return ri('DELETE_CHANNEL.ERROR', {
-					channelName,
-				});
-			}
-		})
-		.catch((err) => {
-			console.log(err.message);
-			if (err.response.data.errorType === 'error-room-not-found') {
-				return ri('DELETE_CHANNEL.ERROR_NOT_FOUND', {
-					channelName,
-				});
-			} else if (err.response.status === 401) {
-				return ri('DELETE_CHANNEL.AUTH_ERROR');
-			} else {
-				return ri('DELETE_CHANNEL.ERROR', {
-					channelName,
-				});
-			}
-		});
-
 const getGroupId = async (channelName, headers) =>
 	await axios
 		.get(`${ apiEndpoints.groupinfourl }${ channelName }`, {
@@ -1003,7 +967,6 @@ module.exports.replaceWhitespacesDots = replaceWhitespacesDots;
 module.exports.emojiTranslateFunc = emojiTranslateFunc;
 module.exports.readMessages = readMessages;
 module.exports.createGroup = createGroup;
-module.exports.deleteGroup = deleteGroup;
 module.exports.getGroupId = getGroupId;
 module.exports.addGroupModerator = addGroupModerator;
 module.exports.addGroupOwner = addGroupOwner;
