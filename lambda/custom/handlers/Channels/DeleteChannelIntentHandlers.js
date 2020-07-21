@@ -1,5 +1,5 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, deleteChannel, deleteGroup } = require('../../helperFunctions');
+const { login, deleteRoom } = require('../../helperFunctions');
 const { supportsAPL, resolveChannel } = require('../../utils');
 const burgerTemplate = require('../../APL/templates/burgerTemplate');
 
@@ -15,6 +15,7 @@ const StartedDeleteChannelIntentHandler = {
 		const { attributesManager } = handlerInput;
 		const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
+		delete sessionAttributes.similarChannels;
 		delete sessionAttributes.channel;
 
 		return resolveChannel(handlerInput, 'channeldelete', 'selection');
@@ -68,25 +69,16 @@ const DeleteChannelIntentHandler = {
 			const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
 			const headers = await login(accessToken);
-			let speechText;
 			const room = sessionAttributes.channel;
-			if (room.type === 'c') {
-				speechText = await deleteChannel(room.name, headers);
-			} else {
-				speechText = await deleteGroup(room.name, headers);
-			}
-
+			const speechText = await deleteRoom(room, headers);
 			const repromptText = ri('GENERIC_REPROMPT');
 
-			if (supportsAPL(handlerInput)) {
+			if (supportsAPL(handlerInput) && speechText.params && speechText.params.success) {
 				const data = {
-					top: 'channel',
-					message: `#${ room.name }`,
-					bottom: 'deleted successfully',
+					top: 'Channel',
+					middle: `#${ room.name }`,
+					bottom: 'Deleted successfully',
 				};
-
-				delete sessionAttributes.similarChannels;
-				delete sessionAttributes.channel;
 
 				return handlerInput.jrb
 					.speak(speechText)
@@ -96,16 +88,11 @@ const DeleteChannelIntentHandler = {
 					.getResponse();
 
 			} else {
-
-				delete sessionAttributes.similarChannels;
-				delete sessionAttributes.channel;
-
 				return handlerInput.jrb
 					.speak(speechText)
 					.speak(repromptText)
 					.reprompt(repromptText)
 					.getResponse();
-
 			}
 
 		} catch (error) {

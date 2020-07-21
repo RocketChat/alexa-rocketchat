@@ -1,7 +1,7 @@
 const layout = require('../layouts/burgerLayout.json');
 const APLconfig = require('../APLconfig');
 
-const template = (top, middle, bottom) => ({
+const template = ({ top, middle, bottom }) => ({
 	type: 'Alexa.Presentation.APL.RenderDocument',
 	version: '1.0',
 	document: layout,
