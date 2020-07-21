@@ -1,36 +1,6 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
 const helperFunctions = require('../../helperFunctions');
 
-const DeleteGroupIntentHandler = {
-	canHandle(handlerInput) {
-		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-			handlerInput.requestEnvelope.request.intent.name === 'DeleteGroupIntent';
-	},
-	async handle(handlerInput) {
-		try {
-			const {
-				accessToken,
-			} = handlerInput.requestEnvelope.context.System.user;
-
-			const channelNameData = handlerInput.requestEnvelope.request.intent.slots.deletegroupname.value;
-			const channelName = helperFunctions.replaceWhitespacesFunc(channelNameData);
-
-			const headers = await helperFunctions.login(accessToken);
-			const speechText = await helperFunctions.deleteGroup(channelName, headers);
-			const repromptText = ri('GENERIC_REPROMPT');
-
-			return handlerInput.jrb
-				.speak(speechText)
-				.speak(repromptText)
-				.reprompt(repromptText)
-				.withSimpleCard(ri('DELETE_CHANNEL.CARD_TITLE'), speechText)
-				.getResponse();
-		} catch (error) {
-			console.error(error);
-		}
-	},
-};
-
 const MakeGroupModeratorIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
@@ -202,7 +172,6 @@ const GetGroupUnreadMessagesIntentHandler = {
 };
 
 module.exports = {
-	DeleteGroupIntentHandler,
 	MakeGroupModeratorIntentHandler,
 	MakeGroupOwnerIntentHandler,
 	PostGroupEmojiMessageIntentHandler,
