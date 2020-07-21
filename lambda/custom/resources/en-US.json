@@ -57,6 +57,7 @@
         "SUCCESS": "I've deleted the channel {channelName}.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Delete A Channel",
+        "NOT_AUTHORISED": "Sorry, you are not authorised to delete this channel.",
         "ERROR": "Sorry, I couldn't delete the channel {channelName} right now.",
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name.",
         "DENIED": "Okay."
