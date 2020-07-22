@@ -1178,6 +1178,40 @@ const kickUser = async (roomId, userId, roomname, username, type, headers) => {
 	}
 };
 
+const getAllUnreadMentions = async (headers) => {
+	try {
+
+		const subscriptions = await axios.get(apiEndpoints.getsubscriptionsurl, {
+			headers,
+		})
+			.then((res) => res.data.update);
+		let finalMessage = '';
+		for (const subscription of subscriptions) {
+			if (subscription.t === 'c') {
+				const counters = await axios.get(`${ apiEndpoints.counterurl }${ subscription.name }`, {
+					headers,
+				}).then((res) => res.data);
+
+				if (counters.userMentions === 0) { continue; }
+				finalMessage += `${ counters.userMentions } mentions in ${ subscription.name }, `;
+			} else if (subscription.t === 'p') {
+				const counters = await axios.get(`${ apiEndpoints.groupcounterurl }${ subscription.rid }`, {
+					headers,
+				}).then((res) => res.data);
+				if (counters.userMentions === 0) { continue; }
+				finalMessage += `${ counters.userMentions } mentions in ${ subscription.name }, `;
+			}
+		}
+
+		if (finalMessage === '') { return ri('MENTIONS.NO_MENTIONS'); }
+		return ri('MENTIONS.MESSAGE', { finalMessage });
+	} catch (err) {
+		console.log(err.message);
+		return ri('MENTIONS.ERROR');
+	}
+};
+
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1222,3 +1256,4 @@ module.exports.addModerator = addModerator;
 module.exports.leaveChannel = leaveChannel;
 module.exports.inviteUser = inviteUser;
 module.exports.kickUser = kickUser;
+module.exports.getAllUnreadMentions = getAllUnreadMentions;
