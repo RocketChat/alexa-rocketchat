@@ -339,7 +339,8 @@ const channelUnreadMessages = async (channelName, unreadCount, headers) => {
 				const msgs = [];
 
 				for (let i = 0; i <= unreadCount - 1; i++) {
-					if (!res.messages[i].hasOwnProperty('t')) {
+					// anything other than text messages are ignored
+					if (!res.messages[i].hasOwnProperty('t') && !res.messages[i].hasOwnProperty('file')) {
 						msgs.push(`${ res.messages[i].u.username } says, ${ res.messages[i].msg } <break time="0.7s"/> `);
 					}
 				}
@@ -606,7 +607,8 @@ const groupUnreadMessages = async (channelName, roomid, unreadCount, headers) =>
 				const msgs = [];
 
 				for (let i = 0; i <= unreadCount - 1; i++) {
-					if (!res.messages[i].hasOwnProperty('t')) {
+					// anything other than text messages are ignored
+					if (!res.messages[i].hasOwnProperty('t') && !res.messages[i].hasOwnProperty('file')) {
 						msgs.push(`${ res.messages[i].u.username } says, ${ res.messages[i].msg } <break time="0.7s"/> `);
 					}
 				}
