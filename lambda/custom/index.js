@@ -146,6 +146,8 @@ const {
 	InProgressRemoveModeratorIntentHandler,
 } = require('./handlers/Channels/RemoveModeratorIntentHandlers');
 
+const { GetMentionsIntentHandler } = require('./handlers/Channels/GetMentionsIntentHandlers');
+
 const { YesIntentHandler } = require('./handlers/General/YesIntentHandler');
 
 const { NoIntentHandler } = require('./handlers/General/NoIntentHandler');
@@ -238,6 +240,7 @@ const buildSkill = (skillBuilder) =>
 			KickUserIntentHandler,
 			DeniedKickUserIntentHandler,
 			InProgressKickUserIntentHandler,
+			GetMentionsIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,
