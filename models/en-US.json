@@ -852,6 +852,15 @@
                         "remove user from {channelname}",
                         "kick user"
                     ]
+                },
+                {
+                    "name": "GetMentionsIntent",
+                    "slots": [],
+                    "samples": [
+                        "get all unread mentions",
+                        "get unread mentions",
+                        "get mentions"
+                    ]
                 }
             ],
             "types": [
