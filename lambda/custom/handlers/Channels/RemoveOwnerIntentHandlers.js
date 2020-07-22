@@ -1,12 +1,12 @@
 const Alexa = require('ask-sdk-core');
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, addOwner } = require('../../helperFunctions');
-const { resolveChannel, resolveUser } = require('../../utils');
+const { login, removeOwner } = require('../../helperFunctions');
+const { resolveChannel, resolveUserWithRole } = require('../../utils');
 
-const StartedAddOwnerIntentHandler = {
+const StartedRemoveOwnerIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-        handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent' &&
+        handlerInput.requestEnvelope.request.intent.name === 'RemoveOwnerIntent' &&
         handlerInput.requestEnvelope.request.dialogState === 'STARTED';
 	},
 	handle(handlerInput) {
@@ -22,7 +22,7 @@ const StartedAddOwnerIntentHandler = {
 		delete sessionAttributes.similarChannels;
 
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
-			return resolveUser(handlerInput, 'username', 'choice');
+			return resolveUserWithRole(handlerInput, 'username', 'choice', 'owner');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
 			return resolveChannel(handlerInput, 'channelname', 'choice');
 		}
@@ -33,10 +33,10 @@ const StartedAddOwnerIntentHandler = {
 	},
 };
 
-const AddOwnerIntentHandler = {
+const RemoveOwnerIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AddOwnerIntent'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'RemoveOwnerIntent'
             && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
 	async handle(handlerInput) {
@@ -49,7 +49,7 @@ const AddOwnerIntentHandler = {
 
 		const headers = await login(accessToken);
 
-		const speakOutput = await addOwner(sessionAttributes.channel.id, sessionAttributes.user.id, sessionAttributes.channel.name, sessionAttributes.user.name, sessionAttributes.channel.type, headers);
+		const speakOutput = await removeOwner(sessionAttributes.channel.id, sessionAttributes.user._id, sessionAttributes.channel.name, sessionAttributes.user.username, sessionAttributes.channel.type, headers);
 		const repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
@@ -60,10 +60,10 @@ const AddOwnerIntentHandler = {
 	},
 };
 
-const DeniedAddOwnerIntentHandler = {
+const DeniedRemoveOwnerIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent'
+            && handlerInput.requestEnvelope.request.intent.name === 'RemoveOwnerIntent'
             && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
 	},
 	handle(handlerInput) {
@@ -79,10 +79,10 @@ const DeniedAddOwnerIntentHandler = {
 	},
 };
 
-const InProgressAddOwnerIntentHandler = {
+const InProgressRemoveOwnerIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent'
+            && handlerInput.requestEnvelope.request.intent.name === 'RemoveOwnerIntent'
             && handlerInput.requestEnvelope.request.dialogState !== 'COMPLETED';
 	},
 	handle(handlerInput) {
@@ -90,7 +90,7 @@ const InProgressAddOwnerIntentHandler = {
 		const intentSlots = intent.slots;
 
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
-			return resolveUser(handlerInput, 'username', 'choice');
+			return resolveUserWithRole(handlerInput, 'username', 'choice', 'owner');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
 			return resolveChannel(handlerInput, 'channelname', 'choice');
 		}
@@ -102,8 +102,8 @@ const InProgressAddOwnerIntentHandler = {
 };
 
 module.exports = {
-	StartedAddOwnerIntentHandler,
-	AddOwnerIntentHandler,
-	DeniedAddOwnerIntentHandler,
-	InProgressAddOwnerIntentHandler,
+	StartedRemoveOwnerIntentHandler,
+	RemoveOwnerIntentHandler,
+	DeniedRemoveOwnerIntentHandler,
+	InProgressRemoveOwnerIntentHandler,
 };

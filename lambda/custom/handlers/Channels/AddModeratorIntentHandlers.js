@@ -1,12 +1,12 @@
 const Alexa = require('ask-sdk-core');
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, addOwner } = require('../../helperFunctions');
+const { login, addModerator } = require('../../helperFunctions');
 const { resolveChannel, resolveUser } = require('../../utils');
 
-const StartedAddOwnerIntentHandler = {
+const StartedAddModeratorIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-        handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent' &&
+        handlerInput.requestEnvelope.request.intent.name === 'AddModeratorIntent' &&
         handlerInput.requestEnvelope.request.dialogState === 'STARTED';
 	},
 	handle(handlerInput) {
@@ -33,10 +33,10 @@ const StartedAddOwnerIntentHandler = {
 	},
 };
 
-const AddOwnerIntentHandler = {
+const AddModeratorIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AddOwnerIntent'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AddModeratorIntent'
             && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
 	async handle(handlerInput) {
@@ -49,7 +49,7 @@ const AddOwnerIntentHandler = {
 
 		const headers = await login(accessToken);
 
-		const speakOutput = await addOwner(sessionAttributes.channel.id, sessionAttributes.user.id, sessionAttributes.channel.name, sessionAttributes.user.name, sessionAttributes.channel.type, headers);
+		const speakOutput = await addModerator(sessionAttributes.channel.id, sessionAttributes.user.id, sessionAttributes.channel.name, sessionAttributes.user.name, sessionAttributes.channel.type, headers);
 		const repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
@@ -60,10 +60,10 @@ const AddOwnerIntentHandler = {
 	},
 };
 
-const DeniedAddOwnerIntentHandler = {
+const DeniedAddModeratorIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent'
+            && handlerInput.requestEnvelope.request.intent.name === 'AddModeratorIntent'
             && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
 	},
 	handle(handlerInput) {
@@ -79,10 +79,10 @@ const DeniedAddOwnerIntentHandler = {
 	},
 };
 
-const InProgressAddOwnerIntentHandler = {
+const InProgressAddModeratorIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent'
+            && handlerInput.requestEnvelope.request.intent.name === 'AddModeratorIntent'
             && handlerInput.requestEnvelope.request.dialogState !== 'COMPLETED';
 	},
 	handle(handlerInput) {
@@ -102,8 +102,8 @@ const InProgressAddOwnerIntentHandler = {
 };
 
 module.exports = {
-	StartedAddOwnerIntentHandler,
-	AddOwnerIntentHandler,
-	DeniedAddOwnerIntentHandler,
-	InProgressAddOwnerIntentHandler,
+	StartedAddModeratorIntentHandler,
+	AddModeratorIntentHandler,
+	DeniedAddModeratorIntentHandler,
+	InProgressAddModeratorIntentHandler,
 };
