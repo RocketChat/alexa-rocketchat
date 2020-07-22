@@ -162,6 +162,11 @@ const APLLocalisationRequestInterceptor = require('./handlers/Interceptors/APLLo
 
 const { HintGenerationResponseInterceptor } = require('./handlers/Interceptors/HintGenerationResponseInterceptor');
 
+const {
+	DeniedChangeStatusIntentHandler,
+	ChangeStatusIntentHandler,
+} = require('./handlers/General/ChangeStatusIntentHandlers');
+
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
 const buildSkill = (skillBuilder) =>
@@ -238,6 +243,8 @@ const buildSkill = (skillBuilder) =>
 			KickUserIntentHandler,
 			DeniedKickUserIntentHandler,
 			InProgressKickUserIntentHandler,
+			DeniedChangeStatusIntentHandler,
+			ChangeStatusIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,
