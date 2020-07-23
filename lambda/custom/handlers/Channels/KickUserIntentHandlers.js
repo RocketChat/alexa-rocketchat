@@ -1,12 +1,12 @@
 const Alexa = require('ask-sdk-core');
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, addOwner } = require('../../helperFunctions');
+const { login, kickUser } = require('../../helperFunctions');
 const { resolveChannel, resolveUser } = require('../../utils');
 
-const StartedAddOwnerIntentHandler = {
+const StartedKickUserIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-        handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent' &&
+        handlerInput.requestEnvelope.request.intent.name === 'KickUserIntent' &&
         handlerInput.requestEnvelope.request.dialogState === 'STARTED';
 	},
 	handle(handlerInput) {
@@ -22,9 +22,9 @@ const StartedAddOwnerIntentHandler = {
 		delete sessionAttributes.similarChannels;
 
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
-			return resolveUser(handlerInput, 'username', 'choice');
+			return resolveUser(handlerInput, 'username', 'selection');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
-			return resolveChannel(handlerInput, 'channelname', 'choice');
+			return resolveChannel(handlerInput, 'channelname', 'selection');
 		}
 
 		return handlerInput.responseBuilder
@@ -33,10 +33,10 @@ const StartedAddOwnerIntentHandler = {
 	},
 };
 
-const AddOwnerIntentHandler = {
+const KickUserIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AddOwnerIntent'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'KickUserIntent'
             && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
 	async handle(handlerInput) {
@@ -49,7 +49,7 @@ const AddOwnerIntentHandler = {
 
 		const headers = await login(accessToken);
 
-		const speakOutput = await addOwner(sessionAttributes.channel.id, sessionAttributes.user.id, sessionAttributes.channel.name, sessionAttributes.user.name, sessionAttributes.channel.type, headers);
+		const speakOutput = await kickUser(sessionAttributes.channel.id, sessionAttributes.user.id, sessionAttributes.channel.name, sessionAttributes.user.name, sessionAttributes.channel.type, headers);
 		const repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
@@ -60,15 +60,15 @@ const AddOwnerIntentHandler = {
 	},
 };
 
-const DeniedAddOwnerIntentHandler = {
+const DeniedKickUserIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent'
+            && handlerInput.requestEnvelope.request.intent.name === 'KickUserIntent'
             && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
 	},
 	handle(handlerInput) {
 
-		const speakOutput = ri('ROOM_ROLES.DENIED');
+		const speakOutput = ri('INVITE_USER.DENIED');
 		const repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
@@ -79,10 +79,10 @@ const DeniedAddOwnerIntentHandler = {
 	},
 };
 
-const InProgressAddOwnerIntentHandler = {
+const InProgressKickUserIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent'
+            && handlerInput.requestEnvelope.request.intent.name === 'KickUserIntent'
             && handlerInput.requestEnvelope.request.dialogState !== 'COMPLETED';
 	},
 	handle(handlerInput) {
@@ -90,9 +90,9 @@ const InProgressAddOwnerIntentHandler = {
 		const intentSlots = intent.slots;
 
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
-			return resolveUser(handlerInput, 'username', 'choice');
+			return resolveUser(handlerInput, 'username', 'selection');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
-			return resolveChannel(handlerInput, 'channelname', 'choice');
+			return resolveChannel(handlerInput, 'channelname', 'selection');
 		}
 
 		return handlerInput.responseBuilder
@@ -102,8 +102,8 @@ const InProgressAddOwnerIntentHandler = {
 };
 
 module.exports = {
-	StartedAddOwnerIntentHandler,
-	AddOwnerIntentHandler,
-	DeniedAddOwnerIntentHandler,
-	InProgressAddOwnerIntentHandler,
+	StartedKickUserIntentHandler,
+	KickUserIntentHandler,
+	DeniedKickUserIntentHandler,
+	InProgressKickUserIntentHandler,
 };
