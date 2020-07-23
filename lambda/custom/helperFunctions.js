@@ -424,35 +424,89 @@ const addAll = async (channelName, roomid, headers) =>
 			}
 		});
 
-const archiveChannel = async (channelName, roomid, headers) =>
-	await axios
-		.post(
-			apiEndpoints.archivechannelurl, {
-				roomId: roomid,
-			}, {
+const archiveChannel = async (roomId, roomname, type, headers) => {
+	try {
+		let response;
+
+		if (type === 'c') {
+			response = await axios.post(apiEndpoints.archivechannelurl, {
+				roomId,
+			},
+			{
 				headers,
-			}
-		)
-		.then((res) => res.data)
-		.then((res) => {
-			if (res.success === true) {
-				return ri('ARCHIVE_CHANNEL.SUCCESS', {
-					channelName,
-				});
-			} else {
-				return ri('ARCHIVE_CHANNEL.ERROR');
-			}
-		})
-		.catch((err) => {
-			console.log(err.message);
-			if (err.response.status === 401) {
-				return ri('ARCHIVE_CHANNEL.AUTH_ERROR');
-			} else {
-				return ri('ARCHIVE_CHANNEL.ERROR_NOT_FOUND', {
-					channelName,
-				});
-			}
-		});
+			}).then((res) => res.data);
+		} else if (type === 'p') {
+			response = await axios.post(apiEndpoints.archivegroupurl, {
+				roomId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		}
+
+
+		if (response.success) { return ri('ARCHIVE_CHANNEL.SUCCESS', { roomname }); }
+
+		return ri('ARCHIVE_CHANNEL.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ARCHIVE_CHANNEL.ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ARCHIVE_CHANNEL.ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-not-authorized') {
+			return ri('ARCHIVE_CHANNEL.NOT_AUTHORISED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-archived') {
+			return ri('ARCHIVE_CHANNEL.ROOM_ALREAD_ARCHIVED', { roomname });
+		} else if (err.response.status === 401) {
+			return ri('ARCHIVE_CHANNEL.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('ARCHIVE_CHANNEL.ERROR');
+		}
+	}
+};
+
+const unarchiveChannel = async (roomId, roomname, type, headers) => {
+	try {
+		let response;
+
+		if (type === 'c') {
+			response = await axios.post(apiEndpoints.unarchivechannelurl, {
+				roomId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		} else if (type === 'p') {
+			response = await axios.post(apiEndpoints.unarchivegroupurl, {
+				roomId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		}
+
+
+		if (response.success) { return ri('ARCHIVE_CHANNEL.UNARCHIVE_SUCCESS', { roomname }); }
+
+		return ri('ARCHIVE_CHANNEL.UNARCHVIE_ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ARCHIVE_CHANNEL.ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ARCHIVE_CHANNEL.ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-not-authorized') {
+			return ri('ARCHIVE_CHANNEL.NOT_AUTHORISED');
+		} else if (err.response.status === 401) {
+			return ri('ARCHIVE_CHANNEL.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('ARCHIVE_CHANNEL.UNARCHVIE_ERROR');
+		}
+	}
+};
 
 function replaceWhitespacesFunc(str) {
 	return removeWhitespace(str);
@@ -1213,6 +1267,8 @@ module.exports.getLastMessageType = getLastMessageType;
 module.exports.resolveChannelname = resolveChannelname;
 module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
+module.exports.archiveChannel = archiveChannel;
+module.exports.unarchiveChannel = unarchiveChannel;
 module.exports.addLeader = addLeader;
 module.exports.getUsersWithRolesFromRoom = getUsersWithRolesFromRoom;
 module.exports.removeLeader = removeLeader;

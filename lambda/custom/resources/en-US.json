@@ -92,12 +92,24 @@
         "ERROR": "Sorry, I am unable to add all users to the channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I am unable to add all users to channel {channelName} right now."
     },
+    "ADD_OWNER": {
+        "SUCCESS": "{userName} is now the owner of {channelName}.",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
+        "CARD_TITLE": "Add Owner",
+        "ERROR": "Sorry, I couldn't assign a owner to the channel right now.",
+        "ERROR_NOT_FOUND": "Sorry, I couldn't assign a owner to channel {channelName} right now."
+    },
     "ARCHIVE_CHANNEL": {
-        "SUCCESS": "{channelName} is now archived.",
+        "SUCCESS": "{roomname} is now archived.",
+        "UNARCHIVE_SUCCESS": "{roomname} is now unarchived.",
+        "NOT_AUTHORISED": "You cannot perform this operation.",
+        "ROOM_ALREAD_ARCHIVED": "{roomname} is already archived.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Archive Channel",
+        "DENIED": "Okay.",
+        "UNARCHVIE_ERROR": "Sorry, I couldn't unarchive this channel right now.",
         "ERROR": "Sorry, I couldn't archive this channel right now.",
-        "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
+        "ERROR_NOT_FOUND": "The room {roomname} does not exist."
     },
     "RESOLVE_CHANNEL":{
         "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",

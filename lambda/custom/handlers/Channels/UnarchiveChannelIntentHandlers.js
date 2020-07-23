@@ -1,13 +1,12 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, archiveChannel } = require('../../helperFunctions');
+const { login, unarchiveChannel } = require('../../helperFunctions');
 const { supportsAPL, resolveChannel } = require('../../utils');
 const titleMessageBoxTemplate = require('../../APL/templates/titleMessageBoxTemplate');
 
-
-const StartedArchiveChannelIntentHandler = {
+const StartedUnarchiveChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-        handlerInput.requestEnvelope.request.intent.name === 'ArchiveChannelIntent' &&
+        handlerInput.requestEnvelope.request.intent.name === 'UnarchiveChannelIntent' &&
         handlerInput.requestEnvelope.request.dialogState === 'STARTED';
 	},
 	async handle(handlerInput) {
@@ -21,10 +20,10 @@ const StartedArchiveChannelIntentHandler = {
 	},
 };
 
-const InProgressArchiveChannelIntentHandler = {
+const InProgressUnarchiveChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-          handlerInput.requestEnvelope.request.intent.name === 'ArchiveChannelIntent' &&
+          handlerInput.requestEnvelope.request.intent.name === 'UnarchiveChannelIntent' &&
           handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
           handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
 	},
@@ -33,10 +32,10 @@ const InProgressArchiveChannelIntentHandler = {
 	},
 };
 
-const DeniedArchiveChannelIntentHandler = {
+const DeniedUnarchiveChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-          handlerInput.requestEnvelope.request.intent.name === 'ArchiveChannelIntent' &&
+          handlerInput.requestEnvelope.request.intent.name === 'UnarchiveChannelIntent' &&
           handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
           handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
 	},
@@ -52,10 +51,10 @@ const DeniedArchiveChannelIntentHandler = {
 	},
 };
 
-const ArchiveChannelIntentHandler = {
+const UnarchiveChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-              handlerInput.requestEnvelope.request.intent.name === 'ArchiveChannelIntent'
+              handlerInput.requestEnvelope.request.intent.name === 'UnarchiveChannelIntent'
               && handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
               && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
@@ -68,7 +67,7 @@ const ArchiveChannelIntentHandler = {
 			const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
 			const headers = await login(accessToken);
-			const speechText = await archiveChannel(sessionAttributes.channel.id, sessionAttributes.channel.name, sessionAttributes.channel.type, headers);
+			const speechText = await unarchiveChannel(sessionAttributes.channel.id, sessionAttributes.channel.name, sessionAttributes.channel.type, headers);
 
 			const repromptText = ri('GENERIC_REPROMPT');
 
@@ -108,8 +107,8 @@ const ArchiveChannelIntentHandler = {
 };
 
 module.exports = {
-	StartedArchiveChannelIntentHandler,
-	InProgressArchiveChannelIntentHandler,
-	DeniedArchiveChannelIntentHandler,
-	ArchiveChannelIntentHandler,
+	StartedUnarchiveChannelIntentHandler,
+	InProgressUnarchiveChannelIntentHandler,
+	DeniedUnarchiveChannelIntentHandler,
+	UnarchiveChannelIntentHandler,
 };
