@@ -1,12 +1,12 @@
 const Alexa = require('ask-sdk-core');
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, addOwner } = require('../../helperFunctions');
+const { login, addLeader } = require('../../helperFunctions');
 const { resolveChannel, resolveUser } = require('../../utils');
 
-const StartedAddOwnerIntentHandler = {
+const StartedAddLeaderIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-        handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent' &&
+        handlerInput.requestEnvelope.request.intent.name === 'AddLeaderIntent' &&
         handlerInput.requestEnvelope.request.dialogState === 'STARTED';
 	},
 	handle(handlerInput) {
@@ -33,10 +33,10 @@ const StartedAddOwnerIntentHandler = {
 	},
 };
 
-const AddOwnerIntentHandler = {
+const AddLeaderIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AddOwnerIntent'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AddLeaderIntent'
             && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
 	async handle(handlerInput) {
@@ -49,7 +49,7 @@ const AddOwnerIntentHandler = {
 
 		const headers = await login(accessToken);
 
-		const speakOutput = await addOwner(sessionAttributes.channel.id, sessionAttributes.user.id, sessionAttributes.channel.name, sessionAttributes.user.name, sessionAttributes.channel.type, headers);
+		const speakOutput = await addLeader(sessionAttributes.channel.id, sessionAttributes.user.id, sessionAttributes.channel.name, sessionAttributes.user.name, sessionAttributes.channel.type, headers);
 		const repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
@@ -60,15 +60,15 @@ const AddOwnerIntentHandler = {
 	},
 };
 
-const DeniedAddOwnerIntentHandler = {
+const DeniedAddLeaderIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent'
+            && handlerInput.requestEnvelope.request.intent.name === 'AddLeaderIntent'
             && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
 	},
 	handle(handlerInput) {
 
-		const speakOutput = ri('ROOM_ROLES.DENIED');
+		const speakOutput = ri('ROOM_ROLES.ADD_LEADER_DENIED');
 		const repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
@@ -79,10 +79,10 @@ const DeniedAddOwnerIntentHandler = {
 	},
 };
 
-const InProgressAddOwnerIntentHandler = {
+const InProgressAddLeaderIntentHandler = {
 	canHandle(handlerInput) {
 		return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'AddOwnerIntent'
+            && handlerInput.requestEnvelope.request.intent.name === 'AddLeaderIntent'
             && handlerInput.requestEnvelope.request.dialogState !== 'COMPLETED';
 	},
 	handle(handlerInput) {
@@ -102,8 +102,8 @@ const InProgressAddOwnerIntentHandler = {
 };
 
 module.exports = {
-	StartedAddOwnerIntentHandler,
-	AddOwnerIntentHandler,
-	DeniedAddOwnerIntentHandler,
-	InProgressAddOwnerIntentHandler,
+	StartedAddLeaderIntentHandler,
+	AddLeaderIntentHandler,
+	DeniedAddLeaderIntentHandler,
+	InProgressAddLeaderIntentHandler,
 };

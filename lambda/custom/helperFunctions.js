@@ -161,11 +161,11 @@ const createChannel = async (channelName, headers) =>
 			}
 		});
 
-const deleteChannel = async (channelName, headers) =>
-	await axios
+const deleteRoom = (roomDetails, headers) =>
+	axios
 		.post(
-			apiEndpoints.deletechannelurl, {
-				roomName: channelName,
+			roomDetails.type === 'c' ? apiEndpoints.deletechannelurl : apiEndpoints.deletegroupurl, {
+				roomName: roomDetails.name,
 			}, {
 				headers,
 			}
@@ -174,11 +174,11 @@ const deleteChannel = async (channelName, headers) =>
 		.then((res) => {
 			if (res.success === true) {
 				return ri('DELETE_CHANNEL.SUCCESS', {
-					channelName,
+					channelName: roomDetails.name, success: true,
 				});
 			} else {
 				return ri('DELETE_CHANNEL.ERROR', {
-					channelName,
+					channelName: roomDetails.name,
 				});
 			}
 		})
@@ -186,13 +186,15 @@ const deleteChannel = async (channelName, headers) =>
 			console.log(err.message);
 			if (err.response.data.errorType === 'error-room-not-found') {
 				return ri('DELETE_CHANNEL.ERROR_NOT_FOUND', {
-					channelName,
+					channelName: roomDetails.name,
 				});
+			} else if (err.response.data.errorType === 'error-not-allowed') {
+				return ri('DELETE_CHANNEL.NOT_AUTHORISED');
 			} else if (err.response.status === 401) {
 				return ri('DELETE_CHANNEL.AUTH_ERROR');
 			} else {
 				return ri('DELETE_CHANNEL.ERROR', {
-					channelName,
+					channelName: roomDetails.name,
 				});
 			}
 		});
@@ -392,38 +394,6 @@ const getRoomId = async (channelName, headers) =>
 			console.log(err.message);
 		});
 
-const makeModerator = async (userName, channelName, userid, roomid, headers) =>
-	await axios
-		.post(
-			apiEndpoints.makemoderatorurl, {
-				userId: userid,
-				roomId: roomid,
-			}, {
-				headers,
-			}
-		)
-		.then((res) => res.data)
-		.then((res) => {
-			if (res.success === true) {
-				return ri('MAKE_MODERATOR.SUCCESS', {
-					userName,
-					channelName,
-				});
-			} else {
-				return ri('MAKE_MODERATOR.ERROR');
-			}
-		})
-		.catch((err) => {
-			console.log(err.message);
-			if (err.response.status === 401) {
-				return ri('MAKE_MODERATOR.AUTH_ERROR');
-			} else {
-				return ri('MAKE_MODERATOR.ERROR_NOT_FOUND', {
-					channelName,
-				});
-			}
-		});
-
 const addAll = async (channelName, roomid, headers) =>
 	await axios
 		.post(
@@ -449,38 +419,6 @@ const addAll = async (channelName, roomid, headers) =>
 				return ri('ADD_ALL_TO_CHANNEL.AUTH_ERROR');
 			} else {
 				return ri('ADD_ALL_TO_CHANNEL.ERROR_NOT_FOUND', {
-					channelName,
-				});
-			}
-		});
-
-const addOwner = async (userName, channelName, userid, roomid, headers) =>
-	await axios
-		.post(
-			apiEndpoints.addownerurl, {
-				userId: userid,
-				roomId: roomid,
-			}, {
-				headers,
-			}
-		)
-		.then((res) => res.data)
-		.then((res) => {
-			if (res.success === true) {
-				return ri('ADD_OWNER.SUCCESS', {
-					userName,
-					channelName,
-				});
-			} else {
-				return ri('ADD_OWNER.ERROR');
-			}
-		})
-		.catch((err) => {
-			console.log(err.message);
-			if (err.response.status === 401) {
-				return ri('ADD_OWNER.AUTH_ERROR');
-			} else {
-				return ri('ADD_OWNER.ERROR_NOT_FOUND', {
 					channelName,
 				});
 			}
@@ -623,42 +561,6 @@ const createGroup = async (channelName, headers) =>
 			}
 		});
 
-const deleteGroup = async (channelName, headers) =>
-	await axios
-		.post(
-			apiEndpoints.deletegroupurl, {
-				roomName: channelName,
-			}, {
-				headers,
-			}
-		)
-		.then((res) => res.data)
-		.then((res) => {
-			if (res.success === true) {
-				return ri('DELETE_CHANNEL.SUCCESS', {
-					channelName,
-				});
-			} else {
-				return ri('DELETE_CHANNEL.ERROR', {
-					channelName,
-				});
-			}
-		})
-		.catch((err) => {
-			console.log(err.message);
-			if (err.response.data.errorType === 'error-room-not-found') {
-				return ri('DELETE_CHANNEL.ERROR_NOT_FOUND', {
-					channelName,
-				});
-			} else if (err.response.status === 401) {
-				return ri('DELETE_CHANNEL.AUTH_ERROR');
-			} else {
-				return ri('DELETE_CHANNEL.ERROR', {
-					channelName,
-				});
-			}
-		});
-
 const getGroupId = async (channelName, headers) =>
 	await axios
 		.get(`${ apiEndpoints.groupinfourl }${ channelName }`, {
@@ -668,70 +570,6 @@ const getGroupId = async (channelName, headers) =>
 		.then((res) => `${ res.group._id }`)
 		.catch((err) => {
 			console.log(err.message);
-		});
-
-const addGroupModerator = async (userName, channelName, userid, roomid, headers) =>
-	await axios
-		.post(
-			apiEndpoints.addgroupmoderatorurl, {
-				userId: userid,
-				roomId: roomid,
-			}, {
-				headers,
-			}
-		)
-		.then((res) => res.data)
-		.then((res) => {
-			if (res.success === true) {
-				return ri('MAKE_MODERATOR.SUCCESS', {
-					userName,
-					channelName,
-				});
-			} else {
-				return ri('MAKE_MODERATOR.ERROR');
-			}
-		})
-		.catch((err) => {
-			console.log(err.message);
-			if (err.response.status === 401) {
-				return ri('MAKE_MODERATOR.AUTH_ERROR');
-			} else {
-				return ri('MAKE_MODERATOR.ERROR_NOT_FOUND', {
-					channelName,
-				});
-			}
-		});
-
-const addGroupOwner = async (userName, channelName, userid, roomid, headers) =>
-	await axios
-		.post(
-			apiEndpoints.addgroupownerurl, {
-				userId: userid,
-				roomId: roomid,
-			}, {
-				headers,
-			}
-		)
-		.then((res) => res.data)
-		.then((res) => {
-			if (res.success === true) {
-				return ri('ADD_OWNER.SUCCESS', {
-					userName,
-					channelName,
-				});
-			} else {
-				return ri('ADD_OWNER.ERROR');
-			}
-		})
-		.catch((err) => {
-			console.log(err.message);
-			if (err.response.status === 401) {
-				return ri('ADD_OWNER.AUTH_ERROR');
-			} else {
-				return ri('ADD_OWNER.ERROR_NOT_FOUND', {
-					channelName,
-				});
-			}
 		});
 
 const postGroupMessage = async (roomid, message, headers) =>
@@ -953,9 +791,14 @@ const resolveUsername = async (username, headers, single = false) => {
 			.then((subscriptions) => subscriptions.filter((subscription) => subscription.t === 'd'))
 			.then((subscriptions) => subscriptions.map((subscription) => ({
 				name: subscription.name,
-				id: subscription._id,
+				// the rid property is a combination of id's of two users involved in the direct chat
+				// removing the id of the current user from rid will give id of the other user
+				id: subscription.rid.replace(subscription.u._id, ''),
 				type: subscription.t,
 			})));
+
+		// Note: A different method can be used to get the list of direct message users from contacts
+		// const subscriptions must be of the form [{name: 'username', id: 'user id', type: 'd'}, ...]
 
 		let bestIndex = 0;
 		let bestMatchingUser;
@@ -989,13 +832,413 @@ const customLog = async (data) => {
 	}
 };
 
+const leaveChannel = async (roomId, roomname, type, headers) => {
+	try {
+		let response;
+		if (type === 'c') {
+			response = await axios.post(apiEndpoints.leavechannelurl, {
+				roomId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		} else if (type === 'p') {
+			response = await axios.post(apiEndpoints.leavegroupurl, {
+				roomId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		}
+		if (response.success) { return ri('LEAVE_CHANNEL.SUCCESS', { roomname }); }
+
+		return ri('LEAVE_CHANNEL.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
+			return ri('LEAVE_CHANNEL.USER_NOT_IN_ROOM', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-you-are-last-owner') {
+			return ri('LEAVE_CHANNEL.ERROR_LAST_OWNER');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('LEAVE_CHANNEL.ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('LEAVE_CHANNEL.ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.status === 401) {
+			return ri('AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('LEAVE_CHANNEL.ERROR');
+		}
+	}
+};
+
+const addLeader = async (roomId, userId, roomname, username, type, headers) => {
+	try {
+		let response;
+		if (type === 'c') {
+			response = await axios.post(apiEndpoints.addleadertochannelurl, {
+				roomId, userId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		} else if (type === 'p') {
+			response = await axios.post(apiEndpoints.addleadertogroupurl, {
+				roomId, userId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		}
+
+		if (response.success) {
+			return ri('ROOM_ROLES.ADD_LEADER_SUCCESS', { username, roomname });
+		}
+
+		return ri('ROOM_ROLES.ERROR');
+
+	} catch (err) {
+		console.log(err);
+		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+			return ri('ROOM_ROLES.ERROR_NOT_ALLOWED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+			return ri('ROOM_ROLES.INVALID_USER', { username });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-already-leader') {
+			return ri('ROOM_ROLES.ALREADY_LEADER', { username, roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
+			return ri('ROOM_ROLES.USER_NOT_MEMBER', { username, roomname });
+		} else if (err.response.status === 401) {
+			return ri('ROOM_ROLES.AUTH_ERROR');
+		} else {
+			return ri('ROOM_ROLES.ERROR');
+		}
+	}
+};
+
+const getUsersWithRolesFromRoom = async (recognisedUsername, roomId, type, role, headers) => {
+	try {
+		let response;
+		if (type === 'c') {
+			response = await axios.get(`${ apiEndpoints.getrolesfromchannelurl }?roomId=${ roomId }`, {
+				headers,
+			}).then((res) => res.data);
+		} else if (type === 'p') {
+			response = await axios.get(`${ apiEndpoints.getrolesfromgroupurl }?roomId=${ roomId }`, {
+				headers,
+			}).then((res) => res.data);
+		}
+
+		const users = [];
+		for (const user of response.roles) {
+			if (user.roles.includes(role)) {
+				users.push(user.u);
+			}
+		}
+
+		if (!response.success) {
+			return 'error';
+		}
+
+		const similarUsers = users.filter((user) => stringSimilar.compareTwoStrings(recognisedUsername, user.username) > envVariables.lowestSimilarityIndex);
+
+		console.log(similarUsers);
+		return similarUsers;
+
+	// all the below errors will not be reached with the current conversation flow
+	} catch (err) {
+		console.log(err);
+		if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
+			return 'You are not part of this room';
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return 'no such room';
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return 'no such room';
+		} else if (err.response.status === 401) {
+			return 'login before using this intent';
+		} else {
+			return 'error';
+		}
+	}
+
+};
+
+const removeLeader = async (roomId, userId, roomname, username, type, headers) => {
+	try {
+		let response;
+		if (type === 'c') {
+			response = await axios.post(apiEndpoints.removeleaderfromchannelurl, {
+				roomId, userId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		} else if (type === 'p') {
+			response = await axios.post(apiEndpoints.removeleaderfromgroupurl, {
+				roomId, userId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		}
+
+
+		if (response.success) { return ri('ROOM_ROLES.REMOVE_LEADER_SUCCESS', { username, roomname }); }
+
+		return ri('ROOM_ROLES.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+			return ri('ROOM_ROLES.ERROR_NOT_ALLOWED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+			return ri('ROOM_ROLES.INVALID_USER', { username });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-leader') {
+			return ri('ROOM_ROLES.USER_NOT_LEADER', { username, roomname });
+		} else if (err.response.status === 401) {
+			return ri('ROOM_ROLES.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('ROOM_ROLES.ERROR');
+		}
+	}
+
+};
+
+const removeOwner = async (roomId, userId, roomname, username, type, headers) => {
+	try {
+		const url = type === 'c' ? apiEndpoints.removeownerfromchannelurl : apiEndpoints.removeownerfromgroupurl;
+		const response = await axios.post(url, {
+			roomId, userId,
+		},
+		{
+			headers,
+		}).then((res) => res.data);
+		if (response.success) { return ri('ROOM_ROLES.REMOVE_OWNER_SUCCESS', { username, roomname }); }
+
+		return ri('ROOM_ROLES.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+			return ri('ROOM_ROLES.ERROR_NOT_ALLOWED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-remove-last-owner') {
+			return ri('ROOM_ROLES.ERROR_REMOVE_LAST_OWNER');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+			return ri('ROOM_ROLES.INVALID_USER', { username });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-owner') {
+			return ri('ROOM_ROLES.USER_NOT_OWNER', { username, roomname });
+		} else if (err.response.status === 401) {
+			return ri('ROOM_ROLES.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('ROOM_ROLES.ERROR');
+		}
+	}
+
+};
+
+const removeModerator = async (roomId, userId, roomname, username, type, headers) => {
+	try {
+		const url = type === 'c' ? apiEndpoints.removemoderatorfromchannelurl : apiEndpoints.removemoderatorfromgroupurl;
+
+		const response = await axios.post(url, {
+			roomId, userId,
+		},
+		{
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) { return ri('ROOM_ROLES.REMOVE_MODERATOR_SUCCESS', { username, roomname }); }
+
+		return ri('ROOM_ROLES.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+			return ri('ROOM_ROLES.ERROR_NOT_ALLOWED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+			return ri('ROOM_ROLES.INVALID_USER', { username });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-moderator') {
+			return ri('ROOM_ROLES.USER_NOT_MODERATOR', { username, roomname });
+		} else if (err.response.status === 401) {
+			return ri('ROOM_ROLES.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('ROOM_ROLES.ERROR');
+		}
+	}
+};
+
+const addOwner = async (roomId, userId, roomname, username, type, headers) => {
+	try {
+		const url = type === 'c' ? apiEndpoints.addownertochannelurl : apiEndpoints.addownertogroupurl;
+
+		const response = await axios.post(url, {
+			roomId, userId,
+		},
+		{
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) {
+			return ri('ROOM_ROLES.ADD_OWNER_SUCCESS', { username, roomname });
+		}
+
+		return ri('ROOM_ROLES.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+			return ri('ROOM_ROLES.ERROR_NOT_ALLOWED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+			return ri('ROOM_ROLES.INVALID_USER', { username });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-already-owner') {
+			return ri('ROOM_ROLES.ALREADY_OWNER', { username, roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
+			return ri('ROOM_ROLES.USER_NOT_MEMBER', { username, roomname });
+		} else if (err.response.status === 401) {
+			return ri('ROOM_ROLES.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('ROOM_ROLES.ERROR');
+		}
+	}
+};
+
+const addModerator = async (roomId, userId, roomname, username, type, headers) => {
+	try {
+		const url = type === 'c' ? apiEndpoints.addmoderatortochannelurl : apiEndpoints.addmoderatortogroupurl;
+
+		const response = await axios.post(url, {
+			roomId, userId,
+		},
+		{
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) {
+			return ri('ROOM_ROLES.ADD_MODERATOR_SUCCESS', { username, roomname });
+		}
+
+		return ri('ROOM_ROLES.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+			return ri('ROOM_ROLES.ERROR_NOT_ALLOWED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ROOM_ROLES.ERROR_ROOM_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+			return ri('ROOM_ROLES.INVALID_USER', { username });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-already-moderator') {
+			return ri('ROOM_ROLES.ALREADY_MODERATOR', { username, roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
+			return ri('ROOM_ROLES.USER_NOT_MEMBER', { username, roomname });
+		} else if (err.response.status === 401) {
+			return ri('ROOM_ROLES.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('ROOM_ROLES.ERROR');
+		}
+	}
+};
+
+const inviteUser = async (roomId, userId, roomname, username, type, headers) => {
+	try {
+		const url = type === 'c' ? apiEndpoints.invitetochannelurl : apiEndpoints.invitetogroupurl;
+
+		const response = await axios.post(url, {
+			roomId, userId,
+		},
+		{
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) { return ri('INVITE_USER.SUCCESS', { username, roomname }); }
+
+		return ri('INVITE_USER.ERROR');
+
+	} catch (err) {
+		console.log(err);
+		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+			return ri('ERROR_NOT_ALLOWED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+			return ri('ERROR_INVALID_USER', { username });
+		} else if (err.response.status === 401) {
+			return ri('AUTH_ERROR');
+		} else {
+			return ri('INVITE_USER.ERROR');
+		}
+	}
+};
+
+const kickUser = async (roomId, userId, roomname, username, type, headers) => {
+	try {
+		const url = type === 'c' ? apiEndpoints.kickuserfromchannelurl : apiEndpoints.kickuserfromgroupurl;
+
+		const response = await axios.post(url, {
+			roomId, userId,
+		},
+		{
+			headers,
+		}).then((res) => res.data);
+
+		console.log(response);
+
+		if (response.success) { return ri('KICK_USER.SUCCESS', { username, roomname }); }
+
+		return ri('KICK_USER.ERROR');
+
+	} catch (err) {
+		console.log(err);
+		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+			return ri('ERROR_NOT_ALLOWED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+			return ri('ERROR_INVALID_USER', { username });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-you-are-last-owner') {
+			return ri('KICK_USER.ERROR_YOU_ARE_LAST_OWNER');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
+			return ri('KICK_USER.ERROR_USER_NOT_IN_ROOM', { username, roomname });
+		} else if (err.response.status === 401) {
+			return ri('AUTH_ERROR');
+		} else {
+			return ri('KICK_USER.ERROR');
+		}
+	}
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
 module.exports.createPersonalAccessToken = createPersonalAccessToken;
 module.exports.channelList = channelList;
 module.exports.createChannel = createChannel;
-module.exports.deleteChannel = deleteChannel;
+module.exports.deleteRoom = deleteRoom;
 module.exports.postMessage = postMessage;
 module.exports.channelLastMessage = channelLastMessage;
 module.exports.getLastMessageFileURL = getLastMessageFileURL;
@@ -1003,7 +1246,6 @@ module.exports.getLastMessageFileDowloadURL = getLastMessageFileDowloadURL;
 module.exports.getUserId = getUserId;
 module.exports.getUserName = getUserName;
 module.exports.getRoomId = getRoomId;
-module.exports.makeModerator = makeModerator;
 module.exports.addAll = addAll;
 module.exports.addOwner = addOwner;
 module.exports.archiveChannel = archiveChannel;
@@ -1014,10 +1256,7 @@ module.exports.replaceWhitespacesDots = replaceWhitespacesDots;
 module.exports.emojiTranslateFunc = emojiTranslateFunc;
 module.exports.readMessages = readMessages;
 module.exports.createGroup = createGroup;
-module.exports.deleteGroup = deleteGroup;
 module.exports.getGroupId = getGroupId;
-module.exports.addGroupModerator = addGroupModerator;
-module.exports.addGroupOwner = addGroupOwner;
 module.exports.postGroupMessage = postGroupMessage;
 module.exports.groupLastMessage = groupLastMessage;
 module.exports.getGroupUnreadCounter = getGroupUnreadCounter;
@@ -1030,3 +1269,12 @@ module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
 module.exports.archiveChannel = archiveChannel;
 module.exports.unarchiveChannel = unarchiveChannel;
+module.exports.addLeader = addLeader;
+module.exports.getUsersWithRolesFromRoom = getUsersWithRolesFromRoom;
+module.exports.removeLeader = removeLeader;
+module.exports.removeOwner = removeOwner;
+module.exports.removeModerator = removeModerator;
+module.exports.addModerator = addModerator;
+module.exports.leaveChannel = leaveChannel;
+module.exports.inviteUser = inviteUser;
+module.exports.kickUser = kickUser;

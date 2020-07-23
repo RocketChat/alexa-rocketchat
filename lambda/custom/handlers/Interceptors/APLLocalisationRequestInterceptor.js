@@ -11,15 +11,17 @@ const APLLocalisationRequestInterceptor = {
 				const resource = require(resourceFilePath);
 
 				// get the value of the requested input key
-				let output = resource[input];
+				const keys = input.split('.');
+				let output = resource;
+				for (const key of keys) {
+					output = output[key];
+				}
 				if (!output) {
 					return 'invalid';
 				}
 
-				// if there are multiple values (i.e. if it's an object), get a random value
-				if (output && typeof(output) === 'object') {
-					output = randomProperty(output);
-				}
+				// if there are multiple values, get a random value
+				output = randomProperty(output);
 
 				// replace the parameters in the value with input data
 				let key; let value;

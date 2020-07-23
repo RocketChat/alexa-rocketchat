@@ -26,7 +26,8 @@ const StartPlaybackHandler = {
 		const attributes = await attributesManager.getPersistentAttributes() || {};
 
 		const playBehavior = 'REPLACE_ALL';
-		const token = fileurl.split('/').slice(-2)[0];
+		// eslint-disable-next-line prefer-template
+		const token = 'token' + Math.random();
 		const offsetInMilliseconds = 0;
 
 		if (supportsDisplay(handlerInput)) {
