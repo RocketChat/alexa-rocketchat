@@ -861,6 +861,26 @@
                         "get unread mentions",
                         "get mentions"
                     ]
+                },
+                {
+                    "name": "ReadMentionsIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "from {channelname}",
+                                "from channel {channelname}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "read mentions",
+                        "unread mentions from channel {channelname} ",
+                        "read unread mentions from channel {channelname}",
+                        "read mentions from channel",
+                        "read unread mentions"
+                    ]
                 }
             ],
             "types": [
@@ -2801,6 +2821,23 @@
                             "prompts": {}
                         }
                     ]
+                },
+                {
+                    "name": "ReadMentionsIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.564375851330.619539757459"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -3775,6 +3812,15 @@
                     {
                         "type": "PlainText",
                         "value": "You want to remove {username} , from channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.564375851330.619539757459",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to read unread mentions from?"
                     }
                 ]
             }
