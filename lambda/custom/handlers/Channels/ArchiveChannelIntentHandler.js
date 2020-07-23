@@ -67,9 +67,6 @@ const ArchiveChannelIntentHandler = {
 			const { attributesManager } = handlerInput;
 			const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
-			// const channelName = handlerInput.requestEnvelope.request.intent.slots.channelname.value;
-
-			console.log(sessionAttributes);
 			const headers = await login(accessToken);
 			const speechText = await archiveChannel(sessionAttributes.channel.id, sessionAttributes.channel.name, sessionAttributes.channel.type, headers);
 
