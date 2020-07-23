@@ -52,4 +52,5 @@ module.exports = {
 	invitetogroupurl: `${ serverurl }/api/v1/groups.invite`,
 	kickuserfromchannelurl: `${ serverurl }/api/v1/channels.kick`,
 	kickuserfromgroupurl: `${ serverurl }/api/v1/groups.kick`,
+	getmentionedmessagesurl: `${ serverurl }/api/v1/chat.getMentionedMessages`,
 };

@@ -1211,6 +1211,56 @@ const getAllUnreadMentions = async (headers) => {
 	}
 };
 
+const getUnreadMentionsCountChannel = async (roomName, headers) => {
+	try {
+		const response = await axios.get(`${ apiEndpoints.counterurl }${ roomName }`, {
+			headers,
+		}).then((res) => res.data);
+
+		return response.userMentions;
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+const getUnreadMentionsCountGroup = async (roomId, headers) => {
+	try {
+		const response = await axios.get(`${ apiEndpoints.groupcounterurl }${ roomId }`, {
+			headers,
+		}).then((res) => res.data);
+
+		return response.userMentions;
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+const readUnreadMentions = async (roomId, roomName, count, headers) => {
+	try {
+		if (count === 0) { return ri('MENTIONS.NO_MENTIONS_ROOM', { roomName }); }
+
+		const response = await axios.get(`${ apiEndpoints.getmentionedmessagesurl }?roomId=${ roomId }&count=${ count }`, {
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success === true) {
+			let finalMessage = '';
+
+			response.messages.forEach((message) => {
+				finalMessage += `${ message.u.username } says, ${ message.msg } <break time="0.7s"/>`;
+			});
+
+			return ri('MENTIONS.READ_MENTIONS', {
+				finalMessage, count, roomName,
+			});
+		} else {
+			return ri('MENTIONS.ERROR');
+		}
+
+	} catch (err) {
+		return ri('MENTIONS.ERROR');
+	}
+};
 
 // Module Export of Functions
 
@@ -1257,3 +1307,6 @@ module.exports.leaveChannel = leaveChannel;
 module.exports.inviteUser = inviteUser;
 module.exports.kickUser = kickUser;
 module.exports.getAllUnreadMentions = getAllUnreadMentions;
+module.exports.getUnreadMentionsCountChannel = getUnreadMentionsCountChannel;
+module.exports.getUnreadMentionsCountGroup = getUnreadMentionsCountGroup;
+module.exports.readUnreadMentions = readUnreadMentions;
