@@ -1,5 +1,7 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
 const { resolveChannelname, login, getUnreadCounter, channelUnreadMessages, getGroupUnreadCounter, groupUnreadMessages } = require('../../helperFunctions');
+const { supportsAPL } = require('../../utils');
+const titleHintTemplate = require('../../APL/templates/titleHintTemplate');
 
 
 const GetUnreadMessagesIntentHandler = {
@@ -27,11 +29,24 @@ const GetUnreadMessagesIntentHandler = {
 
 			const repromptText = ri('GENERIC_REPROMPT');
 
+			if (supportsAPL(handlerInput)) {
+				const data = {
+					title: handlerInput.translate(speechText.key, speechText.params),
+					hint: '',
+				};
+
+				return handlerInput.jrb
+					.speak(speechText)
+					.speak(repromptText)
+					.reprompt(repromptText)
+					.addDirective(titleHintTemplate(data))
+					.getResponse();
+			}
+
 			return handlerInput.jrb
 				.speak(speechText)
 				.speak(repromptText)
 				.reprompt(repromptText)
-				.withSimpleCard(ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
 			console.error(error);
