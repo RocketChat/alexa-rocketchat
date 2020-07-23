@@ -148,6 +148,8 @@ const {
 
 const { GetMentionsIntentHandler } = require('./handlers/Channels/GetMentionsIntentHandlers');
 
+const { ReadMentionsIntentHandler } = require('./handlers/Channels/ReadMentionsIntentHandler');
+
 const { YesIntentHandler } = require('./handlers/General/YesIntentHandler');
 
 const { NoIntentHandler } = require('./handlers/General/NoIntentHandler');
@@ -241,6 +243,7 @@ const buildSkill = (skillBuilder) =>
 			DeniedKickUserIntentHandler,
 			InProgressKickUserIntentHandler,
 			GetMentionsIntentHandler,
+			ReadMentionsIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,
