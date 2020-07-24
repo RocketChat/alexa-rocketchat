@@ -862,6 +862,10 @@
                         }
                     ],
                     "samples": [
+                        "set status as {statusmessage}",
+                        "change status to {statusmessage}",
+                        "set status to {statusmessage}",
+                        "update my status to {statusmessage}",
                         "set new status",
                         "update status",
                         "Change my status"
