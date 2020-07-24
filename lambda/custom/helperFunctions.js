@@ -18,6 +18,27 @@ const {
 
 // Axios Functions
 
+const processError = (err, { resourceKey, roomname, username }) => {
+	if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
+		return ri('ERROR_NOT_ALLOWED');
+	} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+		return ri('ERROR_NOT_FOUND', { roomname });
+	} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+		return ri('ERROR_NOT_FOUND', { roomname });
+	} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
+		return ri('ERROR_INVALID_USER', { username });
+	} else if (err.response.data.errorType && err.response.data.errorType === 'error-you-are-last-owner') {
+		return ri('ERROR_YOU_ARE_LAST_OWNER');
+	} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
+		return ri('ERROR_USER_NOT_IN_ROOM', { username, roomname });
+	} else if (err.response.status === 401) {
+		return ri('AUTH_ERROR');
+	} else {
+		console.log(err);
+		return ri(`${ resourceKey }.ERROR`);
+	}
+};
+
 const login = async (accessToken) =>
 	await axios
 		.post(apiEndpoints.loginUrl, {
@@ -801,20 +822,7 @@ const leaveChannel = async (roomId, roomname, type, headers) => {
 		return ri('LEAVE_CHANNEL.ERROR');
 
 	} catch (err) {
-		if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
-			return ri('LEAVE_CHANNEL.USER_NOT_IN_ROOM', { roomname });
-		} else if (err.response.data.errorType && err.response.data.errorType === 'error-you-are-last-owner') {
-			return ri('LEAVE_CHANNEL.ERROR_LAST_OWNER');
-		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
-			return ri('LEAVE_CHANNEL.ERROR_NOT_FOUND', { roomname });
-		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
-			return ri('LEAVE_CHANNEL.ERROR_NOT_FOUND', { roomname });
-		} else if (err.response.status === 401) {
-			return ri('AUTH_ERROR');
-		} else {
-			console.log(err);
-			return ri('LEAVE_CHANNEL.ERROR');
-		}
+		return processError(err, { resourceKey: 'LEAVE_CHANNEL', roomname });
 	}
 };
 
@@ -1157,24 +1165,7 @@ const kickUser = async (roomId, userId, roomname, username, type, headers) => {
 		return ri('KICK_USER.ERROR');
 
 	} catch (err) {
-		console.log(err);
-		if (err.response.data.errorType && err.response.data.errorType === 'error-not-allowed') {
-			return ri('ERROR_NOT_ALLOWED');
-		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
-			return ri('ERROR_NOT_FOUND', { roomname });
-		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
-			return ri('ERROR_NOT_FOUND', { roomname });
-		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-user') {
-			return ri('ERROR_INVALID_USER', { username });
-		} else if (err.response.data.errorType && err.response.data.errorType === 'error-you-are-last-owner') {
-			return ri('KICK_USER.ERROR_YOU_ARE_LAST_OWNER');
-		} else if (err.response.data.errorType && err.response.data.errorType === 'error-user-not-in-room') {
-			return ri('KICK_USER.ERROR_USER_NOT_IN_ROOM', { username, roomname });
-		} else if (err.response.status === 401) {
-			return ri('AUTH_ERROR');
-		} else {
-			return ri('KICK_USER.ERROR');
-		}
+		return processError(err, { resourceKey: 'KICK_USER', roomname, username });
 	}
 };
 

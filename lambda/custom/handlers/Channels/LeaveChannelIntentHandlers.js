@@ -17,7 +17,7 @@ const StartedLeaveChannelIntentHandler = {
 
 		delete sessionAttributes.channel;
 
-		return resolveChannel(handlerInput);
+		return resolveChannel(handlerInput, 'channelname', 'choice');
 	},
 };
 
@@ -29,7 +29,7 @@ const InProgressLeaveChannelIntentHandler = {
           handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
 	},
 	async handle(handlerInput) {
-		return resolveChannel(handlerInput);
+		return resolveChannel(handlerInput, 'channelname', 'choice');
 	},
 };
 
