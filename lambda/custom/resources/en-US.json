@@ -160,6 +160,8 @@
         "ChangeStatusIntent": "Change my status",
         "GetMentionsIntent": "Get my mentions"
     },
+    "ERROR_USER_NOT_IN_ROOM": "{username} is not a member of room {roomname}.",
+    "ERROR_YOU_ARE_LAST_OWNER":"You are last owner. Please set a new owner before leaving room.",
     "HINT_TRANSITION": "You can try saying",
     "FALLBACK_MSG": "Sorry, I don't know about that.",
     "ERROR_NOT_FOUND": "The room {roomname} does not exist.",
