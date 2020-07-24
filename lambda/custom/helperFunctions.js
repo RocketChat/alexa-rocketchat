@@ -1178,6 +1178,24 @@ const kickUser = async (roomId, userId, roomname, username, type, headers) => {
 	}
 };
 
+const setStatus = async (message, headers) => {
+	try {
+		const response = await axios.post(apiEndpoints.setstatusurl, {
+			message,
+		}, {
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) {
+			return ri('STATUS.SUCCESS');
+		}
+		return ri('STATUS.ERROR');
+	} catch (err) {
+		console.log(err);
+		return ri('STATUS.ERROR');
+	}
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1222,3 +1240,4 @@ module.exports.addModerator = addModerator;
 module.exports.leaveChannel = leaveChannel;
 module.exports.inviteUser = inviteUser;
 module.exports.kickUser = kickUser;
+module.exports.setStatus = setStatus;
