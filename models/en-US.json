@@ -846,6 +846,24 @@
                         "remove user from {channelname}",
                         "kick user"
                     ]
+                },
+                {
+                    "name": "ChangeStatusIntent",
+                    "slots": [
+                        {
+                            "name": "statusmessage",
+                            "type": "AMAZON.SearchQuery"
+                        }
+                    ],
+                    "samples": [
+                        "set status as {statusmessage}",
+                        "change status to {statusmessage}",
+                        "set status to {statusmessage}",
+                        "update my status to {statusmessage}",
+                        "set new status",
+                        "update status",
+                        "Change my status"
+                    ]
                 }
             ],
             "types": [
@@ -2803,6 +2821,25 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "ChangeStatusIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": true,
+                    "prompts": {
+                        "confirmation": "Confirm.Intent.443955682466"
+                    },
+                    "slots": [
+                        {
+                            "name": "statusmessage",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.443955682466.1237381162454"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -3786,6 +3823,24 @@
                     {
                         "type": "PlainText",
                         "value": "You want to remove {username} , from channel {channelname} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.443955682466.1237381162454",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What would you like to set the status as?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.443955682466",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to change your status to, {statusmessage} , is that correct?"
                     }
                 ]
             }

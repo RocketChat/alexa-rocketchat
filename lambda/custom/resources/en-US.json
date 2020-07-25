@@ -160,6 +160,11 @@
         "ChangeStatusIntent": "Change my status",
         "GetMentionsIntent": "Get my mentions"
     },
+    "STATUS": {
+        "SUCCESS": "I've updated your status.",
+        "DENIED": "Okay, I won't change your status.",
+        "ERROR": "Sorry, I couldn't change your status."
+    },
     "HINT_TRANSITION": "You can try saying",
     "FALLBACK_MSG": "Sorry, I don't know about that.",
     "ERROR_NOT_FOUND": "The room {roomname} does not exist.",
