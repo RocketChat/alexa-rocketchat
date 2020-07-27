@@ -699,7 +699,7 @@ const resolveChannelname = async (channelName, headers, single = false) => {
 			type: channel.t,
 		})));
 
-		let bestIndex = 0;
+		let bestIndex = -1;
 		let bestMatchingChannel;
 		const similarChannels = [];
 		for (const channel of channels) {
