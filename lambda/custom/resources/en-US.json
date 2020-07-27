@@ -160,6 +160,11 @@
         "ChangeStatusIntent": "Change my status",
         "GetMentionsIntent": "Get my mentions"
     },
+    "UNREADS": {
+        "MESSAGE": "You have, {finalMessage}.",
+        "NO_UNREADS": "You don't have any unread messages.",
+        "ERROR": "Sorry, I couldn't perform this request."
+    },
     "MENTIONS": {
         "MESSAGE": "You have, {finalMessage}.",
         "READ_MENTIONS": "You have {count} mentions in {roomName} <break time='0.5s'/> {finalMessage} <break time='0.5s'/>",

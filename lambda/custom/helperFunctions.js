@@ -1178,6 +1178,33 @@ const kickUser = async (roomId, userId, roomname, username, type, headers) => {
 	}
 };
 
+const getAllUnreads = async (headers) => {
+	try {
+
+		const subscriptions = await axios.get(apiEndpoints.getsubscriptionsurl, {
+			headers,
+		})
+			.then((res) => res.data.update);
+		let finalMessage = '';
+
+		for (const subscription of subscriptions) {
+			if (subscription.unread && subscription.unread !== 0) {
+				if (subscription.t && subscription.t === 'd') {
+					finalMessage += `${ subscription.unread } unreads from ${ subscription.name }, `;
+				} else {
+					finalMessage += `${ subscription.unread } unreads in ${ subscription.name }, `;
+				}
+			}
+		}
+
+		if (finalMessage === '') { return ri('UNREADS.NO_UNREADS'); }
+		return ri('UNREADS.MESSAGE', { finalMessage });
+	} catch (err) {
+		console.log(err.message);
+		return ri('UNREADS.ERROR');
+	}
+};
+
 const getAllUnreadMentions = async (headers) => {
 	try {
 
@@ -1304,3 +1331,4 @@ module.exports.getAllUnreadMentions = getAllUnreadMentions;
 module.exports.getUnreadMentionsCountChannel = getUnreadMentionsCountChannel;
 module.exports.getUnreadMentionsCountGroup = getUnreadMentionsCountGroup;
 module.exports.readUnreadMentions = readUnreadMentions;
+module.exports.getAllUnreads = getAllUnreads;
