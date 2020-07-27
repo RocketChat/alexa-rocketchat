@@ -881,6 +881,16 @@
                         "read mentions from channel",
                         "read unread mentions"
                     ]
+                },
+                {
+                    "name": "GetUnreadsIntent",
+                    "slots": [],
+                    "samples": [
+                        "get my unread messages",
+                        "do I have any unreads",
+                        "get all my unreads",
+                        "get all unreads"
+                    ]
                 }
             ],
             "types": [
