@@ -1186,20 +1186,14 @@ const getAllUnreadMentions = async (headers) => {
 		})
 			.then((res) => res.data.update);
 		let finalMessage = '';
-		for (const subscription of subscriptions) {
-			if (subscription.t === 'c') {
-				const counters = await axios.get(`${ apiEndpoints.counterurl }${ subscription.name }`, {
-					headers,
-				}).then((res) => res.data);
 
-				if (counters.userMentions === 0) { continue; }
-				finalMessage += `${ counters.userMentions } mentions in ${ subscription.name }, `;
-			} else if (subscription.t === 'p') {
-				const counters = await axios.get(`${ apiEndpoints.groupcounterurl }${ subscription.rid }`, {
-					headers,
-				}).then((res) => res.data);
-				if (counters.userMentions === 0) { continue; }
-				finalMessage += `${ counters.userMentions } mentions in ${ subscription.name }, `;
+		for (const subscription of subscriptions) {
+			if (subscription.userMentions && subscription.userMentions !== 0) {
+				if (subscription.t && subscription.t === 'd') {
+					finalMessage += `${ subscription.userMentions } mentions from ${ subscription.name },`;
+				} else {
+					finalMessage += `${ subscription.userMentions } mentions in ${ subscription.name },`;
+				}
 			}
 		}
 
