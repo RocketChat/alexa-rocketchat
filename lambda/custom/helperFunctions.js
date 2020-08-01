@@ -746,7 +746,7 @@ const resolveUsername = async (username, headers, single = false) => {
 		// Note: A different method can be used to get the list of direct message users from contacts
 		// const subscriptions must be of the form [{name: 'username', id: 'user id', type: 'd'}, ...]
 
-		let bestIndex = 0;
+		let bestIndex = -1;
 		let bestMatchingUser;
 		const similarUsers = [];
 		for (const user of subscriptions) {
