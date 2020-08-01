@@ -1,6 +1,7 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
 const { login, resolveChannelname, readPinnedMessages } = require('../../helperFunctions');
 const titleMessageBoxTemplate = require('../../APL/templates/titleMessageBoxTemplate');
+const { supportsAPL } = require('../../utils');
 
 const ReadPinnedMessagesIntentHandler = {
 	canHandle(handlerInput) {
@@ -21,16 +22,25 @@ const ReadPinnedMessagesIntentHandler = {
 
 			// if there were any pinned messages helper function would return an array, otherwise there are no pinned messages
 			if (!Array.isArray(pinnedMessages)) {
-				const data = {
-					title: '',
-					message: handlerInput.translate(pinnedMessages.key, pinnedMessages.params),
-				};
 				const repromptText = ri('GENERIC_REPROMPT');
+				if (supportsAPL(handlerInput)) {
+					const data = {
+						title: '',
+						message: handlerInput.translate(pinnedMessages.key, pinnedMessages.params),
+					};
+
+					return handlerInput.jrb
+						.speak(pinnedMessages)
+						.speak(repromptText)
+						.reprompt(repromptText)
+						.addDirective(titleMessageBoxTemplate(data))
+						.getResponse();
+				}
+
 				return handlerInput.jrb
 					.speak(pinnedMessages)
 					.speak(repromptText)
 					.reprompt(repromptText)
-					.addDirective(titleMessageBoxTemplate(data))
 					.getResponse();
 
 			}
@@ -38,6 +48,17 @@ const ReadPinnedMessagesIntentHandler = {
 			const no_of_pinned_messages = pinnedMessages.length;
 
 			const speechText = ri('PINNED_MESSAGES.SUCCESS', { no_of_pinned_messages, channelname: resolvedChannelDetails[0].name, username: pinnedMessages[no_of_pinned_messages - 1][0], message: pinnedMessages[no_of_pinned_messages - 1][1] });
+			const repromptText = ri('GENERIC_REPROMPT');
+
+
+			if (!supportsAPL(handlerInput)) {
+				return handlerInput.jrb
+					.speak(speechText)
+					.speak(repromptText)
+					.reprompt(repromptText)
+					.getResponse();
+			}
+
 
 			let apltext = '';
 
@@ -49,8 +70,6 @@ const ReadPinnedMessagesIntentHandler = {
 				title: `Pinned Messages in ${ resolvedChannelDetails[0].name }: ${ pinnedMessages.length }`,
 				message: apltext,
 			};
-
-			const repromptText = ri('GENERIC_REPROMPT');
 
 			return handlerInput.jrb
 				.speak(speechText)
