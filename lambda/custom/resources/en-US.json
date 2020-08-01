@@ -167,6 +167,12 @@
         "ERROR_USER_NOT_IN_ROOM": "{username} is not a member of room {roomname}.",
         "ERROR_YOU_ARE_LAST_OWNER": "You are last owner. Please set a new owner before leaving room."
     },
+    "PINNED_MESSAGES":{
+        "SUCCESS": "There are {no_of_pinned_messages} pinned messages in the channel {channelname}, here is the latest one. {username} says, {message}.",
+        "NO_PINNED_MESSAGES": "There are no pinned messages in channel {channelname}.",
+        "ERROR": "Sorry, I'm unable to process you request."
+
+    },
     "HINTS": {
         "GetUnreadMessagesIntent": "Get unread messages from channel",
         "GetLastMessageFromChannelIntent": "Read last message from channel",
