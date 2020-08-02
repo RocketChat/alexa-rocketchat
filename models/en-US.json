@@ -859,7 +859,11 @@
                     "samples": [
                         "get all unread mentions",
                         "get unread mentions",
-                        "get mentions"
+                        "get mentions",
+                        "get my mentions",
+                        "do I have any unread mentions",
+                        "do I have any mentions",
+                        "unread mentions"
                     ]
                 },
                 {
