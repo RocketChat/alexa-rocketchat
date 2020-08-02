@@ -332,7 +332,7 @@ const getUnreadCounter = async (channelName, headers) =>
 
 // PLEASE DO NOT REFACTOR CHANNELUNREADMESSAGES FUNCTION
 const channelUnreadMessages = async (channelName, unreadCount, headers) => {
-	if (unreadCount === 0) { return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.NO_MESSAGE'); }
+	if (unreadCount === 0) { return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.NO_MESSAGE'), { channelName }; }
 
 	return await axios
 		.get(`${ apiEndpoints.channelmessageurl }${ channelName }&count=${ unreadCount }`, {
@@ -354,6 +354,7 @@ const channelUnreadMessages = async (channelName, unreadCount, headers) => {
 				const responseString = msgs.join('  ');
 
 				const finalMsg = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.MESSAGE', {
+					channelName,
 					respString: responseString,
 					unread: msgs.length,
 				});
@@ -600,7 +601,7 @@ const getGroupUnreadCounter = async (roomid, headers) =>
 		});
 
 const groupUnreadMessages = async (channelName, roomid, unreadCount, headers) => {
-	if (unreadCount === 0) { return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.NO_MESSAGE'); }
+	if (unreadCount === 0) { return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.NO_MESSAGE', { channelName }); }
 
 	return await axios
 		.get(`${ apiEndpoints.groupmessageurl }${ roomid }&count=${ unreadCount }`, {
@@ -622,6 +623,7 @@ const groupUnreadMessages = async (channelName, roomid, unreadCount, headers) =>
 				const responseString = msgs.join('  ');
 
 				const finalMsg = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.MESSAGE', {
+					channelName,
 					respString: responseString,
 					unread: msgs.length,
 				});
@@ -785,9 +787,9 @@ const resolveUsername = async (username, headers, single = false) => {
 // this functions logs the data to an external site
 const customLog = async (data) => {
 	try {
-		axios.post(envVariables.customLogUrl, (data));
+		await axios.post(envVariables.customLogUrl, (data));
 	} catch (err) {
-		console.log(err);
+		// console.log(err);
 	}
 };
 

@@ -71,9 +71,9 @@
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
     },
     "GET_UNREAD_MESSAGES_FROM_CHANNEL": {
-        "MESSAGE": "You Have {unread} Unread Messages. <break time='1s'/> {respString} <break time='0.7s'/> ",
+        "MESSAGE": "You Have {unread} Unread Messages in {channelName}. <break time='1s'/> {respString} <break time='0.7s'/> ",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
-        "NO_MESSAGE": "You Don't Have Any Unread Messages.",
+        "NO_MESSAGE": "You Don't Have Any Unread Messages in {channelName}.",
         "CARD_TITLE": "Channel Unread Messages",
         "ERROR": "Sorry, I couldn't find the channel {channelName} right now.",
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
