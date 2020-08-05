@@ -27,6 +27,7 @@ const LaunchRequestHandler = {
 					return handlerInput.jrb
 						.speak(speechText)
 						.addDirective(errorMessageTemplate(data))
+						.withLinkAccountCard()
 						.withShouldEndSession(true)
 						.getResponse();
 
@@ -34,7 +35,7 @@ const LaunchRequestHandler = {
 
 					return handlerInput.jrb
 						.speak(speechText)
-						.withSimpleCard(ri('WELCOME.CARD_TITLE'), speechText)
+						.withLinkAccountCard()
 						.withShouldEndSession(true)
 						.getResponse();
 
