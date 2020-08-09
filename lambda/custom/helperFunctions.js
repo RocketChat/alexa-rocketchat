@@ -1355,6 +1355,111 @@ const readPinnedMessages = async (roomId, channelname, headers) => {
 	}
 };
 
+const getAllUnreads = async (headers) => {
+	try {
+
+		const subscriptions = await axios.get(apiEndpoints.getsubscriptionsurl, {
+			headers,
+		})
+			.then((res) => res.data.update);
+		let finalMessage = '';
+
+		for (const subscription of subscriptions) {
+			if (subscription.unread && subscription.unread !== 0) {
+				if (subscription.t && subscription.t === 'd') {
+					finalMessage += `${ subscription.unread } unreads from ${ subscription.name }, `;
+				} else {
+					finalMessage += `${ subscription.unread } unreads in ${ subscription.name }, `;
+				}
+			}
+		}
+
+		if (finalMessage === '') { return ri('UNREADS.NO_UNREADS'); }
+		return ri('UNREADS.MESSAGE', { finalMessage });
+	} catch (err) {
+		console.log(err.message);
+		return ri('UNREADS.ERROR');
+	}
+};
+
+const getAllUnreadMentions = async (headers) => {
+	try {
+
+		const subscriptions = await axios.get(apiEndpoints.getsubscriptionsurl, {
+			headers,
+		})
+			.then((res) => res.data.update);
+		let finalMessage = '';
+
+		for (const subscription of subscriptions) {
+			if (subscription.userMentions && subscription.userMentions !== 0) {
+				if (subscription.t && subscription.t === 'd') {
+					finalMessage += `${ subscription.userMentions } mentions from ${ subscription.name },`;
+				} else {
+					finalMessage += `${ subscription.userMentions } mentions in ${ subscription.name },`;
+				}
+			}
+		}
+
+		if (finalMessage === '') { return ri('MENTIONS.NO_MENTIONS'); }
+		return ri('MENTIONS.MESSAGE', { finalMessage });
+	} catch (err) {
+		console.log(err.message);
+		return ri('MENTIONS.ERROR');
+	}
+};
+
+const getUnreadMentionsCountChannel = async (roomName, headers) => {
+	try {
+		const response = await axios.get(`${ apiEndpoints.counterurl }${ roomName }`, {
+			headers,
+		}).then((res) => res.data);
+
+		return response.userMentions;
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+const getUnreadMentionsCountGroup = async (roomId, headers) => {
+	try {
+		const response = await axios.get(`${ apiEndpoints.groupcounterurl }${ roomId }`, {
+			headers,
+		}).then((res) => res.data);
+
+		return response.userMentions;
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+const readUnreadMentions = async (roomId, roomName, count, headers) => {
+	try {
+		if (count === 0) { return ri('MENTIONS.NO_MENTIONS_ROOM', { roomName }); }
+
+		const response = await axios.get(`${ apiEndpoints.getmentionedmessagesurl }?roomId=${ roomId }&count=${ count }`, {
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success === true) {
+			let finalMessage = '';
+
+			response.messages.forEach((message) => {
+				finalMessage += `${ message.u.username } says, ${ message.msg } <break time="0.7s"/>`;
+			});
+
+			return ri('MENTIONS.READ_MENTIONS', {
+				finalMessage, count, roomName,
+			});
+		} else {
+			return ri('MENTIONS.ERROR');
+		}
+
+	} catch (err) {
+		return ri('MENTIONS.ERROR');
+	}
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1405,3 +1510,8 @@ module.exports.inviteUser = inviteUser;
 module.exports.kickUser = kickUser;
 module.exports.setStatus = setStatus;
 module.exports.readPinnedMessages = readPinnedMessages;
+module.exports.getAllUnreadMentions = getAllUnreadMentions;
+module.exports.getUnreadMentionsCountChannel = getUnreadMentionsCountChannel;
+module.exports.getUnreadMentionsCountGroup = getUnreadMentionsCountGroup;
+module.exports.readUnreadMentions = readUnreadMentions;
+module.exports.getAllUnreads = getAllUnreads;

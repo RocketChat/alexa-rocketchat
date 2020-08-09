@@ -62,4 +62,5 @@ module.exports = {
 	kickuserfromgroupurl: `${ serverurl }/api/v1/groups.kick`,
 	setstatusurl: `${ serverurl }/api/v1/users.setStatus`,
 	readpinnedmessagesurl: `${ serverurl }/api/v1/chat.getPinnedMessages`,
+	getmentionedmessagesurl: `${ serverurl }/api/v1/chat.getMentionedMessages`,
 };

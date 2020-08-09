@@ -149,6 +149,12 @@ const {
 	ReadPinnedMessagesIntentHandler,
 } = require('./handlers/Channels/ReadPinnedMessagesIntentHandlers');
 
+const { GetMentionsIntentHandler } = require('./handlers/Channels/GetMentionsIntentHandlers');
+
+const { ReadMentionsIntentHandler } = require('./handlers/Channels/ReadMentionsIntentHandler');
+
+const { GetUnreadsIntentHandler } = require('./handlers/Channels/GetUnreadsIntentHandler');
+
 const { YesIntentHandler } = require('./handlers/General/YesIntentHandler');
 
 const { NoIntentHandler } = require('./handlers/General/NoIntentHandler');
@@ -292,6 +298,9 @@ const buildSkill = (skillBuilder) =>
 			DeniedChangeStatusIntentHandler,
 			ChangeStatusIntentHandler,
 			ReadPinnedMessagesIntentHandler,
+			GetMentionsIntentHandler,
+			ReadMentionsIntentHandler,
+			GetUnreadsIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,

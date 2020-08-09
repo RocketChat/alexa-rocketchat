@@ -874,6 +874,49 @@
                         "update status",
                         "Change my status"
                     ]
+                },
+                {
+                    "name": "GetMentionsIntent",
+                    "slots": [],
+                    "samples": [
+                        "get all unread mentions",
+                        "get unread mentions",
+                        "get mentions",
+                        "get my mentions",
+                        "do I have any unread mentions",
+                        "do I have any mentions",
+                        "unread mentions"
+                    ]
+                },
+                {
+                    "name": "ReadMentionsIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "from {channelname}",
+                                "from channel {channelname}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "read mentions",
+                        "unread mentions from channel {channelname} ",
+                        "read unread mentions from channel {channelname}",
+                        "read mentions from channel",
+                        "read unread mentions"
+                    ]
+                },
+                {
+                    "name": "GetUnreadsIntent",
+                    "slots": [],
+                    "samples": [
+                        "get my unread messages",
+                        "do I have any unreads",
+                        "get all my unreads",
+                        "get all unreads"
+                    ]
                 }
             ],
             "types": [
@@ -2833,6 +2876,23 @@
                     ]
                 },
                 {
+                    "name": "ReadMentionsIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.564375851330.619539757459"
+                            }
+                        }
+                    ]
+                },
+                {
                     "name": "ChangeStatusIntent",
                     "delegationStrategy": "ALWAYS",
                     "confirmationRequired": true,
@@ -3851,6 +3911,15 @@
                     {
                         "type": "PlainText",
                         "value": "You want to change your status to, {statusmessage} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.564375851330.619539757459",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to read unread mentions from?"
                     }
                 ]
             }

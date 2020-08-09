@@ -136,9 +136,9 @@
         "REMOVE_OWNER_SUCCESS": "{username} is no longer an owner of {roomname}.",
         "REMOVE_MODERATOR_SUCCESS": "{username} is no longer a moderator of {roomname}.",
         "ERROR_REMOVE_LAST_OWNER": "This is a last owner. Please set a new owner before removing this one.",
-        "USER_NOT_LEADER": "{username} is not a leader of {roomname}.",
-        "USER_NOT_OWNER": "{username} is not an owner of {roomname}.",
-        "USER_NOT_MODERATOR": "{username} is not a moderator of {roomname}.",
+        "USER_NOT_LEADER": "There is no leader named {username} in {roomname}.",
+        "USER_NOT_OWNER": "There is no owner named {username} in {roomname}.",
+        "USER_NOT_MODERATOR": "There is no moderator named {username} in {roomname}.",
         "USER_NOT_MEMBER": "{username} is not a member of room {roomname}.",
         "ERROR_NOT_ALLOWED": "Sorry, you don't have the right to perform this operation.",
         "ERROR_ROOM_NOT_FOUND": "There's no room named {roomname}.",
@@ -185,6 +185,20 @@
         "SUCCESS": "I've updated your status.",
         "DENIED": "Okay, I won't change your status.",
         "ERROR": "Sorry, I couldn't change your status."
+    },
+    "UNREADS": {
+        "MESSAGE": "You have, {finalMessage}.",
+        "NO_UNREADS": "You don't have any unread messages.",
+        "ERROR": "Sorry, I couldn't perform this request."
+    },
+    "MENTIONS": {
+        "MESSAGE": "You have, {finalMessage}.",
+        "READ_MENTIONS": "You have {count} mentions in {roomName} <break time='0.5s'/> {finalMessage} <break time='0.5s'/>",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate.",
+        "NO_MENTIONS": "You don't have any unread mentions.",
+        "NO_MENTIONS_ROOM": "You don't have any unread mentions in {roomName}.",
+        "REACTED": "I've acknowledged to {count} mentions in {roomName}.",
+        "ERROR": "Sorry, I couldn't perform this request."
     },
     "HINT_TRANSITION": "You can try saying",
     "FALLBACK_MSG": "Sorry, I don't know about that.",
