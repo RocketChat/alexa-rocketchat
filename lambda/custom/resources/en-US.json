@@ -99,6 +99,21 @@
         "ERROR": "Sorry, I couldn't archive this channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
     },
+    "CHANNEL_DETAILS": {
+        "SET_ANNOUNCEMENT_SUCCESS": "I've set the announcement in, {roomname}.",
+        "SET_ANNOUNCEMENT_DENIED": "Okay, I won't set the announcement.",
+        "SET_DESCRIPTION_SUCCESS": "I've set the description in, {roomname}.",
+        "SET_DESCRIPTION_DENIED": "Okay.",
+        "SET_TOPIC_SUCCESS": "I've set the topic in, {roomname}.",
+        "SET_TOPIC_DENIED": "Okay.",
+        "RENAME_ROOM_SUCCESS": "{oldname}, is now {newname}.",
+        "RENAME_ROOM_DENIED": "Okay.",
+        "ERROR_NAME_TAKEN": "The name {newname} is already taken.",
+        "NOT_AUTHORISED": "Sorry, You are not authorised to perform this.",
+        "ERROR": "Sorry, I couldn't do it at the moment.",
+        "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate.",
+        "ERROR_NOT_FOUND": "Sorry, I couldn't find room named {roomname}."
+    },
     "RESOLVE_CHANNEL":{
         "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
         "NO_CHANNEL":"You are not part of any channel or group named {channel_name}.",
@@ -151,6 +166,12 @@
         "DENIED": "Okay.",
         "ERROR_USER_NOT_IN_ROOM": "{username} is not a member of room {roomname}.",
         "ERROR_YOU_ARE_LAST_OWNER": "You are last owner. Please set a new owner before leaving room."
+    },
+    "PINNED_MESSAGES":{
+        "SUCCESS": "There are {no_of_pinned_messages} pinned messages in the channel {channelname}, here is the latest one. {username} says, {message}.",
+        "NO_PINNED_MESSAGES": "There are no pinned messages in channel {channelname}.",
+        "ERROR": "Sorry, I'm unable to process you request."
+
     },
     "HINTS": {
         "GetUnreadMessagesIntent": "Get unread messages from channel",

@@ -145,6 +145,10 @@ const {
 	InProgressRemoveModeratorIntentHandler,
 } = require('./handlers/Channels/RemoveModeratorIntentHandlers');
 
+const {
+	ReadPinnedMessagesIntentHandler,
+} = require('./handlers/Channels/ReadPinnedMessagesIntentHandlers');
+
 const { YesIntentHandler } = require('./handlers/General/YesIntentHandler');
 
 const { NoIntentHandler } = require('./handlers/General/NoIntentHandler');
@@ -158,6 +162,34 @@ const { ResponseLog } = require('./handlers/Interceptors/ResponseLog');
 const { RequestLog } = require('./handlers/Interceptors/RequestLog');
 
 const APLLocalisationRequestInterceptor = require('./handlers/Interceptors/APLLocalisationRequestInterceptor');
+
+const {
+	StartedSetAnnouncementIntentHandler,
+	InProgressSetAnnouncementIntentHandler,
+	DeniedSetAnnouncementIntentHandler,
+	SetAnnouncementIntentHandler,
+} = require('./handlers/Channels/SetAnnouncementIntentHandlers');
+
+const {
+	StartedSetDescriptionIntentHandler,
+	InProgressSetDescriptionIntentHandler,
+	DeniedSetDescriptionIntentHandler,
+	SetDescriptionIntentHandler,
+} = require('./handlers/Channels/SetDescriptionIntentHandlers');
+
+const {
+	StartedSetTopicIntentHandler,
+	InProgressSetTopicIntentHandler,
+	DeniedSetTopicIntentHandler,
+	SetTopicIntentHandler,
+} = require('./handlers/Channels/SetTopicIntentHandlers');
+
+const {
+	StartedRenameChannelIntentHandler,
+	InProgressRenameChannelIntentHandler,
+	DeniedRenameChannelIntentHandler,
+	RenameChannelIntentHandler,
+} = require('./handlers/Channels/RenameChannelIntentHandlers');
 
 const { HintGenerationResponseInterceptor } = require('./handlers/Interceptors/HintGenerationResponseInterceptor');
 
@@ -212,6 +244,22 @@ const buildSkill = (skillBuilder) =>
 			PostGroupEmojiMessageIntentHandler,
 			GroupLastMessageIntentHandler,
 			PostEmojiDirectMessageIntentHandler,
+			StartedSetAnnouncementIntentHandler,
+			InProgressSetAnnouncementIntentHandler,
+			DeniedSetAnnouncementIntentHandler,
+			SetAnnouncementIntentHandler,
+			StartedSetDescriptionIntentHandler,
+			InProgressSetDescriptionIntentHandler,
+			DeniedSetDescriptionIntentHandler,
+			SetDescriptionIntentHandler,
+			StartedSetTopicIntentHandler,
+			InProgressSetTopicIntentHandler,
+			DeniedSetTopicIntentHandler,
+			SetTopicIntentHandler,
+			StartedRenameChannelIntentHandler,
+			InProgressRenameChannelIntentHandler,
+			DeniedRenameChannelIntentHandler,
+			RenameChannelIntentHandler,
 			StartedAddLeaderIntentHandler,
 			AddLeaderIntentHandler,
 			DeniedAddLeaderIntentHandler,
@@ -243,6 +291,7 @@ const buildSkill = (skillBuilder) =>
 			InProgressKickUserIntentHandler,
 			DeniedChangeStatusIntentHandler,
 			ChangeStatusIntentHandler,
+			ReadPinnedMessagesIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,

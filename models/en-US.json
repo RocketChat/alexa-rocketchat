@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "rocket chat",
+            "invocationName": "test rocket",
             "modelConfiguration": {
                 "fallbackIntentSensitivity": {
                     "level": "LOW"
@@ -506,6 +506,8 @@
                         }
                     ],
                     "samples": [
+                        "get pinned messages",
+                        "get pinned messages from {channelname}",
                         "read pinned messages from {channelname}",
                         "read pinned messages"
                     ]
@@ -575,6 +577,8 @@
                         }
                     ],
                     "samples": [
+                        "make an announcement in {channelname}",
+                        "make an announcement",
                         "set announcement",
                         "Set announcement in channl {channelname}",
                         "Set announcement in {channelname}"
@@ -605,6 +609,9 @@
                         }
                     ],
                     "samples": [
+                        "change description",
+                        "update description in {channelname}",
+                        "change description in {channelname}",
                         "Set description in {channelname}",
                         "Set description"
                     ]
@@ -633,6 +640,9 @@
                         }
                     ],
                     "samples": [
+                        "update topic in {channelname}",
+                        "change topic in {channelname}",
+                        "change topic ",
                         "set topic in {channelname}",
                         "set topic"
                     ]

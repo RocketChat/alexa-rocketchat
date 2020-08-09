@@ -714,7 +714,7 @@ const resolveChannelname = async (channelName, headers, single = false) => {
 			type: channel.t,
 		})));
 
-		let bestIndex = 0;
+		let bestIndex = -1;
 		let bestMatchingChannel;
 		const similarChannels = [];
 		for (const channel of channels) {
@@ -761,7 +761,7 @@ const resolveUsername = async (username, headers, single = false) => {
 		// Note: A different method can be used to get the list of direct message users from contacts
 		// const subscriptions must be of the form [{name: 'username', id: 'user id', type: 'd'}, ...]
 
-		let bestIndex = 0;
+		let bestIndex = -1;
 		let bestMatchingUser;
 		const similarUsers = [];
 		for (const user of subscriptions) {
@@ -790,6 +790,91 @@ const customLog = async (data) => {
 		await axios.post(envVariables.customLogUrl, (data));
 	} catch (err) {
 		// console.log(err);
+	}
+};
+
+const setAnnouncement = async (room, announcement, headers) => {
+	try {
+		const url = room.type === 'c' ? apiEndpoints.setannouncementchannelurl : apiEndpoints.setannouncementgroupurl;
+		const response = await axios.post(url, {
+			roomId: room.id, announcement,
+		}, {
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) {
+			return ri('CHANNEL_DETAILS.SET_ANNOUNCEMENT_SUCCESS', { roomname: room.name, success: true });
+		}
+		return ri('CHANNEL_DETAILS.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-action-not-allowed') {
+			return ri('CHANNEL_DETAILS.NOT_AUTHORISED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('CHANNEL_DETAILS.ERROR_NOT_FOUND', { roomname: room.name });
+		} else if (err.response.status === 401) {
+			return ri('CHANNEL_DETAILS.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('CHANNEL_DETAILS.ERROR');
+		}
+	}
+};
+
+const setTopic = async (room, topic, headers) => {
+	try {
+		const url = room.type === 'c' ? apiEndpoints.settopicchannelurl : apiEndpoints.settopicgroupurl;
+		const response = await axios.post(url, {
+			roomId: room.id, topic,
+		}, {
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) {
+			return ri('CHANNEL_DETAILS.SET_TOPIC_SUCCESS', { roomname: room.name, success: true });
+		}
+		return ri('CHANNEL_DETAILS.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-action-not-allowed') {
+			return ri('CHANNEL_DETAILS.NOT_AUTHORISED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('CHANNEL_DETAILS.ERROR_NOT_FOUND', { roomname: room.name });
+		} else if (err.response.status === 401) {
+			return ri('CHANNEL_DETAILS.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('CHANNEL_DETAILS.ERROR');
+		}
+	}
+};
+
+const setDescription = async (room, description, headers) => {
+	try {
+		const url = room.type === 'c' ? apiEndpoints.setdescriptionchannelurl : apiEndpoints.setdescriptiongroupurl;
+		const response = await axios.post(url, {
+			roomId: room.id, description,
+		}, {
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) {
+			return ri('CHANNEL_DETAILS.SET_DESCRIPTION_SUCCESS', { roomname: room.name, success: true });
+		}
+
+		return ri('CHANNEL_DETAILS.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-action-not-allowed') {
+			return ri('CHANNEL_DETAILS.NOT_AUTHORISED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('CHANNEL_DETAILS.ERROR_NOT_FOUND', { roomname: room.name });
+		} else if (err.response.status === 401) {
+			return ri('CHANNEL_DETAILS.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('CHANNEL_DETAILS.ERROR');
+		}
 	}
 };
 
@@ -1121,6 +1206,39 @@ const addModerator = async (roomId, userId, roomname, username, type, headers) =
 	}
 };
 
+const renameChannel = async (room, newname, headers) => {
+	try {
+		const url = room.type === 'c' ? apiEndpoints.renamechannelurl : apiEndpoints.renamegroupurl;
+		// remove whitespaces from the newname
+		newname = newname.trim().split(' ').join('');
+		const response = await axios.post(url, {
+			roomId: room.id, name: newname,
+		}, {
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success) {
+			return ri('CHANNEL_DETAILS.RENAME_ROOM_SUCCESS', { oldname: room.name, newname, success: true });
+		}
+		return ri('CHANNEL_DETAILS.ERROR');
+
+	} catch (err) {
+		console.log(err);
+		if (err.response.data.errorType && err.response.data.errorType === 'error-action-not-allowed') {
+			return ri('CHANNEL_DETAILS.NOT_AUTHORISED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('CHANNEL_DETAILS.ERROR_NOT_FOUND', { roomname: room.name });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-duplicate-channel-name') {
+			return ri('CHANNEL_DETAILS.ERROR_NAME_TAKEN', { newname });
+		} else if (err.response.status === 401) {
+			return ri('CHANNEL_DETAILS.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('CHANNEL_DETAILS.ERROR');
+		}
+	}
+};
+
 const inviteUser = async (roomId, userId, roomname, username, type, headers) => {
 	try {
 		const url = type === 'c' ? apiEndpoints.invitetochannelurl : apiEndpoints.invitetogroupurl;
@@ -1211,6 +1329,32 @@ const setStatus = async (message, headers) => {
 	}
 };
 
+const readPinnedMessages = async (roomId, channelname, headers) => {
+	try {
+		const response = await axios.get(`${ apiEndpoints.readpinnedmessagesurl }?roomId=${ roomId }`, {
+			headers,
+		}).then((res) => res.data);
+
+		if (!response.success) { return ri('PINNED_MESSAGES.ERROR'); }
+		if (response.count === 0) { return ri('PINNED_MESSAGES.NO_PINNED_MESSAGES', { channelname }); }
+
+		const messages = [];
+		for (const message of response.messages) {
+			messages.push([message.u.username, message.msg]);
+		}
+		return messages;
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ERROR_INVALID_ROOM');
+		} else if (err.response.status === 401) {
+			return ri('AUTH_ERROR');
+		} else {
+			return ri('ERROR');
+		}
+	}
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1246,6 +1390,10 @@ module.exports.getLastMessageType = getLastMessageType;
 module.exports.resolveChannelname = resolveChannelname;
 module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
+module.exports.setAnnouncement = setAnnouncement;
+module.exports.setDescription = setDescription;
+module.exports.setTopic = setTopic;
+module.exports.renameChannel = renameChannel;
 module.exports.addLeader = addLeader;
 module.exports.getUsersWithRolesFromRoom = getUsersWithRolesFromRoom;
 module.exports.removeLeader = removeLeader;
@@ -1256,3 +1404,4 @@ module.exports.leaveChannel = leaveChannel;
 module.exports.inviteUser = inviteUser;
 module.exports.kickUser = kickUser;
 module.exports.setStatus = setStatus;
+module.exports.readPinnedMessages = readPinnedMessages;
