@@ -986,6 +986,48 @@ const leaveChannel = async (roomId, roomname, type, headers) => {
 	}
 };
 
+const resolveDiscussion = async (discussionName, headers) => {
+	try {
+		// prid sort so that the normal rooms will be considered last
+		const groupDiscussions = await axios.get(`${ apiEndpoints.grouplisturl }?sort={"prid": -1, "_updatedAt": -1}&fields={"_id": 1, "name": 1, "fname": 1, "prid": 1, "t": 1}&count=100`, {
+			headers,
+		}).then((res) => res.data.groups);
+
+		const channelDiscussions = await axios.get(`${ apiEndpoints.channellisturl }?sort={"prid": -1, "_updatedAt": -1}&fields={"_id": 1, "name": 1, "fname": 1, "prid": 1, "t": 1}&count=100`, {
+			headers,
+		}).then((res) => res.data.channels);
+
+		const discussionDetails = [];
+		const discussionNames = [];
+
+		for (const discussion of groupDiscussions.concat(channelDiscussions)) {
+			// if prid doesn't exist it's not a discussion
+			if (!discussion.prid) { continue; }
+
+			discussionDetails.push({
+				id: discussion._id, // id of the discussion room
+				name: discussion.name, // the unique name of the discussion
+				fname: discussion.fname, // the display name of the discussion
+				type: discussion.t, // type: private (p), public(c)
+			});
+
+			discussionNames.push(discussion.fname.toLowerCase());
+		}
+
+		if (discussionNames.length === 0) { return null; }
+
+		const comparison = stringSimilar.findBestMatch(removeWhitespace(discussionName).toLowerCase(), discussionNames);
+		if (comparison.bestMatch.rating > 0) {
+			return discussionDetails[comparison.bestMatchIndex];
+		} else {
+			return null;
+		}
+
+	} catch (err) {
+		throw err;
+	}
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1026,3 +1068,4 @@ module.exports.resolveChannelname = resolveChannelname;
 module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
 module.exports.leaveChannel = leaveChannel;
+module.exports.resolveDiscussion = resolveDiscussion;
