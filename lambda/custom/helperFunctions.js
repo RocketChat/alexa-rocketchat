@@ -16,6 +16,16 @@ const {
 	oauthServiceName,
 } = envVariables;
 
+const cleanMessage = (string) => {
+
+	// :([a-z_]+): => regex for emoji :emoji:
+	// (&[#0-9A-Za-z]*;) => regex for special character encodings &#ab3;
+	// ((https?|ftp):\/\/[\.[a-zA-Z0-9\/\-]+) => regex for url
+
+	const combined_regex = new RegExp(':([a-z_]+):|(&[#0-9A-Za-z]*;)|((https?|ftp):\/\/[.[a-zA-Z0-9\/-]+)|[^ .,A-Za-z0-9\\n]', 'g');
+	return string.replace(combined_regex, '');
+};
+
 // Axios Functions
 
 const login = async (accessToken) =>
