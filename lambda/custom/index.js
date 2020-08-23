@@ -97,6 +97,9 @@ const {
 	PostDiscussionMessageIntentHandler,
 } = require('./handlers/Channels/PostDiscussionMessageIntentHandlers');
 
+const {
+	ReadUnreadsFromDiscussionIntentHandler,
+} = require('./handlers/Channels/ReadUnreadsFromDiscussionIntentHandlers');
 
 const {
 	ReadUnreadMentionsFromDiscussionIntentHandler,
@@ -171,6 +174,7 @@ const buildSkill = (skillBuilder) =>
 			InProgressPostDiscussionMessageIntentHandler,
 			DeniedPostDiscussionMessageIntentHandler,
 			PostDiscussionMessageIntentHandler,
+			ReadUnreadsFromDiscussionIntentHandler,
 			ReadUnreadMentionsFromDiscussionIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
