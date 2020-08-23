@@ -97,6 +97,11 @@ const {
 	PostDiscussionMessageIntentHandler,
 } = require('./handlers/Channels/PostDiscussionMessageIntentHandlers');
 
+
+const {
+	ReadUnreadMentionsFromDiscussionIntentHandler,
+} = require('./handlers/Channels/ReadUnreadMentionsFromDiscussionIntentHandlers');
+
 const { HelpIntentHandler } = require('./handlers/General/HelpIntentHandler');
 
 const { CancelAndStopIntentHandler } = require('./handlers/General/CancelAndStopIntentHandler');
@@ -166,6 +171,7 @@ const buildSkill = (skillBuilder) =>
 			InProgressPostDiscussionMessageIntentHandler,
 			DeniedPostDiscussionMessageIntentHandler,
 			PostDiscussionMessageIntentHandler,
+			ReadUnreadMentionsFromDiscussionIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,
