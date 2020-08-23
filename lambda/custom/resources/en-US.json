@@ -34,6 +34,7 @@
         "ASK_MORE": "Would you like to add more?",
         "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
         "NO_CHANNEL": "There is no channel named {channel_name}.",
+        "NO_ACTIVE_DISCUSSION": "There's no active discussion named {discussionname}.",
         "NO_USER": "There's no one named {username}.",
         "SIMILAR_CHANNELS": "There are multiple channels with similar name. Please tell the serial number of desired channel. {channel_names}.",
         "SIMILAR_USERS": "There are multiple users with similar username. Please tell the serial number of desired user. {usernames}.",
@@ -70,8 +71,10 @@
     },
     "GET_UNREAD_MESSAGES_FROM_CHANNEL": {
         "MESSAGE": "You Have {unread} Unread Messages <break time='1s'/> {respString} <break time='0.7s'/> ",
+        "DISCUSSION_MESSAGE": "You have {total} unread activities and {count} unread messages in {channelName}, {responseString}.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "NO_MESSAGE": "You Don't Have Any Unread Messages.",
+        "NO_MESSAGE_IN_DISCUSSION": "You don't have any unread messages in {channelName}.",
         "CARD_TITLE": "Channel Unread Messages",
         "ERROR": "Sorry, I couldn't find the channel {channelName} right now.",
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
@@ -117,7 +120,27 @@
         "USER_NOT_IN_ROOM": "You are not part of {roomname}.",
         "ERROR_NOT_FOUND": "The room {roomname} does not exist."
     },
+    "MESSAGE_TYPE": {
+        "TEXT_MESSAGE": "{username} says, {message}",
+        "CHANGE_DESCRIPTION": "{username} changed the description to, {description}.",
+        "CHANGE_ANNOUNCEMENT": "{username} made an announcement that says {announcement}.",
+        "CHANGE_TOPIC": "{username} changed the topic to {topic}.",
+        "IMAGE_MESSAGE": "{username} shared an image titled {title}.",
+        "VIDEO_MESSAGE": "{username} shared a video titled {title}.", 
+        "FILE_MESSAGE": "{username} shared a file titled {title}.",
+        "DISCUSSION_CREATED": "{username} created a discussion named {name}.",
+        "UNKNOWN_MESSAGE": "{username}, performed some action"  
+    },
+    "MENTIONS": {
+        "READ_MENTIONS": "You have {count} mentions in {roomName}. {finalMessage}.",
+        "NO_MENTIONS": "You don't have any mentions in {roomName}.",
+        "READ_DM_MENTIONS": "You have {count} mentions from {name}. {finalMessage}.",
+        "NO_DM_MENTIONS": "You don't have any mentions from DM, {name}.",
+        "ERROR": "Sorry, I couldn't get your mentions"
+    },
+    "NO_ACTIVE_DISCUSSION": "Couldn't find an active discussion named {name} from your discussions.",
     "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate.",
     "AUDIO_NO_SUPPORT": "Sorry, this skill doesn't support that feature.",
-    "GENERIC_REPROMPT": "Anything else I can help you with?"
+    "GENERIC_REPROMPT": "Anything else I can help you with?",
+    "SOMETHING_WENT_WRONG": "Sorry, something went wrong."
 }
