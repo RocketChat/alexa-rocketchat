@@ -1114,6 +1114,20 @@ const roomUnreadMessages = async (channelName, unreadCount, type, headers, handl
 	}
 };
 
+const getRoomCounters = async (roomId, type, headers) => {
+	try {
+		const url = type === 'c' ? apiEndpoints.channelcounterurl : apiEndpoints.privateroomcounterurl;
+		const response = await axios.get(`${ url }?roomId=${ roomId }`, {
+			headers,
+		}).then((res) => res.data);
+
+		console.log(response);
+		return response;
+	} catch (err) {
+		throw err;
+	}
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1156,3 +1170,4 @@ module.exports.customLog = customLog;
 module.exports.leaveChannel = leaveChannel;
 module.exports.resolveDiscussion = resolveDiscussion;
 module.exports.roomUnreadMessages = roomUnreadMessages;
+module.exports.getRoomCounters = getRoomCounters;
