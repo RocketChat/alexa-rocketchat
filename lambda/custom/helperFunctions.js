@@ -1033,6 +1033,7 @@ const roomUnreadMessages = async (channelName, unreadCount, type, headers, handl
 		// fname is optional and is used as a display name for discussions
 		if (fname) { fname = `Discussion ${ fname }`; }
 		// this must be ==
+		// eslint-disable-next-line eqeqeq
 		if (!unreadCount || unreadCount == 0) {
 			return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.NO_MESSAGE_IN_DISCUSSION', { channelName: fname || channelName });
 		}
@@ -1128,6 +1129,51 @@ const getRoomCounters = async (roomId, type, headers) => {
 	}
 };
 
+const readUnreadMentions = async (channelDetails, count, headers, fname = undefined) => {
+	try {
+		if (fname) { fname = `Discussion ${ fname }`; }
+		if (count === null) {
+			return ri('MENTIONS.ERROR');
+		}
+		// to be left as ==
+		// eslint-disable-next-line eqeqeq
+		if (count == 0) {
+			return ri('MENTIONS.NO_MENTIONS', { roomName: fname || channelDetails.name });
+		}
+
+		const response = await axios.get(`${ apiEndpoints.getmentionedmessagesurl }?roomId=${ channelDetails.id }&count=${ count }`, {
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success === true) {
+			let finalMessage = '';
+			const messages = [];
+
+			response.messages.forEach((message) => {
+				finalMessage += `${ message.u.username } says, ${ message.msg }.`;
+				messages.push(`${ message.u.username }: ${ message.msg }.`);
+			});
+
+			finalMessage = cleanMessage(finalMessage);
+
+			const speechText = ri('MENTIONS.READ_MENTIONS', {
+				finalMessage, count, roomName: fname || channelDetails.name,
+			});
+
+			// if there's nothing to display in the table just return speech text
+			if (messages.length === 0) { return speechText; }
+			return speechText;
+
+			// return [speechText, messages];
+		} else {
+			return ri('MENTIONS.ERROR');
+		}
+
+	} catch (err) {
+		return ri('MENTIONS.ERROR');
+	}
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1171,3 +1217,4 @@ module.exports.leaveChannel = leaveChannel;
 module.exports.resolveDiscussion = resolveDiscussion;
 module.exports.roomUnreadMessages = roomUnreadMessages;
 module.exports.getRoomCounters = getRoomCounters;
+module.exports.readUnreadMentions = readUnreadMentions;
