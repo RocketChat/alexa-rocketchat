@@ -1028,6 +1028,92 @@ const resolveDiscussion = async (discussionName, headers) => {
 	}
 };
 
+const roomUnreadMessages = async (channelName, unreadCount, type, headers, handlerInput, fname = null) => {
+	try {
+		// fname is optional and is used as a display name for discussions
+		if (fname) { fname = `Discussion ${ fname }`; }
+		// this must be ==
+		if (!unreadCount || unreadCount == 0) {
+			return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.NO_MESSAGE_IN_DISCUSSION', { channelName: fname || channelName });
+		}
+
+		const res = await axios
+			.get(`${ type === 'c' ? apiEndpoints.channelmessageurl : apiEndpoints.groupmessagenameurl }${ channelName }&count=${ unreadCount }`, {
+				headers,
+			})
+			.then((res) => res.data);
+
+		if (res.success === true) {
+
+			const msgs = [];
+			const messages = [];
+			let previousUsername = '';
+			for (let i = 0; i <= unreadCount - 1; i++) {
+				if (!res.messages[i]) { continue; }
+				let speechText;
+
+				// if it's just a normal text message
+				if (!res.messages[i].file && !res.messages[i].t && res.messages[i].msg) {
+					// check if the message is not empty or made of just dots.
+					if (cleanMessage(res.messages[i].msg).replace(/\./g, ' ').trim()) {
+						if (previousUsername === res.messages[i].u.username) {
+							msgs.push(`${ res.messages[i].msg }. `);
+						} else {
+							msgs.push(`${ res.messages[i].u.username } says, ${ res.messages[i].msg }.`);
+							previousUsername = res.messages[i].u.username;
+						}
+					}
+					messages.push(`${ res.messages[i].u.username }: ${ res.messages[i].msg }`);
+				} else if (res.messages[i].t) {
+					if (res.messages[i].t === 'room_changed_description') {
+						speechText = handlerInput.translate('MESSAGE_TYPE.CHANGE_DESCRIPTION', { username: res.messages[i].u.username, description: res.messages[i].msg });
+						msgs.push(speechText);
+						messages.push(`${ res.messages[i].u.username }: ${ res.messages[i].msg }`);
+					} else if (res.messages[i].t === 'room_changed_topic') {
+						speechText = handlerInput.translate('MESSAGE_TYPE.CHANGE_TOPIC', { username: res.messages[i].u.username, topic: res.messages[i].msg });
+						msgs.push(speechText);
+						messages.push(`${ res.messages[i].u.username }: ${ res.messages[i].msg }`);
+					} else if (res.messages[i].t === 'room_changed_announcement') {
+						speechText = handlerInput.translate('MESSAGE_TYPE.CHANGE_ANNOUNCEMENT', { username: res.messages[i].u.username, announcement: res.messages[i].msg });
+						msgs.push(speechText);
+						messages.push(`${ res.messages[i].u.username }: ${ res.messages[i].msg }`);
+					} else if (res.messages[i].t === 'discussion-created') {
+						speechText = handlerInput.translate('MESSAGE_TYPE.DISCUSSION_CREATED', { username: res.messages[i].u.username, name: res.messages[i].msg });
+						msgs.push(speechText);
+						messages.push(`${ res.messages[i].u.username }: ${ res.messages[i].msg }`);
+					}
+				} else if (res.messages[i].file) {
+					if (res.messages[i].file.type.includes('image')) {
+						speechText = handlerInput.translate('MESSAGE_TYPE.IMAGE_MESSAGE', { username: res.messages[i].u.username, title: res.messages[i].file.name });
+					} else if (res.messages[i].file.type.includes('video')) {
+						speechText = handlerInput.translate('MESSAGE_TYPE.VIDEO_MESSAGE', { username: res.messages[i].u.username, title: res.messages[i].file.name });
+					} else {
+						speechText = handlerInput.translate('MESSAGE_TYPE.FILE_MESSAGE', { username: res.messages[i].u.username, title: res.messages[i].file.name });
+					}
+					msgs.push(speechText);
+					messages.push(`${ res.messages[i].u.username }: ${ res.messages[i].file.name }`);
+				}
+			}
+
+			let responseString = msgs.join('  ');
+			responseString = cleanMessage(responseString);
+
+			const finalMsg = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.DISCUSSION_MESSAGE', { total: unreadCount, count: msgs.length, channelName: fname || channelName, responseString });
+
+			// if there's nothing to display in the table just send the messsage.
+			if (messages.length === 0) { return finalMsg; }
+			// return [finalMsg, messages];
+			return finalMsg;
+
+		} else {
+			return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.ERROR');
+		}
+
+	} catch (err) {
+		throw err;
+	}
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1069,3 +1155,4 @@ module.exports.resolveUsername = resolveUsername;
 module.exports.customLog = customLog;
 module.exports.leaveChannel = leaveChannel;
 module.exports.resolveDiscussion = resolveDiscussion;
+module.exports.roomUnreadMessages = roomUnreadMessages;
