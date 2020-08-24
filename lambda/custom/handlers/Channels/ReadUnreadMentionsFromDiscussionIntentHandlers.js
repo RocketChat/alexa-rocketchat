@@ -1,4 +1,4 @@
-const { resolveDiscussion, login, readUnreadMentions, getRoomCounters } = require('../../helperFunctions');
+const { resolveDiscussion, login, readRoomUnreadMentions, getRoomCounters } = require('../../helperFunctions');
 const { ri } = require('@jargon/alexa-skill-sdk');
 
 const ReadUnreadMentionsFromDiscussionIntentHandler = {
@@ -20,7 +20,7 @@ const ReadUnreadMentionsFromDiscussionIntentHandler = {
 				speechText = ri('NO_ACTIVE_DISCUSSION', { name: discussionname });
 			} else {
 				const roomCounters = await getRoomCounters(discussionDetails.id, discussionDetails.type, headers);
-				speechText = await readUnreadMentions(discussionDetails, roomCounters.userMentions, headers, discussionDetails.fname);
+				speechText = await readRoomUnreadMentions(discussionDetails, roomCounters.userMentions, headers, discussionDetails.fname);
 			}
 
 			const repromptText = ri('GENERIC_REPROMPT');

@@ -1129,7 +1129,7 @@ const getRoomCounters = async (roomId, type, headers) => {
 	}
 };
 
-const readUnreadMentions = async (channelDetails, count, headers, fname = undefined) => {
+const readRoomUnreadMentions = async (channelDetails, count, headers, fname = undefined) => {
 	try {
 		if (fname) { fname = `Discussion ${ fname }`; }
 		if (count === null) {
@@ -1217,4 +1217,4 @@ module.exports.leaveChannel = leaveChannel;
 module.exports.resolveDiscussion = resolveDiscussion;
 module.exports.roomUnreadMessages = roomUnreadMessages;
 module.exports.getRoomCounters = getRoomCounters;
-module.exports.readUnreadMentions = readUnreadMentions;
+module.exports.readRoomUnreadMentions = readRoomUnreadMentions;
