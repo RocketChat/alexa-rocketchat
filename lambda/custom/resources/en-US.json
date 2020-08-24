@@ -47,12 +47,14 @@
     },
     "CREATE_CHANNEL": {
         "SUCCESS": "I've created your channel {channelName}.",
+        "SUCCESS_GROUP": "I've created your group {channelName}.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Create A Channel",
         "ERROR": "Sorry, I couldn't create the channel {channelName} right now.",
+        "ERROR_GROUP": "Sorry, I couldn't create the group {channelName} right now.",
         "ERROR_DUPLICATE_NAME": "Sorry, the channel {channelName} already exists. Please try again with different channel name.",
         "ERROR_INVALID_NAME": "Sorry, {channelName} is not a valid channel name. Please try again with a single word name for the channel.",
-        "DENIED": "Okay, let's try again."
+        "DENIED": "Okay."
     },
     "DELETE_CHANNEL": {
         "SUCCESS": "I've deleted the channel {channelName}.",

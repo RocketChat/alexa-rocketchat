@@ -41,19 +41,12 @@ const DeniedCreateChannelIntentHandler = {
 	},
 	handle(handlerInput) {
 		const speechText = ri('CREATE_CHANNEL.DENIED');
+		const repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
 			.speak(speechText)
-			.addDelegateDirective({
-				name: 'CreateChannelIntent',
-				confirmationStatus: 'NONE',
-				slots: {
-					channelname: {
-						name: 'channelname',
-						confirmationStatus: 'NONE',
-					},
-				},
-			})
+			.speak(repromptText)
+			.reprompt(repromptText)
 			.getResponse();
 	},
 };
