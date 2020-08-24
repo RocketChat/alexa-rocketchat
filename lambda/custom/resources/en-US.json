@@ -131,7 +131,7 @@
         "DISCUSSION_CREATED": "{username} created a discussion named {name}.",
         "UNKNOWN_MESSAGE": "{username}, performed some action"  
     },
-    "MENTIONS": {
+    "ROOM_MENTIONS": {
         "READ_MENTIONS": "You have {count} mentions in {roomName}. {finalMessage}.",
         "NO_MENTIONS": "You don't have any mentions in {roomName}.",
         "READ_DM_MENTIONS": "You have {count} mentions from {name}. {finalMessage}.",

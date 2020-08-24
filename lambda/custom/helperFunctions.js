@@ -1133,12 +1133,12 @@ const readRoomUnreadMentions = async (channelDetails, count, headers, fname = un
 	try {
 		if (fname) { fname = `Discussion ${ fname }`; }
 		if (count === null) {
-			return ri('MENTIONS.ERROR');
+			return ri('ROOM_MENTIONS.ERROR');
 		}
 		// to be left as ==
 		// eslint-disable-next-line eqeqeq
 		if (count == 0) {
-			return ri('MENTIONS.NO_MENTIONS', { roomName: fname || channelDetails.name });
+			return ri('ROOM_MENTIONS.NO_MENTIONS', { roomName: fname || channelDetails.name });
 		}
 
 		const response = await axios.get(`${ apiEndpoints.getmentionedmessagesurl }?roomId=${ channelDetails.id }&count=${ count }`, {
@@ -1156,7 +1156,7 @@ const readRoomUnreadMentions = async (channelDetails, count, headers, fname = un
 
 			finalMessage = cleanMessage(finalMessage);
 
-			const speechText = ri('MENTIONS.READ_MENTIONS', {
+			const speechText = ri('ROOM_MENTIONS.READ_MENTIONS', {
 				finalMessage, count, roomName: fname || channelDetails.name,
 			});
 
@@ -1166,11 +1166,11 @@ const readRoomUnreadMentions = async (channelDetails, count, headers, fname = un
 
 			// return [speechText, messages];
 		} else {
-			return ri('MENTIONS.ERROR');
+			return ri('ROOM_MENTIONS.ERROR');
 		}
 
 	} catch (err) {
-		return ri('MENTIONS.ERROR');
+		return ri('ROOM_MENTIONS.ERROR');
 	}
 };
 
