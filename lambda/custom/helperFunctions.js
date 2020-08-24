@@ -551,11 +551,11 @@ const createGroup = async (channelName, headers) =>
 		.then((res) => res.data)
 		.then((res) => {
 			if (res.success === true) {
-				return ri('CREATE_CHANNEL.SUCCESS', {
+				return ri('CREATE_CHANNEL.SUCCESS_GROUP', {
 					channelName,
 				});
 			} else {
-				return ri('CREATE_CHANNEL.ERROR', {
+				return ri('CREATE_CHANNEL.ERROR_GROUP', {
 					channelName,
 				});
 			}
