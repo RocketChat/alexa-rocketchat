@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "test rocket",
+            "invocationName": "rocket chat",
             "modelConfiguration": {
                 "fallbackIntentSensitivity": {
                     "level": "LOW"
