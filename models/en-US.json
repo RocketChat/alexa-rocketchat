@@ -213,10 +213,16 @@
                     "slots": [
                         {
                             "name": "readunreadschannel",
-                            "type": "channelnames"
+                            "type": "channelnames",
+                            "samples": [
+                                "read from {readunreadschannel}",
+                                "from {readunreadschannel}"
+                            ]
                         }
                     ],
                     "samples": [
+                        "read unread messages from {readunreadschannel}",
+                        "read unreads",
                         "Any Unread Messages in {readunreadschannel}",
                         "Read My Unread Messages From {readunreadschannel}"
                     ]
@@ -293,18 +299,6 @@
                     ],
                     "samples": [
                         "Read Last Message From Private Channel {grouplastmessagechannelname}"
-                    ]
-                },
-                {
-                    "name": "ReadGroupUnreadsIntent",
-                    "slots": [
-                        {
-                            "name": "groupunreadschannelname",
-                            "type": "channelnames"
-                        }
-                    ],
-                    "samples": [
-                        "Read Unread Messages From Private Channel {groupunreadschannelname}"
                     ]
                 },
                 {
@@ -512,6 +506,8 @@
                         }
                     ],
                     "samples": [
+                        "get pinned messages",
+                        "get pinned messages from {channelname}",
                         "read pinned messages from {channelname}",
                         "read pinned messages"
                     ]
@@ -581,6 +577,8 @@
                         }
                     ],
                     "samples": [
+                        "make an announcement in {channelname}",
+                        "make an announcement",
                         "set announcement",
                         "Set announcement in channl {channelname}",
                         "Set announcement in {channelname}"
@@ -611,6 +609,9 @@
                         }
                     ],
                     "samples": [
+                        "change description",
+                        "update description in {channelname}",
+                        "change description in {channelname}",
                         "Set description in {channelname}",
                         "Set description"
                     ]
@@ -639,6 +640,9 @@
                         }
                     ],
                     "samples": [
+                        "update topic in {channelname}",
+                        "change topic in {channelname}",
+                        "change topic ",
                         "set topic in {channelname}",
                         "set topic"
                     ]
@@ -869,6 +873,49 @@
                         "set new status",
                         "update status",
                         "Change my status"
+                    ]
+                },
+                {
+                    "name": "GetMentionsIntent",
+                    "slots": [],
+                    "samples": [
+                        "get all unread mentions",
+                        "get unread mentions",
+                        "get mentions",
+                        "get my mentions",
+                        "do I have any unread mentions",
+                        "do I have any mentions",
+                        "unread mentions"
+                    ]
+                },
+                {
+                    "name": "ReadMentionsIntent",
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "samples": [
+                                "from {channelname}",
+                                "from channel {channelname}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "read mentions",
+                        "unread mentions from channel {channelname} ",
+                        "read unread mentions from channel {channelname}",
+                        "read mentions from channel",
+                        "read unread mentions"
+                    ]
+                },
+                {
+                    "name": "GetUnreadsIntent",
+                    "slots": [],
+                    "samples": [
+                        "get my unread messages",
+                        "do I have any unreads",
+                        "get all my unreads",
+                        "get all unreads"
                     ]
                 }
             ],
@@ -2812,6 +2859,40 @@
                     ]
                 },
                 {
+                    "name": "ReadUnreadsIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "readunreadschannel",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.188447357128.1264995215062"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ReadMentionsIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "channelname",
+                            "type": "channelnames",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.564375851330.619539757459"
+                            }
+                        }
+                    ]
+                },
+                {
                     "name": "ChangeStatusIntent",
                     "delegationStrategy": "ALWAYS",
                     "confirmationRequired": true,
@@ -3744,6 +3825,15 @@
                 ]
             },
             {
+                "id": "Elicit.Slot.188447357128.1264995215062",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to read unreads from?"
+                    }
+                ]
+            },
+            {
                 "id": "Elicit.Slot.485687859193.22188146981",
                 "variations": [
                     {
@@ -3821,6 +3911,15 @@
                     {
                         "type": "PlainText",
                         "value": "You want to change your status to, {statusmessage} , is that correct?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.564375851330.619539757459",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which channel do you want to read unread mentions from?"
                     }
                 ]
             }

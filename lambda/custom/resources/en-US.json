@@ -71,9 +71,9 @@
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
     },
     "GET_UNREAD_MESSAGES_FROM_CHANNEL": {
-        "MESSAGE": "You Have {unread} Unread Messages <break time='1s'/> {respString} <break time='0.7s'/> ",
+        "MESSAGE": "You Have {unread} Unread Messages in {channelName}. <break time='1s'/> {respString} <break time='0.7s'/> ",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
-        "NO_MESSAGE": "You Don't Have Any Unread Messages.",
+        "NO_MESSAGE": "You Don't Have Any Unread Messages in {channelName}.",
         "CARD_TITLE": "Channel Unread Messages",
         "ERROR": "Sorry, I couldn't find the channel {channelName} right now.",
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
@@ -99,6 +99,21 @@
         "ERROR": "Sorry, I couldn't archive this channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
     },
+    "CHANNEL_DETAILS": {
+        "SET_ANNOUNCEMENT_SUCCESS": "I've set the announcement in, {roomname}.",
+        "SET_ANNOUNCEMENT_DENIED": "Okay, I won't set the announcement.",
+        "SET_DESCRIPTION_SUCCESS": "I've set the description in, {roomname}.",
+        "SET_DESCRIPTION_DENIED": "Okay.",
+        "SET_TOPIC_SUCCESS": "I've set the topic in, {roomname}.",
+        "SET_TOPIC_DENIED": "Okay.",
+        "RENAME_ROOM_SUCCESS": "{oldname}, is now {newname}.",
+        "RENAME_ROOM_DENIED": "Okay.",
+        "ERROR_NAME_TAKEN": "The name {newname} is already taken.",
+        "NOT_AUTHORISED": "Sorry, You are not authorised to perform this.",
+        "ERROR": "Sorry, I couldn't do it at the moment.",
+        "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate.",
+        "ERROR_NOT_FOUND": "Sorry, I couldn't find room named {roomname}."
+    },
     "RESOLVE_CHANNEL":{
         "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
         "NO_CHANNEL":"You are not part of any channel or group named {channel_name}.",
@@ -121,9 +136,9 @@
         "REMOVE_OWNER_SUCCESS": "{username} is no longer an owner of {roomname}.",
         "REMOVE_MODERATOR_SUCCESS": "{username} is no longer a moderator of {roomname}.",
         "ERROR_REMOVE_LAST_OWNER": "This is a last owner. Please set a new owner before removing this one.",
-        "USER_NOT_LEADER": "{username} is not a leader of {roomname}.",
-        "USER_NOT_OWNER": "{username} is not an owner of {roomname}.",
-        "USER_NOT_MODERATOR": "{username} is not a moderator of {roomname}.",
+        "USER_NOT_LEADER": "There is no leader named {username} in {roomname}.",
+        "USER_NOT_OWNER": "There is no owner named {username} in {roomname}.",
+        "USER_NOT_MODERATOR": "There is no moderator named {username} in {roomname}.",
         "USER_NOT_MEMBER": "{username} is not a member of room {roomname}.",
         "ERROR_NOT_ALLOWED": "Sorry, you don't have the right to perform this operation.",
         "ERROR_ROOM_NOT_FOUND": "There's no room named {roomname}.",
@@ -152,6 +167,12 @@
         "ERROR_USER_NOT_IN_ROOM": "{username} is not a member of room {roomname}.",
         "ERROR_YOU_ARE_LAST_OWNER": "You are last owner. Please set a new owner before leaving room."
     },
+    "PINNED_MESSAGES":{
+        "SUCCESS": "There are {no_of_pinned_messages} pinned messages in the channel {channelname}, here is the latest one. {username} says, {message}.",
+        "NO_PINNED_MESSAGES": "There are no pinned messages in channel {channelname}.",
+        "ERROR": "Sorry, I'm unable to process you request."
+
+    },
     "HINTS": {
         "GetUnreadMessagesIntent": "Get unread messages from channel",
         "GetLastMessageFromChannelIntent": "Read last message from channel",
@@ -164,6 +185,20 @@
         "SUCCESS": "I've updated your status.",
         "DENIED": "Okay, I won't change your status.",
         "ERROR": "Sorry, I couldn't change your status."
+    },
+    "UNREADS": {
+        "MESSAGE": "You have, {finalMessage}.",
+        "NO_UNREADS": "You don't have any unread messages.",
+        "ERROR": "Sorry, I couldn't perform this request."
+    },
+    "MENTIONS": {
+        "MESSAGE": "You have, {finalMessage}.",
+        "READ_MENTIONS": "You have {count} mentions in {roomName} <break time='0.5s'/> {finalMessage} <break time='0.5s'/>",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate.",
+        "NO_MENTIONS": "You don't have any unread mentions.",
+        "NO_MENTIONS_ROOM": "You don't have any unread mentions in {roomName}.",
+        "REACTED": "I've acknowledged to {count} mentions in {roomName}.",
+        "ERROR": "Sorry, I couldn't perform this request."
     },
     "HINT_TRANSITION": "You can try saying",
     "FALLBACK_MSG": "Sorry, I don't know about that.",
