@@ -703,11 +703,12 @@ the user has joined and are similar to the input string
 */
 const resolveChannelname = async (channelName, headers, single = false) => {
 	try {
-		const publicChannelsResponse = await axios.get(apiEndpoints.channellisturl, {
+		// sort wrt prid, so the discussions will end up at the end.
+		const publicChannelsResponse = await axios.get(`${ apiEndpoints.channellisturl }?sort={"prid": 1, "_updatedAt": -1}&fields={"_id": 1, "name": 1, "t": 1}&count=100`, {
 			headers,
 		}).then((res) => res.data);
 
-		const privateChannelsResponse = await axios.get(apiEndpoints.grouplisturl, {
+		const privateChannelsResponse = await axios.get(`${ apiEndpoints.grouplisturl }?sort={"prid": 1, "_updatedAt": -1}&fields={"_id": 1, "name": 1, "t": 1}&count=100`, {
 			headers,
 		}).then((res) => res.data);
 
