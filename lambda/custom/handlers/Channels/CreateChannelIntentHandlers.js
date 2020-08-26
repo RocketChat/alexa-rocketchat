@@ -1,7 +1,7 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
 const { login, createChannel, replaceWhitespacesFunc } = require('../../helperFunctions');
 const { supportsAPL } = require('../../utils');
-const { createChannelLayout } = require('../../APL/layouts');
+const titleMessageBoxTemplate = require('../../APL/templates/titleMessageBoxTemplate');
 
 const StartedCreateChannelIntentHandler = {
 	canHandle(handlerInput) {
@@ -73,57 +73,16 @@ const CreateChannelIntentHandler = {
 
 			if (supportsAPL(handlerInput)) {
 
+				const data = {
+					title: 'Channel Created',
+					message: `${ speechText.params.channelName }`,
+				};
+
 				return handlerInput.jrb
 					.speak(speechText)
 					.speak(repromptText)
 					.reprompt(repromptText)
-					.addDirective({
-						type: 'Alexa.Presentation.APL.RenderDocument',
-						version: '1.0',
-						document: createChannelLayout,
-						datasources: {
-
-							CreateChannelPageData: {
-								type: 'object',
-								objectId: 'rcCreateChannel',
-								backgroundImage: {
-									contentDescription: null,
-									smallSourceUrl: null,
-									largeSourceUrl: null,
-									sources: [
-										{
-											url: 'https://user-images.githubusercontent.com/41849970/60651516-fcb23880-9e63-11e9-8efb-1e590a41489e.png',
-											size: 'small',
-											widthPixels: 0,
-											heightPixels: 0,
-										},
-										{
-											url: 'https://user-images.githubusercontent.com/41849970/60651516-fcb23880-9e63-11e9-8efb-1e590a41489e.png',
-											size: 'large',
-											widthPixels: 0,
-											heightPixels: 0,
-										},
-									],
-								},
-								textContent: {
-									placeholder: {
-										type: 'PlainText',
-										text: 'Channel',
-									},
-									channelname: {
-										type: 'PlainText',
-										text: `#${ speechText.params.channelName }`,
-									},
-									successful: {
-										type: 'PlainText',
-										text: 'created successfully.',
-									},
-								},
-								logoUrl: 'https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/icon-circle-1024.png',
-							},
-
-						},
-					})
+					.addDirective(titleMessageBoxTemplate(data))
 					.getResponse();
 
 			} else {

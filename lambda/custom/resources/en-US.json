@@ -5,6 +5,7 @@
     },
     "HELP": {
         "MESSAGE": "This is the Alexa Skill for rocket chat. What would you like to do?",
+        "DETAILED_MESSAGE": "This is the Alexa Skill for Rocket Chat. You can use this skill to send messages, read unread messages, get your mentions, reading mentioned messages, et cetera. Find more functionalities in the skill description section of the Alexa App.",
         "CARD_TITLE": "Rocket.Chat Help"
     },
     "GOODBYE": {
@@ -202,7 +203,10 @@
         "PostDirectMessageIntent": "Post direct message",
         "PostEmojiMessageIntent": "Read Pinned messages from channel",
         "ChangeStatusIntent": "Change my status",
-        "GetMentionsIntent": "Get my mentions"
+        "GetMentionsIntent": "Get my mentions",
+        "PostDiscussionMessageIntent": "Send message to a discussion",
+        "ReadUnreadsFromDiscussionIntent": "Read unread messages from discussion",
+        "ReadMentionsIntent": "Read mentions from channel"
     },
     "STATUS": {
         "SUCCESS": "I've updated your status.",

@@ -1,7 +1,7 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
 const { login, deleteRoom } = require('../../helperFunctions');
 const { supportsAPL, resolveChannel } = require('../../utils');
-const burgerTemplate = require('../../APL/templates/burgerTemplate');
+const titleMessageBoxTemplate = require('../../APL/templates/titleMessageBoxTemplate');
 
 
 const StartedDeleteChannelIntentHandler = {
@@ -75,16 +75,15 @@ const DeleteChannelIntentHandler = {
 
 			if (supportsAPL(handlerInput) && speechText.params && speechText.params.success) {
 				const data = {
-					top: 'Channel',
-					middle: `#${ room.name }`,
-					bottom: 'Deleted successfully',
+					title: 'Channel Deleted',
+					message: `${ room.name }`,
 				};
 
 				return handlerInput.jrb
 					.speak(speechText)
 					.speak(repromptText)
 					.reprompt(repromptText)
-					.addDirective(burgerTemplate(data))
+					.addDirective(titleMessageBoxTemplate(data))
 					.getResponse();
 
 			} else {
