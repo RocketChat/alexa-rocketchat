@@ -40,6 +40,7 @@
         "SIMILAR_USERS": "There are multiple users with similar username. Please tell the serial number of desired user. {usernames}.",
         "CONFIRM_MORE": "Okay, go on.",
         "CONFIRM_MORE_REPROMPT": "Please continue your message.",
+        "POST_LONG_MESSAGE_CONFIRMATION": "You want to send, {longmessage}, to channel {channelName}, is that correct?",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Post A Message",
         "ERROR": "Sorry, I couldn't send your message right now.",
@@ -60,9 +61,10 @@
         "SUCCESS": "I've deleted the channel {channelName}.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Delete A Channel",
+        "NOT_AUTHORISED": "Sorry, you are not authorised to delete this channel.",
         "ERROR": "Sorry, I couldn't delete the channel {channelName} right now.",
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name.",
-        "DENIED": "Okay, let's try again."
+        "DENIED": "Okay."
     },
     "GET_LAST_MESSAGE_FROM_CHANNEL": {
         "SUCCESS": "{name} says, {message}.",
@@ -72,11 +74,11 @@
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
     },
     "GET_UNREAD_MESSAGES_FROM_CHANNEL": {
-        "MESSAGE": "You Have {unread} Unread Messages <break time='1s'/> {respString} <break time='0.7s'/> ",
         "DISCUSSION_MESSAGE": "You have {total} unread activities and {count} unread messages in {channelName}, {responseString}.",
-        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
-        "NO_MESSAGE": "You Don't Have Any Unread Messages.",
         "NO_MESSAGE_IN_DISCUSSION": "You don't have any unread messages in {channelName}.",
+        "MESSAGE": "You Have {unread} Unread Messages in {channelName}. <break time='1s'/> {respString} <break time='0.7s'/> ",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
+        "NO_MESSAGE": "You Don't Have Any Unread Messages in {channelName}.",
         "CARD_TITLE": "Channel Unread Messages",
         "ERROR": "Sorry, I couldn't find the channel {channelName} right now.",
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
@@ -95,13 +97,6 @@
         "ERROR": "Sorry, I am unable to add all users to the channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I am unable to add all users to channel {channelName} right now."
     },
-    "ADD_OWNER": {
-        "SUCCESS": "{userName} is now the owner of {channelName}.",
-        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
-        "CARD_TITLE": "Add Owner",
-        "ERROR": "Sorry, I couldn't assign a owner to the channel right now.",
-        "ERROR_NOT_FOUND": "Sorry, I couldn't assign a owner to channel {channelName} right now."
-    },
     "ARCHIVE_CHANNEL": {
         "SUCCESS": "{channelName} is now archived.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
@@ -109,10 +104,53 @@
         "ERROR": "Sorry, I couldn't archive this channel right now.",
         "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
     },
+    "CHANNEL_DETAILS": {
+        "SET_ANNOUNCEMENT_SUCCESS": "I've set the announcement in, {roomname}.",
+        "SET_ANNOUNCEMENT_DENIED": "Okay, I won't set the announcement.",
+        "SET_DESCRIPTION_SUCCESS": "I've set the description in, {roomname}.",
+        "SET_DESCRIPTION_DENIED": "Okay.",
+        "SET_TOPIC_SUCCESS": "I've set the topic in, {roomname}.",
+        "SET_TOPIC_DENIED": "Okay.",
+        "RENAME_ROOM_SUCCESS": "{oldname}, is now {newname}.",
+        "RENAME_ROOM_DENIED": "Okay.",
+        "ERROR_NAME_TAKEN": "The name {newname} is already taken.",
+        "NOT_AUTHORISED": "Sorry, You are not authorised to perform this.",
+        "ERROR": "Sorry, I couldn't do it at the moment.",
+        "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate.",
+        "ERROR_NOT_FOUND": "Sorry, I couldn't find room named {roomname}."
+    },
     "RESOLVE_CHANNEL":{
         "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
-        "NO_CHANNEL":"There is no channel named {channel_name}.",
+        "NO_CHANNEL":"You are not part of any channel or group named {channel_name}.",
         "SIMILAR_CHANNELS": "There are multiple channels with similar name. Please tell the serial number of desired channel. {channel_names}."
+    },
+    "RESOLVE_USERNAME":{
+        "ASK_CHOICE": "Please select between one and {choice_limit}. {users_list}.",
+        "NO_USER":"There is no user named {username} in your contacts list.",
+        "SIMILAR_USERS": "There are multiple users with similar username. Please tell the serial number of desired user. {user_names}."
+    },
+    "ROOM_ROLES":{
+        "ADD_LEADER_SUCCESS": "{username} is now the leader of {roomname}.",
+        "ADD_OWNER_SUCCESS": "{username} is now an owner of {roomname}.",
+        "ADD_MODERATOR_SUCCESS": "{username} is now a moderator of {roomname}.",
+        "ADD_LEADER_DENIED": "Okay.",
+        "ALREADY_LEADER": "{username} is already a leader of {roomname}.",
+        "ALREADY_OWNER": "{username} is already an owner of {roomname}.",
+        "ALREADY_MODERATOR": "{username} is already a moderator of {roomname}.",
+        "REMOVE_LEADER_SUCCESS": "{username} is no longer a leader of {roomname}.",
+        "REMOVE_OWNER_SUCCESS": "{username} is no longer an owner of {roomname}.",
+        "REMOVE_MODERATOR_SUCCESS": "{username} is no longer a moderator of {roomname}.",
+        "ERROR_REMOVE_LAST_OWNER": "This is a last owner. Please set a new owner before removing this one.",
+        "USER_NOT_LEADER": "There is no leader named {username} in {roomname}.",
+        "USER_NOT_OWNER": "There is no owner named {username} in {roomname}.",
+        "USER_NOT_MODERATOR": "There is no moderator named {username} in {roomname}.",
+        "USER_NOT_MEMBER": "{username} is not a member of room {roomname}.",
+        "ERROR_NOT_ALLOWED": "Sorry, you don't have the right to perform this operation.",
+        "ERROR_ROOM_NOT_FOUND": "There's no room named {roomname}.",
+        "INVALID_USER": "There's no user named {username}.",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
+        "DENIED": "Okay.",
+        "ERROR": "Sorry, I couldn't perform this operation."
     },
     "LEAVE_CHANNEL": {
         "SUCCESS": "You have left the room {roomname}.",
@@ -140,9 +178,60 @@
         "NO_DM_MENTIONS": "You don't have any mentions from DM, {name}.",
         "ERROR": "Sorry, I couldn't get your mentions"
     },
+    "INVITE_USER": {
+        "SUCCESS": "{username} has been invited to {roomname}.",
+        "ERROR": "Sorry, the invite was unsuccessful.",
+        "DENIED": "Okay."
+    },
+    "KICK_USER": {
+        "SUCCESS": "{username} was removed from {roomname}.",
+        "ERROR": "Sorry, there was an error",
+        "DENIED": "Okay.",
+        "ERROR_USER_NOT_IN_ROOM": "{username} is not a member of room {roomname}.",
+        "ERROR_YOU_ARE_LAST_OWNER": "You are last owner. Please set a new owner before leaving room."
+    },
+    "PINNED_MESSAGES":{
+        "SUCCESS": "There are {no_of_pinned_messages} pinned messages in the channel {channelname}, here is the latest one. {username} says, {message}.",
+        "NO_PINNED_MESSAGES": "There are no pinned messages in channel {channelname}.",
+        "ERROR": "Sorry, I'm unable to process you request."
+
+    },
+    "HINTS": {
+        "GetUnreadMessagesIntent": "Get unread messages from channel",
+        "GetLastMessageFromChannelIntent": "Read last message from channel",
+        "PostDirectMessageIntent": "Post direct message",
+        "PostEmojiMessageIntent": "Read Pinned messages from channel",
+        "ChangeStatusIntent": "Change my status",
+        "GetMentionsIntent": "Get my mentions"
+    },
+    "STATUS": {
+        "SUCCESS": "I've updated your status.",
+        "DENIED": "Okay, I won't change your status.",
+        "ERROR": "Sorry, I couldn't change your status."
+    },
+    "UNREADS": {
+        "MESSAGE": "You have, {finalMessage}.",
+        "NO_UNREADS": "You don't have any unread messages.",
+        "ERROR": "Sorry, I couldn't perform this request."
+    },
+    "MENTIONS": {
+        "MESSAGE": "You have, {finalMessage}.",
+        "READ_MENTIONS": "You have {count} mentions in {roomName} <break time='0.5s'/> {finalMessage} <break time='0.5s'/>",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate.",
+        "NO_MENTIONS": "You don't have any unread mentions.",
+        "NO_MENTIONS_ROOM": "You don't have any unread mentions in {roomName}.",
+        "REACTED": "I've acknowledged to {count} mentions in {roomName}.",
+        "ERROR": "Sorry, I couldn't perform this request."
+    },
     "NO_ACTIVE_DISCUSSION": "Couldn't find an active discussion named {name} from your discussions.",
-    "AUTH_ERROR":"Sorry you are currently signed out , please use the companion app to authenticate.",
+    "SOMETHING_WENT_WRONG": "Sorry, something went wrong.",
+    "HINT_TRANSITION": "You can try saying",
+    "FALLBACK_MSG": "Sorry, I don't know about that.",
+    "ERROR_NOT_FOUND": "The room {roomname} does not exist.",
+    "ERROR_NOT_ALLOWED": "Sorry, only authorised users can perform this operation.",
+    "ERROR_INVALID_USER": "The username {username} does not exist.",
+    "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate.",
     "AUDIO_NO_SUPPORT": "Sorry, this skill doesn't support that feature.",
     "GENERIC_REPROMPT": "Anything else I can help you with?",
-    "SOMETHING_WENT_WRONG": "Sorry, something went wrong."
+    "YES_PROMPT": "What would you like to do?"
 }

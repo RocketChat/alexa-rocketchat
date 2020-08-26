@@ -1,48 +1,47 @@
 const { ri } = require('@jargon/alexa-skill-sdk');
-const { login, deleteRoom } = require('../../helperFunctions');
+const { login, renameChannel } = require('../../helperFunctions');
 const { supportsAPL, resolveChannel } = require('../../utils');
-const burgerTemplate = require('../../APL/templates/burgerTemplate');
+const titleMessageTemplate = require('../../APL/templates/titleMessageBoxTemplate');
 
 
-const StartedDeleteChannelIntentHandler = {
+const StartedRenameChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-        handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
+        handlerInput.requestEnvelope.request.intent.name === 'RenameChannelIntent' &&
         handlerInput.requestEnvelope.request.dialogState === 'STARTED';
 	},
 	async handle(handlerInput) {
-
 		const { attributesManager } = handlerInput;
 		const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
 		delete sessionAttributes.similarChannels;
 		delete sessionAttributes.channel;
 
-		return resolveChannel(handlerInput, 'channeldelete', 'selection');
+		return resolveChannel(handlerInput, 'channelname', 'choice');
 	},
 };
 
-const InProgressDeleteChannelIntentHandler = {
+const InProgressRenameChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-          handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
+          handlerInput.requestEnvelope.request.intent.name === 'RenameChannelIntent' &&
           handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
           handlerInput.requestEnvelope.request.intent.confirmationStatus !== 'DENIED';
 	},
 	async handle(handlerInput) {
-		return resolveChannel(handlerInput, 'channeldelete', 'selection');
+		return resolveChannel(handlerInput, 'channelname', 'choice');
 	},
 };
 
-const DeniedDeleteChannelIntentHandler = {
+const DeniedRenameChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-          handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent' &&
+          handlerInput.requestEnvelope.request.intent.name === 'RenameChannelIntent' &&
           handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS' &&
           handlerInput.requestEnvelope.request.intent.confirmationStatus === 'DENIED';
 	},
 	handle(handlerInput) {
-		const speechText = ri('DELETE_CHANNEL.DENIED');
+		const speechText = ri('CHANNEL_DETAILS.SET_DESCRIPTION_DENIED');
 		const repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
@@ -53,10 +52,10 @@ const DeniedDeleteChannelIntentHandler = {
 	},
 };
 
-const DeleteChannelIntentHandler = {
+const RenameChannelIntentHandler = {
 	canHandle(handlerInput) {
 		return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-              handlerInput.requestEnvelope.request.intent.name === 'DeleteChannelIntent'
+              handlerInput.requestEnvelope.request.intent.name === 'RenameChannelIntent'
               && handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
               && handlerInput.requestEnvelope.request.intent.confirmationStatus === 'CONFIRMED';
 	},
@@ -68,31 +67,53 @@ const DeleteChannelIntentHandler = {
 			const { attributesManager } = handlerInput;
 			const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
+			// const channelName = handlerInput.requestEnvelope.request.intent.slots.channelname.value;
+			const newname = handlerInput.requestEnvelope.request.intent.slots.newname.value;
+
 			const headers = await login(accessToken);
-			const room = sessionAttributes.channel;
-			const speechText = await deleteRoom(room, headers);
+			const speechText = await renameChannel(sessionAttributes.channel, newname, headers);
+
+			delete sessionAttributes.similarChannels;
+			delete sessionAttributes.channel;
+
 			const repromptText = ri('GENERIC_REPROMPT');
 
-			if (supportsAPL(handlerInput) && speechText.params && speechText.params.success) {
-				const data = {
-					top: 'Channel',
-					middle: `#${ room.name }`,
-					bottom: 'Deleted successfully',
-				};
+			if (supportsAPL(handlerInput)) {
+				if (speechText.params && speechText.params.success) {
+					const data = {
+						title: handlerInput.translate(speechText.key, speechText.params),
+						message: '',
+					};
 
-				return handlerInput.jrb
-					.speak(speechText)
-					.speak(repromptText)
-					.reprompt(repromptText)
-					.addDirective(burgerTemplate(data))
-					.getResponse();
+					return handlerInput.jrb
+						.speak(speechText)
+						.speak(repromptText)
+						.reprompt(repromptText)
+						.addDirective(titleMessageTemplate(data))
+						.getResponse();
+
+				} else {
+					const data = {
+						title: handlerInput.translate('CHANNEL_DETAILS.ERROR'),
+						message: '',
+					};
+
+					return handlerInput.jrb
+						.speak(speechText)
+						.speak(repromptText)
+						.reprompt(repromptText)
+						.addDirective(titleMessageTemplate(data))
+						.getResponse();
+				}
 
 			} else {
+
 				return handlerInput.jrb
 					.speak(speechText)
 					.speak(repromptText)
 					.reprompt(repromptText)
 					.getResponse();
+
 			}
 
 		} catch (error) {
@@ -102,8 +123,8 @@ const DeleteChannelIntentHandler = {
 };
 
 module.exports = {
-	StartedDeleteChannelIntentHandler,
-	InProgressDeleteChannelIntentHandler,
-	DeniedDeleteChannelIntentHandler,
-	DeleteChannelIntentHandler,
+	StartedRenameChannelIntentHandler,
+	InProgressRenameChannelIntentHandler,
+	DeniedRenameChannelIntentHandler,
+	RenameChannelIntentHandler,
 };
