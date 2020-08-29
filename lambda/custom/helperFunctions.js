@@ -1738,6 +1738,64 @@ const readUnreadMentions = async (roomId, roomName, count, headers) => {
 	}
 };
 
+const DMUnreadMessages = async (name, count, headers) => {
+	try {
+		if (count == null) {
+			return ri('SOMETHING_WENT_WRONG');
+		}
+		// eslint-disable-next-line eqeqeq
+		if (count == 0) {
+			return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.NO_MESSAGE_IN_DM', { name });
+		}
+
+		const res = await axios
+			.get(`${ apiEndpoints.immessageurl }?username=${ name }&count=${ count }`, {
+				headers,
+			})
+			.then((res) => res.data);
+
+		if (res.success === true) {
+
+			const msgs = [];
+
+			for (let i = 0; i <= count - 1; i++) {
+				if (res.messages[i] && !res.messages[i].t) {
+					if (res.messages[i].file) {
+						msgs.push(`Sent you a file named ${ res.messages[i].file.name }.`);
+					} else if (res.messages[i].msg) { msgs.push(`${ res.messages[i].msg }.`); }
+				}
+			}
+
+			let responseString = msgs.join('  ');
+			responseString = cleanMessage(responseString);
+
+			const finalMsg = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.DM_MESSAGE', { unread: msgs.length, name, responseString });
+
+			// return [finalMsg, msgs];
+			return finalMsg;
+
+		} else {
+			return ri('SOMETHING_WENT_WRONG');
+		}
+	} catch (err) {
+		console.log(err);
+		throw err.message;
+	}
+};
+
+const getDMCounter = async (id, headers) => {
+	try {
+		console.log(id);
+		const response = await axios.get(`${ apiEndpoints.imcountersurl }?roomId=${ id }`, {
+			headers,
+		})
+			.then((res) => res.data);
+		return response;
+	} catch (err) {
+		throw 'Error while getting counters';
+	}
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1797,3 +1855,6 @@ module.exports.getUnreadMentionsCountChannel = getUnreadMentionsCountChannel;
 module.exports.getUnreadMentionsCountGroup = getUnreadMentionsCountGroup;
 module.exports.readUnreadMentions = readUnreadMentions;
 module.exports.getAllUnreads = getAllUnreads;
+module.exports.DMUnreadMessages = DMUnreadMessages;
+module.exports.getDMCounter = getDMCounter;
+
