@@ -10,6 +10,7 @@ const {
 
 const removeWhitespace = require('remove-whitespace');
 const emojiTranslate = require('moji-translate');
+const { serverurl } = require('./config');
 
 // Server Credentials. Follow readme to set them up.
 const {
@@ -312,7 +313,7 @@ const getLastMessageFileURL = async (channelName, type, headers) =>
 			headers,
 		})
 		.then((res) => res.data)
-		.then((res) => `https://bots.rocket.chat/file-upload/${ res.messages[0].file._id }/${ res.messages[0].file.name }`)
+		.then((res) => `https://${ serverurl }/file-upload/${ res.messages[0].file._id }/${ res.messages[0].file.name }`)
 		.catch((err) => {
 			console.log(err.message);
 		});
@@ -774,6 +775,7 @@ const resolveChannelname = async (channelName, headers, single = false) => {
 	}
 };
 
+// this function will resolve channelnames from the latest 100 active channels and groups that the user is part of
 /*
 this function takes in a string as an input and returns an array of channel/group names which
 the user has joined and are similar to the input string
@@ -826,6 +828,7 @@ const resolveChannelnameFromLatestActiveRooms = async (channelName, headers, sin
 	}
 };
 
+// this function resolves usernames from all the DMs that the user has joined
 /*
 this function takes a string an an input and returns an array of usernames
 which the user is in contact with and is similar to the input string

@@ -324,8 +324,9 @@ SECRET_ACCESS_KEY=<your aws account secret access key>
 SERVER_URL=<rocket chat server url>
 OAUTH_SERVICE_NAME=<oauth service name>
 DDB_NAME=<dynamo table name>
-CUSTOM_LOG_URL=<custom logger url(optional parameter)>
+CUSTOM_LOG_URL=<custom logger url(optional parameter, can be ignored if logs are not required)>
 ```
+*Note*: The logs generated during the skill execution is sent to the CUSTOM_LOG_URL as a POST request. The body of this POST request then needs to be displayed in an external website. This is a potential risk to privacy and should only be used during development. [Here](https://github.com/AdarshNaidu/My-Logs) is the code to setup a server that displays the logs.
 
 3. From `./lambda/custom` folder, run `npm start` to start the server at port 3000.
 
@@ -350,14 +351,17 @@ Change the skill name, example phrase, icons, testing instructions etc ...
 See the Skill [Manifest Documentation](https://developer.amazon.com/docs/smapi/skill-manifest.html) for more information.
 
   
+2. ```./lambda/custom/handlers```
 
-2.  ```./lambda/custom/index.js```
 
-  
+Add new handlers for intents in specific folders, modify intent logic, enhance the functionality of the source code to customize the skill.  
+The naming convention and folder structure is as follows
+```
+Intent name: FunctionIntent
+Intent type: channel based intent
+Intent path: ./lambda/custom/handlers/Channels/FunctionIntentHandler(s).js
+```
 
-Add new handlers for intents, modify intent logic, enhance the functionality of the source code to customize the skill.
-
-  
 
 3.  ```./lambda/custom/resources/*.json```
 
