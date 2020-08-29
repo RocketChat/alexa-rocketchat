@@ -43,8 +43,6 @@ const login = async (accessToken) =>
 		})
 		.then((res) => res.data)
 		.then((res) => {
-			console.log(res);
-			customLog({ user: res }); // eslint-disable-line no-use-before-define
 			const headers = {
 				'X-Auth-Token': res.data.authToken,
 				'X-User-Id': res.data.userId,
@@ -780,7 +778,8 @@ const resolveChannelname = async (channelName, headers, single = false) => {
 this function takes in a string as an input and returns an array of channel/group names which
 the user has joined and are similar to the input string
 */
-const resolveChannelname = async (channelName, headers, single = false) => {
+// eslint-disable-next-line no-unused-vars
+const resolveChannelnameFromLatestActiveRooms = async (channelName, headers, single = false) => {
 	try {
 		// sort wrt prid, so the discussions will end up at the end.
 		const publicChannelsResponse = await axios.get(`${ apiEndpoints.channellisturl }?sort={"prid": 1, "_updatedAt": -1}&fields={"_id": 1, "name": 1, "t": 1}&count=100`, {
@@ -841,11 +840,12 @@ const resolveUsername = async (username, headers, single = false) => {
 		// since we only need to resolve usernames we filter only direct message subscriptions
 			.then((subscriptions) => subscriptions.filter((subscription) => subscription.t === 'd'))
 			.then((subscriptions) => subscriptions.map((subscription) => ({
-				name: subscription.name,
+				name: subscription.name, // name of the other dm user
 				// the rid property is a combination of id's of two users involved in the direct chat
 				// removing the id of the current user from rid will give id of the other user
-				id: subscription.rid.replace(subscription.u._id, ''),
-				type: subscription.t,
+				id: subscription.rid.replace(subscription.u._id, ''), // user id of the other dm user
+				rid: subscription.rid, // room id of the dm room
+				type: subscription.t, // type of the room 't' in this case
 			})));
 
 		// Note: A different method can be used to get the list of direct message users from contacts
@@ -855,7 +855,7 @@ const resolveUsername = async (username, headers, single = false) => {
 		let bestMatchingUser;
 		const similarUsers = [];
 		for (const user of subscriptions) {
-			const index = stringSimilar.compareTwoStrings(user.name, username);
+			const index = stringSimilar.compareTwoStrings(user.name.replace(/\./g, ' '), username);
 			if (index > bestIndex) {
 				bestIndex = index;
 				bestMatchingUser = user;
@@ -1105,7 +1105,7 @@ const roomUnreadMessages = async (channelName, unreadCount, type, headers, handl
 						msgs.push(speechText);
 						messages.push(`${ res.messages[i].u.username }: ${ res.messages[i].msg }`);
 					}
-				} else if (res.messages[i].file) {
+				} else if (res.messages[i].file && res.messages[i].file.type) {
 					if (res.messages[i].file.type.includes('image')) {
 						speechText = handlerInput.translate('MESSAGE_TYPE.IMAGE_MESSAGE', { username: res.messages[i].u.username, title: res.messages[i].file.name });
 					} else if (res.messages[i].file.type.includes('video')) {
@@ -1120,6 +1120,8 @@ const roomUnreadMessages = async (channelName, unreadCount, type, headers, handl
 
 			let responseString = msgs.join('  ');
 			responseString = cleanMessage(responseString);
+			// 8000 is the character limit of alexa response.
+			responseString = responseString.slice(0, 7000);
 
 			const finalMsg = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.DISCUSSION_MESSAGE', { total: unreadCount, count: msgs.length, channelName: fname || channelName, responseString });
 
@@ -1652,6 +1654,8 @@ const getAllUnreads = async (headers) => {
 			}
 		}
 
+		finalMessage = finalMessage.slice(0, 7000);
+
 		if (finalMessage === '') { return ri('UNREADS.NO_UNREADS'); }
 		return ri('UNREADS.MESSAGE', { finalMessage });
 	} catch (err) {
@@ -1678,6 +1682,8 @@ const getAllUnreadMentions = async (headers) => {
 				}
 			}
 		}
+
+		finalMessage = finalMessage.slice(0, 7000);
 
 		if (finalMessage === '') { return ri('MENTIONS.NO_MENTIONS'); }
 		return ri('MENTIONS.MESSAGE', { finalMessage });
