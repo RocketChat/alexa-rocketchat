@@ -77,6 +77,8 @@
     "GET_UNREAD_MESSAGES_FROM_CHANNEL": {
         "DISCUSSION_MESSAGE": "You have {total} unread activities and {count} unread messages in {channelName}, {responseString}.",
         "NO_MESSAGE_IN_DISCUSSION": "You don't have any unread messages in {channelName}.",
+        "DM_MESSAGE": "You have {unread} unread messages from {name}. {responseString}.",
+        "NO_MESSAGE_IN_DM": "You don't have any unread messages from {name}.",
         "MESSAGE": "You Have {unread} Unread Messages in {channelName}. <break time='1s'/> {respString} <break time='0.7s'/> ",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "NO_MESSAGE": "You Don't Have Any Unread Messages in {channelName}.",
@@ -228,6 +230,7 @@
         "ERROR": "Sorry, I couldn't perform this request."
     },
     "NO_ACTIVE_DISCUSSION": "Couldn't find an active discussion named {name} from your discussions.",
+    "ROOM_NOT_FOUND": "I couldn't find a room named {name} from your subscriptions.",
     "SOMETHING_WENT_WRONG": "Sorry, something went wrong.",
     "HINT_TRANSITION": "You can try saying",
     "FALLBACK_MSG": "Sorry, I don't know about that.",

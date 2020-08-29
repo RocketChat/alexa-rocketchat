@@ -164,7 +164,7 @@ const {
 
 const { GetMentionsIntentHandler } = require('./handlers/Channels/GetMentionsIntentHandlers');
 
-const { ReadMentionsIntentHandler } = require('./handlers/Channels/ReadMentionsIntentHandler');
+const { ReadUnreadMentionsFromRoomIntentHandler } = require('./handlers/Channels/ReadUnreadMentionsFromRoomIntentHandler');
 
 const { GetUnreadsIntentHandler } = require('./handlers/Channels/GetUnreadsIntentHandler');
 
@@ -216,6 +216,10 @@ const {
 	DeniedChangeStatusIntentHandler,
 	ChangeStatusIntentHandler,
 } = require('./handlers/General/ChangeStatusIntentHandlers');
+
+const { ReadUnreadsFromRoomIntentHandler } = require('./handlers/Channels/ReadUnreadsFromRoomIntentHandlers');
+
+const { ReadUnreadsFromDMIntentHandler } = require('./handlers/Direct/ReadUnreadsFromDMIntentHandler');
 
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
@@ -317,8 +321,10 @@ const buildSkill = (skillBuilder) =>
 			ChangeStatusIntentHandler,
 			ReadPinnedMessagesIntentHandler,
 			GetMentionsIntentHandler,
-			ReadMentionsIntentHandler,
+			ReadUnreadMentionsFromRoomIntentHandler,
 			GetUnreadsIntentHandler,
+			ReadUnreadsFromRoomIntentHandler,
+			ReadUnreadsFromDMIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,
