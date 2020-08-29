@@ -697,6 +697,85 @@ const postDirectMessage = async (message, roomid, headers) =>
 			return ri('POST_MESSAGE.ERROR');
 		});
 
+// this function resolves channel names from all the rooms that the user has joined
+const resolveChannelname = async (channelName, headers, single = false) => {
+	try {
+		channelName = channelName.toLowerCase();
+		// load all subscriptions
+		const subscriptions = await axios.get(apiEndpoints.getsubscriptionsurl, {
+			headers,
+		})
+			.then((res) => res.data.update)
+			// filter only channels and groups
+			.then((subscriptions) => subscriptions.filter((subscription) => subscription.t === 'c' || subscription.t === 'p'))
+			// make every room in {name, id, type} form
+			.then((subscriptions) => subscriptions.map((subscription) => ({
+				name: subscription.name,
+				id: subscription.rid,
+				type: subscription.t,
+			})));
+
+		// iterate through the subscriptions array once, find the top 3 matching rooms
+		let bestRating = -1;
+		let secondBestRating = -1;
+		let thirdBestRating = -1;
+		let bestIndex;
+		let secondBestIndex;
+		let thirdBestIndex;
+
+		for (const [i, room] of subscriptions.entries()) {
+			const rating = stringSimilar.compareTwoStrings(room.name.toLowerCase(), channelName);
+			if (rating > bestRating) {
+				let temp = secondBestRating;
+				secondBestRating = bestRating;
+				bestRating = rating;
+				thirdBestRating = temp;
+				temp = secondBestIndex;
+				secondBestIndex = bestIndex;
+				bestIndex = i;
+				thirdBestIndex = temp;
+			} else if (rating > secondBestRating) {
+				thirdBestRating = secondBestRating;
+				secondBestRating = rating;
+				thirdBestIndex = secondBestIndex;
+				secondBestIndex = i;
+			} else if (rating > thirdBestRating) {
+				thirdBestRating = rating;
+				thirdBestIndex = i;
+			}
+		}
+
+		const similarRooms = [];
+		similarRooms.push(subscriptions[bestIndex]);
+		// return best match if single room is requested
+		if (single) {
+			return similarRooms;
+		}
+
+		// return and empty array if there's no good match
+		if (bestRating < 0.2) {
+			return [];
+		}
+
+		// return the best match if the best rating is "not that best"
+		if (bestRating <= 0.7) {
+			return similarRooms;
+		} else {
+			// if the best rating is high, then check the second best and third best ratings
+			if (secondBestRating > 0.7) {
+				similarRooms.push(subscriptions[secondBestIndex]);
+			}
+			if (thirdBestRating > 0.7) {
+				similarRooms.push(subscriptions[thirdBestIndex]);
+			}
+			return similarRooms;
+		}
+
+	} catch (err) {
+		throw err;
+	}
+};
+
 /*
 this function takes in a string as an input and returns an array of channel/group names which
 the user has joined and are similar to the input string
