@@ -22,6 +22,7 @@ const ReadPinnedMessagesIntentHandler = {
 
 			// if there were any pinned messages helper function would return an array, otherwise there are no pinned messages
 			if (!Array.isArray(pinnedMessages)) {
+				// if there are no pinned message display the speech text in APL
 				const repromptText = ri('GENERIC_REPROMPT');
 				if (supportsAPL(handlerInput)) {
 					const data = {
@@ -45,6 +46,8 @@ const ReadPinnedMessagesIntentHandler = {
 
 			}
 
+			// if there are pinned messages display the pinned messages in the APL
+
 			const no_of_pinned_messages = pinnedMessages.length;
 
 			const speechText = ri('PINNED_MESSAGES.SUCCESS', { no_of_pinned_messages, channelname: resolvedChannelDetails[0].name, username: pinnedMessages[no_of_pinned_messages - 1][0], message: pinnedMessages[no_of_pinned_messages - 1][1] });
@@ -62,6 +65,7 @@ const ReadPinnedMessagesIntentHandler = {
 
 			let apltext = '';
 
+			// message[0] represents the author of the message and message[1] represents the message content
 			for (const message of pinnedMessages) {
 				apltext += `<b>${ message[0] }:</b>${ message[1] }<br><br>`;
 			}
@@ -79,7 +83,14 @@ const ReadPinnedMessagesIntentHandler = {
 				.getResponse();
 
 		} catch (error) {
-			console.error(error);
+			const speechText = ri('SOMETHING_WENT_WRONG');
+			const repromptText = ri('GENERIC_REPROMPT');
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse();
 		}
 	},
 };

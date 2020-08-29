@@ -79,6 +79,8 @@ const SetDescriptionIntentHandler = {
 			const repromptText = ri('GENERIC_REPROMPT');
 
 			if (supportsAPL(handlerInput)) {
+				// the helper function sets and returns a "success" parameter to the speechText
+				// if the operation was successful then display a sucess message and announcement in APL
 				if (speechText.params && speechText.params.success) {
 					const data = {
 						title: handlerInput.translate('CHANNEL_DETAILS.SET_DESCRIPTION_SUCCESS', { roomname: channelName }),

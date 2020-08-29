@@ -97,7 +97,14 @@ const CreateChannelIntentHandler = {
 			}
 
 		} catch (error) {
-			console.error(error);
+			const speechText = ri('SOMETHING_WENT_WRONG');
+			const repromptText = ri('GENERIC_REPROMPT');
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse();
 		}
 	},
 };

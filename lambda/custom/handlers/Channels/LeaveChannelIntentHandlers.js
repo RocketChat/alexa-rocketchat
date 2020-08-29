@@ -69,7 +69,6 @@ const LeaveChannelIntentHandler = {
 
 			// const channelName = handlerInput.requestEnvelope.request.intent.slots.channelname.value;
 
-			console.log(sessionAttributes);
 			const headers = await login(accessToken);
 			const speechText = await leaveChannel(sessionAttributes.channel.id, sessionAttributes.channel.name, sessionAttributes.channel.type, headers);
 
@@ -78,6 +77,7 @@ const LeaveChannelIntentHandler = {
 			if (supportsAPL(handlerInput)) {
 				const data = {
 					title: '',
+					// this basically prints the speechText that the user hears on screen
 					message: handlerInput.translate(speechText.key, speechText.params),
 				};
 
@@ -105,7 +105,14 @@ const LeaveChannelIntentHandler = {
 			}
 
 		} catch (error) {
-			console.error(error);
+			const speechText = ri('SOMETHING_WENT_WRONG');
+			const repromptText = ri('GENERIC_REPROMPT');
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse();
 		}
 	},
 };

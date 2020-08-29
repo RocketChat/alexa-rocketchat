@@ -50,6 +50,7 @@ const InProgressPostDiscussionMessageIntentHandler = {
 					.getResponse();
 			}
 
+			// fname is the display name of a discussion
 			currentIntent.slots.discussionname.value = discussionDetails.fname;
 
 			sessionAttributes.discussionDetails = discussionDetails;
@@ -108,6 +109,7 @@ const PostDiscussionMessageIntentHandler = {
 			const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
 			const message = handlerInput.requestEnvelope.request.intent.slots.discussionmessage.value;
+			// name of the discussion is a uniquely generated name that can be used a channelnames
 			const discussionName = sessionAttributes.discussionDetails.name;
 
 			const headers = await login(accessToken);

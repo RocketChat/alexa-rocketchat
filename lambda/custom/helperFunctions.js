@@ -219,7 +219,8 @@ const postMessage = async (channelName, message, headers) =>
 		.post(
 			apiEndpoints.postmessageurl, {
 				channel: `#${ channelName }`,
-				text: message,
+				// make the first letter to upper case
+				text: message[0].toUpperCase() + message.slice(1),
 			}, {
 				headers,
 			}
@@ -780,7 +781,6 @@ const resolveChannelname = async (channelName, headers, single = false) => {
 this function takes in a string as an input and returns an array of channel/group names which
 the user has joined and are similar to the input string
 */
-// eslint-disable-next-line no-unused-vars
 const resolveChannelnameFromLatestActiveRooms = async (channelName, headers, single = false) => {
 	try {
 		// sort wrt prid, so the discussions will end up at the end.
@@ -1649,6 +1649,11 @@ const getAllUnreads = async (headers) => {
 
 		for (const subscription of subscriptions) {
 			if (subscription.unread && subscription.unread !== 0) {
+				// if it is a discussion then use fname for reference
+				if (subscription.prid) {
+					finalMessage += `${ subscription.unread } unreads from discussion ${ subscription.fname }, `;
+					continue;
+				}
 				if (subscription.t && subscription.t === 'd') {
 					finalMessage += `${ subscription.unread } unreads from ${ subscription.name }, `;
 				} else {
@@ -1678,6 +1683,11 @@ const getAllUnreadMentions = async (headers) => {
 
 		for (const subscription of subscriptions) {
 			if (subscription.userMentions && subscription.userMentions !== 0) {
+				// if it is a discussion then use fname as reference
+				if (subscription.prid) {
+					finalMessage += `${ subscription.userMentions } mentions from discussion ${ subscription.fname }, `;
+					continue;
+				}
 				if (subscription.t && subscription.t === 'd') {
 					finalMessage += `${ subscription.userMentions } mentions from ${ subscription.name },`;
 				} else {
@@ -1866,4 +1876,5 @@ module.exports.readUnreadMentions = readUnreadMentions;
 module.exports.getAllUnreads = getAllUnreads;
 module.exports.DMUnreadMessages = DMUnreadMessages;
 module.exports.getDMCounter = getDMCounter;
+module.exports.resolveChannelnameFromLatestActiveRooms = resolveChannelnameFromLatestActiveRooms; // not used currently
 

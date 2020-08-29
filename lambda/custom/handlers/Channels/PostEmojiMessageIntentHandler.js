@@ -1,3 +1,4 @@
+// this intent is not in use due to unreliable emoji translation
 const { ri } = require('@jargon/alexa-skill-sdk');
 const { login, replaceWhitespacesFunc, emojiTranslateFunc, postMessage } = require('../../helperFunctions');
 
@@ -30,7 +31,14 @@ const PostEmojiMessageIntentHandler = {
 				.withSimpleCard(ri('POST_MESSAGE.CARD_TITLE'), speechText)
 				.getResponse();
 		} catch (error) {
-			console.error(error);
+			const speechText = ri('SOMETHING_WENT_WRONG');
+			const repromptText = ri('GENERIC_REPROMPT');
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse();
 		}
 	},
 };

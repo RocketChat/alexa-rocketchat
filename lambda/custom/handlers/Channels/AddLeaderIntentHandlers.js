@@ -16,11 +16,14 @@ const StartedAddLeaderIntentHandler = {
 		const { attributesManager } = handlerInput;
 		const sessionAttributes = attributesManager.getSessionAttributes() || {};
 
+		// clear the session attributes that this intent will make use of
 		delete sessionAttributes.user;
 		delete sessionAttributes.channel;
 		delete sessionAttributes.similarusers;
 		delete sessionAttributes.similarChannels;
 
+		// this will take care of the cases when both the slots will be filled during intent invocation
+		// eg: make username as leader of channel channelname
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
 			return resolveUser(handlerInput, 'username', 'choice');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {
@@ -89,6 +92,7 @@ const InProgressAddLeaderIntentHandler = {
 		const { intent } = handlerInput.requestEnvelope.request;
 		const intentSlots = intent.slots;
 
+		// resolving the slots one by one
 		if (intentSlots.username.confirmationStatus === 'NONE' && intentSlots.username.value) {
 			return resolveUser(handlerInput, 'username', 'choice');
 		} else if (intentSlots.channelname.confirmationStatus === 'NONE' && intentSlots.channelname.value) {

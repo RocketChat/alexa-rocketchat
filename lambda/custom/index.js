@@ -98,8 +98,6 @@ const {
 	AudioPlayerEventHandler,
 } = require('./handlers/General/PlaybackIntentHandlers');
 
-const { GetUnreadMessagesIntentHandler } = require('./handlers/Channels/GetUnreadMessagesIntentHandler');
-
 const { AddAllToChannelIntentHandler } = require('./handlers/Channels/AddAllToChannelIntentHandler');
 
 const {
@@ -262,7 +260,6 @@ const buildSkill = (skillBuilder) =>
 			DeniedAddModeratorIntentHandler,
 			InProgressAddModeratorIntentHandler,
 			ArchiveChannelIntentHandler,
-			GetUnreadMessagesIntentHandler,
 			CreateGrouplIntentHandler,
 			DeniedCreateGroupIntentHandler,
 			PostEmojiDirectMessageIntentHandler,

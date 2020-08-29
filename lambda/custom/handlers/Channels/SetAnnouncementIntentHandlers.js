@@ -79,6 +79,8 @@ const SetAnnouncementIntentHandler = {
 			const repromptText = ri('GENERIC_REPROMPT');
 
 			if (supportsAPL(handlerInput)) {
+				// the helper function sets and returns a "success" parameter to the speechText
+				// if the operation was successful then display a sucess message and announcement in APL
 				if (speechText.params && speechText.params.success) {
 					const data = {
 						title: handlerInput.translate('CHANNEL_DETAILS.SET_ANNOUNCEMENT_SUCCESS', { roomname: channelName }),
@@ -93,6 +95,7 @@ const SetAnnouncementIntentHandler = {
 						.getResponse();
 
 				} else {
+					// if operation failed, display a failed message in APL
 					const data = {
 						title: handlerInput.translate('CHANNEL_DETAILS.ERROR'),
 						message: '',
@@ -117,7 +120,14 @@ const SetAnnouncementIntentHandler = {
 			}
 
 		} catch (error) {
-			console.error(error);
+			const speechText = ri('SOMETHING_WENT_WRONG');
+			const repromptText = ri('GENERIC_REPROMPT');
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse();
 		}
 	},
 };

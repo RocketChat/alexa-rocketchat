@@ -18,6 +18,7 @@ const StartedDeleteChannelIntentHandler = {
 		delete sessionAttributes.similarChannels;
 		delete sessionAttributes.channel;
 
+		// when the channelname is provided during the intent invocation
 		return resolveChannel(handlerInput, 'channeldelete', 'selection');
 	},
 };
@@ -95,7 +96,14 @@ const DeleteChannelIntentHandler = {
 			}
 
 		} catch (error) {
-			console.error(error);
+			const speechText = ri('SOMETHING_WENT_WRONG');
+			const repromptText = ri('GENERIC_REPROMPT');
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse();
 		}
 	},
 };
