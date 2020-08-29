@@ -66,4 +66,6 @@ module.exports = {
 	setstatusurl: `${ serverurl }/api/v1/users.setStatus`,
 	readpinnedmessagesurl: `${ serverurl }/api/v1/chat.getPinnedMessages`,
 	getmentionedmessagesurl: `${ serverurl }/api/v1/chat.getMentionedMessages`,
+	immessageurl: `${ serverurl }/api/v1/im.messages`,
+	imcountersurl: `${ serverurl }/api/v1/im.counters`,
 };
