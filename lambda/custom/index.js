@@ -68,7 +68,19 @@ const {
 	InProgressAddModeratorIntentHandler,
 } = require('./handlers/Channels/AddModeratorIntentHandlers');
 
-const { ArchiveChannelIntentHandler } = require('./handlers/Channels/ArchiveChannelIntentHandler');
+const {
+	StartedArchiveChannelIntentHandler,
+	InProgressArchiveChannelIntentHandler,
+	DeniedArchiveChannelIntentHandler,
+	ArchiveChannelIntentHandler,
+} = require('./handlers/Channels/ArchiveChannelIntentHandler');
+
+const {
+	StartedUnarchiveChannelIntentHandler,
+	InProgressUnarchiveChannelIntentHandler,
+	DeniedUnarchiveChannelIntentHandler,
+	UnarchiveChannelIntentHandler,
+} = require('./handlers/Channels/UnarchiveChannelIntentHandlers');
 
 const {
 	StartedLeaveChannelIntentHandler,
@@ -279,6 +291,14 @@ const buildSkill = (skillBuilder) =>
 			InProgressRenameChannelIntentHandler,
 			DeniedRenameChannelIntentHandler,
 			RenameChannelIntentHandler,
+			StartedArchiveChannelIntentHandler,
+			InProgressArchiveChannelIntentHandler,
+			DeniedArchiveChannelIntentHandler,
+			ArchiveChannelIntentHandler,
+			StartedUnarchiveChannelIntentHandler,
+			InProgressUnarchiveChannelIntentHandler,
+			DeniedUnarchiveChannelIntentHandler,
+			UnarchiveChannelIntentHandler,
 			StartedAddLeaderIntentHandler,
 			AddLeaderIntentHandler,
 			DeniedAddLeaderIntentHandler,
