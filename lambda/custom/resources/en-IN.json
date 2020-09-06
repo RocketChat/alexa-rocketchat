@@ -97,7 +97,7 @@
         "SUCCESS": "Added All Users To {channelName}.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Add All To Channel",
-        "ERROR": "Sorry, I am unable to add all users to the channel right now.",
+        "ERROR": "Sorry, only server admins can perform this operation. Please make sure you have the right permissions.",
         "ERROR_NOT_FOUND": "Sorry, I am unable to add all users to channel {channelName} right now."
     },
     "ADD_OWNER": {
@@ -110,13 +110,13 @@
     "ARCHIVE_CHANNEL": {
         "SUCCESS": "{roomname} is now archived.",
         "UNARCHIVE_SUCCESS": "{roomname} is now unarchived.",
-        "NOT_AUTHORISED": "You cannot perform this operation.",
+        "NOT_AUTHORISED": "Sorry, You are not authorised to perform this operation.",
         "ROOM_ALREAD_ARCHIVED": "{roomname} is already archived.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Archive Channel",
         "DENIED": "Okay.",
-        "UNARCHVIE_ERROR": "Sorry, I couldn't unarchive this channel right now.",
-        "ERROR": "Sorry, I couldn't archive this channel right now.",
+        "UNARCHVIE_ERROR": "Sorry, I couldn't unarchive this channel. Please make sure you have the right permissions.",
+        "ERROR": "Sorry, I couldn't archive this channel. Please make sure you have the right permissions.",
         "ERROR_NOT_FOUND": "The room {roomname} does not exist."
     },
     "CHANNEL_DETAILS": {

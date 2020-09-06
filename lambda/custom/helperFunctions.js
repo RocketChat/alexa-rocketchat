@@ -439,9 +439,7 @@ const addAll = async (channelName, roomid, headers) =>
 			if (err.response.status === 401) {
 				return ri('ADD_ALL_TO_CHANNEL.AUTH_ERROR');
 			} else {
-				return ri('ADD_ALL_TO_CHANNEL.ERROR_NOT_FOUND', {
-					channelName,
-				});
+				return ri('ADD_ALL_TO_CHANNEL.ERROR');
 			}
 		});
 
