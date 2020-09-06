@@ -68,7 +68,19 @@ const {
 	InProgressAddModeratorIntentHandler,
 } = require('./handlers/Channels/AddModeratorIntentHandlers');
 
-const { ArchiveChannelIntentHandler } = require('./handlers/Channels/ArchiveChannelIntentHandler');
+const {
+	StartedArchiveChannelIntentHandler,
+	InProgressArchiveChannelIntentHandler,
+	DeniedArchiveChannelIntentHandler,
+	ArchiveChannelIntentHandler,
+} = require('./handlers/Channels/ArchiveChannelIntentHandler');
+
+const {
+	StartedUnarchiveChannelIntentHandler,
+	InProgressUnarchiveChannelIntentHandler,
+	DeniedUnarchiveChannelIntentHandler,
+	UnarchiveChannelIntentHandler,
+} = require('./handlers/Channels/UnarchiveChannelIntentHandlers');
 
 const {
 	StartedLeaveChannelIntentHandler,
@@ -98,18 +110,29 @@ const {
 	AudioPlayerEventHandler,
 } = require('./handlers/General/PlaybackIntentHandlers');
 
-const { GetUnreadMessagesIntentHandler } = require('./handlers/Channels/GetUnreadMessagesIntentHandler');
-
 const { AddAllToChannelIntentHandler } = require('./handlers/Channels/AddAllToChannelIntentHandler');
 
-const { CreateGrouplIntentHandler } = require('./handlers/Channels/CreateGrouplIntentHandler');
+const {
+	CreateGrouplIntentHandler,
+	DeniedCreateGroupIntentHandler,
+} = require('./handlers/Channels/CreateGrouplIntentHandler');
 
 const { PostEmojiDirectMessageIntentHandler } = require('./handlers/Direct/PostEmojiDirectMessageIntentHandler');
 
 const {
-	PostGroupEmojiMessageIntentHandler,
-	GroupLastMessageIntentHandler,
-} = require('./handlers/Channels/PrivateChannelIntents');
+	StartedPostDiscussionMessageIntentHandler,
+	InProgressPostDiscussionMessageIntentHandler,
+	DeniedPostDiscussionMessageIntentHandler,
+	PostDiscussionMessageIntentHandler,
+} = require('./handlers/Channels/PostDiscussionMessageIntentHandlers');
+
+const {
+	ReadUnreadsFromDiscussionIntentHandler,
+} = require('./handlers/Channels/ReadUnreadsFromDiscussionIntentHandlers');
+
+const {
+	ReadUnreadMentionsFromDiscussionIntentHandler,
+} = require('./handlers/Channels/ReadUnreadMentionsFromDiscussionIntentHandlers');
 
 const { FallbackIntentHandler } = require('./handlers/General/FallbackIntentHandler');
 
@@ -151,7 +174,7 @@ const {
 
 const { GetMentionsIntentHandler } = require('./handlers/Channels/GetMentionsIntentHandlers');
 
-const { ReadMentionsIntentHandler } = require('./handlers/Channels/ReadMentionsIntentHandler');
+const { ReadUnreadMentionsFromRoomIntentHandler } = require('./handlers/Channels/ReadUnreadMentionsFromRoomIntentHandler');
 
 const { GetUnreadsIntentHandler } = require('./handlers/Channels/GetUnreadsIntentHandler');
 
@@ -204,6 +227,10 @@ const {
 	ChangeStatusIntentHandler,
 } = require('./handlers/General/ChangeStatusIntentHandlers');
 
+const { ReadUnreadsFromRoomIntentHandler } = require('./handlers/Channels/ReadUnreadsFromRoomIntentHandlers');
+
+const { ReadUnreadsFromDMIntentHandler } = require('./handlers/Direct/ReadUnreadsFromDMIntentHandler');
+
 const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).installOnto(Alexa.SkillBuilders.standard());
 
 const buildSkill = (skillBuilder) =>
@@ -245,10 +272,8 @@ const buildSkill = (skillBuilder) =>
 			DeniedAddModeratorIntentHandler,
 			InProgressAddModeratorIntentHandler,
 			ArchiveChannelIntentHandler,
-			GetUnreadMessagesIntentHandler,
 			CreateGrouplIntentHandler,
-			PostGroupEmojiMessageIntentHandler,
-			GroupLastMessageIntentHandler,
+			DeniedCreateGroupIntentHandler,
 			PostEmojiDirectMessageIntentHandler,
 			StartedSetAnnouncementIntentHandler,
 			InProgressSetAnnouncementIntentHandler,
@@ -266,6 +291,14 @@ const buildSkill = (skillBuilder) =>
 			InProgressRenameChannelIntentHandler,
 			DeniedRenameChannelIntentHandler,
 			RenameChannelIntentHandler,
+			StartedArchiveChannelIntentHandler,
+			InProgressArchiveChannelIntentHandler,
+			DeniedArchiveChannelIntentHandler,
+			ArchiveChannelIntentHandler,
+			StartedUnarchiveChannelIntentHandler,
+			InProgressUnarchiveChannelIntentHandler,
+			DeniedUnarchiveChannelIntentHandler,
+			UnarchiveChannelIntentHandler,
 			StartedAddLeaderIntentHandler,
 			AddLeaderIntentHandler,
 			DeniedAddLeaderIntentHandler,
@@ -286,6 +319,12 @@ const buildSkill = (skillBuilder) =>
 			InProgressLeaveChannelIntentHandler,
 			DeniedLeaveChannelIntentHandler,
 			LeaveChannelIntentHandler,
+			StartedPostDiscussionMessageIntentHandler,
+			InProgressPostDiscussionMessageIntentHandler,
+			DeniedPostDiscussionMessageIntentHandler,
+			PostDiscussionMessageIntentHandler,
+			ReadUnreadsFromDiscussionIntentHandler,
+			ReadUnreadMentionsFromDiscussionIntentHandler,
 			FallbackIntentHandler,
 			StartedInviteUserIntentHandler,
 			InviteUserIntentHandler,
@@ -299,8 +338,10 @@ const buildSkill = (skillBuilder) =>
 			ChangeStatusIntentHandler,
 			ReadPinnedMessagesIntentHandler,
 			GetMentionsIntentHandler,
-			ReadMentionsIntentHandler,
+			ReadUnreadMentionsFromRoomIntentHandler,
 			GetUnreadsIntentHandler,
+			ReadUnreadsFromRoomIntentHandler,
+			ReadUnreadsFromDMIntentHandler,
 			HelpIntentHandler,
 			CancelAndStopIntentHandler,
 			SessionEndedRequestHandler,

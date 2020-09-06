@@ -60,7 +60,8 @@ const LaunchRequestHandler = {
 					const dataResponse = await createPersonalAccessToken(headers);
 					if (dataResponse.length !== 0) {
 						attributes.profileId = headers['X-User-Id'];
-						attributes.personalAccessToken = dataResponse;
+						// personal access tokens should be encrypted before storing
+						// attributes.personalAccessToken = dataResponse;
 						attributes.notificationsSettings = 'userMentions';
 						attributes.apiRegion = 'userMentions';
 						attributes.userName = await getUserName(headers);

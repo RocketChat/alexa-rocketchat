@@ -41,7 +41,6 @@ const InProgressPostLongMessageIntentHandler = {
 
 			// get the array of channels which the user was asked for
 			const channels = sessionAttributes.similarChannels.trim().split(' ');
-			console.log(channels);
 
 			// if the user selects an invalid choice then ask for an appropriate choice
 			if (Number(updatedSlots.choice.value) === 0 || Number(updatedSlots.choice.value) > channels.length) {
@@ -72,7 +71,6 @@ const InProgressPostLongMessageIntentHandler = {
 
 			// get the array of similar channelnames
 			const channels = await resolveChannelname(updatedSlots.channelname.value, headers);
-			console.log(channels);
 
 			// if there are no similar channels
 			if (channels.length === 0) {
@@ -148,7 +146,14 @@ const PostLongMessageIntentHandler = {
 				.getResponse();
 
 		} catch (error) {
-			console.error(error);
+			const speechText = ri('SOMETHING_WENT_WRONG');
+			const repromptText = ri('GENERIC_REPROMPT');
+
+			return handlerInput.jrb
+				.speak(speechText)
+				.speak(repromptText)
+				.reprompt(repromptText)
+				.getResponse();
 		}
 	},
 };

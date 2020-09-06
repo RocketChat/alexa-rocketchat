@@ -18,9 +18,42 @@ Innovating Incredible New User Experiences In The Alexa Ecosystem
 
 ---
 
+# Quick Project Setup
   
 
-# Let's Get Started
+Follow [this](https://drive.google.com/file/d/1C0b0y07Lay6tkH1LbBVmECiplB6dRoSl/view?usp=sharing) walkthrough video of the project setup. Or Steps listed below.
+
+1. Download the contents of this repository.
+2. Go to Alexa Developer Console: https://developer.amazon.com/alexa/console/ask
+3. Create a new Alexa skill with the following settings
+	+ Default Language: Any English locale
+	+ Model: Custom
+	+ Hosting Backend Method: Provision your own
+	+ Template: Hello World Skill
+4. In the project repository, navigate to `./models/en-<locale>.json` file, and copy the contents inside the model.
+5. In Alexa Developer console under **Build** > **Custom** > **Interaction Model** > **JSON Editor**. Paste the copied contents.
+6. Under **Build** > **Invocation**. Change the *Skill Invocation Name* to **YOURSERVERNAME rocket chat**.
+7. **Save** and **Build** the model.
+8. Follow the steps from 1 to 17 in [Deployment](#deployment), under Configuring Account Linking section.
+9. Login into [AWS](https://aws.amazon.com) console and Navigate to [Lambda](https://aws.amazon.com/lambda/) functions console.
+10. Create a lambda function and add policies to access DynamoDB and Cloudwatch to the role for this lambda function. (Refer walkthrough video)
+11. Add the following environment variables:
+```
+SERVER_URL=https://yourservername.rocket.chat
+OAUTH_SERVICE_NAME=(The name of the Custom OAuth setup in Rocket Chat server)
+DDB_NAME=(Any name for the Dynamo DB table used by your skill. Eg: alexa)
+```
+12. Add a trigger with the following settings: **Add Trigger** > **Alexa Skills Kit** > **Skill ID verification**: Disable (Or Enable according to requirement)
+13. In the project repository, navigate to `./lambda/custom` file, and follow the below steps:
+    + Open terminal and run `npm install`
+    + Select all the files and compress into a .zip file.
+14. Upload this zip file in the AWS lambda function.
+15. Copy the ARN of the lambda function.
+16. Navigate to **Build** > **Endpoint** in the Alexa developer console and paste this endpoint in the **Default Region** field of **AWS Lambda ARN**.
+17. To test the Skill, go to Test tab and type: Open YOURSERVERNAME rocket chat
+18. If everything goes well, you'll be prompted to link your account. Open the Alexa App and Click on the Account Linking Card.
+
+# Project Setup For Development
 
   
 
@@ -216,7 +249,7 @@ e.g:
 
   
 
-3. Toggle the *Do you allow users to create an account or link to an existing account with you?* button. Leave *Allow users to enable skill without account linking* as it is. Select auth code grant.
+3. Toggle the *Do you allow users to create an account or link to an existing account with you?* button. Toggle *Allow users to enable skill without account linking* as False. Select auth code grant.
 
   
 
@@ -324,8 +357,9 @@ SECRET_ACCESS_KEY=<your aws account secret access key>
 SERVER_URL=<rocket chat server url>
 OAUTH_SERVICE_NAME=<oauth service name>
 DDB_NAME=<dynamo table name>
-CUSTOM_LOG_URL=<custom logger url(optional parameter)>
+CUSTOM_LOG_URL=<custom logger url(optional parameter, can be ignored if logs are not required)>
 ```
+*Note*: The logs generated during the skill execution is sent to the CUSTOM_LOG_URL as a POST request. The body of this POST request then needs to be displayed in an external website. This is a potential risk to privacy and should only be used during development. [Here](https://github.com/AdarshNaidu/My-Logs) is the code to setup a server that displays the logs.
 
 3. From `./lambda/custom` folder, run `npm start` to start the server at port 3000.
 
@@ -350,14 +384,17 @@ Change the skill name, example phrase, icons, testing instructions etc ...
 See the Skill [Manifest Documentation](https://developer.amazon.com/docs/smapi/skill-manifest.html) for more information.
 
   
+2. ```./lambda/custom/handlers```
 
-2.  ```./lambda/custom/index.js```
 
-  
+Add new handlers for intents in specific folders, modify intent logic, enhance the functionality of the source code to customize the skill.  
+The naming convention and folder structure is as follows
+```
+Intent name: FunctionIntent
+Intent type: channel based intent
+Intent path: ./lambda/custom/handlers/Channels/FunctionIntentHandler(s).js
+```
 
-Add new handlers for intents, modify intent logic, enhance the functionality of the source code to customize the skill.
-
-  
 
 3.  ```./lambda/custom/resources/*.json```
 

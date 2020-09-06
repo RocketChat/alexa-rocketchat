@@ -1,3 +1,4 @@
+// this intent is not used due to the unreliable emoji translation
 const { ri } = require('@jargon/alexa-skill-sdk');
 const { replaceWhitespacesDots, emojiTranslateFunc, login, createDMSession, postDirectMessage } = require('../../helperFunctions');
 

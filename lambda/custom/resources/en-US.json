@@ -5,6 +5,7 @@
     },
     "HELP": {
         "MESSAGE": "This is the Alexa Skill for rocket chat. What would you like to do?",
+        "DETAILED_MESSAGE": "This is the Alexa Skill for Rocket Chat. You can use this skill to send messages, read unread messages, get your mentions, reading mentioned messages, et cetera. Find more functionalities in the skill description section of the Alexa App.",
         "CARD_TITLE": "Rocket.Chat Help"
     },
     "GOODBYE": {
@@ -34,6 +35,7 @@
         "ASK_MORE": "Would you like to add more?",
         "ASK_CHOICE": "Please select between one and {choice_limit}. {channels_list}.",
         "NO_CHANNEL": "There is no channel named {channel_name}.",
+        "NO_ACTIVE_DISCUSSION": "There's no active discussion named {discussionname}.",
         "NO_USER": "There's no one named {username}.",
         "SIMILAR_CHANNELS": "There are multiple channels with similar name. Please tell the serial number of desired channel. {channel_names}.",
         "SIMILAR_USERS": "There are multiple users with similar username. Please tell the serial number of desired user. {usernames}.",
@@ -47,12 +49,14 @@
     },
     "CREATE_CHANNEL": {
         "SUCCESS": "I've created your channel {channelName}.",
+        "SUCCESS_GROUP": "I've created your group {channelName}.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Create A Channel",
         "ERROR": "Sorry, I couldn't create the channel {channelName} right now.",
+        "ERROR_GROUP": "Sorry, I couldn't create the group {channelName} right now.",
         "ERROR_DUPLICATE_NAME": "Sorry, the channel {channelName} already exists. Please try again with different channel name.",
         "ERROR_INVALID_NAME": "Sorry, {channelName} is not a valid channel name. Please try again with a single word name for the channel.",
-        "DENIED": "Okay, let's try again."
+        "DENIED": "Okay."
     },
     "DELETE_CHANNEL": {
         "SUCCESS": "I've deleted the channel {channelName}.",
@@ -71,6 +75,10 @@
         "ERROR_NOT_FOUND": "Sorry, the channel {channelName} does not exist. Please try again with different channel name."
     },
     "GET_UNREAD_MESSAGES_FROM_CHANNEL": {
+        "DISCUSSION_MESSAGE": "You have {total} unread activities and {count} unread messages in {channelName}, {responseString}.",
+        "NO_MESSAGE_IN_DISCUSSION": "You don't have any unread messages in {channelName}.",
+        "DM_MESSAGE": "You have {unread} unread messages from {name}. {responseString}.",
+        "NO_MESSAGE_IN_DM": "You don't have any unread messages from {name}.",
         "MESSAGE": "You Have {unread} Unread Messages in {channelName}. <break time='1s'/> {respString} <break time='0.7s'/> ",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "NO_MESSAGE": "You Don't Have Any Unread Messages in {channelName}.",
@@ -89,15 +97,27 @@
         "SUCCESS": "Added All Users To {channelName}.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Add All To Channel",
-        "ERROR": "Sorry, I am unable to add all users to the channel right now.",
+        "ERROR": "Sorry, only server admins can perform this operation. Please make sure you have the right permissions.",
         "ERROR_NOT_FOUND": "Sorry, I am unable to add all users to channel {channelName} right now."
     },
+    "ADD_OWNER": {
+        "SUCCESS": "{userName} is now the owner of {channelName}.",
+        "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
+        "CARD_TITLE": "Add Owner",
+        "ERROR": "Sorry, I couldn't assign a owner to the channel right now.",
+        "ERROR_NOT_FOUND": "Sorry, I couldn't assign a owner to channel {channelName} right now."
+    },
     "ARCHIVE_CHANNEL": {
-        "SUCCESS": "{channelName} is now archived.",
+        "SUCCESS": "{roomname} is now archived.",
+        "UNARCHIVE_SUCCESS": "{roomname} is now unarchived.",
+        "NOT_AUTHORISED": "Sorry, You are not authorised to perform this operation.",
+        "ROOM_ALREAD_ARCHIVED": "{roomname} is already archived.",
         "AUTH_ERROR": "Sorry you are currently signed out , please use the companion app to authenticate ",
         "CARD_TITLE": "Archive Channel",
-        "ERROR": "Sorry, I couldn't archive this channel right now.",
-        "ERROR_NOT_FOUND": "Sorry, I couldn't archive channel {channelName} right now."
+        "DENIED": "Okay.",
+        "UNARCHVIE_ERROR": "Sorry, I couldn't unarchive this channel. Please make sure you have the right permissions.",
+        "ERROR": "Sorry, I couldn't archive this channel. Please make sure you have the right permissions.",
+        "ERROR_NOT_FOUND": "The room {roomname} does not exist."
     },
     "CHANNEL_DETAILS": {
         "SET_ANNOUNCEMENT_SUCCESS": "I've set the announcement in, {roomname}.",
@@ -155,6 +175,24 @@
         "USER_NOT_IN_ROOM": "You are not part of {roomname}.",
         "ERROR_NOT_FOUND": "The room {roomname} does not exist."
     },
+    "MESSAGE_TYPE": {
+        "TEXT_MESSAGE": "{username} says, {message}",
+        "CHANGE_DESCRIPTION": "{username} changed the description to, {description}.",
+        "CHANGE_ANNOUNCEMENT": "{username} made an announcement that says {announcement}.",
+        "CHANGE_TOPIC": "{username} changed the topic to {topic}.",
+        "IMAGE_MESSAGE": "{username} shared an image titled {title}.",
+        "VIDEO_MESSAGE": "{username} shared a video titled {title}.", 
+        "FILE_MESSAGE": "{username} shared a file titled {title}.",
+        "DISCUSSION_CREATED": "{username} created a discussion named {name}.",
+        "UNKNOWN_MESSAGE": "{username}, performed some action"  
+    },
+    "ROOM_MENTIONS": {
+        "READ_MENTIONS": "You have {count} mentions in {roomName}. {finalMessage}.",
+        "NO_MENTIONS": "You don't have any mentions in {roomName}.",
+        "READ_DM_MENTIONS": "You have {count} mentions from {name}. {finalMessage}.",
+        "NO_DM_MENTIONS": "You don't have any mentions from DM, {name}.",
+        "ERROR": "Sorry, I couldn't get your mentions"
+    },
     "INVITE_USER": {
         "SUCCESS": "{username} has been invited to {roomname}.",
         "ERROR": "Sorry, the invite was unsuccessful.",
@@ -179,7 +217,10 @@
         "PostDirectMessageIntent": "Post direct message",
         "PostEmojiMessageIntent": "Read Pinned messages from channel",
         "ChangeStatusIntent": "Change my status",
-        "GetMentionsIntent": "Get my mentions"
+        "GetMentionsIntent": "Get my mentions",
+        "PostDiscussionMessageIntent": "Send message to a discussion",
+        "ReadUnreadsFromDiscussionIntent": "Read unread messages from discussion",
+        "ReadMentionsIntent": "Read mentions from channel"
     },
     "STATUS": {
         "SUCCESS": "I've updated your status.",
@@ -200,6 +241,9 @@
         "REACTED": "I've acknowledged to {count} mentions in {roomName}.",
         "ERROR": "Sorry, I couldn't perform this request."
     },
+    "NO_ACTIVE_DISCUSSION": "Couldn't find an active discussion named {name} from your discussions.",
+    "ROOM_NOT_FOUND": "I couldn't find a room named {name} from your subscriptions.",
+    "SOMETHING_WENT_WRONG": "Sorry, something went wrong.",
     "HINT_TRANSITION": "You can try saying",
     "FALLBACK_MSG": "Sorry, I don't know about that.",
     "ERROR_NOT_FOUND": "The room {roomname} does not exist.",

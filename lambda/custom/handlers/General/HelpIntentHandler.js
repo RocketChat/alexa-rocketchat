@@ -6,12 +6,13 @@ const HelpIntentHandler = {
 			handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
 	},
 	handle(handlerInput) {
-		const speechText = ri('HELP.MESSAGE');
+		const speechText = ri('HELP.DETAILED_MESSAGE');
+		const repromptText = ri('GENERIC_REPROMPT');
 
 		return handlerInput.jrb
 			.speak(speechText)
-			.reprompt(speechText)
-			.withSimpleCard(ri('HELP.CARD_TITLE'), speechText)
+			.speak(repromptText)
+			.reprompt(repromptText)
 			.getResponse();
 	},
 };

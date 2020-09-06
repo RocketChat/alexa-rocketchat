@@ -10,11 +10,22 @@ const {
 
 const removeWhitespace = require('remove-whitespace');
 const emojiTranslate = require('moji-translate');
+const { serverurl } = require('./config');
 
 // Server Credentials. Follow readme to set them up.
 const {
 	oauthServiceName,
 } = envVariables;
+
+const cleanMessage = (string) => {
+
+	// :([a-z_]+): => regex for emoji :emoji:
+	// (&[#0-9A-Za-z]*;) => regex for special character encodings &#ab3;
+	// ((https?|ftp):\/\/[\.[a-zA-Z0-9\/\-]+) => regex for url
+
+	const combined_regex = new RegExp(':([a-z_]+):|(&[#0-9A-Za-z]*;)|((https?|ftp):\/\/[.[a-zA-Z0-9\/-]+)|[^ .,A-Za-z0-9\\n]', 'g');
+	return string.replace(combined_regex, '');
+};
 
 const removeEmojis = (string) => {
 	const exp = ':([a-z_]+):';
@@ -33,8 +44,6 @@ const login = async (accessToken) =>
 		})
 		.then((res) => res.data)
 		.then((res) => {
-			console.log(res);
-			customLog({ user: res }); // eslint-disable-line no-use-before-define
 			const headers = {
 				'X-Auth-Token': res.data.authToken,
 				'X-User-Id': res.data.userId,
@@ -210,7 +219,8 @@ const postMessage = async (channelName, message, headers) =>
 		.post(
 			apiEndpoints.postmessageurl, {
 				channel: `#${ channelName }`,
-				text: message,
+				// make the first letter to upper case
+				text: message[0].toUpperCase() + message.slice(1),
 			}, {
 				headers,
 			}
@@ -232,9 +242,9 @@ const postMessage = async (channelName, message, headers) =>
 			}
 		});
 
-const getLastMessageType = async (channelName, headers) =>
+const getLastMessageType = async (channelName, type, headers) =>
 	await axios
-		.get(`${ apiEndpoints.channelmessageurl }${ channelName }`, {
+		.get(`${ type === 'c' ? apiEndpoints.channelmessageurl : apiEndpoints.groupmessagenameurl }${ channelName }`, {
 			headers,
 		})
 		.then((res) => res.data)
@@ -249,9 +259,9 @@ const getLastMessageType = async (channelName, headers) =>
 			console.log(err.message);
 		});
 
-const channelLastMessage = async (channelName, headers) =>
+const channelLastMessage = async (channelName, type, headers) =>
 	await axios
-		.get(`${ apiEndpoints.channelmessageurl }${ channelName }`, {
+		.get(`${ type === 'c' ? apiEndpoints.channelmessageurl : apiEndpoints.groupmessagenameurl }${ channelName }`, {
 			headers,
 		})
 		.then((res) => res.data)
@@ -298,13 +308,13 @@ const readMessages = async (roomid, headers) =>
 		});
 
 
-const getLastMessageFileURL = async (channelName, headers) =>
+const getLastMessageFileURL = async (channelName, type, headers) =>
 	await axios
-		.get(`${ apiEndpoints.channelmessageurl }${ channelName }`, {
+		.get(`${ type === 'c' ? apiEndpoints.channelmessageurl : apiEndpoints.groupmessagenameurl }${ channelName }`, {
 			headers,
 		})
 		.then((res) => res.data)
-		.then((res) => `https://bots.rocket.chat/file-upload/${ res.messages[0].file._id }/${ res.messages[0].file.name }`)
+		.then((res) => `https://${ serverurl }/file-upload/${ res.messages[0].file._id }/${ res.messages[0].file.name }`)
 		.catch((err) => {
 			console.log(err.message);
 		});
@@ -429,41 +439,93 @@ const addAll = async (channelName, roomid, headers) =>
 			if (err.response.status === 401) {
 				return ri('ADD_ALL_TO_CHANNEL.AUTH_ERROR');
 			} else {
-				return ri('ADD_ALL_TO_CHANNEL.ERROR_NOT_FOUND', {
-					channelName,
-				});
+				return ri('ADD_ALL_TO_CHANNEL.ERROR');
 			}
 		});
 
-const archiveChannel = async (channelName, roomid, headers) =>
-	await axios
-		.post(
-			apiEndpoints.archivechannelurl, {
-				roomId: roomid,
-			}, {
+const archiveChannel = async (roomId, roomname, type, headers) => {
+	try {
+		let response;
+
+		if (type === 'c') {
+			response = await axios.post(apiEndpoints.archivechannelurl, {
+				roomId,
+			},
+			{
 				headers,
-			}
-		)
-		.then((res) => res.data)
-		.then((res) => {
-			if (res.success === true) {
-				return ri('ARCHIVE_CHANNEL.SUCCESS', {
-					channelName,
-				});
-			} else {
-				return ri('ARCHIVE_CHANNEL.ERROR');
-			}
-		})
-		.catch((err) => {
-			console.log(err.message);
-			if (err.response.status === 401) {
-				return ri('ARCHIVE_CHANNEL.AUTH_ERROR');
-			} else {
-				return ri('ARCHIVE_CHANNEL.ERROR_NOT_FOUND', {
-					channelName,
-				});
-			}
-		});
+			}).then((res) => res.data);
+		} else if (type === 'p') {
+			response = await axios.post(apiEndpoints.archivegroupurl, {
+				roomId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		}
+
+
+		if (response.success) { return ri('ARCHIVE_CHANNEL.SUCCESS', { roomname }); }
+
+		return ri('ARCHIVE_CHANNEL.ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ARCHIVE_CHANNEL.ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ARCHIVE_CHANNEL.ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-not-authorized') {
+			return ri('ARCHIVE_CHANNEL.NOT_AUTHORISED');
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-room-archived') {
+			return ri('ARCHIVE_CHANNEL.ROOM_ALREAD_ARCHIVED', { roomname });
+		} else if (err.response.status === 401) {
+			return ri('ARCHIVE_CHANNEL.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('ARCHIVE_CHANNEL.ERROR');
+		}
+	}
+};
+
+const unarchiveChannel = async (roomId, roomname, type, headers) => {
+	try {
+		let response;
+
+		if (type === 'c') {
+			response = await axios.post(apiEndpoints.unarchivechannelurl, {
+				roomId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		} else if (type === 'p') {
+			response = await axios.post(apiEndpoints.unarchivegroupurl, {
+				roomId,
+			},
+			{
+				headers,
+			}).then((res) => res.data);
+		}
+
+
+		if (response.success) { return ri('ARCHIVE_CHANNEL.UNARCHIVE_SUCCESS', { roomname }); }
+
+		return ri('ARCHIVE_CHANNEL.UNARCHVIE_ERROR');
+
+	} catch (err) {
+		if (err.response.data.errorType && err.response.data.errorType === 'error-room-not-found') {
+			return ri('ARCHIVE_CHANNEL.ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-invalid-room') {
+			return ri('ARCHIVE_CHANNEL.ERROR_NOT_FOUND', { roomname });
+		} else if (err.response.data.errorType && err.response.data.errorType === 'error-not-authorized') {
+			return ri('ARCHIVE_CHANNEL.NOT_AUTHORISED');
+		} else if (err.response.status === 401) {
+			return ri('ARCHIVE_CHANNEL.AUTH_ERROR');
+		} else {
+			console.log(err);
+			return ri('ARCHIVE_CHANNEL.UNARCHVIE_ERROR');
+		}
+	}
+};
 
 function replaceWhitespacesFunc(str) {
 	return removeWhitespace(str);
@@ -490,11 +552,11 @@ const createGroup = async (channelName, headers) =>
 		.then((res) => res.data)
 		.then((res) => {
 			if (res.success === true) {
-				return ri('CREATE_CHANNEL.SUCCESS', {
+				return ri('CREATE_CHANNEL.SUCCESS_GROUP', {
 					channelName,
 				});
 			} else {
-				return ri('CREATE_CHANNEL.ERROR', {
+				return ri('CREATE_CHANNEL.ERROR_GROUP', {
 					channelName,
 				});
 			}
@@ -687,17 +749,98 @@ const postDirectMessage = async (message, roomid, headers) =>
 			return ri('POST_MESSAGE.ERROR');
 		});
 
+// this function resolves channel names from all the rooms that the user has joined
+const resolveChannelname = async (channelName, headers, single = false) => {
+	try {
+		channelName = channelName.toLowerCase();
+		// load all subscriptions
+		const subscriptions = await axios.get(apiEndpoints.getsubscriptionsurl, {
+			headers,
+		})
+			.then((res) => res.data.update)
+			// filter only channels and groups
+			.then((subscriptions) => subscriptions.filter((subscription) => subscription.t === 'c' || subscription.t === 'p'))
+			// make every room in {name, id, type} form
+			.then((subscriptions) => subscriptions.map((subscription) => ({
+				name: subscription.name,
+				id: subscription.rid,
+				type: subscription.t,
+			})));
+
+		// iterate through the subscriptions array once, find the top 3 matching rooms
+		let bestRating = -1;
+		let secondBestRating = -1;
+		let thirdBestRating = -1;
+		let bestIndex;
+		let secondBestIndex;
+		let thirdBestIndex;
+
+		for (const [i, room] of subscriptions.entries()) {
+			const rating = stringSimilar.compareTwoStrings(room.name.toLowerCase(), channelName);
+			if (rating > bestRating) {
+				let temp = secondBestRating;
+				secondBestRating = bestRating;
+				bestRating = rating;
+				thirdBestRating = temp;
+				temp = secondBestIndex;
+				secondBestIndex = bestIndex;
+				bestIndex = i;
+				thirdBestIndex = temp;
+			} else if (rating > secondBestRating) {
+				thirdBestRating = secondBestRating;
+				secondBestRating = rating;
+				thirdBestIndex = secondBestIndex;
+				secondBestIndex = i;
+			} else if (rating > thirdBestRating) {
+				thirdBestRating = rating;
+				thirdBestIndex = i;
+			}
+		}
+
+		const similarRooms = [];
+		similarRooms.push(subscriptions[bestIndex]);
+		// return best match if single room is requested
+		if (single) {
+			return similarRooms;
+		}
+
+		// return and empty array if there's no good match
+		if (bestRating < 0.2) {
+			return [];
+		}
+
+		// return the best match if the best rating is "not that best"
+		if (bestRating <= 0.7) {
+			return similarRooms;
+		} else {
+			// if the best rating is high, then check the second best and third best ratings
+			if (secondBestRating > 0.7) {
+				similarRooms.push(subscriptions[secondBestIndex]);
+			}
+			if (thirdBestRating > 0.7) {
+				similarRooms.push(subscriptions[thirdBestIndex]);
+			}
+			return similarRooms;
+		}
+
+	} catch (err) {
+		throw err;
+	}
+};
+
+// this function will resolve channelnames from the latest 100 active channels and groups that the user is part of
 /*
 this function takes in a string as an input and returns an array of channel/group names which
 the user has joined and are similar to the input string
 */
-const resolveChannelname = async (channelName, headers, single = false) => {
+const resolveChannelnameFromLatestActiveRooms = async (channelName, headers, single = false) => {
 	try {
-		const publicChannelsResponse = await axios.get(apiEndpoints.channellisturl, {
+		// sort wrt prid, so the discussions will end up at the end.
+		const publicChannelsResponse = await axios.get(`${ apiEndpoints.channellisturl }?sort={"prid": 1, "_updatedAt": -1}&fields={"_id": 1, "name": 1, "t": 1}&count=100`, {
 			headers,
 		}).then((res) => res.data);
 
-		const privateChannelsResponse = await axios.get(apiEndpoints.grouplisturl, {
+		const privateChannelsResponse = await axios.get(`${ apiEndpoints.grouplisturl }?sort={"prid": 1, "_updatedAt": -1}&fields={"_id": 1, "name": 1, "t": 1}&count=100`, {
 			headers,
 		}).then((res) => res.data);
 
@@ -737,6 +880,7 @@ const resolveChannelname = async (channelName, headers, single = false) => {
 	}
 };
 
+// this function resolves usernames from all the DMs that the user has joined
 /*
 this function takes a string an an input and returns an array of usernames
 which the user is in contact with and is similar to the input string
@@ -751,11 +895,12 @@ const resolveUsername = async (username, headers, single = false) => {
 		// since we only need to resolve usernames we filter only direct message subscriptions
 			.then((subscriptions) => subscriptions.filter((subscription) => subscription.t === 'd'))
 			.then((subscriptions) => subscriptions.map((subscription) => ({
-				name: subscription.name,
+				name: subscription.name, // name of the other dm user
 				// the rid property is a combination of id's of two users involved in the direct chat
 				// removing the id of the current user from rid will give id of the other user
-				id: subscription.rid.replace(subscription.u._id, ''),
-				type: subscription.t,
+				id: subscription.rid.replace(subscription.u._id, ''), // user id of the other dm user
+				rid: subscription.rid, // room id of the dm room
+				type: subscription.t, // type of the room 't' in this case
 			})));
 
 		// Note: A different method can be used to get the list of direct message users from contacts
@@ -765,7 +910,7 @@ const resolveUsername = async (username, headers, single = false) => {
 		let bestMatchingUser;
 		const similarUsers = [];
 		for (const user of subscriptions) {
-			const index = stringSimilar.compareTwoStrings(user.name, username);
+			const index = stringSimilar.compareTwoStrings(user.name.replace(/\./g, ' '), username);
 			if (index > bestIndex) {
 				bestIndex = index;
 				bestMatchingUser = user;
@@ -915,6 +1060,196 @@ const leaveChannel = async (roomId, roomname, type, headers) => {
 			console.log(err);
 			return ri('LEAVE_CHANNEL.ERROR');
 		}
+	}
+};
+
+const resolveDiscussion = async (discussionName, headers) => {
+	try {
+		// prid sort so that the normal rooms will be considered last
+		const groupDiscussions = await axios.get(`${ apiEndpoints.grouplisturl }?sort={"prid": -1, "_updatedAt": -1}&fields={"_id": 1, "name": 1, "fname": 1, "prid": 1, "t": 1}&count=100`, {
+			headers,
+		}).then((res) => res.data.groups);
+
+		const channelDiscussions = await axios.get(`${ apiEndpoints.channellisturl }?sort={"prid": -1, "_updatedAt": -1}&fields={"_id": 1, "name": 1, "fname": 1, "prid": 1, "t": 1}&count=100`, {
+			headers,
+		}).then((res) => res.data.channels);
+
+		const discussionDetails = [];
+		const discussionNames = [];
+
+		for (const discussion of groupDiscussions.concat(channelDiscussions)) {
+			// if prid doesn't exist it's not a discussion
+			if (!discussion.prid) { continue; }
+
+			discussionDetails.push({
+				id: discussion._id, // id of the discussion room
+				name: discussion.name, // the unique name of the discussion
+				fname: discussion.fname, // the display name of the discussion
+				type: discussion.t, // type: private (p), public(c)
+			});
+
+			discussionNames.push(discussion.fname.toLowerCase());
+		}
+
+		if (discussionNames.length === 0) { return null; }
+
+		const comparison = stringSimilar.findBestMatch(removeWhitespace(discussionName).toLowerCase(), discussionNames);
+		if (comparison.bestMatch.rating > 0) {
+			return discussionDetails[comparison.bestMatchIndex];
+		} else {
+			return null;
+		}
+
+	} catch (err) {
+		throw err;
+	}
+};
+
+const roomUnreadMessages = async (channelName, unreadCount, type, headers, handlerInput, fname = null) => {
+	try {
+		// fname is optional and is used as a display name for discussions
+		if (fname) { fname = `Discussion ${ fname }`; }
+		// this must be ==
+		// eslint-disable-next-line eqeqeq
+		if (!unreadCount || unreadCount == 0) {
+			return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.NO_MESSAGE_IN_DISCUSSION', { channelName: fname || channelName });
+		}
+
+		const res = await axios
+			.get(`${ type === 'c' ? apiEndpoints.channelmessageurl : apiEndpoints.groupmessagenameurl }${ channelName }&count=${ unreadCount }`, {
+				headers,
+			})
+			.then((res) => res.data);
+
+		if (res.success === true) {
+
+			const msgs = [];
+			const messages = [];
+			let previousUsername = '';
+			for (let i = 0; i <= unreadCount - 1; i++) {
+				if (!res.messages[i]) { continue; }
+				let speechText;
+
+				// if it's just a normal text message
+				if (!res.messages[i].file && !res.messages[i].t && res.messages[i].msg) {
+					// check if the message is not empty or made of just dots.
+					if (cleanMessage(res.messages[i].msg).replace(/\./g, ' ').trim()) {
+						if (previousUsername === res.messages[i].u.username) {
+							msgs.push(`${ res.messages[i].msg }. `);
+						} else {
+							msgs.push(`${ res.messages[i].u.username } says, ${ res.messages[i].msg }.`);
+							previousUsername = res.messages[i].u.username;
+						}
+					}
+					messages.push(`${ res.messages[i].u.username }: ${ res.messages[i].msg }`);
+				} else if (res.messages[i].t) {
+					if (res.messages[i].t === 'room_changed_description') {
+						speechText = handlerInput.translate('MESSAGE_TYPE.CHANGE_DESCRIPTION', { username: res.messages[i].u.username, description: res.messages[i].msg });
+						msgs.push(speechText);
+						messages.push(`${ res.messages[i].u.username }: ${ res.messages[i].msg }`);
+					} else if (res.messages[i].t === 'room_changed_topic') {
+						speechText = handlerInput.translate('MESSAGE_TYPE.CHANGE_TOPIC', { username: res.messages[i].u.username, topic: res.messages[i].msg });
+						msgs.push(speechText);
+						messages.push(`${ res.messages[i].u.username }: ${ res.messages[i].msg }`);
+					} else if (res.messages[i].t === 'room_changed_announcement') {
+						speechText = handlerInput.translate('MESSAGE_TYPE.CHANGE_ANNOUNCEMENT', { username: res.messages[i].u.username, announcement: res.messages[i].msg });
+						msgs.push(speechText);
+						messages.push(`${ res.messages[i].u.username }: ${ res.messages[i].msg }`);
+					} else if (res.messages[i].t === 'discussion-created') {
+						speechText = handlerInput.translate('MESSAGE_TYPE.DISCUSSION_CREATED', { username: res.messages[i].u.username, name: res.messages[i].msg });
+						msgs.push(speechText);
+						messages.push(`${ res.messages[i].u.username }: ${ res.messages[i].msg }`);
+					}
+				} else if (res.messages[i].file && res.messages[i].file.type) {
+					if (res.messages[i].file.type.includes('image')) {
+						speechText = handlerInput.translate('MESSAGE_TYPE.IMAGE_MESSAGE', { username: res.messages[i].u.username, title: res.messages[i].file.name });
+					} else if (res.messages[i].file.type.includes('video')) {
+						speechText = handlerInput.translate('MESSAGE_TYPE.VIDEO_MESSAGE', { username: res.messages[i].u.username, title: res.messages[i].file.name });
+					} else {
+						speechText = handlerInput.translate('MESSAGE_TYPE.FILE_MESSAGE', { username: res.messages[i].u.username, title: res.messages[i].file.name });
+					}
+					msgs.push(speechText);
+					messages.push(`${ res.messages[i].u.username }: ${ res.messages[i].file.name }`);
+				}
+			}
+
+			let responseString = msgs.join('  ');
+			responseString = cleanMessage(responseString);
+			// 8000 is the character limit of alexa response.
+			responseString = responseString.slice(0, 7000);
+
+			const finalMsg = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.DISCUSSION_MESSAGE', { total: unreadCount, count: msgs.length, channelName: fname || channelName, responseString });
+
+			// if there's nothing to display in the table just send the messsage.
+			if (messages.length === 0) { return finalMsg; }
+			// return [finalMsg, messages];
+			return finalMsg;
+
+		} else {
+			return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.ERROR');
+		}
+
+	} catch (err) {
+		throw err;
+	}
+};
+
+const getRoomCounters = async (roomId, type, headers) => {
+	try {
+		const url = type === 'c' ? apiEndpoints.channelcounterurl : apiEndpoints.privateroomcounterurl;
+		const response = await axios.get(`${ url }?roomId=${ roomId }`, {
+			headers,
+		}).then((res) => res.data);
+
+		console.log(response);
+		return response;
+	} catch (err) {
+		throw err;
+	}
+};
+
+const readRoomUnreadMentions = async (channelDetails, count, headers, fname = undefined) => {
+	try {
+		if (fname) { fname = `Discussion ${ fname }`; }
+		if (count === null) {
+			return ri('ROOM_MENTIONS.ERROR');
+		}
+		// to be left as ==
+		// eslint-disable-next-line eqeqeq
+		if (count == 0) {
+			return ri('ROOM_MENTIONS.NO_MENTIONS', { roomName: fname || channelDetails.name });
+		}
+
+		const response = await axios.get(`${ apiEndpoints.getmentionedmessagesurl }?roomId=${ channelDetails.id }&count=${ count }`, {
+			headers,
+		}).then((res) => res.data);
+
+		if (response.success === true) {
+			let finalMessage = '';
+			const messages = [];
+
+			response.messages.forEach((message) => {
+				finalMessage += `${ message.u.username } says, ${ message.msg }.`;
+				messages.push(`${ message.u.username }: ${ message.msg }.`);
+			});
+
+			finalMessage = cleanMessage(finalMessage);
+
+			const speechText = ri('ROOM_MENTIONS.READ_MENTIONS', {
+				finalMessage, count, roomName: fname || channelDetails.name,
+			});
+
+			// if there's nothing to display in the table just return speech text
+			if (messages.length === 0) { return speechText; }
+			return speechText;
+
+			// return [speechText, messages];
+		} else {
+			return ri('ROOM_MENTIONS.ERROR');
+		}
+
+	} catch (err) {
+		return ri('ROOM_MENTIONS.ERROR');
 	}
 };
 
@@ -1366,6 +1701,11 @@ const getAllUnreads = async (headers) => {
 
 		for (const subscription of subscriptions) {
 			if (subscription.unread && subscription.unread !== 0) {
+				// if it is a discussion then use fname for reference
+				if (subscription.prid) {
+					finalMessage += `${ subscription.unread } unreads from discussion ${ subscription.fname }, `;
+					continue;
+				}
 				if (subscription.t && subscription.t === 'd') {
 					finalMessage += `${ subscription.unread } unreads from ${ subscription.name }, `;
 				} else {
@@ -1373,6 +1713,8 @@ const getAllUnreads = async (headers) => {
 				}
 			}
 		}
+
+		finalMessage = finalMessage.slice(0, 7000);
 
 		if (finalMessage === '') { return ri('UNREADS.NO_UNREADS'); }
 		return ri('UNREADS.MESSAGE', { finalMessage });
@@ -1393,6 +1735,11 @@ const getAllUnreadMentions = async (headers) => {
 
 		for (const subscription of subscriptions) {
 			if (subscription.userMentions && subscription.userMentions !== 0) {
+				// if it is a discussion then use fname as reference
+				if (subscription.prid) {
+					finalMessage += `${ subscription.userMentions } mentions from discussion ${ subscription.fname }, `;
+					continue;
+				}
 				if (subscription.t && subscription.t === 'd') {
 					finalMessage += `${ subscription.userMentions } mentions from ${ subscription.name },`;
 				} else {
@@ -1400,6 +1747,8 @@ const getAllUnreadMentions = async (headers) => {
 				}
 			}
 		}
+
+		finalMessage = finalMessage.slice(0, 7000);
 
 		if (finalMessage === '') { return ri('MENTIONS.NO_MENTIONS'); }
 		return ri('MENTIONS.MESSAGE', { finalMessage });
@@ -1460,6 +1809,64 @@ const readUnreadMentions = async (roomId, roomName, count, headers) => {
 	}
 };
 
+const DMUnreadMessages = async (name, count, headers) => {
+	try {
+		if (count == null) {
+			return ri('SOMETHING_WENT_WRONG');
+		}
+		// eslint-disable-next-line eqeqeq
+		if (count == 0) {
+			return ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.NO_MESSAGE_IN_DM', { name });
+		}
+
+		const res = await axios
+			.get(`${ apiEndpoints.immessageurl }?username=${ name }&count=${ count }`, {
+				headers,
+			})
+			.then((res) => res.data);
+
+		if (res.success === true) {
+
+			const msgs = [];
+
+			for (let i = 0; i <= count - 1; i++) {
+				if (res.messages[i] && !res.messages[i].t) {
+					if (res.messages[i].file) {
+						msgs.push(`Sent you a file named ${ res.messages[i].file.name }.`);
+					} else if (res.messages[i].msg) { msgs.push(`${ res.messages[i].msg }.`); }
+				}
+			}
+
+			let responseString = msgs.join('  ');
+			responseString = cleanMessage(responseString);
+
+			const finalMsg = ri('GET_UNREAD_MESSAGES_FROM_CHANNEL.DM_MESSAGE', { unread: msgs.length, name, responseString });
+
+			// return [finalMsg, msgs];
+			return finalMsg;
+
+		} else {
+			return ri('SOMETHING_WENT_WRONG');
+		}
+	} catch (err) {
+		console.log(err);
+		throw err.message;
+	}
+};
+
+const getDMCounter = async (id, headers) => {
+	try {
+		console.log(id);
+		const response = await axios.get(`${ apiEndpoints.imcountersurl }?roomId=${ id }`, {
+			headers,
+		})
+			.then((res) => res.data);
+		return response;
+	} catch (err) {
+		throw 'Error while getting counters';
+	}
+};
+
 // Module Export of Functions
 
 module.exports.login = login;
@@ -1499,6 +1906,8 @@ module.exports.setAnnouncement = setAnnouncement;
 module.exports.setDescription = setDescription;
 module.exports.setTopic = setTopic;
 module.exports.renameChannel = renameChannel;
+module.exports.archiveChannel = archiveChannel;
+module.exports.unarchiveChannel = unarchiveChannel;
 module.exports.addLeader = addLeader;
 module.exports.getUsersWithRolesFromRoom = getUsersWithRolesFromRoom;
 module.exports.removeLeader = removeLeader;
@@ -1506,6 +1915,10 @@ module.exports.removeOwner = removeOwner;
 module.exports.removeModerator = removeModerator;
 module.exports.addModerator = addModerator;
 module.exports.leaveChannel = leaveChannel;
+module.exports.resolveDiscussion = resolveDiscussion;
+module.exports.roomUnreadMessages = roomUnreadMessages;
+module.exports.getRoomCounters = getRoomCounters;
+module.exports.readRoomUnreadMentions = readRoomUnreadMentions;
 module.exports.inviteUser = inviteUser;
 module.exports.kickUser = kickUser;
 module.exports.setStatus = setStatus;
@@ -1515,3 +1928,7 @@ module.exports.getUnreadMentionsCountChannel = getUnreadMentionsCountChannel;
 module.exports.getUnreadMentionsCountGroup = getUnreadMentionsCountGroup;
 module.exports.readUnreadMentions = readUnreadMentions;
 module.exports.getAllUnreads = getAllUnreads;
+module.exports.DMUnreadMessages = DMUnreadMessages;
+module.exports.getDMCounter = getDMCounter;
+module.exports.resolveChannelnameFromLatestActiveRooms = resolveChannelnameFromLatestActiveRooms; // not used currently
+
