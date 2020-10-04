@@ -309,6 +309,32 @@ Copy **https://pitangui.amazon.com/api/skill/link/YOURVENDORID** or **https://la
 
 ```
 
+
+### Setting up Local development
+
+With this setup, develper can run the backend code of the skill in the system itself, leading to faster development.  
+Note: The below setups are optional and is not required for the code to run in aws lambda.
+
+1. Navigate to `./lambda/custom` folder and make a new file named .env
+
+2. Add the following to .env file
+```
+ACCESS_KEY_ID=<your aws account access key ID>
+SECRET_ACCESS_KEY=<your aws account secret access key>
+SERVER_URL=<rocket chat server url>
+OAUTH_SERVICE_NAME=<oauth service name>
+DDB_NAME=<dynamo table name>
+CUSTOM_LOG_URL=<custom logger url(optional parameter)>
+```
+
+3. From `./lambda/custom` folder, run `npm start` to start the server at port 3000.
+
+4. Install `ngrok`, then in a new terminal run `ngrok http 3000`, copy the https forwarding link.
+
+5. In the build section of the Alexa Developer Console, go to endpoint submenu in the sidebar and set the Service Endpoint Type to HTTPS.
+
+6. In the default region input box, paste the link from step 4 and set the drop down to "My development endpoint is a sub-domain of a domain that has wildcard certificate from a certificate authority" option, save the changes.
+
 ## Customization
 
   

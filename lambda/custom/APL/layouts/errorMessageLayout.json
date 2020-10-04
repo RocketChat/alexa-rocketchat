@@ -1,0 +1,306 @@
+{
+    "type": "APL",
+    "version": "1.1",
+    "settings": {
+        "idleTimeout": 120000
+    },
+    "theme": "dark",
+    "import": [{
+        "name": "alexa-layouts",
+        "version": "1.0.0"
+    }],
+    "resources": [{
+        "description": "Common margins and padding",
+        "dimensions": {
+            "marginTop": 40,
+            "marginLeft": 60,
+            "marginRight": 60,
+            "marginBottom": 40
+        }
+    }],
+    "onMount": [{
+        "type": "Sequential",
+        "commands": [{
+            "type": "Parallel",
+            "commands": "<COMPONENT_ON_MOUNT_COMMANDS>"
+        }],
+        "finally": "<DOCUMENT_ON_MOUNT_COMMAND>"
+    }],
+    "graphics": {
+        "parameterizedCircle": {
+            "type": "AVG",
+            "version": "1.0",
+            "height": 100,
+            "width": 100,
+            "items": {
+                "type": "path",
+                "fill": "red",
+                "stroke": "blue",
+                "strokeWidth": 4,
+                "pathData": "M 50 0 L 100 50 L 50 100 L 0 50 z"
+            }
+        }
+    },
+    "commands": {
+        "slideInFromRight": {
+            "parameters": [
+                "distance"
+            ],
+            "command": {
+                "type": "AnimateItem",
+                "easing": "ease-in-out",
+                "duration": 300,
+                "values": [{
+                        "property": "opacity",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "property": "transformX",
+                        "from": "${distance}",
+                        "to": 0
+                    }
+                ]
+            }
+        }
+    },
+    "layouts": {},
+    "mainTemplate": {
+        "parameters": [
+            "payload"
+        ],
+        "items": [{
+                "type": "Container",
+                "when": "${@viewportProfile == @hubRoundSmall}",
+                "height": "100vh",
+                "items": [{
+                        "type": "Image",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "paddingLeft": "600",
+                        "source": "${payload.AuthorisationErrorPageData.backgroundImage.sources[0].url}",
+                        "scale": "best-fill",
+                        "align": "right",
+                        "overlayColor": "rgba(black,0.5)",
+                        "position": "absolute"
+                    },
+                    {
+                        "type": "AlexaHeader",
+                        "headerAttributionImage": "${payload.AuthorisationErrorPageData.logoUrl}"
+                    },
+                    {
+                        "type": "Container",
+                        "grow": 1,
+                        "items": [{
+                                "type": "Text",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "paddingBottom": "30",
+                                "textAlign": "center",
+                                "color": "#BC2031",
+                                "fontFamily": "avenir next condensed",
+                                "fontSize": "26",
+                                "text": "${payload.AuthorisationErrorPageData.textContent.primaryText.text}",
+                                "fontWeight": "bold"
+                            },
+                            {
+                                "type": "Text",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "paddingBottom": "150",
+                                "textAlign": "center",
+                                "color": "#FFFFFF",
+                                "fontSize": "24",
+                                "text": "${payload.AuthorisationErrorPageData.textContent.secondaryText.text}"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "Container",
+                "when": "${@viewportProfile == @hubLandscapeSmall}",
+                "height": "100vh",
+                "items": [{
+                        "type": "Image",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "source": "${payload.AuthorisationErrorPageData.backgroundImage.sources[0].url}",
+                        "scale": "best-fill",
+                        "overlayColor": "rgba(black,0.5)",
+                        "position": "absolute"
+                    },
+                    {
+                        "type": "AlexaHeader",
+                        "headerAttributionImage": "${payload.AuthorisationErrorPageData.logoUrl}"
+                    },
+                    {
+                        "type": "Container",
+                        "grow": 1,
+                        "items": [{
+                                "type": "Text",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "paddingBottom": "30",
+                                "textAlign": "left",
+                                "color": "#BC2031",
+                                "fontFamily": "avenir next condensed",
+                                "text": "${payload.AuthorisationErrorPageData.textContent.primaryText.text}",
+                                "fontWeight": "bold"
+                            },
+                            {
+                                "type": "Text",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "paddingBottom": "300",
+                                "textAlign": "left",
+                                "color": "#FFFFFF",
+                                "fontSize": "30",
+                                "text": "${payload.AuthorisationErrorPageData.textContent.secondaryText.text}"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "Container",
+                "when": "${@viewportProfile == @hubLandscapeMedium}",
+                "height": "100vh",
+                "items": [{
+                        "type": "Image",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "source": "${payload.AuthorisationErrorPageData.backgroundImage.sources[0].url}",
+                        "scale": "best-fill",
+                        "overlayColor": "rgba(black,0.5)",
+                        "position": "absolute"
+                    },
+                    {
+                        "type": "AlexaHeader",
+                        "headerAttributionImage": "${payload.AuthorisationErrorPageData.logoUrl}"
+                    },
+                    {
+                        "type": "Container",
+                        "grow": 1,
+                        "items": [{
+                                "type": "Text",
+                                "style": "textStyleBody",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "paddingBottom": "30",
+                                "textAlign": "left",
+                                "color": "#BC2031",
+                                "fontFamily": "avenir next condensed",
+                                "fontSize": "40",
+                                "text": "${payload.AuthorisationErrorPageData.textContent.primaryText.text}",
+                                "fontWeight": "bold"
+                            },
+                            {
+                                "type": "Text",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "paddingBottom": "350",
+                                "textAlign": "left",
+                                "color": "#FFFFFF",
+                                "fontSize": "30",
+                                "text": "${payload.AuthorisationErrorPageData.textContent.secondaryText.text}"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "Container",
+                "when": "${@viewportProfile == @hubLandscapeLarge}",
+                "height": "100vh",
+                "items": [{
+                        "type": "Image",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "source": "${payload.AuthorisationErrorPageData.backgroundImage.sources[0].url}",
+                        "scale": "best-fill",
+                        "overlayColor": "rgba(black,0.5)",
+                        "position": "absolute"
+                    },
+                    {
+                        "type": "AlexaHeader",
+                        "headerAttributionImage": "${payload.AuthorisationErrorPageData.logoUrl}"
+                    },
+                    {
+                        "type": "Container",
+                        "grow": 1,
+                        "items": [{
+                                "type": "Text",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "paddingBottom": "30",
+                                "textAlign": "left",
+                                "color": "#BC2031",
+                                "fontFamily": "avenir next condensed",
+                                "fontSize": "50",
+                                "text": "${payload.AuthorisationErrorPageData.textContent.primaryText.text}",
+                                "fontWeight": "bold"
+                            },
+                            {
+                                "type": "Text",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "paddingBottom": "550",
+                                "textAlign": "left",
+                                "color": "#FFFFFF",
+                                "fontSize": "40",
+                                "text": "${payload.AuthorisationErrorPageData.textContent.secondaryText.text}"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "Container",
+                "when": "${@viewportProfile == @tvLandscapeXLarge}",
+                "height": "100vh",
+                "items": [{
+                        "type": "Image",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "source": "${payload.AuthorisationErrorPageData.backgroundImage.sources[0].url}",
+                        "scale": "best-fill",
+                        "overlayColor": "rgba(black,0.5)",
+                        "position": "absolute"
+                    },
+                    {
+                        "type": "AlexaHeader",
+                        "headerAttributionImage": "${payload.AuthorisationErrorPageData.logoUrl}"
+                    },
+                    {
+                        "type": "Container",
+                        "grow": 1,
+                        "items": [{
+                                "type": "Text",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "paddingBottom": "30",
+                                "textAlign": "left",
+                                "color": "#BC2031",
+                                "fontFamily": "avenir next condensed",
+                                "fontSize": "40",
+                                "text": "${payload.AuthorisationErrorPageData.textContent.primaryText.text}",
+                                "fontWeight": "bold"
+                            },
+                            {
+                                "type": "Text",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "paddingBottom": "300",
+                                "textAlign": "left",
+                                "color": "#FFFFFF",
+                                "fontSize": "30",
+                                "text": "${payload.AuthorisationErrorPageData.textContent.secondaryText.text}"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
