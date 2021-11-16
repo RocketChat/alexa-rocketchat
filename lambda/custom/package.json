@@ -24,7 +24,7 @@
     "@rocket.chat/eslint-config": "^0.2.0",
     "ask-sdk-express-adapter": "^2.1.0",
     "ask-sdk-model": "^1.28.0",
-    "aws-sdk": "^2.683.0",
+    "aws-sdk": "^2.814.0",
     "babel-eslint": "^10.1.0",
     "dotenv": "^8.2.0",
     "eslint": "^5.16.0",
